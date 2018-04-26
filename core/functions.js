@@ -168,7 +168,7 @@ module.exports = (client) => {
 		text = text
 		.replace(/`/g, "`" + String.fromCharCode(8203))
 		.replace(/@/g, "@" + String.fromCharCode(8203))
-		.replace(client.token, "MzQ.BITE.Tk2N6s2DHTSHgz.MY.6Par0tOU.DICK.cA84");
+		.replace(client.token, "{null}");
 
 		return text;
 	};
@@ -209,7 +209,7 @@ module.exports = (client) => {
 		let a = this.split(""),
 		n = a.length;
 
-		for(let i = n - 1; i > 0; i--) {
+		for (let i = n - 1; i > 0; i--) {
 			let j = Math.floor(Math.random() * (i + 1));
 			let tmp = a[i];
 			a[i] = a[j];
