@@ -23,12 +23,4 @@
 
 module.exports = (client) => {
 	client.trunc = require('truncate');
-
-	client.pluralize = require('pluralize');
-
-	client.vString = require('validator');
-
-	client.uuidv1 = require('uuid/v1');
-	client.uuidv4 = require('uuid/v4');
-	client.uuidv5 = require('uuid/v5');
 };
