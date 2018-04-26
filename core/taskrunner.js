@@ -28,6 +28,8 @@ module.exports = async (client) => {
 
 	/**
 	* The almighty task runner! This uses cron jobs to run various things
+	*
+	* TODO: A more graceful way to do this
 	*/
 
 
