@@ -1,0 +1,87 @@
+{
+	"botVersion": "1.0.0",
+	"clientSecret": "",
+	"token": "",
+
+	"ownerName": "depthbomb#7698",
+	"ownerId": "133325534548590594",
+
+	"prefix": "!",
+	"botUsername": "GoatBot!",
+	"color": "#0097A7",
+	"initialGame": "!help",
+	"status": "online",
+	"clientId": "405805435438891008",
+	"userAgent": "GoatBot! Automaton by Caprine Softworks",
+
+	"roles": {
+		"admin": "186979341387694080",
+		"mod": ""
+	},
+
+	"nsfwChannel": "429030866585518080",
+
+	"crypto": {
+		"salt": ""
+	},
+
+	"cooldowns": {
+		"default": 1.5,
+		"bypassChannels": [],
+		"bypassUsers": []
+	},
+
+	"playingGames": [
+		"Petting a goat",
+		"Increasing Discount's incoming damage",
+		"Drinking tap water",
+		"Dividing by zero",
+
+			"Praying to the B͠͞ĺ̡́̕a̢͟c̡̢ķ̵̶͝͝ ̵̴̨̧́Ǵ̶̛͘͡o̧̨̡͟a̴̡̧͜͝t͢",
+
+		"Hacking your IP address with HTML",
+		"Snapping my Fortnite win",
+		"Yiffing",
+		"Accidentally crashing the server",
+		"WoW for 16 hours a day",
+		"Thinking of new quotes for this",
+		"Changing map to surf_tf_japan_v1",
+		"!help",
+		"Making a furry inside joke",
+		"a True Pacifist run"
+	],
+
+	"logTimezone": "America/Chicago",
+
+	"steam": {
+		"api_key": ""
+	},
+
+	"imgur": {
+		"username": "",
+		"password": "",
+		"client": "",
+		"secret": ""
+	},
+
+	"logTypes": [
+		"msg",
+		"event",
+		"bot",
+		"system",
+		"warn",
+		"error",
+		"cron",
+		"debug"
+	],
+
+	"directories": [
+		"storage",
+		"storage/cache",
+		"storage/cache/albums",
+		"storage/cache/steam",
+		"storage/tmp",
+		"storage/tmp/cooldowns",
+		"storage/logs"
+	]
+}

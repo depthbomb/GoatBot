@@ -1,0 +1,62 @@
+{
+	"name": "goatbot",
+	"version": "1.0.0",
+	"description": "Cyan.TF Discord bot",
+	"keywords": [
+		"discord",
+		"bot",
+		"furry",
+		"goat"
+	],
+	"author": "depthbomb",
+	"license": "MIT",
+	"homepage": "https://github.com/depthbomb/GoatBot",
+	"respository": {
+		"type": "git",
+		"url": "https://github.com/depthbomb/GoatBot.git"
+	},
+	"bugs": {
+		"url": "https://github.com/depthbomb/JPEGoat/issues"
+	},
+	"main": "goat.js",
+	"scripts": {
+		"start": "node ./"
+	},
+	"dependencies": {
+		"ascii-table": "0.0.9",
+		"atob": "^2.0.3",
+		"btoa": "^1.1.2",
+		"bufferutil": "^3.0.2",
+		"chalk": "^2.4.1",
+		"cheerio": "^1.0.0-rc.2",
+		"cli-table2": "^0.2.0",
+		"colors": "^1.1.2",
+		"discord.js": "^11.2.1",
+		"erlpack": "github:hammerandchisel/erlpack",
+		"html-entities": "^1.2.1",
+		"imgur": "^0.2.1",
+		"jimp": "^0.2.28",
+		"md5": "^2.2.1",
+		"moment": "^2.22.1",
+		"moment-duration-format": "^2.2.2",
+		"moment-timezone": "^0.5.13",
+		"ms": "^2.0.0",
+		"node-cron": "^1.2.1",
+		"node-opus": "^0.2.7",
+		"pluralize": "^7.0.0",
+		"querystring": "^0.2.0",
+		"random-int": "^1.0.0",
+		"random-number-between": "^1.0.3",
+		"request": "^2.83.0",
+		"shuffle-array": "^1.0.1",
+		"sleep": "^5.1.1",
+		"snekfetch": "^4.0.0",
+		"ssq": "0.0.1",
+		"steamid": "^1.1.0",
+		"to-zalgo": "^1.0.1",
+		"truncate": "^2.0.0",
+		"uuid": "^3.1.0",
+		"uws": "^9.148.0",
+		"validator": "^9.0.0"
+	}
+}
