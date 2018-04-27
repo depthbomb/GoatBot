@@ -23,7 +23,7 @@
 
 module.exports = (client, message) => {
 	//	Don't log our own deletions
-	//if (message.author.id === client.user.id) return;
+	if (message.author.id === client.user.id) return;
 
 	let logMessage;
 	let isAttachment = false;
