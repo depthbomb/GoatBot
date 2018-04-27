@@ -42,7 +42,6 @@
 		"moment-timezone": "^0.5.13",
 		"ms": "^2.0.0",
 		"node-cron": "^1.2.1",
-		"node-opus": "^0.2.7",
 		"pluralize": "^7.0.0",
 		"querystring": "^0.2.0",
 		"random-int": "^1.0.0",
@@ -55,7 +54,6 @@
 		"to-zalgo": "^1.0.1",
 		"truncate": "^2.0.0",
 		"uuid": "^3.1.0",
-		"uws": "^9.148.0",
 		"validator": "^9.0.0"
 	}
 }
