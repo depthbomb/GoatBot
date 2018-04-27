@@ -63,9 +63,9 @@ exports.run = async (client, message, args, level) => {
 				.setColor('#0097a7')
 				.setFooter(`${serverIp}:${serverPort}`)
 				.setTimestamp()
-				.addBlankField()
 				.addField('Map', data.map, true)
-				.addField('Players', `${data.numplayers}/${data.maxplayers}`, true);
+				.addField('Players', `${data.numplayers}/${data.maxplayers}`, true)
+				.addField('\u200B', 'Type `!gameinfo players` to get a list of online players.');
 	
 			return statusMessage.edit(`<@${message.author.id}>`, {
 				embed: serverInfoEmbed
