@@ -22,7 +22,8 @@
 	"nsfwChannel": "429030866585518080",
 
 	"crypto": {
-		"salt": ""
+		"salt": "",
+		"errorSalt": ""
 	},
 
 	"cooldowns": {

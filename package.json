@@ -24,7 +24,7 @@
 	},
 	"dependencies": {
 		"ascii-table": "0.0.9",
-		"atob": "^2.0.3",
+		"atob": "^2.1.1",
 		"btoa": "^1.1.2",
 		"bufferutil": "^3.0.2",
 		"chalk": "^2.4.1",
