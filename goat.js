@@ -67,9 +67,19 @@ class GoatBot extends Discord.Client {
 		// Set perm to 0 if webhook or DM
 		if (!message.guild || !message.member || message.channel.type === "dm") return 0;
 
-		/**
-		 * TODO: Add permissions for admin/moderator roles
-		 */
+		try {
+			const moderatorRole = message.member.roles.find('id', client.config.roles.mod);
+			if (moderatorRole && message.member.roles.has(moderatorRole.id)) permlvl = 2;
+		} catch (e) {
+			client.log('warn', 'Moderator role is not present. Skipping level 2 check.');
+		}
+
+		try {
+			const adminRole = message.member.roles.find('id', client.config.roles.admin);
+			if (adminRole && message.member.roles.has(adminRole.id)) permlvl = 3;
+		} catch (e) {
+			client.log('warn', 'Admin role is not present. Skipping level 3 check.');
+		}
 
 		return permlvl;
 	}
@@ -94,6 +104,7 @@ class GoatBot extends Discord.Client {
 		else if (type === "error") console.log(chalk.bgRedBright.whiteBright(logMsg));
 		else if (type === "cron") console.log(chalk.bgMagentaBright.whiteBright(logMsg));
 		else if (type === "debug") console.log(chalk.bgBlackBright.whiteBright(logMsg));
+		else return;
 
 		if (logAsFile.includes(type) && writeFile) {
 			fs.appendFile(`${client.storagePath}/logs/${logName}`, logEntry, (err) => {
@@ -122,7 +133,7 @@ const init = async () => {
 			if (f !== 'disabled') {	//	Skip directory
 				const props = require(`${client.appPath}/commands/${f}`);
 				if (!props.conf.enabled) return console.log(chalk.greenBright(`Skipping command [${props.help.name}] because it is disabled`));
-				if(f.split(".").slice(-1)[0] !== "js") return;
+				if (f.split(".").slice(-1)[0] !== "js") return;
 				console.log(chalk.greenBright(`Loaded command [${props.help.name}]`));
 				client.commands.set(props.help.name, props);
 				props.conf.aliases.forEach(alias => {
