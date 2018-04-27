@@ -51,6 +51,14 @@
 		"a True Pacifist run"
 	],
 
+	"greetingChannel": "437403529783803926",
+	"greetings": [
+		"{user} has joined us! Give them a warm welcome.",
+		"Hey, {user} just joined! Let's bully them!",
+		"OwO What's this? {user} has joined!",
+		"Everyone hide! {user}'s here"
+	],
+
 	"logTimezone": "America/Chicago",
 
 	"steam": {
