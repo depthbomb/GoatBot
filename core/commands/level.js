@@ -22,7 +22,6 @@
 */
 
 exports.run = async (client, message, args, level) => {
-
 	return client.msg(message, 'blue', 'info', `You have a permission level of ${level}.`);
 };
 

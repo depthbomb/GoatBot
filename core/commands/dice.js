@@ -24,7 +24,6 @@
 exports.run = async (client, message, args, level) => {
 	if (!args || args.length < 2) return message.reply("Both arguments are required.");
 
-	const randnum = require('random-number-between');
 	const pluralize = require('pluralize');
 
 	const numDice = args[0];
@@ -39,7 +38,7 @@ exports.run = async (client, message, args, level) => {
 		return;
 	}
 
-	let results = randnum(1, maxNum, numDice);
+	let results = client.randomInt(1, maxNum, numDice);
 
 	message.reply(`:game_die: Rolled ${numDice} ${maxNum}-sided ${pluralize('die', numDice)} and got ***${results.join(', ')}*** :game_die:`);
 };

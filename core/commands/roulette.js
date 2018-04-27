@@ -22,9 +22,8 @@
 */
 
 exports.run = (client, message, args, level) => {
-	const randnum = require('random-number-between');
 	const bullet = 3;
-	const chamber = randnum(1, 6, 1)[0];
+	const chamber = client.randomInt(1, 6);
 
 	if(bullet === chamber) {
 		message.delete().then((msg) => {

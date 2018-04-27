@@ -196,6 +196,21 @@ module.exports = (client) => {
 		return isNaN(parseInt(param));
 	};
 
+	client.randomInt = (min, max, amount = 1) => {
+		let results;
+		if (amount > 1) {
+			results = [];
+			for (let i = 0; i < amount; i++) {
+				results.push(Math.floor(Math.random() * (max - min + 1)) + min);
+			}
+
+		} else {
+			results = Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+
+		return results;
+	}
+
 	client.b64 = {
 		encode (string) {
 			return require('btoa')(string);
