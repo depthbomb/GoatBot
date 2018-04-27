@@ -86,7 +86,7 @@ module.exports = (client) => {
 	 * @param {bool} autoDelete Whether to auto-delete sent message
 	 * @param {bool} autoDeleteDelay Delay in seconds when deleting the message
 	 */
-	client.msg = (messageObj, type, icon, message, reply = true, autoDelete = true, autoDeleteDelay = 10) => {
+	client.msg = (messageObj, type, icon, message, reply = true, autoDelete = false, autoDeleteDelay = 10) => {
 		const { RichEmbed } = require('discord.js');
 		const colors = {
 			"black": "#212121",
