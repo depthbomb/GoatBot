@@ -59,18 +59,20 @@ module.exports = (client) => {
 		const { RichEmbed } = require('discord.js');
 		const crypto = require('crypto');
 		const algorithm = 'aes-256-cbc';
-		const key = "stackTraceSalt__CYAN";
+		const key = client.config.crypto.errorSalt;
 		const cipher = crypto.createCipher(algorithm, key);
-		let errorStack = `**UserID:** ${msg.author.id}\n**ChannelID:** ${msg.channel.id}\n**DM?:** ${msg.channel.type === "dm"}\n${msg.guild.available ? "**Guild:** " + msg.guild.name + "\n" : ""}\n\`\`\`JS\n${err}\n\`\`\``;
+		const errorStack = `**UserID:** ${msg.author.id}\n**ChannelID:** ${msg.channel.id}\n**DM?:** ${msg.channel.type === "dm"}\n${msg.guild.available ? "**Guild:** " + msg.guild.name + "\n" : ""}\n\`\`\`JS\n${err}\n\`\`\``;
+
 		let encrypted = cipher.update(errorStack, "utf8", "base64");
 		encrypted += cipher.final('base64');
 
 		let embed = new RichEmbed()
-						.setAuthor("Something broke!", client.user.avatarURL)
+						.setAuthor("OOPSIE WOOPSIE!!", client.user.avatarURL)
 						.setColor(clientColors.red)
-						.setDescription("I have encountered a problem! If you see my creator, send them the code below.")
+						.setDescription("OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this code belowo if you see him!")
 						.addField("\u200B", `\`\`\`\n${encrypted}\n\`\`\``, true)
-						.setThumbnail(client.emojis.find("name", "caprineError").url)
+						.setThumbnail(client.emojis.find("name", "caprineError").url);
+
 		return msg.reply({ embed });
 	};
 
@@ -246,7 +248,7 @@ module.exports = (client) => {
 	client.wait = require("util").promisify(setTimeout);
 
 	// These 2 simply handle unhandled things. Like Magic. /shrug
-	process.on("uncaughtException", (err) => {
+	process.on("uncaughtException", err => {
 		const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
 		console.trace("Uncaught Exception: ", errorMsg);
 	});
