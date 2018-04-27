@@ -22,7 +22,7 @@
 */
 
 module.exports = (client, message) => {
-	//	Don't log our own deletions
+	//	Don't log our own messages
 	if (message.author.id === client.user.id) return;
 
 	let logMessage;

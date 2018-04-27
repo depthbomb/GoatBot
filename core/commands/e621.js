@@ -25,7 +25,6 @@ exports.run = async (client, message, args, level) => {
 	if (!args || args.length === 0) return;
 	if (!message.channel.nsfw && message.channel.type !== "dm") return client.msg(message, "red", "error", "This command can only be used in NSFW channels.");
 
-	const shuffle = require('shuffle-array');
 	const request = require('request');
 	const { RichEmbed } = require('discord.js');
 
@@ -84,7 +83,7 @@ exports.run = async (client, message, args, level) => {
 				if (d.success && d.success === false) return msg.edit(`<@${message.author.id}>, Error: ` + d.message);
 				if (d === undefined || d.length == 0) return msg.edit(`<@${message.author.id}>, No results for your query. Make sure the tags you used exist and are formatted correctly. If the tags are correct then try lowering the page number. If all else fails, then there might just not be any results for what you searched for.\n¯\\_(ツ)_/¯`);
 
-				let selected = shuffle(data)[0];
+				let selected = data.shuffle()[0];
 				let postTags = selected.tags.split(" ");
 				let blT = blacklistedTags.map((w) => {
 					return +new RegExp('\\b' + w + '\\b', 'gi').test(postTags);

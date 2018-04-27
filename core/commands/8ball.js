@@ -25,7 +25,6 @@ exports.run = async (client, message, args, level) => {
 	const { RichEmbed } = require('discord.js');
 	let question = args.join(" ");
 	if(question.endsWith("?")) {
-		const shuffle = require('shuffle-array');
 		const responses = [
 			// Affirmative
 			"It is certain",
@@ -53,7 +52,7 @@ exports.run = async (client, message, args, level) => {
 		];
 		const embed = new RichEmbed()
 					.setColor('#232323')
-					.setDescription(`\:8ball: <@${message.author.id}>, ${shuffle(responses)[0]}`);
+					.setDescription(`\:8ball: <@${message.author.id}>, ${responses.shuffle()[0]}`);
 
 		message.channel.send({ embed });
 	} else {

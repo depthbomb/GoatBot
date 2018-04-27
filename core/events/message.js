@@ -74,11 +74,9 @@ module.exports = (client, message) => {
         * React to OwO's
         */
         if (null !== message.content.match(/\b([O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F][Ww\uA4B3\u03C9][O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F])\b/)) {
-			const shuffle = require('shuffle-array');
-
             client.log("bot", 'OwO detected!');
             let reactArray = ['🍌', '🍆', '🥒'];
-            shuffle(reactArray);
+            reactArray.shuffle();
             message.react(reactArray[0]);
         }
 
