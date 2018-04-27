@@ -22,5 +22,20 @@
 */
 
 module.exports = (client, message) => {
-	client.log("event", `${message.author.username}'s message [${message.content}] was deleted`);
+	//	Don't log our own deletions
+	//if (message.author.id === client.user.id) return;
+
+	let logMessage;
+	let isAttachment = false;
+	let attachmentWithMessage = false;
+	if (typeof message.attachments.first() != 'undefined') isAttachment = true;
+	if (isAttachment && message.content !== "") attachmentWithMessage = true;
+
+	if (message.embeds.length > 0) logMessage = `${message.author.username}'s embed(s) were deleted`;
+	else if (isAttachment && !attachmentWithMessage) logMessage = `${message.author.username}'s attachment was deleted`;
+	else if (attachmentWithMessage) logMessage = `${message.author.username}'s attachment with message [${message.content}] was deleted`;
+	else logMessage = `${message.author.username}'s message [${message.content}] was deleted`;
+	
+
+	client.log("event", logMessage);
 };
