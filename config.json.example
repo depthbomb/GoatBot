@@ -32,6 +32,10 @@
 		"bypassUsers": []
 	},
 
+	"autoRoles": {
+		"unrestrictDelay": 300
+	},
+
 	"playingGames": [
 		"Petting a goat",
 		"Increasing Discount's incoming damage",
