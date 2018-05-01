@@ -2,6 +2,7 @@ node_modules
 config.json
 /core/commands/disabled/*.js
 /storage/logs/*.log
+/storage/database/*
 /storage/cache/albums/*
 /storage/cache/steam/*
 /storage/tmp/cooldowns/*

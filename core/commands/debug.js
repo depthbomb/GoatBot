@@ -42,6 +42,8 @@ exports.run = (client, message, args, level) => {
 		logTypes.forEach(type => {
 			client.log(type, `This is a test log entry for [${type}]`, false);
 		});
+	} else {
+		return;
 	}
 };
 

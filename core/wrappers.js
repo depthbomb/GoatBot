@@ -23,4 +23,6 @@
 
 module.exports = (client) => {
 	client.trunc = require('truncate');
+
+	client.uuid = require('uuid/v4');
 };

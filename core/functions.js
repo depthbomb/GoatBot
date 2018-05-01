@@ -43,18 +43,6 @@ module.exports = (client) => {
 		}
 	};
 
-	client.extractUser = (message, string) => {
-		if(target.match(/<@!?\d{17,19}>/g)) {
-			return message.mentions.users.first();
-		} else {
-			try {
-				return client.users.find('id', string);
-			} catch (e) {
-				throw new Error("User does not appear to exist.");
-			}
-		}
-	};
-
 	client.error = (msg, err) => {
 		const { RichEmbed } = require('discord.js');
 		const crypto = require('crypto');
@@ -123,6 +111,11 @@ module.exports = (client) => {
 				}, autoDeleteDelay * 1000);
 			}
 		});
+	};
+
+
+	client.logAction = () => {
+		
 	};
 
 

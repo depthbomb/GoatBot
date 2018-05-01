@@ -25,6 +25,25 @@ module.exports = (client, message) => {
 	const moment = require('moment');
 	if (message.author.bot) return;
 
+	message.isGagged = () => {
+		if (message.channel.type === "dm") return;
+		const db = client.db;
+		db.all(`SELECT userid, active FROM softgags WHERE userid = "${message.author.id}" LIMIT 1`, (e, r) => {
+			if (e) throw new Error(e);
+			if (r.length > 0) {
+				const row = r[0];
+				if (row.active) {
+					return message.delete();
+				}
+			}
+		});
+	};
+
+	/**
+	* Check for user softgags and delete their message if they have an active one
+	*/
+	message.isGagged();
+
 	const settings = client.config;
 	message.settings = settings;
 

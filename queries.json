@@ -1,0 +1,6 @@
+{
+	"//": "Avoid messing with this unless you know what you are doing!",
+	"create": {
+		"softgags": "CREATE TABLE IF NOT EXISTS softgags (id INTEGER PRIMARY KEY AUTOINCREMENT, userid TEXT NOT NULL UNIQUE, date INT(11) NOT NULL, active TINYINT(1) NOT NULL DEFAULT '1')"
+	}
+}
