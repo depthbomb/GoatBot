@@ -33,6 +33,33 @@ module.exports = async (client) => {
 	*/
 
 
+	cron.schedule('*/1 * * * *', () => {
+		client.db.all(`SELECT * FROM mutes WHERE expiration <= ${moment().format('X')} AND active = 1`, (err, rows) => {
+			if (err) throw new Error(err);
+			if (rows) {	//	Found some!
+				rows.forEach(mute => {
+					client.fetchUser(mute.userid).then(user => {
+
+						const guild = client.guilds.find('id', '186978265557237762');
+						const mem = guild.members.find('id', user.id);
+
+						mem.setMute(false, 'Unmuted by GoatBot!').then(m => {
+							client.db.run(`UPDATE mutes SET active = 0 WHERE guid = '${mute.guid}'`, (err) => {
+								if (err) throw new Error(err);
+								client.log("debug", `Unmuted ${mem.nickname}`);
+							});
+						});
+
+
+					}).catch((err) => {
+						client.log("error", `Failed to send reminder message to user:\n\n${err}`);
+					});
+				});
+			}
+		});
+	});
+
+
 	/**
 	* Every hour
 	*/

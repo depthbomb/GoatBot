@@ -44,7 +44,7 @@ exports.run = async (client, message, args, level) => {
 	};
 
 	if (validMoves.includes(move)) {
-		let botMove = shuffle(botMoves)[0];
+		let botMove = botMoves.shuffle();
 		let outcomeMessage;
 		let vsMessage = `${user} ${emoji[move]} _vs._ ${emoji[botMove]} ${bot}`;
 
@@ -65,6 +65,7 @@ exports.run = async (client, message, args, level) => {
 
 		return message.channel.send(`${vsMessage}\n\n${outcomeMessage}`);
 	} else {
+		console.log('Invalid move');
 		return;
 	}
 };

@@ -22,27 +22,34 @@
 */
 
 exports.run = (client, message, args, level) => {
-	const target = args[0];
-	const user = message.mentions.users.first();
-
 	const moment = require('moment');
+	const target = args[0];
+	const time = args[1];
+	const user = message.mentions.users.first();
+	const now = moment();
 
-	client.db.all(`SELECT userid, active FROM softgags WHERE userid = "${user.id}" LIMIT 1`, (err, rows) => {
+	let expiration;
+	if (typeof time !== 'undefined') {
+		expiration = now.add(time, 'm');
+	} else {
+		expiration = now.add(30, 'm');
+	}
+
+	client.db.all(`SELECT userid, active FROM mutes WHERE userid = "${user.id}" LIMIT 1`, (err, rows) => {
 		if (err) throw new Error(err);
+		
 		if (rows.length > 0) {
 			let row = rows[0];
 			if (row.active) {
-				client.db.run(`UPDATE softgags SET active = "0" WHERE userid = "${user.id}"`, () => {
-					return message.reply(`Ungagged ${user.tag}`);
-				});
-			} else {
-				client.db.run(`UPDATE softgags SET active = "1" WHERE userid = "${user.id}"`, () => {
-					return message.reply(`Gagged ${user.tag}`);
+				client.db.run(`UPDATE mutes SET active = "0" WHERE userid = "${user.id}"`, () => {
+					return message.reply(`[DEBUG] Unmuted ${user.tag}`);
 				});
 			}
 		} else {
-			client.db.run("INSERT INTO softgags (userid, date) VALUES (?, ?)", [user.id, moment().format('X')], () => {
-				return message.reply(`Gagged ${user.tag}`);
+			client.db.run("INSERT INTO mutes (guid, userid, date, expiration) VALUES (?, ?, ?, ?)", [client.uuid(), user.id, now.format('X'), expiration.format('X')], () => {
+				message.guild.members.find('id', user.id).setMute(true, 'Muted by GoatBot!').then(mem => {
+					return message.reply(`[DEBUG] Muted ${user.tag} until ${expiration.format('dddd, MMMM Do YYYY, HH:mm:ss')}`);
+				});
 			});
 		}
 	});
@@ -51,21 +58,20 @@ exports.run = (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	guildOnly: true,
-	aliases: [
-		"sg"
-	],
+	aliases: [],
 	permLevel: 5
 };
 
 exports.help = {
-	name: "softgag",
+	name: "m",
 	category: "Moderation",
-	description: "Adds or removes user from softgag",
-	usage: "softgag [@user]",
+	description: "Mutes or unmutes a user",
+	usage: "mute [@user] [duration]",
 	params: {
-		'@user': 'User mention to gag'
+		'@user': 'User mention to mute',
+		'duration': 'Length of the mute, defaults to 30 minutes'
 	},
 	examples: [
-		"softgag @UserName#0000"
+		"mute @UserName#0000 5"
 	]
 };
