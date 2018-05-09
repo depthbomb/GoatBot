@@ -65,7 +65,6 @@ exports.run = async (client, message, args, level) => {
 
 		return message.channel.send(`${vsMessage}\n\n${outcomeMessage}`);
 	} else {
-		console.log('Invalid move');
 		return;
 	}
 };
