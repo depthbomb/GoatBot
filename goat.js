@@ -91,7 +91,7 @@ class GoatBot extends Discord.Client {
 	 * Logs a message
 	 * @param {string} type Log type
 	 * @param {string} message Message to log
-	 * @param {boolean} writeFile Whether to message to file
+	 * @param {boolean} writeFile Whether to write message to file
 	 */
 	log (type, message, writeFile = true) {
 		let logName = type + '.log';
