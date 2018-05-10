@@ -32,7 +32,7 @@ exports.run = async (client, message, args, level) => {
 
 	request({
 		headers: {
-			"User-Agent": client.config.defaultSettings.userAgent
+			"User-Agent": client.config.userAgent
 		},
 		uri: apiUrl,
 		method: 'GET'
