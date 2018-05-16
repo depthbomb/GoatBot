@@ -25,6 +25,7 @@ exports.run = async (client, message, args, level) => {
 	const { RichEmbed } = require('discord.js');
 	let question = args.join(" ");
 	if(question.endsWith("?")) {
+
 		const responses = [
 			// Affirmative
 			"It is certain",
@@ -37,13 +38,17 @@ exports.run = async (client, message, args, level) => {
 			"Outlook good",
 			"Yes",
 			"Signs point to yes",
+
 			// Non-committal
 			"Reply hazy, try again",
 			"Ask again later",
 			"Better not tell you now",
 			"Cannot predict now",
 			"Concentrate and ask again",
+
 			// Negative
+			"No",
+			"Nope",
 			"Don't count on it",
 			"My reply is no",
 			"My sources say no",
