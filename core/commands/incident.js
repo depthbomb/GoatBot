@@ -24,44 +24,89 @@
 exports.run = async (client, message, args, level) => {
 	if (args.length > 0) return;
 
-	const cheerio = require('cheerio');
-	const snekfetch = require('snekfetch');
-	const Entities = require('html-entities').AllHtmlEntities;
-	const entities = new Entities();
 	const { RichEmbed } = require('discord.js');
-	const statusUrl = "https://status.discordapp.com/";
+	const request = require('request');
+	const apiUrl = "https://discord.statuspage.io/history.json";
 
-	let statusMessage = await message.channel.send('Checking status...');
+	const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	const colors = {
+		none: "#3498db",
+		minor: "#faa61a",
+		major: "#f04747"
+	};
+	const currentMonth = monthNames[new Date().getMonth()];
+	const currentDay = new Date().getDate();
+	const dateString = `${currentMonth} ${currentDay}`;
 
-	return snekfetch.get(statusUrl).then(result => {
-		let $ = cheerio.load(result.text);
-		let statusBlock = $('.page-status').length ? $('.page-status') : $('.unresolved-incidents .unresolved-incident');
-		let statusTitle = $('.page-status').length ? statusBlock.find('span.status').text().trim() : $('.unresolved-incidents').find('.incident-title>a').text().replace("Subscribe", "").trim();
-		let statusColor;
-		let hasUpdates = false;
-		let updates = [];
+	let statusMessage = await message.channel.send('Contacting API...');
 
-		if (statusBlock.find('.updates').length) {
-			hasUpdates = true;
-			statusBlock.find('.updates>.update').each((i, v) => {
-				/*help me*/
-				updates.push(entities.decode($(v).html().replace(/<\/?strong>/ig, "**").replace(/<small>(.*)<\/?small>/ig, "_$1_").replace("<br>", "\n").replace(/[ ]{2,}/g, " ").replace(/\n\n/ig, "")).trim());
-			});
+	request({
+		headers: {
+			"User-Agent": client.config.userAgent
+		},
+		uri: apiUrl,
+		method: 'GET'
+	}, (err, res, body) => {
+		if (err) {
+			statusMessage.delete();
+			return client.error(message, err);
 		}
 
-		if (statusBlock.hasClass('status-none')) statusColor = clientColors.green;
-		else if (statusBlock.hasClass('status-minor')) statusColor = clientColors.orange;
-		else if (statusBlock.hasClass('impact-major')) statusColor = clientColors.red;
-		else if (statusBlock.hasClass('impact-none')) statusColor = clientColors.black;
+		statusMessage.edit('Contacted API, checking for incidents today...');
 
-		let statusEmbed = new RichEmbed()
-							.setAuthor("Discord Status")
-							.setColor(statusColor)
-							.setDescription(`***${statusTitle}*** ${hasUpdates ? "\n\n" + updates.join("\n\n") : ""}`);
+		const data = JSON.parse(body);
+		const months = data.months;
+		const latestMonth = months[0];
+		const latestIncident = latestMonth.incidents[0];
+		const incidentTimestamp = latestIncident.timestamp;
 
-		statusMessage.edit(`<@${message.author.id}>`, {embed: statusEmbed});
-	}).catch((err) => {
-		statusMessage.edit('Could not fetch status: ' + err);
+		if (incidentTimestamp.indexOf(dateString) !== -1) {
+
+			statusMessage.edit('Found an incident! Gathering details...');
+
+			const incidentUrl = `https://status.discordapp.com/incidents/${latestIncident.code}.json`;
+
+			request({
+				headers: {
+					"User-Agent": client.config.userAgent
+				},
+				uri: incidentUrl,
+				method: 'GET'
+			}, (err, res, body) => {
+
+				if (err) {
+					statusMessage.delete();
+					return client.error(message, err);
+				}
+
+				const incident = JSON.parse(body);
+				const incidentName = incident.name;
+				const incidentStatus = incident.status;
+				const incidentUpdates = incident.incident_updates;
+
+				statusMessage.edit('Processing incident data...');
+
+				let statusEmbed = new RichEmbed()
+					.setTitle(incidentName)
+					.setURL(incident.shortlink)
+					.setColor(colors[incident.impact])
+					.setTimestamp();
+
+				for (let i = 0; i < incidentUpdates.length; i++) {
+					const update = incidentUpdates[i];
+
+					//	Add space above updates if it is not the first one for a cleaner look
+					if (i > 0) statusEmbed.addBlankField();
+
+					statusEmbed.addField(update.status.toProperCase(), update.body);
+				}
+
+				statusMessage.edit(`<@${message.author.id}>`, { embed: statusEmbed });
+			});
+		} else {
+			statusMessage.edit(`<@${message.author.id}>, There are no current incidents to report for today!`);
+		}
+
 	});
 };
 

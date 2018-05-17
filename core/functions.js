@@ -233,6 +233,10 @@ module.exports = (client) => {
 		return a.join("");
 	};
 
+	String.prototype.toProperCase = function () {
+		return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+	};
+
 	Array.prototype.shuffle = function () {
 		let currentIndex = this.length, temporaryValue, randomIndex;
 
