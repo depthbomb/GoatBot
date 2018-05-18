@@ -101,10 +101,10 @@ exports.run = async (client, message, args, level) => {
 					statusEmbed.addField(update.status.toProperCase(), update.body);
 				}
 
-				statusMessage.edit(`<@${message.author.id}>`, { embed: statusEmbed });
+				return statusMessage.edit(`<@${message.author.id}>`, { embed: statusEmbed });
 			});
 		} else {
-			statusMessage.edit(`<@${message.author.id}>, There are no current incidents to report for today!`);
+			return statusMessage.edit(`<@${message.author.id}>, There are no current incidents to report for today!`);
 		}
 
 	});

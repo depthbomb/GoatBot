@@ -205,14 +205,14 @@ module.exports = (client) => {
 	}
 
 	client.b64 = {
-		encode (string) {
-			return require('btoa')(string);
+		encode (str) {
+			return require('btoa')(str);
 		},
-		decode (string) {
-			return require('atob')(string);
+		decode (str) {
+			return require('atob')(str);
 		},
-		check (string) {
-			return (client.b64.decode(client.b64.encode(string)) == string);
+		check (str) {
+			return (client.b64.decode(client.b64.encode(str)) == str);
 		}
 	};
 

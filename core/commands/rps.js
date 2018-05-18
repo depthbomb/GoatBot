@@ -23,7 +23,6 @@
 
 exports.run = async (client, message, args, level) => {
 	if (!args) return;
-	const shuffle = require("shuffle-array");
 	const validMoves = ["rock", "paper", "scissors"];
 	const botMoves = ["rock", "paper", "scissors"];
 	const move = args[0].toLowerCase();
@@ -44,7 +43,7 @@ exports.run = async (client, message, args, level) => {
 	};
 
 	if (validMoves.includes(move)) {
-		let botMove = botMoves.shuffle();
+		let botMove = botMoves.shuffle()[0];
 		let outcomeMessage;
 		let vsMessage = `${user} ${emoji[move]} _vs._ ${emoji[botMove]} ${bot}`;
 
