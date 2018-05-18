@@ -22,6 +22,7 @@
 */
 
 exports.run = async (client, message, args, level) => {
+	const request = require('request');
 	const msg = args.join(' ');
 	const api_key = client.config.cleverbot_api_key;
 
@@ -35,7 +36,7 @@ exports.run = async (client, message, args, level) => {
 		uri: api_url,
 		method: 'GET'
 	}, (err, res, body) => {
-		if (err) return client.error(message, err);
+		if (err) throw new Error(err);
 
 		const data = JSON.parse(body);
 		state = data.cs;
