@@ -28,7 +28,7 @@ exports.run = async (client, message, args, level) => {
 	const Chance = require('chance');
 	let thing = args[0].replace(/_/g, ' ');
 	let thing2 = args[1].replace(/_/g, ' ');
-	const chance = new Chance(thing, thing2, message.author.id, new Date().getFullYear());
+	const chance = new Chance(thing, thing2, new Date().getFullYear());
 	const output = Math.floor(chance.random() * (100 - 1 + 1)) + 1;
 	const blocks = Math.floor(output / 10);
 	const bar = '█'.repeat(blocks);
@@ -49,7 +49,7 @@ exports.run = async (client, message, args, level) => {
 	}
 
 	let response;
-	if(output <= 0) response = "_Uh oh!_ Maybe you two should see other people";
+	if(output >= 0 && output < 10) response = "_Uh oh!_ Maybe you two should see other people";
 	else if(output >= 10 && output < 20) response = "Awful... \:cry:";
 	else if(output >= 20 && output < 40) response = "Not too great \:cry:";
 	else if(output >= 40 && output < 50) response = "Worse than average \:neutral_face:";
