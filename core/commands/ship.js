@@ -57,7 +57,7 @@ exports.run = async (client, message, args, level) => {
 	else if(output > 50 && output < 75 && output !== 69) response = "Not bad! \:slight_smile:";
 	else if(output === 69) response = "***( ͡° ͜ʖ ͡°)***";
 	else if(output >= 75 && output < 90) response = "Pretty good! \:grinning:";
-	else if(output >= 90 && output < 99) response = "Great! \:kissing_heart:";
+	else if(output >= 90 && output < 100) response = "Great! \:kissing_heart:";
 	else if(output >= 100) response = "A perfect match! \:heart_eyes: ";
 	else response = 'You should not see this';
 
