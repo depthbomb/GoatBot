@@ -28,9 +28,9 @@ exports.run = async (client, message, args, level) => {
 	const Chance = require('chance');
 	let thing = args[0].replace(/_/g, ' ');
 	let thing2 = args[1].replace(/_/g, ' ');
-	const chance = new Chance(thing, thing2);
+	const chance = new Chance(thing, thing2, message.author.id, new Date().getFullYear());
 	const output = Math.floor(chance.random() * (100 - 1 + 1)) + 1;
-	const blocks = Math.ceil(output / 10);
+	const blocks = Math.floor(output / 10);
 	const bar = '█'.repeat(blocks);
 	const barFill = ' ​'.repeat((10 - blocks));
 
