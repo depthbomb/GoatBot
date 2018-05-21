@@ -22,42 +22,33 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (!args || args.length < 2) return message.reply("Both arguments are required.");
-
-	const pluralize = require('pluralize');
-	const numSides = args[0];
-	const numDice = args[1];
-	
-	if (client.isNaN(numSides)) return message.reply('Number of sides must be a number, duh dummy!');
-	if (numSides < 2) return message.reply('Number of sides must be greater than 2.');
-
-	if (client.isNaN(numDice)) return message.reply('Number of dice must be a number, duh dummy!');
-	if (numDice < 1 || numDice > 100) return message.reply('Number of dice must be between 0 and 100');
-
-	let results = client.randomInt(1, numSides, numDice, 1);
-
-	message.reply(`:game_die: Rolled ${numDice} ${numSides}-sided ${pluralize('die', numDice)} and got ***${results.join(', ')}*** :game_die:`);
+	if (!args || args.length < 2 || args.length > 50) return;
+	const choice = args.shuffle()[0].replace(/_/g, ' ');
+	message.reply(`I choose... \`${choice}\`!`);
 };
 
 exports.conf = {
 	enabled: true,
 	guildOnly: false,
 	aliases: [
-		'roll'
+		'choose'
 	],
+	cooldown: 1.5,
 	permLevel: 0
 };
 
 exports.help = {
-	name: "dice",
+	name: "choice",
 	category: "Fun",
-	description: "Roll a dice.",
-	usage: "dice [side count] [die count]",
+	description: "Let the bot choose between a list of items",
+	usage: "choice [item] [item2] [...?]",
 	params: {
-		"side count": "Number of sides per die",
-		"die count": "Number of die to roll"
+		"item": "First choice, use underscores for spacces",
+		"item2": "Second choice",
+		"...?": "Additional choices, need at least two"
 	},
 	examples: [
-		"dice 5 10"
+		"choice paper plastic",
+		"choose beef pork chicken tofu"
 	]
 };

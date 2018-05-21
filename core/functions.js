@@ -189,9 +189,9 @@ module.exports = (client) => {
 		return isNaN(parseInt(param));
 	};
 
-	client.randomInt = (min, max, amount = 1) => {
+	client.randomInt = (min, max, amount = 1, forceArray = false) => {
 		let results;
-		if (amount > 1) {
+		if (amount > 1 || forceArray) {
 			results = [];
 			for (let i = 0; i < amount; i++) {
 				results.push(Math.floor(Math.random() * (max - min + 1)) + min);
