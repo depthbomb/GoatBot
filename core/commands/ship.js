@@ -26,8 +26,8 @@ exports.run = async (client, message, args, level) => {
 
 	const { RichEmbed } = require('discord.js');
 	const Chance = require('chance');
-	let thing = args[0].replace(/_/g, ' ');
-	let thing2 = args[1].replace(/_/g, ' ');
+	let thing = args[0].replace(/_/g, ' ').trim();
+	let thing2 = args[1].replace(/_/g, ' ').trim();
 	const chance = new Chance(thing, thing2, new Date().getFullYear());
 	const output = Math.floor(chance.random() * (100 - 1 + 1)) + 1;
 	const blocks = Math.floor(output / 10);
