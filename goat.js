@@ -69,6 +69,7 @@ class GoatBot extends Discord.Client {
 		this.appPath		= `${__dirname}/core`;
 		this.storagePath	= `${__dirname}/storage`;
 		this.tmpPath		= `${__dirname}/storage/tmp`;
+		this.deported       = ['168137183805308928'];
 	}
 
 	permlevel (message) {
