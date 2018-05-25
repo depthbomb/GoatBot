@@ -25,16 +25,16 @@ exports.run = (client, message, args, level) => {
 	const nsfwRole = message.member.guild.roles.find('name', 'NSFW').id;
 	const blacklist = client.config.nsfwBlacklist;
 
-	if (blacklist.include(message.member.id)) return;
+	if (blacklist.includes(message.member.id)) return;
 
 	if (message.member.roles.exists('name', 'NSFW')) {
-		message.member.removeRole(nsfwRole, 'Via CyanBot!').then(() => {
+		message.member.removeRole(nsfwRole, 'Via GoatBot!').then(() => {
 			message.delete().then(msg => {
 				msg.reply('Your access to the NSFW channels has been revoked.');
 			});
 		});
 	} else {
-		message.member.addRole(nsfwRole, 'Via CyanBot!').then(() => {
+		message.member.addRole(nsfwRole, 'Via GoatBot!').then(() => {
 			message.delete().then(msg => {
 				msg.reply('You have been given access to the NSFW channels. Have fun ( ͡° ͜ʖ ͡°)');
 			});
