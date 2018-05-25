@@ -24,7 +24,6 @@
 exports.run = async (client, message, args, level) => {
 	if (args.length !== 1) return;
 	const target = args[0];
-	//const customMessage = args[1];
 	const sender = message.author.tag;
 
 	let userTarget;
@@ -49,22 +48,7 @@ exports.run = async (client, message, args, level) => {
 		"https://i.imgur.com/MWiDknU.jpg"
 	];
 
-	let currentIndex = spookyPics.length, temporaryValue, randomIndex;
-
-	// While there remain elements to shuffle...
-	while (0 !== currentIndex) {
-
-		// Pick a remaining element...
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex -= 1;
-
-		// And swap it with the current element.
-		temporaryValue = spookyPics[currentIndex];
-		spookyPics[currentIndex] = spookyPics[randomIndex];
-		spookyPics[randomIndex] = temporaryValue;
-	}
-
-	userTarget.send(`${spookyPics[0]}\n\n***OoOOooh!***\n_You have been spooked by ${sender}!_\nHappy Halloween!`).then(msg => {
+	userTarget.send(`${spookyPics.shuffle()[0]}\n\n***OoOOooh!***\n_You have been spooked by ${sender}!_\nHappy Halloween!`).then(msg => {
 		message.delete();
 	}).catch(err => {
 		message.author.send(`The target does not appear to allow me to send them DMs. I cannot spook them if I cannot send them DMs.`);
