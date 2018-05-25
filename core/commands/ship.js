@@ -26,10 +26,10 @@ exports.run = async (client, message, args, level) => {
 
 	const { RichEmbed } = require('discord.js');
 	const Chance = require('chance');
-	let thing = args[0].toLowerCase().replace(/_/g, ' ').trim();
-	let thing2 = args[1].toLowerCase().replace(/_/g, ' ').trim();
+	let thing = args[0].replace(/_/g, ' ').trim();
+	let thing2 = args[1].replace(/_/g, ' ').trim();
 
-	if (thing === thing2) return message.reply('You cannot ship two identical items.');
+	if (thing.toLowerCase() === thing2.toLowerCase()) return message.reply('You cannot ship two identical items.');
 
 	const chance = new Chance(thing, thing2, new Date().getFullYear());
 	const output = Math.floor(chance.random() * (100 - 1 + 1)) + 1;
