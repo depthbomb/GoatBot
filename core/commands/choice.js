@@ -23,6 +23,9 @@
 
 exports.run = async (client, message, args, level) => {
 	if (!args || args.length < 2 || args.length > 50) return;
+
+	if (args.allValuesSame()) return message.reply('Choices cannot be identical.');
+
 	const choice = args.shuffle()[0].replace(/_/g, ' ');
 	message.reply(`I choose... \`${choice}\`!`);
 };
