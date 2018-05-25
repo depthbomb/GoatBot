@@ -29,7 +29,7 @@ exports.run = async (client, message, args, level) => {
 	const jimp = require('jimp');
 	const imgur = require('imgur');
 	const { RichEmbed } = require('discord.js');
-	const imageName = `${client.tmpPath}/color_${client.cuid()}.png`;
+	const imageName = `${client.tmpPath}/color_${client.uuid()}.png`;
 
 	if (!color.match(/#?[a-fA-F0-9]{6}/i)) return client.msg(message, "red", "error", "The color code you provided is invalid.");
 
