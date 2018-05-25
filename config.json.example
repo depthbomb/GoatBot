@@ -12,15 +12,23 @@
 	"initialGame": "!help",
 	"status": "online",
 	"clientId": "405805435438891008",
-	"userAgent": "GoatBot! Automaton by Caprine Softworks",
+	"userAgent": "GoatBot! Automaton by Caprine Softworks - github.com/depthbomb/GoatBot",
+
+	"database": {
+		"host": "localhost",
+		"user": "username",
+		"pass": "password",
+		"db":   "goatbot"
+	},
 
 	"roles": {
-		"admin": "186979341387694080",
+		"admin": "",
 		"mod": ""
 	},
 
-	"nsfwChannel": "429030866585518080",
-	"logChannel": "428601004913590274",
+	"nsfwBlacklist": [],
+	"nsfwChannel": "",
+	"logChannel": "",
 
 	"crypto": {
 		"salt": "",
@@ -57,7 +65,7 @@
 		"a True Pacifist run"
 	],
 
-	"greetingChannel": "437403529783803926",
+	"greetingChannel": "",
 	"greetings": [
 		"{user} has joined us! Give them a warm welcome.",
 		"Hey, {user} just joined! Let's bully them!",
@@ -70,6 +78,8 @@
 	"steam": {
 		"api_key": ""
 	},
+
+	"cleverbot_api_key": "",
 
 	"imgur": {
 		"username": "",

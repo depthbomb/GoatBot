@@ -22,8 +22,10 @@
 */
 
 exports.run = (client, message, args, level) => {
-	
 	const nsfwRole = message.member.guild.roles.find('name', 'NSFW').id;
+	const blacklist = client.config.nsfwBlacklist;
+
+	if (blacklist.include(message.member.id)) return;
 
 	if (message.member.roles.exists('name', 'NSFW')) {
 		message.member.removeRole(nsfwRole, 'Via CyanBot!').then(() => {
