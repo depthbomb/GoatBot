@@ -47,12 +47,13 @@ exports.run = async (client, message, args, level) => {
 				.setTitle(`Results for \`${decodeURIComponent(term)}\``)
 				.setDescription(result.permalink)
 				.addField("Definition", client.trunc(result.definition, 1023))
-				.addBlankField(true)
-				.addField("Example(s)", client.trunc(result.example, 1023))
 				.setColor("#134FE6");
-			msg.edit(`<@${message.author.id}>`, {embed: embed});
+
+			if (result.example) embed.addBlankField(1).addField('Example(s)', client.trunc(result.example, 500));
+			
+			msg.edit(`<@${message.author.id}>`, { embed });
 		}
-	});
+	});	
 };
 
 exports.conf = {
