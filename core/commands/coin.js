@@ -22,12 +22,9 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (args) return;
-	
 	const sides = ['Heads', 'Tails'];
 	const decision = sides.shuffle()[0];
 	
-
 	return message.reply(`The coin lands on ***${decision}!***`);
 };
 
