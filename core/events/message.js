@@ -25,25 +25,6 @@ module.exports = (client, message) => {
 	const moment = require('moment');
 	if (message.author.bot) return;
 
-	message.isGagged = () => {
-		if (message.channel.type === "dm") return;
-		const db = client.db;
-		db.all(`SELECT userid, active FROM softgags WHERE userid = "${message.author.id}" LIMIT 1`, (e, r) => {
-			if (e) throw new Error(e);
-			if (r.length > 0) {
-				const row = r[0];
-				if (row.active) {
-					return message.delete();
-				}
-			}
-		});
-	};
-
-	/**
-	* Check for user softgags and delete their message if they have an active one
-	*/
-	message.isGagged();
-
 	const settings = client.config;
 	message.settings = settings;
 
@@ -180,7 +161,8 @@ module.exports = (client, message) => {
 			});
 		} else {
 			client.log("system", `${message.author.username} attempted to execute command [${cmd.help.name}] but does not have permission`);
-			message.reply(`You do not have permission to use this command.`);
+
+			return client.msg(message, 'red', 'error', `You do not have permission to use this command. It requires a permission level of ${cmd.conf.permLevel} and you have a permission level of ${level}.`, true);
 		}
 	}
 	// Best Practice: **do not** reply with a message if the command does
