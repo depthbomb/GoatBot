@@ -31,7 +31,7 @@ exports.run = async (client, message, args, level) => {
 	if (client.isNaN(numDice) || args.length < 2) numDice = 1;
 
 	if (client.isNaN(numSides)) return message.reply('Number of sides must be a number, duh dummy!');
-	if (numSides < 2 || numSide > 999999999) return message.reply('Number of sides must be between 2 and 999999999.');
+	if (numSides < 2 || numSides > 999999999) return message.reply('Number of sides must be between 2 and 999999999.');
 
 	if (client.isNaN(numDice)) return message.reply('Number of dice must be a number, duh dummy!');
 	if (numDice < 1 || numDice > 100) return message.reply('Number of dice must be between 0 and 100');
