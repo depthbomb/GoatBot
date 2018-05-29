@@ -47,6 +47,7 @@
 		"node-opus": "^0.3.0",
 		"opusscript": "0.0.6",
 		"pluralize": "^7.0.0",
+		"pokemon": "^1.2.2",
 		"querystring": "^0.2.0",
 		"random-int": "^1.0.0",
 		"request": "^2.86.0",
