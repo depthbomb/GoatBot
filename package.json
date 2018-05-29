@@ -44,22 +44,14 @@
 		"moment-timezone": "^0.5.17",
 		"ms": "^2.0.0",
 		"node-cron": "^1.2.1",
-		"node-opus": "^0.3.0",
-		"opusscript": "0.0.6",
 		"pluralize": "^7.0.0",
 		"pokemon": "^1.2.2",
-		"querystring": "^0.2.0",
-		"random-int": "^1.0.0",
 		"request": "^2.86.0",
-		"sleep": "^5.1.1",
 		"snekfetch": "^4.0.0",
-		"sqlite3": "^4.0.0",
 		"ssq": "0.0.1",
 		"steamid": "^1.1.0",
 		"to-zalgo": "^1.0.1",
 		"truncate": "^2.0.0",
-		"uuid": "^3.1.0",
-		"validator": "^9.0.0",
-		"ytdl-core": "^0.20.4"
+		"uuid": "^3.1.0"
 	}
 }
