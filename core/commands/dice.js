@@ -38,7 +38,7 @@ exports.run = async (client, message, args, level) => {
 
 	let results = client.randomInt(1, numSides, numDice, 1);
 
-	message.reply(`:game_die: Rolled ${numDice} ${numSides}-sided ${pluralize('die', numDice)} and got ***${results.join(', ')}*** :game_die:`);
+	return message.reply(`:game_die: Rolled ${numDice} ${numSides}-sided ${pluralize('die', numDice)} and got ***${results.join(', ')}*** :game_die:`);
 };
 
 exports.conf = {
