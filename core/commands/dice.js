@@ -22,12 +22,14 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (!args || args.length < 2) return message.reply("Both arguments are required.");
-
+	if (!args || args.length < 1) return message.reply("Both arguments are required.");
 	const pluralize = require('pluralize');
+
 	const numSides = args[0];
-	const numDice = args[1];
+	let numDice = args[1];
 	
+	if (client.isNaN(numDice) || args.length < 2) numDice = 1;
+
 	if (client.isNaN(numSides)) return message.reply('Number of sides must be a number, duh dummy!');
 	if (numSides < 2) return message.reply('Number of sides must be greater than 2.');
 
@@ -52,12 +54,13 @@ exports.help = {
 	name: "dice",
 	category: "Fun",
 	description: "Roll a dice.",
-	usage: "dice [side count] [die count]",
+	usage: "dice [side count] [die count?]",
 	params: {
 		"side count": "Number of sides per die",
-		"die count": "Number of die to roll"
+		"die count": "(Optional) Number of die to roll, defaults to 1 if not specified or non-numeric"
 	},
 	examples: [
-		"dice 5 10"
+		"dice 5 10",
+		"dice 6"
 	]
 };
