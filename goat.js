@@ -40,7 +40,6 @@ const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
-const sql = require('sqlite3');
 
 /**
 * Client colors
@@ -64,7 +63,6 @@ class GoatBot extends Discord.Client {
 		this.queries     	= require("./queries.json");
 		this.commands		= new Discord.Collection();
 		this.aliases		= new Discord.Collection();
-		this.db             = new sql.Database(`${__dirname}/storage/database/goat.db3`);
 		this.rootPath		= __dirname;
 		this.appPath		= `${__dirname}/core`;
 		this.storagePath	= `${__dirname}/storage`;
@@ -229,15 +227,6 @@ const init = async () => {
 				});
 			}
 		}
-	});
-
-
-	/**
-	* Creates the local database if it doesn't exist
-	*/
-	Object.keys(client.queries.create).forEach(key => {
-		console.log(chalk.greenBright(`Running database query [${key}]`));
-		client.db.run(client.queries.create[key]);
 	});
 
 
