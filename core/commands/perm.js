@@ -29,7 +29,8 @@ exports.conf = {
 	enabled: true,
 	guildOnly: true,
 	aliases: [
-		"lvl",
+		"permission",
+		"permissions",
 		"mylevel",
 		"mylvl"
 	],
@@ -37,11 +38,11 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "level",
+	name: "perm",
 	category: "System",
 	description: "Displays your command permission level",
-	usage: "level",
+	usage: "perm",
 	examples: [
-		"level"
+		"perm"
 	]
 };
