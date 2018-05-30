@@ -36,7 +36,7 @@ exports.run = (client, message, args, level) => {
 				output += `\n== ${cat} ==\n`;
 				currentCategory = cat;
 			}
-			output += `${settings.prefix}${c.help.name}${" ".repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
+			output += `${c.help.name}${" ".repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
 		});
 		message.author.send(output, {code:"asciidoc", split: true}).then((msg) => {
 			message.react("📨");
