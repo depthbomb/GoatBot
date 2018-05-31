@@ -24,6 +24,7 @@
 exports.run = (client, message, args, level) => {
 	const nsfwRole = message.member.guild.roles.find('name', 'NSFW').id;
 	const blacklist = client.config.nsfwBlacklist;
+	const lenny = '( ͡° ͜ʖ ͡°)'; //	Store the face as its own variable because it messes up the text in the line it is in
 
 	if (blacklist.includes(message.member.id)) return;
 
@@ -36,7 +37,7 @@ exports.run = (client, message, args, level) => {
 	} else {
 		message.member.addRole(nsfwRole, 'Via GoatBot!').then(() => {
 			message.delete().then(msg => {
-				msg.reply('You have been given access to the NSFW channels. Have fun ( ͡° ͜ʖ ͡°)');
+				msg.reply(`You have been given access to the NSFW channels. Have fun ${lenny}\n\n_Abuse of this command, such as using it frequently for no reason, will result in you being blacklisted from using it. If you do not wish to see the content in the channels, then don't bother joining._`);
 			});
 		});
 	}
