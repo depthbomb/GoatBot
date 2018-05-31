@@ -42,6 +42,11 @@ exports.run = (client, message, args, level) => {
 		logTypes.forEach(type => {
 			client.log(type, `This is a test log entry for [${type}]`, false);
 		});
+	} else if (action === 'dumpCommands') {
+		const json = `${client.rootPath}/commands.json`;
+		fs.writeFile(json, JSON.stringify(client.commands.array(), null, 4), () => {
+			message.reply(`Dumped commands to \`${json}\``);
+		});
 	} else {
 		return;
 	}

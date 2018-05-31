@@ -1,5 +1,6 @@
 node_modules
 config.json
+commands.json
 /core/commands/disabled/*.js
 /storage/logs/*.log
 /storage/database/*

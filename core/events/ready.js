@@ -73,5 +73,5 @@ module.exports = async client => {
 
     //	 Write our pretty logo
     console.log(chalk.bgCyan.whiteBright(ascii.join("\n")));
-    console.log(chalk.bgCyan.whiteBright(`Ready to serve ${client.users.size} users in ${client.guilds.size} servers.`))
+    console.log(chalk.bgCyan.whiteBright(`Ready to serve ${client.users.size} users in ${client.guilds.size} servers.`));
 };
