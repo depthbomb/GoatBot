@@ -22,6 +22,7 @@
 */
 
 exports.run = (client, message, args, level) => {
+	const fs = require('fs');
 	const action = args[0];
 	const option = args[1];
 
