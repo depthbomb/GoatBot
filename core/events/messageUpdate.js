@@ -28,5 +28,6 @@ module.exports = (client, oldMessage, newMessage) => {
 
 	if (oldMessage.content != newMessage.content) {
 		client.log("event", `${oldMessage.author.username}'s message was updated: [${oldMessage}] --> [${newMessage}]`);
+		client.logAction('Message updated', `${oldMessage.author.username}'s message was updated:\n\n[${oldMessage}] --> [${newMessage}]`, clientColors.default, oldMessage.author.tag, oldMessage.author.avatarURL);
 	}
 };

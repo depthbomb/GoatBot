@@ -22,5 +22,6 @@
 */
 
 module.exports = (client, channel) => {
-	client.log("event", `Channel ${channel.id} has been deleted`)
+	client.log("event", `Channel ${channel.id} (${channel.type.toUpperCase()}) has been deleted`);
+	client.logAction('Channel deleted', `Channel ${channel.id} (${channel.type.toUpperCase()}) has been deleted`, clientColors.red);
 };

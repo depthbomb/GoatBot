@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (client, member) => {
-	client.log("event", `${member.user.tag} has left ${member.guild.name}`);
-	client.logAction('User left', `${member.user.tag} has left ${member.guild.name}`, clientColors.red, member.user.tag, member.user.avatarURL);
+module.exports = (guild, user) => {
+	client.log("event", `${user.tag} has been unbanned.`);
+	client.logAction('User banned', `${user.tag} has been unbanned.`, clientColors.orange, user.tag, user.avatarURL);
 };

@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (client, member) => {
-	client.log("event", `${member.user.tag} has left ${member.guild.name}`);
-	client.logAction('User left', `${member.user.tag} has left ${member.guild.name}`, clientColors.red, member.user.tag, member.user.avatarURL);
+module.exports = (messages) => {
+	client.log("event", `${messages.array().length} messages have been deleted`);
+	client.logAction('Bulk message deletion', `${messages.array().length} messages have been deleted`);
 };

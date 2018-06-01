@@ -23,4 +23,5 @@
 
 module.exports = (client, oldChannel, newChannel) => {
 	client.log("event", `Channel [${oldChannel.id}] (${oldChannel.type.toUpperCase()}) was updated.`);
+	client.logAction('Channel updated', `Channel [${oldChannel.id}] (${oldChannel.type.toUpperCase()}) was updated.`);
 };

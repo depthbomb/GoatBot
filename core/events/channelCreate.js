@@ -22,5 +22,6 @@
 */
 
 module.exports = (client, channel) => {
-	client.log("event", `New ${channel.type.toUpperCase()} channel created with ID ${channel.id}`)
+	client.log("event", `New ${channel.type.toUpperCase()} channel created with ID ${channel.id}`);
+	client.logAction('Channel created', `New ${channel.type.toUpperCase()} channel created with ID ${channel.id}`);
 };

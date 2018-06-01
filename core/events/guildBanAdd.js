@@ -22,5 +22,6 @@
 */
 
 module.exports = (guild, user) => {
-	client.log("event", `${user.username} has been banned.`);
+	client.log("event", `${user.tag} has been banned.`);
+	client.logAction('User banned', `${user.tag} has been banned.`, clientColors.red, user.tag, user.avatarURL);
 };
