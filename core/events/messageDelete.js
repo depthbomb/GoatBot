@@ -23,7 +23,7 @@
 
 module.exports = (client, message) => {
 	//	Don't log our own messages
-	if (message.author.id === client.user.id) return;
+	if (message.author.id === client.user.id || message.channel.type === 'dm') return;
 
 	let logMessage;
 	let isAttachment = false;
@@ -31,10 +31,10 @@ module.exports = (client, message) => {
 	if (typeof message.attachments.first() != 'undefined') isAttachment = true;
 	if (isAttachment && message.content) attachmentWithMessage = true;
 
-	if (message.embeds.length > 0) logMessage = `${message.author.username}'s embed(s) were deleted`;
-	else if (isAttachment && !attachmentWithMessage) logMessage = `${message.author.username}'s attachment [${message.attachments.first().url}] was deleted`;
-	else if (attachmentWithMessage) logMessage = `${message.author.username}'s attachment [${message.attachments.first().url}] with message [${message.content}] was deleted`;
-	else logMessage = `${message.author.username}'s message [${message.content}] was deleted`;
+	if (message.embeds.length > 0) logMessage = `${message.author.username}'s embed(s) were deleted in ${message.channel.name}`;
+	else if (isAttachment && !attachmentWithMessage) logMessage = `${message.author.username}'s attachment [${message.attachments.first().url}] was deleted in ${message.channel.name}`;
+	else if (attachmentWithMessage) logMessage = `${message.author.username}'s attachment [${message.attachments.first().url}] with message [${message.content}] was deleted in ${message.channel.name}`;
+	else logMessage = `${message.author.username}'s message [${message.content}] was deleted in ${message.channel.name}`;
 
 	client.log("event", logMessage);
 	client.logAction('Message deleted', logMessage, clientColors.default, message.author.tag, message.author.avatarURL);

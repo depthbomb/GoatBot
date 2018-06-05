@@ -33,7 +33,7 @@ exports.run = (client, message, args, level) => {
 	if (num > 100) num = 100;	//	We can only purge 100 messages at most
 
 	message.delete().then(() => {
-		message.channel.bulkDelete(num).catch(e => {
+		message.channel.bulkDelete(num, true).catch(e => {
 			console.trace(e);
 		});
 	});

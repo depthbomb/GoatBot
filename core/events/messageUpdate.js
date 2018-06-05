@@ -22,12 +22,11 @@
 */
 
 module.exports = (client, oldMessage, newMessage) => {
-	if (oldMessage.author.bot) return;
-
+	if (oldMessage.author.bot || oldMessage.channel.type === 'dm') return;
 	if (newMessage.content === "!snip" || newMessage.content === "!s") oldMessage.delete();
 
 	if (oldMessage.content != newMessage.content) {
-		client.log("event", `${oldMessage.author.username}'s message was updated: [${oldMessage}] --> [${newMessage}]`);
+		client.log("event", `${oldMessage.author.username}'s message was updated in ${oldMessage.channel.name}: [${oldMessage}] --> [${newMessage}]`);
 		client.logAction('Message updated', `${oldMessage.author.username}'s message was updated:\n\n[${oldMessage}] --> [${newMessage}]`, clientColors.default, oldMessage.author.tag, oldMessage.author.avatarURL);
 	}
 };

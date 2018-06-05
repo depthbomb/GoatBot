@@ -21,7 +21,15 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (messages) => {
-	client.log("event", `${messages.array().length} messages have been deleted`);
-	client.logAction('Bulk message deletion', `${messages.array().length} messages have been deleted`);
+module.exports = (client, messages) => {
+	const channel = messages.first().channel.name;
+	let messageAuthors = [];
+
+	for (let i = 0; i < messages.array().length; i++) {
+		const msg = messages.array()[i];
+		if (!messageAuthors.includes(msg.author.username)) messageAuthors.push(msg.author.username);
+	}
+
+	client.log("event", `${messages.array().length} messages by ${messageAuthors.join(', ')} have been deleted in ${channel}.`);
+	client.logAction('Bulk message deletion', `${messages.array().length} messages by ${messageAuthors.join(', ')} have been deleted in ${channel}.`);
 };

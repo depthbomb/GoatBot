@@ -87,6 +87,10 @@ module.exports = (client, message) => {
 			message.react("🔥");
 		}
 
+		if (message.cleanContent === "** **") {
+			message.delete();
+		}
+
 		/**
 		* Dunk
 		*/
@@ -165,6 +169,4 @@ module.exports = (client, message) => {
 			return client.msg(message, 'red', 'error', `You do not have permission to use this command. It requires a permission level of ${cmd.conf.permLevel} and you have a permission level of ${level}.`, true);
 		}
 	}
-	// Best Practice: **do not** reply with a message if the command does
-	// not exist, or permissions lack.
 };
