@@ -13,6 +13,7 @@
 	"status": "online",
 	"clientId": "405805435438891008",
 	"userAgent": "GoatBot! Automaton by Caprine Softworks - github.com/depthbomb/GoatBot",
+	"mainGuild": "",
 
 	"database": {
 		"host": "localhost",
@@ -29,6 +30,7 @@
 	"nsfwBlacklist": [],
 	"nsfwChannel": "",
 	"logChannel": "",
+	"refugeeChannel": "",
 
 	"crypto": {
 		"salt": "",
