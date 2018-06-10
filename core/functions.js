@@ -241,8 +241,8 @@ module.exports = (client) => {
 	};
 	
 	/**
-	 * Underscore to Space, replaces underscores with spaces
-	 */
+	* Underscore to Space - replaces underscores with spaces, duh
+	*/
 	String.prototype.usToSp = function () {
 		return this.replace(/_/g, ' ');
 	};
