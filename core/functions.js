@@ -24,6 +24,9 @@
 module.exports = (client) => {
 	const fs = require('fs');
 
+	client.trunc = require('truncate');
+	client.uuid = require('uuid/v4');
+
 	/*
 	SINGLE-LINE AWAITMESSAGE
 	A simple way to grab a single reply, from the user that initiated

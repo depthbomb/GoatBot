@@ -129,7 +129,6 @@ class GoatBot extends Discord.Client {
 const client = new GoatBot();
 
 require(`${client.appPath}/functions.js`)(client);
-require(`${client.appPath}/wrappers.js`)(client);
 
 const init = async () => {
 
