@@ -26,8 +26,8 @@ exports.run = async (client, message, args, level) => {
 
 	const { RichEmbed } = require('discord.js');
 	const Chance = require('chance');
-	let thing = args[0].replace(/_/g, ' ').trim();
-	let thing2 = args[1].replace(/_/g, ' ').trim();
+	let thing = args[0].usToSp().trim();
+	let thing2 = args[1].usToSp().trim();
 
 	if (thing.toLowerCase() === thing2.toLowerCase()) return message.reply('You cannot ship two identical items.');
 
@@ -46,7 +46,7 @@ exports.run = async (client, message, args, level) => {
 		if (thing2.match(/<@!?\d{17,19}>/g)) {
 			let user2 = message.mentions.users.last();
 			thing2 = user2.username;
-		}	
+		}
 	} catch (error) {
 		console.log(error);
 	}
@@ -67,7 +67,7 @@ exports.run = async (client, message, args, level) => {
 	let embed = new RichEmbed()
 		.setColor('#be1931')
 		.setTitle('\:heart: Ship Calculator')
-		.setDescription(`\:small_red_triangle_down: \`${thing}\`\n\:small_red_triangle: \`${thing2}\`\n\n${output}% [\`${bar}${barFill}\`](#) ${response}`)
+		.setDescription(`\:small_red_triangle_down: \`${thing}\`\n\:small_red_triangle: \`${thing2}\`\n\n${output}% [\`${bar}${barFill}\`](https://www.buymeacoff.ee/depthbomb) ${response}`)
 
 	message.reply({ embed });
 };

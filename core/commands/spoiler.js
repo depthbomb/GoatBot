@@ -35,7 +35,7 @@ exports.run = (client, message, args, level) => {
 	let encrypted = cipher.update(spoiler, "utf8", "base64");
 	encrypted += cipher.final('base64');
 
-	let messageContent = `<@${message.author.id}> sent a spoiler for: \`${topic.replace(/-/g, ' ')}\` - _react with :eyes: to decode_\n\n\`${encrypted}\``;
+	let messageContent = `<@${message.author.id}> sent a spoiler for: \`${topic.usToSp()}\` - _react with :eyes: to decode_\n\n\`${encrypted}\``;
 
 	message.delete();
 
@@ -82,10 +82,10 @@ exports.help = {
 	description: 'TODO',
 	usage: "spoiler [topic] [message]",
 	params: {
-		"topic": "Topic of your spoiler, used to let others know what the spoiler pertains to. Use dashes instead of spaces",
+		"topic": "Topic of your spoiler, used to let others know what the spoiler pertains to. Use underscores for spaces",
 		"message": "The spoiler message itself"
 	},
 	examples: [
-		"spoiler My-Topic Everybody dies!"
+		"spoiler My_Topic Everybody dies!"
 	]
 };

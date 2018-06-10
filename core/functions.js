@@ -239,6 +239,13 @@ module.exports = (client) => {
 	String.prototype.toProperCase = function () {
 		return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	};
+	
+	/**
+	 * Underscore to Space, replaces underscores with spaces
+	 */
+	String.prototype.usToSp = function () {
+		return this.replace(/_/g, ' ');
+	};
 
 	String.prototype.scramble = function () {
 		let a = this.split(""),
