@@ -98,7 +98,17 @@ module.exports = (client, message) => {
 			message.react("🔥");
 		}
 
-		if (message.cleanContent === "** **") {
+		if (message.cleanContent === '** **' ||
+			message.cleanContent === '.' ||
+			message.cleanContent === ',' ||
+			message.cleanContent === '_' ||
+			message.cleanContent === '-' ||
+			message.cleanContent === '*' ||
+			message.cleanContent === '+' ||
+			message.cleanContent === '=' ||
+			message.cleanContent === '`' ||
+			message.cleanContent === '~'
+		) {
 			message.delete();
 		}
 
