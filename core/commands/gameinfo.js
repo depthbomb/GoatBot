@@ -47,7 +47,7 @@ exports.run = async (client, message, args, level) => {
 			table.setHeading('Name', 'Score', 'Time')
 
 			players.forEach(user => {
-				table.addRow(user.name !== '' ? user.name : '<unconnected>', user.score, `${ms(Math.floor(user.duration * 1000), {long: true})}`);
+				table.addRow(user.name !== '' ? user.name.trim() : '<Connecting...>', user.score, `${ms(Math.floor(user.duration * 1000), {long: true})}`);
 			});
 	
 			return statusMessage.edit(`<@${message.author.id}>\n\`\`\`${table.toString()}\`\`\``);
@@ -59,7 +59,7 @@ exports.run = async (client, message, args, level) => {
 			if (err) throw new Error(err);
 	
 			const serverInfoEmbed = new RichEmbed()
-				.setAuthor('Cyan.TF Server Info', 'https://cyan.tf/serverapi/bot/cyan-logo.png', 'https://cyan.tf/')
+				.setAuthor('Cyan.TF Server Info', 'https://cyan.tf/styles/cyan/images/cyan2018.png', 'https://cyan.tf/')
 				.setColor('#0097a7')
 				.setFooter(`${serverIp}:${serverPort}`)
 				.setTimestamp()
