@@ -47,7 +47,7 @@ exports.run = async (client, message, args, level) => {
 			table.setHeading('Name', 'Score', 'Time')
 
 			players.forEach(user => {
-				table.addRow(user.name !== '' ? user.name.trim() : '<Connecting...>', user.score, `${ms(Math.floor(user.duration * 1000), {long: true})}`);
+				table.addRow(user.name !== '' ? user.name : '<Connecting...>', user.score, `${ms(Math.floor(user.duration * 1000), {long: true})}`);
 			});
 	
 			return statusMessage.edit(`<@${message.author.id}>\n\`\`\`${table.toString()}\`\`\``);
