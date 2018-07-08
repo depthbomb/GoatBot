@@ -83,6 +83,11 @@
 
 	"cleverbot_api_key": "",
 
+	"rss": {
+		"url": "https://steamcommunity.com/groups/cyantf/rss/",
+		"output_channel": ""
+	},
+
 	"imgur": {
 		"username": "",
 		"password": "",
