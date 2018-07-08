@@ -24,7 +24,23 @@
 module.exports = async (client) => {
 	const fs = require('fs');
 	const cron = require('node-cron');
-	const moment = require('moment');
+
+	/**
+	* Every minute
+	*/
+	// cron.schedule('* * * * *', () => {
+	// 	let Parser = require('rss-parser');
+	// 	let parser = new Parser();
+
+	// 	(async () => {
+	// 		let feed = await parser.parseURL('https://steamcommunity.com/groups/joincyantf/rss/');
+	// 		feed.items.forEach(item => {
+				
+	// 		});
+		   
+	// 	  })();
+	// });
+
 
 	/**
 	* Every hour

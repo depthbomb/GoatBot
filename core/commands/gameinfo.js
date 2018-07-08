@@ -34,9 +34,13 @@ exports.run = async (client, message, args, level) => {
 	const serverIp = '66.150.188.17';
 	const serverPort = 27015;
 
-	if (action === 'players') {
-		let statusMessage = await message.channel.send('Checking players...');
+	let statusMessage = await message.channel.send('One moment...');
 
+	const timeOut = setTimeout(() => {
+		return statusMessage.edit(`<@${message.author.id}>, Timed out while querying server. Is it up?`);
+	}, (10*1000));
+
+	if (action === 'players') {
 		ssq.players(serverIp, serverPort, (err, data) => {
 			if (err) throw new Error(err);
 			if (data.length < 1) return statusMessage.edit(`<@${message.author.id}>, There are currently no players on the server.`);
@@ -49,12 +53,12 @@ exports.run = async (client, message, args, level) => {
 			players.forEach(user => {
 				table.addRow(user.name !== '' ? user.name : '<Connecting...>', user.score, `${ms(Math.floor(user.duration * 1000), {long: true})}`);
 			});
+			
+			clearTimeout(timeOut);
 	
 			return statusMessage.edit(`<@${message.author.id}>\n\`\`\`${table.toString()}\`\`\``);
 		});
 	} else {
-		let statusMessage = await message.channel.send('Checking server...');
-
 		ssq.info(serverIp, serverPort, (err, data) => {
 			if (err) throw new Error(err);
 	
@@ -67,6 +71,8 @@ exports.run = async (client, message, args, level) => {
 				.addField('Players', `${data.numplayers}/${data.maxplayers}`, true)
 				.addField('\u200B', 'Type `!gameinfo players` to get a list of online players.');
 	
+			clearTimeout(timeOut);
+
 			return statusMessage.edit(`<@${message.author.id}>`, {
 				embed: serverInfoEmbed
 			});

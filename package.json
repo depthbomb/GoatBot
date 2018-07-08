@@ -47,6 +47,7 @@
 		"pluralize": "^7.0.0",
 		"pokemon": "^1.2.2",
 		"request": "^2.87.0",
+		"rss-parser": "^3.4.2",
 		"snekfetch": "^4.0.2",
 		"ssq": "0.0.1",
 		"steamid": "^1.1.0",
