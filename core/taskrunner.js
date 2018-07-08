@@ -37,12 +37,12 @@ module.exports = async (client) => {
 			const feed = await parser.parseURL(client.config.rss.url);
 
 			if (feed.items.length < 1) return;
-
+			
 			const latest = feed.items[0];
 			const cacheFile = path.join(client.cachePath, 'rss', encodeURIComponent(latest.link) + '.cache');
 
 			//	If the latest feed item is not cached
-			if (!client.fileExists(cacheFile)) {
+			if (!fs.existsSync(cacheFile)) {
 				const { RichEmbed } = require('discord.js');
 
 				const content = latest.content
@@ -58,8 +58,8 @@ module.exports = async (client) => {
 								.setTimestamp()
 				
 				const outputChannel = client.channels.find('id', client.config.rss.output_channel);
-				return outputChannel.send({ embed }).then(() => {
-					fs.writeFileSync(cacheFile, JSON.stringify(latest));
+				fs.writeFile(cacheFile, JSON.stringify(latest), (err) => {
+					return outputChannel.send({ embed });
 				});
 			}
 		})();
