@@ -23,23 +23,47 @@
 
 module.exports = async (client) => {
 	const fs = require('fs');
+	const path = require('path');
 	const cron = require('node-cron');
 
 	/**
 	* Every minute
 	*/
-	// cron.schedule('* * * * *', () => {
-	// 	let Parser = require('rss-parser');
-	// 	let parser = new Parser();
+	cron.schedule('* * * * *', () => {
+		const Parser = require('rss-parser');
+		const parser = new Parser();
 
-	// 	(async () => {
-	// 		let feed = await parser.parseURL('https://steamcommunity.com/groups/joincyantf/rss/');
-	// 		feed.items.forEach(item => {
+		(async () => {
+			const feed = await parser.parseURL(client.config.rss.url);
+
+			if (feed.items.length < 1) return;
+
+			const latest = feed.items[0];
+			const cacheFile = path.join(client.cachePath, 'rss', encodeURIComponent(latest.link) + '.cache');
+
+			//	If the latest feed item is not cached
+			if (!client.fileExists(cacheFile)) {
+				const { RichEmbed } = require('discord.js');
+
+				const content = latest.content
+								.replace(/<br>/g, '\n')	//	Replace line break tags with actual line breaks before stripping HTML
+								.replace(/<(.|\n)*?>/g, '');
+
+				const embed = new RichEmbed()
+								.setColor(client.config.color)
+								.setTitle(latest.title)
+								.setURL(latest.link)
+								.setFooter('Via Cyan.TF Steam Group')
+								.setDescription(client.trunc(content, 900, {ellipsis: "..."}))
+								.setTimestamp()
 				
-	// 		});
-		   
-	// 	  })();
-	// });
+				const outputChannel = client.channels.find('id', client.config.rss.output_channel);
+				return outputChannel.send({ embed }).then(() => {
+					fs.writeFileSync(cacheFile, JSON.stringify(latest));
+				});
+			}
+		})();
+	});
 
 
 	/**

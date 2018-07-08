@@ -6,4 +6,5 @@ commands.json
 /storage/database/*
 /storage/cache/albums/*
 /storage/cache/steam/*
+/storage/cache/rss/*
 /storage/tmp/cooldowns/*

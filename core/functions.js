@@ -28,12 +28,9 @@ module.exports = (client) => {
 	client.uuid = require('uuid/v4');
 
 	/*
-	SINGLE-LINE AWAITMESSAGE
-	A simple way to grab a single reply, from the user that initiated
-	the command. Useful to get "precisions" on certain things...
-	USAGE
-	const response = await client.awaitReply(msg, "Favourite Color?");
-	msg.reply(`Oh, I really love ${response} too!`);
+		USAGE:
+		const response = await client.awaitReply(msg, "Favourite Color?");
+		msg.reply(`Oh, I really love ${response} too!`);
 	*/
 	client.awaitReply = async (msg, question, limit = 60000) => {
 		const filter = m => m.author.id = msg.author.id;
@@ -175,13 +172,6 @@ module.exports = (client) => {
 		});
 	};
 
-	/*
-	MESSAGE CLEAN FUNCTION
-	"Clean" removes @everyone pings, as well as tokens, and makes code blocks
-	escaped so they're shown more easily. As a bonus it resolves promises
-	and stringifies objects!
-	This is mostly only used by the Eval and Exec commands.
-	*/
 	client.clean = async (client, text) => {
 		if (text && text.constructor.name == "Promise")
 		text = await text;
@@ -194,6 +184,14 @@ module.exports = (client) => {
 		.replace(client.token, "{null}");
 
 		return text;
+	};
+
+	client.hashString = (str, algo = 'md5') => {
+		const crypto = require('crypto');
+		let data = str;
+
+		//	Should probably catch any errors from this via invalid algorithms, but it should be fine for now~
+		return crypto.createHash(algo).update(data).digest('hex');
 	};
 
 	client.fileExists = (path) => {

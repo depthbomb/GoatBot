@@ -23,7 +23,6 @@
 
 if (process.version.slice(1).split(".")[0] < 8) throw new Error("GoatBot requires Node 8.0.0 or higher. Update Node on your system.");
 
-// These 2 simply handle unhandled things. Like Magic. /shrug
 process.on("uncaughtException", err => {
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
 	console.trace("Uncaught Exception: ", err);
@@ -67,6 +66,7 @@ class GoatBot extends Discord.Client {
 		this.appPath		= `${__dirname}/core`;
 		this.storagePath	= `${__dirname}/storage`;
 		this.tmpPath		= `${__dirname}/storage/tmp`;
+		this.cachePath		= `${__dirname}/storage/cache`;
 		this.deported       = ['168137183805308928'];
 	}
 
@@ -132,7 +132,9 @@ require(`${client.appPath}/functions.js`)(client);
 
 const init = async () => {
 
+
 	require(`${client.appPath}/taskrunner.js`)(client);
+
 
 	/**
 	* Load commands
@@ -156,6 +158,7 @@ const init = async () => {
 			process.exit(1);
 		}
 	});
+	/* ===================================================== */
 
 
 	/**
@@ -175,6 +178,7 @@ const init = async () => {
 			process.exit(1);
 		}
 	});
+	/* ===================================================== */
 
 
 	/**
@@ -194,6 +198,8 @@ const init = async () => {
 			});
 		}
 	}
+	/* ===================================================== */
+
 
 	/**
 	 * Create empty log files
@@ -210,6 +216,7 @@ const init = async () => {
 			});
 		}
 	}
+	/* ===================================================== */
 
 
 	/**
@@ -227,9 +234,34 @@ const init = async () => {
 			}
 		}
 	});
+	/* ===================================================== */
 
 
+	/**
+	* Required for RSS functionality
+	*/
+	const Parser = require('rss-parser');
+	const parser = new Parser();
+	(async () => {
+		let feed = await parser.parseURL(client.config.rss.url);
+		feed.items.forEach(item => {
+			//  We cache the current items so we may check for new entries
+			const cacheName = encodeURIComponent(item.link);
+			const cacheFile = path.join(client.cachePath, 'rss', `${cacheName}.cache`);
+
+			if (!client.fileExists(cacheFile)) {
+				fs.writeFileSync(cacheFile, JSON.stringify(item));
+			}
+		});
+	})();
+	/* ===================================================== */
+
+
+	/**
+	* Log the bot into its account
+	*/
 	client.login(client.config.token);
+	/* ===================================================== */
 };
 
 
