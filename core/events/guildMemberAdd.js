@@ -33,8 +33,6 @@ module.exports = (client, member) => {
 
 		member.addRole(refugeeRole).then(mem => {
 			if (client.deported.includes(mem.id)) return;
-
-			console.log('Gave user refugee role');
 			
 			client.log("bot", `Sending welcome DM to new user, ${member.user.tag}.`);
 	
@@ -44,7 +42,6 @@ module.exports = (client, member) => {
 			* Remove the restricted role and give the user the member role after the provided delay
 			*/
 			setTimeout(() => {
-				console.log('Timeout over!');
 				mem.removeRole(refugeeRole, 'Via GoatBot!');
 				mem.addRole(memberRole, 'Via GoatBot!');
 			}, (client.config.autoRoles.unrestrictDelay * 1000));
