@@ -32,7 +32,7 @@ module.exports = (client, member) => {
 		greetingChannel.send(greeting);
 
 		member.addRole(refugeeRole).then(mem => {
-			if (!client.deported.includes(mem.id)) return;
+			if (client.deported.includes(mem.id)) return;
 
 			console.log('Gave user refugee role');
 			
