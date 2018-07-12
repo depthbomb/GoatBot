@@ -127,26 +127,28 @@ module.exports = (client, message) => {
 			message.author.send("https://www.youtube.com/watch?v=wCZFISvHmyY");
 		}
 
-		// if (null !== message.content.match(/^(https?:\/\/)?discord(?:app\.com|\.gg)[\/invite\/]?(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig)) {
-		// 	if (message.author.id !== message.guild.owner.id || level < 2) {
-		// 		message.delete();
-		// 	}
-		// }
+		if (null !== message.content.match(/^(https?:\/\/)?discord(?:app\.com|\.gg)[\/invite\/]?(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig)) {
+			if (message.content === 'https://discord.gg/xw624a8' || message.content === 'https://discordapp.com/invite/xw624a8') return;
 
-		// if (null !== message.content.match(/[n\u00F1]+[\s_\-.,+^*#&:;~$!\`%]*?[i1l\u012F]+[\s_\-.,+^*#&:;~$!\`%]*?[g\u011F]+[\s_\-.,+^*#&:;~$!\`%]*?[g\u011F]+[\s_\-.,+^*#&:;~$!\`%]*?[a4@\u03B1]+/ig) ||
-		// 	null !== message.content.match(/f[a@α4]+[g\u011F]([g\u011F]+[o\u03BF0]+t)?/ig) ||
-		// 	null !== message.content.match(/[n\u00F1][\s_\-.,+^*#&:;~$!\`%]*?[i1!l|\\\/#*]+[\s_\-.,+^*#&:;~$!\`%\u012F]*?[gq9\u011F][\s_\-.,+^*#&:;~$!\`%]*?[\u011Fgq9#*\s][\s_\-.,+^*#&:;~$!\`%]*?[e3a4\u00E3\u03B1@#*\s]?[\s_\-.,+^*#&:;~$!\`%]*?r/ig)) {
-		// 	if (message.channel.type === 'dm') return;
-		// 	if (message.author.id !== message.guild.owner.id || level < 2) {
-		// 		message.delete().then(msg => {
-		// 			msg.reply('_Whoops!_ You can\'t say that in a Christian guild!').then(rMessage => {
-		// 				setTimeout(() => {
-		// 					rMessage.delete();
-		// 				}, 10000);
-		// 			});
-		// 		});
-		// 	}
-		// }
+			if (message.author.id !== message.guild.owner.id || level < 2) {
+				message.delete();
+			}
+		}
+
+		if (null !== message.content.match(/[n\u00F1]+[\s_\-.,+^*#&:;~$!\`%]*?[i1l\u012F]+[\s_\-.,+^*#&:;~$!\`%]*?[g\u011F]+[\s_\-.,+^*#&:;~$!\`%]*?[g\u011F]+[\s_\-.,+^*#&:;~$!\`%]*?[a4@\u03B1]+/ig) ||
+			null !== message.content.match(/f[a@α4]+[g\u011F]([g\u011F]+[o\u03BF0]+t)?/ig) ||
+			null !== message.content.match(/[n\u00F1][\s_\-.,+^*#&:;~$!\`%]*?[i1!l|\\\/#*]+[\s_\-.,+^*#&:;~$!\`%\u012F]*?[gq9\u011F][\s_\-.,+^*#&:;~$!\`%]*?[\u011Fgq9#*\s][\s_\-.,+^*#&:;~$!\`%]*?[e3a4\u00E3\u03B1@#*\s]?[\s_\-.,+^*#&:;~$!\`%]*?r/ig)) {
+			if (message.channel.type === 'dm') return;
+			if (message.author.id !== message.guild.owner.id || level < 2) {
+				message.delete().then(msg => {
+					msg.reply('_Whoops!_ You can\'t say that in a Christian guild!').then(rMessage => {
+						setTimeout(() => {
+							rMessage.delete();
+						}, 10000);
+					});
+				});
+			}
+		}
 
 		// if (null !== message.content.match(/word/i)) {}
 		/*--------------------------------------------------------------------------*/
