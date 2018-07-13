@@ -106,7 +106,7 @@ exports.run = async (client, message, args, level) => {
 							.setImage(selected.file_url)
 							.setDescription(`https://e621.net/post/show/${selected.id}/`)
 							.addField("Description", `${selected.description !== "" ? desc : "_No description_"}`)
-							.addField("Tags", tags)
+							.addField("Tags", '```' + tags + '```')
 							.addField("Artist(s)", selected.artist.length > 0 ? "`" + selected.artist.join(", ") + "`" : "unknown_artist")
 							.setFooter(`${data.length < 320 ? data.length : '>' + data.length} results`)
 							.setColor("#002d55");
@@ -130,7 +130,7 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	guildOnly: false,
-	cooldown: 7.5,
+	cooldown: 5.5,
 	aliases: [
 		"e6",
 		"salt",
