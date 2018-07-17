@@ -43,7 +43,6 @@
 		"moment-duration-format": "^2.2.2",
 		"moment-timezone": "^0.5.17",
 		"ms": "^2.1.1",
-		"node-cron": "^1.2.1",
 		"pluralize": "^7.0.0",
 		"pokemon": "^1.2.2",
 		"request": "^2.87.0",
