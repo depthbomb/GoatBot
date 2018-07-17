@@ -142,34 +142,34 @@ module.exports = (client) => {
 	client.cooldown = async (message, cooldownName, cooldownDuration, reply = true, callback) => {
 		const now = require('moment')().unix() * 1000;
 		const messageTime = message.createdTimestamp;
-		const cooldownPath = `${client.tmpPath}/cooldowns/${cooldownName}.json`;
+		
+		//	Object to store command cooldowns
+		let cooldownObject = client.cooldowns;
 		let timeLeft;
-		fs.stat(cooldownPath, (err, stat) => {
-			if (err == null) {
-				const ms = require('ms');
-				return fs.readFile(cooldownPath, (err, data) => {
-					if (err) throw err;
-					let expiration = JSON.parse(data).ex;
-					timeLeft = expiration - messageTime;
-					if (reply) message.reply(`Please try again in about ${ms(timeLeft, {long: true})}.`).then(cdMsg => {
-						setTimeout(() => {
-							cdMsg.delete();
-						}, 5000);
-					});
-				});
-			} else if (err.code === 'ENOENT') {	//	Cache file does not exist
-				fs.writeFile(cooldownPath, JSON.stringify({"ex":(messageTime + cooldownDuration)}), (err) => {
-					if (err) throw err;
-					setTimeout(() => {
-						fs.unlink(cooldownPath, (err) => {
-							if (err && err.code !== 'ENOENT') client.log("error", "Error removing cooldown: " + err);
-						});
-					}, cooldownDuration);
-				});
-			}
+		let onCooldown;
 
-			callback();
-		});
+		if (cooldownObject.hasOwnProperty(cooldownName)) {
+			onCooldown = true;
+			const ms = require('ms');
+			const expiration = cooldownObject[cooldownName].ex;
+			timeLeft = expiration - messageTime;
+
+			if (reply) message.reply(`Please try again in about ${ms(timeLeft, {long: true})}.`).then(cdMsg => {
+				setTimeout(() => {
+					cdMsg.delete();
+				}, 5000);
+			});
+		} else {
+			onCooldown = false;
+			cooldownObject[cooldownName] = {
+				ex: (messageTime + cooldownDuration)
+			};
+			setTimeout(() => {
+				delete cooldownObject[cooldownName];	//	Weird operator
+			}, cooldownDuration);
+		}
+
+		callback(onCooldown);
 	};
 
 	client.clean = async (client, text) => {

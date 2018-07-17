@@ -173,18 +173,20 @@ module.exports = (client, message) => {
 				cooldown = cmd.conf.cooldown * 1000;
 			}
 
-			/**
-			* Handle command cooldowns
-			*/
 			let cooldownName;
+			
 			if (!cmd.conf.globalCd) {
 				cooldownName = `c_${cmd.help.name}_${message.author.id}`;
 			} else {
 				cooldownName = `c_${cmd.help.name}_GLOBAL`;
 			}
-			client.cooldown(message, cooldownName, cooldown, true, () => {
-				client.log("system", `${message.author.username} executed command [${cmd.help.name}]`);
-				cmd.run(client, message, args, level);
+			client.cooldown(message, cooldownName, cooldown, true, (cd) => {
+				if (cd) {
+					client.log("system", `${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);
+				} else {
+					client.log("system", `${message.author.username} executed command [${cmd.help.name}]`);
+					cmd.run(client, message, args, level);
+				}
 			});
 		} else {
 			client.log("system", `${message.author.username} attempted to execute command [${cmd.help.name}] but does not have permission`);

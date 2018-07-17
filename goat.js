@@ -68,6 +68,7 @@ class GoatBot extends Discord.Client {
 		this.tmpPath		= `${__dirname}/storage/tmp`;
 		this.cachePath		= `${__dirname}/storage/cache`;
 		this.deported       = ['168137183805308928'];
+		this.cooldowns      = {};
 	}
 
 	permlevel (message) {
@@ -216,24 +217,6 @@ const init = async () => {
 			});
 		}
 	}
-	/* ===================================================== */
-
-
-	/**
-	* Clear any leftover cooldowns
-	*/
-	fs.readdir(`${client.tmpPath}/cooldowns/`, (err, files) => {
-		if (err) throw new Error(err);
-
-		for (let file of files) {
-			if (file.match(/\bc_[a-zA-Z0-9]+(_[a-zA-Z0-9]+)?\.json\b/)) {
-				fs.unlink(path.join(`${client.tmpPath}/cooldowns/`, file), err => {
-					if (err) throw new Error(err);
-					console.log(chalk.greenBright("Clearing cooldown file", file));
-				});
-			}
-		}
-	});
 	/* ===================================================== */
 
 

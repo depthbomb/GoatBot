@@ -113,7 +113,6 @@
 		"storage/cache/steam",
 		"storage/cache/rss",
 		"storage/tmp",
-		"storage/tmp/cooldowns",
 		"storage/logs"
 	]
 }
