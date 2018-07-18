@@ -56,7 +56,7 @@ module.exports = (client) => {
 
 		let embed = new RichEmbed()
 						.setAuthor("OOPSIE WOOPSIE!!", client.user.avatarURL)
-						.setColor(clientColors.red)
+						.setColor(client.colors.red)
 						.setDescription("OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this code belowo if you see him!")
 						.addField("\u200B", `\`\`\`\n${encrypted}\n\`\`\``, true)
 						.setThumbnail(client.emojis.find("name", "caprineError").url);
@@ -122,7 +122,7 @@ module.exports = (client) => {
 	 * @param {string} authorName "Author" name
 	 * @param {string} authorImage "Author" image
 	 */
-	client.logAction = (title, logMessage, color = clientColors.default, authorName, authorImage = client.guilds.find('id', client.config.mainGuild).iconURL) => {
+	client.logAction = (title, logMessage, color = client.colors.default, authorName, authorImage = client.guilds.find('id', client.config.mainGuild).iconURL) => {
 		const { RichEmbed } = require('discord.js');
 		const logChannel = client.channels.find('id', client.config.logChannel);
 

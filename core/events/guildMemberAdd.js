@@ -51,5 +51,5 @@ module.exports = (client, member) => {
 	}
 
 	client.log("event", `${member.user.tag} has joined ${member.guild.name}!`);
-	client.logAction('User joined', `${member.user.tag} has joined ${member.guild.name}!`, clientColors.green, member.user.tag, member.user.avatarURL);
+	client.logAction('User joined', `${member.user.tag} has joined ${member.guild.name}!`, client.colors.green, member.user.tag, member.user.avatarURL);
 };

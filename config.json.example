@@ -109,9 +109,10 @@
 	"directories": [
 		"storage",
 		"storage/cache",
-		"storage/cache/albums",
-		"storage/cache/steam",
 		"storage/cache/rss",
+		"storage/cache/command_data",
+		"storage/cache/command_data/steam",
+		"storage/cache/command_data/e621",
 		"storage/tmp",
 		"storage/logs"
 	]

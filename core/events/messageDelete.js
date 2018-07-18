@@ -37,5 +37,5 @@ module.exports = (client, message) => {
 	else logMessage = `${message.author.username}'s message [${message.content}] was deleted in ${message.channel.name}`;
 
 	client.log("event", logMessage);
-	client.logAction('Message deleted', logMessage, clientColors.default, message.author.tag, message.author.avatarURL);
+	client.logAction('Message deleted', logMessage, client.colors.default, message.author.tag, message.author.avatarURL);
 };
