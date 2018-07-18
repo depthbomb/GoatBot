@@ -60,13 +60,12 @@ exports.run = async (client, message, args, level) => {
 
 		let maxAttempts = 5;
 		let attempts = 0;
-		let msg = await message.channel.send("Waiting...");
+		let msg = await message.channel.send("Sending request...");
 		tags = tags.replace(/rating:.*/g, "");	//	Remove any rating tags the user adds
 
 		const searchQuery = `tags=${tags}+rating:${rating}&limit=320&page=${pageNum}`;
 		const apiUrl = `https://e621.net/post/index.json?${searchQuery}`;
 
-		msg.edit("Connecting to API...");
 		request({
 			headers: {
 				"User-Agent": client.config.userAgent
@@ -90,7 +89,7 @@ exports.run = async (client, message, args, level) => {
 					return +new RegExp('\\b' + w + '\\b', 'gi').test(postTags);
 				});
 
-				if (attempts !== maxAttempts) {
+				if (attempts < maxAttempts) {
 					if (blT.indexOf(1) >= 0) {
 						attempts++;
 						msg.edit(`Blacklisted post found... trying again... (${attempts} out of ${maxAttempts})`);
