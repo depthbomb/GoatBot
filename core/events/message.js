@@ -26,6 +26,10 @@ module.exports = (client, message) => {
 	const moment = require('moment');
 	if (message.author.bot) return;
 
+	const rawMessage	= message.content;
+	const isAdmin		= (message.author.id === client.config.ownerId);
+	const isServerStaff = (message.member.roles.find('id', client.config.roles.admin) || message.member.roles.find('id', client.config.roles.mod));
+
 	if (!message.system) {
 		let logPrefix = [];
 		let username = message.member !== null ? message.member.displayName : message.author.tag;
@@ -55,7 +59,7 @@ module.exports = (client, message) => {
 
 		if (isImage) {
 			if (!client.config.allowances.enabled) return;
-			if (!client.config.allowances.channels.includes(message.channel.id)) return;
+			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
 
 			const imagesMax = client.config.allowances.images;
 
@@ -80,24 +84,24 @@ module.exports = (client, message) => {
 
 		if (isUrl) {
 			if (!client.config.allowances.enabled) return;
-			if (!client.config.allowances.channels.includes(message.channel.id)) return;
+			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
 
-			const urlsMax = client.config.allowances.urls;
+			const urlsMax = client.config.allowances.links;
 
-			if (!client.allowances.urls.hasOwnProperty(message.author.id)) {
-				client.allowances.urls[message.author.id] = {
+			if (!client.allowances.links.hasOwnProperty(message.author.id)) {
+				client.allowances.links[message.author.id] = {
 					amount: 1,
 					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
 				};
 			} else {
-				if (client.allowances.urls[message.author.id].amount < urlsMax) {
-					client.allowances.urls[message.author.id] = {
-						amount: client.allowances.urls[message.author.id].amount + 1,
+				if (client.allowances.links[message.author.id].amount < urlsMax) {
+					client.allowances.links[message.author.id] = {
+						amount: client.allowances.links[message.author.id].amount + 1,
 						expires: moment().add(client.config.allowances.expiration, 'm').format('X')
 					};
 				} else {
 					return message.delete().then(m => {
-						m.reply(`You have reached your max allowance for URLs sent. This allowance resets in about ${moment.unix(client.allowances.urls[message.author.id].expires).toNow(true)}.`);
+						m.reply(`You have reached your max allowance for URLs sent. This allowance resets in about ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
 					});
 				}
 			}
@@ -108,8 +112,6 @@ module.exports = (client, message) => {
 
 	const args			= message.content.slice(client.config.prefix.length).trim().split(/ +/g);
 	const command		= args.shift().toLowerCase();
-	const rawMessage	= message.content;
-	const isAdmin		= (message.author.id === client.config.ownerId);
 	const level			= client.permlevel(message);
 	const cmd			= client.commands.get(command) || client.commands.get(client.aliases.get(command));
 
