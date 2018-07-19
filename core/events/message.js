@@ -97,7 +97,7 @@ module.exports = (client, message) => {
 					};
 				} else {
 					return message.delete().then(m => {
-						m.reply(`You have reached your max allowance for URLs sent in non-media channels. This allowance resets in about ${moment.unix(client.allowances.urls[message.author.id].expires).toNow(true)}.`);
+						m.reply(`You have reached your max allowance for URLs sent. This allowance resets in about ${moment.unix(client.allowances.urls[message.author.id].expires).toNow(true)}.`);
 					});
 				}
 			}
