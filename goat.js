@@ -44,31 +44,30 @@ class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
 
-		this.config					= require("./config.json");
-		this.commands				= new Discord.Collection();
-		this.aliases				= new Discord.Collection();
-		this.rootPath				= __dirname;
-		this.appPath				= `${__dirname}/core`;
+		this.config = require("./config.json");
+		this.commands = new Discord.Collection();
+		this.aliases = new Discord.Collection();
+		this.rootPath = __dirname;
+		this.appPath = `${__dirname}/core`;
 
 		//	Storage root path
-		this.storagePath			= `${__dirname}/storage`;
+		this.storagePath = `${__dirname}/storage`;
 
 		//	Path for storing temporary data
-		this.tmpPath				= `${__dirname}/storage/tmp`;
+		this.tmpPath = `${__dirname}/storage/tmp`;
 
 		//	Cache root path
-		this.cachePath				= `${__dirname}/storage/cache`;
+		this.cachePath = `${__dirname}/storage/cache`;
 
 		//	Path for storing command-related data
-		this.commandCachePath		= `${__dirname}/storage/cache/command_data`;
+		this.commandCachePath = `${__dirname}/storage/cache/command_data`;
 
 		//	'Deported' users will not be able to leave the refugee camp automatically and need to be approved manually
-		this.deported				= ['168137183805308928'];
+		this.deported = ['168137183805308928'];
 
 		//	Object to store command cooldowns
-		this.cooldowns				= {};
-
-		this.colors					= {
+		this.cooldowns = {};
+		this.colors = {
 			yellow:		"#faa61a",
 			default:	"#99aab5",
 			red:		"#f04747",

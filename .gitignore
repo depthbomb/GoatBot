@@ -1,7 +1,13 @@
 node_modules
 config.json
 commands.json
-/core/commands/disabled/*.js
+/core/commands/*.js
+/core/commands/!help.js
+/core/commands/!eval.js
+/core/commands/!about.js
+/core/commands/!reload.js
+/core/commands/!perm.js
+/core/commands/!stats.js
 /storage/logs/*.log
 /storage/database/*
 /storage/cache/albums/*
