@@ -67,6 +67,8 @@ class GoatBot extends Discord.Client {
 
 		//	Object to store command cooldowns
 		this.cooldowns = {};
+		
+		this.allowances = { images: {}, links: {} };
 		this.colors = {
 			yellow:		"#faa61a",
 			default:	"#99aab5",

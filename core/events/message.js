@@ -22,11 +22,9 @@
 */
 
 module.exports = (client, message) => {
+	const ms = require('ms');
 	const moment = require('moment');
 	if (message.author.bot) return;
-
-	const settings = client.config;
-	message.settings = settings;
 
 	if (!message.system) {
 		let logPrefix = [];
@@ -40,15 +38,70 @@ module.exports = (client, message) => {
 		if (message.tts) logPrefix.push('[TTS]');
 
 		let isAttachment = false;
+		let isImage = false;
 		let attachmentWithMessage = false;
-		if (typeof message.attachments.first() != 'undefined') isAttachment = true;
-
-		if (isAttachment && message.content !== "") attachmentWithMessage = true;
+		let isUrl = false;
 
 		let logMessage;
+
+		if (typeof message.attachments.first() != 'undefined') isAttachment = true;
+		if (isAttachment && message.attachments.first().width != undefined) isImage = true;
+		if (isAttachment && message.content !== "") attachmentWithMessage = true;
+		if (null !== message.cleanContent.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi)) isUrl = true;
+
 		if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url}`;
 		else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
-		else 				logMessage = `${logPrefix.join(" ")} ${username}: ${message.cleanContent}`;
+		else logMessage = `${logPrefix.join(" ")} ${username}: ${message.cleanContent}`;
+
+		if (isImage) {
+			if (!client.config.allowances.enabled) return;
+			if (!client.config.allowances.channels.includes(message.channel.id)) return;
+
+			const imagesMax = client.config.allowances.images;
+
+			if (!client.allowances.images.hasOwnProperty(message.author.id)) {
+				client.allowances.images[message.author.id] = {
+					amount: 1,
+					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+				};
+			} else {
+				if (client.allowances.images[message.author.id].amount < imagesMax) {
+					client.allowances.images[message.author.id] = {
+						amount: client.allowances.images[message.author.id].amount + 1,
+						expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+					};
+				} else {
+					return message.delete().then(m => {
+						m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in about ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
+					});
+				}
+			}
+		}
+
+		if (isUrl) {
+			if (!client.config.allowances.enabled) return;
+			if (!client.config.allowances.channels.includes(message.channel.id)) return;
+
+			const urlsMax = client.config.allowances.urls;
+
+			if (!client.allowances.urls.hasOwnProperty(message.author.id)) {
+				client.allowances.urls[message.author.id] = {
+					amount: 1,
+					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+				};
+			} else {
+				if (client.allowances.urls[message.author.id].amount < urlsMax) {
+					client.allowances.urls[message.author.id] = {
+						amount: client.allowances.urls[message.author.id].amount + 1,
+						expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+					};
+				} else {
+					return message.delete().then(m => {
+						m.reply(`You have reached your max allowance for URLs sent in non-media channels. This allowance resets in about ${moment.unix(client.allowances.urls[message.author.id].expires).toNow(true)}.`);
+					});
+				}
+			}
+		}
 
 		client.log("msg", logMessage);
 	}

@@ -43,6 +43,16 @@
 		"bypassUsers": []
 	},
 
+	"allowances": {
+		"enabled": true,
+		"links": 10,
+		"images": 5,
+		"expiration": 5,
+		"channels": [
+			"186978265557237762"
+		]
+	},
+
 	"autoRoles": {
 		"unrestrictDelay": 300
 	},

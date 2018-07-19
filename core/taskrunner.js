@@ -24,6 +24,7 @@
 module.exports = async (client) => {
 	const fs = require('fs');
 	const path = require('path');
+	const moment = require('moment');
 	const Parser = require('rss-parser');
 
 	const tasks = {
@@ -79,6 +80,42 @@ module.exports = async (client) => {
 				})();
 			}
 		},
+
+		refresh_allowances__images: {
+			interval: 60,
+			action: () => {
+				if (!client.config.allowances.enabled) return;
+				const allowances = client.allowances.images;
+				const now = moment().format('X');
+
+				for (const key of Object.keys(allowances)) {
+					const user = allowances[key];
+					if (user.amount < 5) return;
+					if (user.expires <= now) {
+						delete client.allowances.images[key];
+						console.log('Freshing image allowance for ', key);
+					}
+				}
+			}
+		},
+
+		refresh_allowances__urls: {
+			interval: 60,
+			action: () => {
+				if (!client.config.allowances.enabled) return;
+				const allowances = client.allowances.urls;
+				const now = moment().format('X');
+
+				for (const key of Object.keys(allowances)) {
+					const user = allowances[key];
+					if (user.amount < 5) return;
+					if (user.expires <= now) {
+						delete client.allowances.urls[key];
+						console.log('Freshing URL allowance for ', key);
+					}
+				}
+			}
+		},
 	};
 
 
@@ -91,5 +128,5 @@ module.exports = async (client) => {
 		setInterval(() => {
 			return task.action();
 		}, (task.interval * 1000));
-	}
+	};
 };
