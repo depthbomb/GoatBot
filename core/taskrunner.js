@@ -90,12 +90,11 @@ module.exports = async (client) => {
 
 				for (const key of Object.keys(allowances)) {
 					const user = allowances[key];
-					if (user.amount < client.config.allowances.images) return;
-					if (user.expires <= now) {
-						delete client.allowances.images[key];
+					if (user.expires < now) {
+						delete allowances[key];
 						console.log('Freshing image allowance for ', key);
 					}
-				}
+				};
 			}
 		},
 
@@ -108,12 +107,11 @@ module.exports = async (client) => {
 
 				for (const key of Object.keys(allowances)) {
 					const user = allowances[key];
-					if (user.amount < client.config.allowances.links) return;
-					if (user.expires <= now) {
-						delete client.allowances.links[key];
+					if (user.expires < now) {
+						delete allowances[key];
 						console.log('Freshing URL allowance for ', key);
 					}
-				}
+				};
 			}
 		},
 	};
