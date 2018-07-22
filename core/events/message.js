@@ -219,7 +219,7 @@ module.exports = (client, message) => {
 	if (cmd) {
 
 		if (client.strictMode.enabled && level < 2) {
-			if (message.channel.id != '420816699626094592' || message.channel.id != '437832772887773195') {
+			if (!client.config.strict_mode.command_channels.includes(message.channel.id)) {
 				return client.msg(message, 'red', 'error', 'Commands may only be used in the <#420816699626094592> channel while strict mode is enabled.');
 			}
 		}

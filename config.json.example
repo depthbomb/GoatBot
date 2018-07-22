@@ -53,6 +53,13 @@
 		]
 	},
 
+	"strict_mode": {
+		"command_channels": [
+			""
+		],
+		"default_expiration": 5
+	},
+
 	"autoRoles": {
 		"unrestrictDelay": 300
 	},
