@@ -48,7 +48,7 @@ exports.run = async (client, message, args, level) => {
 			thing2 = user2.username;
 		}
 	} catch (error) {
-		console.log(error);
+		return client.error(message, error);
 	}
 
 	let response;
