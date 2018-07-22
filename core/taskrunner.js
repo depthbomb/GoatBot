@@ -92,7 +92,7 @@ module.exports = async (client) => {
 					const user = allowances[key];
 					if (user.expires < now) {
 						delete allowances[key];
-						console.log('Freshing image allowance for ', key);
+						console.log('Refreshing image allowance for ', key);
 					}
 				};
 			}
@@ -109,7 +109,7 @@ module.exports = async (client) => {
 					const user = allowances[key];
 					if (user.expires < now) {
 						delete allowances[key];
-						console.log('Freshing URL allowance for ', key);
+						console.log('Refreshing URL allowance for ', key);
 					}
 				};
 			}

@@ -76,7 +76,7 @@ module.exports = (client, message) => {
 					};
 				} else {
 					return message.delete().then(m => {
-						m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in about ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
+						m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
 					});
 				}
 			}
@@ -101,7 +101,7 @@ module.exports = (client, message) => {
 					};
 				} else {
 					return message.delete().then(m => {
-						m.reply(`You have reached your max allowance for URLs sent. This allowance resets in about ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
+						m.reply(`You have reached your max allowance for URLs sent. This allowance resets in ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
 					});
 				}
 			}
@@ -217,6 +217,12 @@ module.exports = (client, message) => {
 
 	// If the command exists, **AND** the user has permission, run it.
 	if (cmd) {
+
+		if (client.strictMode.enabled && level < 2) {
+			if (message.channel.id != '420816699626094592' || message.channel.id != '437832772887773195') {
+				return client.msg(message, 'red', 'error', 'Commands may only be used in the <#420816699626094592> channel while strict mode is enabled.');
+			}
+		}
 
 		if (level >= cmd.conf.permLevel) {
 
