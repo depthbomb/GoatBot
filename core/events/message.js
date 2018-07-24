@@ -28,7 +28,9 @@ module.exports = (client, message) => {
 
 	const rawMessage	= message.content;
 	const isAdmin		= (message.author.id === client.config.ownerId);
-	const isServerStaff = (message.member.roles.find('id', client.config.roles.admin) || message.member.roles.find('id', client.config.roles.mod));
+	const level			= client.permlevel(message);
+	const isServerStaff = (message.member.roles.find('id', client.config.roles.admin) || message.member.roles.find('id', client.config.roles.mod) || level < 2 || isAdmin);
+	//	Yes this is messy, I will fix it later
 
 	if (!message.system) {
 		let logPrefix = [];
@@ -112,7 +114,6 @@ module.exports = (client, message) => {
 
 	const args			= message.content.slice(client.config.prefix.length).trim().split(/ +/g);
 	const command		= args.shift().toLowerCase();
-	const level			= client.permlevel(message);
 	const cmd			= client.commands.get(command) || client.commands.get(client.aliases.get(command));
 
 	/**
@@ -184,9 +185,18 @@ module.exports = (client, message) => {
 
 		if (null !== message.content.match(/^(https?:\/\/)?discord(?:app\.com|\.gg)[\/invite\/]?(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig)) {
 			if (message.content === 'https://discord.gg/xw624a8' || message.content === 'https://discordapp.com/invite/xw624a8') return;
+			if (!isServerStaff) {
+				message.delete().then(m => {
+					m.reply('Discord invite links are not allowed in public channels.');
+				});
+			}
+		}
 
-			if (message.author.id !== message.guild.owner.id || level < 2) {
-				message.delete();
+		if (null !== message.content.match(/(?:https?:\/\/)?steamcommunity\.com\/groups\/[a-zA-Z0-9-_]{3,32}/ig)) {
+			if (!isServerStaff) {
+				message.delete().then(m => {
+					m.reply('Steam community group links are not allowed in public channels.');
+				});
 			}
 		}
 
