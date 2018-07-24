@@ -37,13 +37,21 @@ exports.run = (client, message, args, level) => {
 	const choice2 = panel2.shuffle()[0];
 	const choice3 = panel3.shuffle()[0];
 
-	return message.reply(`${choice1} | ${choice2} | ${choice3}`);
+	let jackpotText;
+	if (choice1 === choice2 && choice2 === choice3) {
+		jackpotText = '***Jackpot!***';
+	} else {
+		jackpotText = 'Better luck next time!';
+	}
+
+	return message.reply(`${choice1} | ${choice2} | ${choice3}\n${jackpotText}`);
 };
 
 exports.conf = {
 	enabled: true,
 	guildOnly: false,
 	cooldown: 3,
+	globalCd: true,
 	aliases: [
 		'sm'
 	],
