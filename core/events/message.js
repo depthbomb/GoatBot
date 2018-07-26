@@ -30,7 +30,7 @@ module.exports = (client, message) => {
 	const isAdmin		= (message.author.id === client.config.ownerId);
 	const level			= client.permlevel(message);
 	const isServerStaff = (message.member.roles.find('id', client.config.roles.admin) || message.member.roles.find('id', client.config.roles.mod) || level < 2 || isAdmin);
-	//	Yes this is messy, I will fix it later
+	//	Yes this is messy, I will fix it later.. maybe
 
 	if (!message.system) {
 		let logPrefix = [];
@@ -117,7 +117,7 @@ module.exports = (client, message) => {
 	const cmd			= client.commands.get(command) || client.commands.get(client.aliases.get(command));
 
 	/**
-	* Reading from non-command messages
+	*	Reading from non-command messages
 	*/
 	if(message.content.indexOf(client.config.prefix) !== 0) {
         /*
@@ -128,7 +128,7 @@ module.exports = (client, message) => {
 
 
 		/**
-		* Automatically delete refugee messages after 5 minutes of sending
+		*	Automatically delete refugee messages after 5 minutes of sending
 		*/
 		if (message.channel.id === client.config.refugeeChannel) {
 			setTimeout(() => {
@@ -138,7 +138,7 @@ module.exports = (client, message) => {
 
 
         /**
-        * React to OwO's
+        *	React to OwO's
         */
         if (null !== message.content.match(/\b([O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F][Ww\uA4B3\u03C9][O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F])\b/)) {
             client.log("bot", 'OwO detected!');
@@ -148,36 +148,31 @@ module.exports = (client, message) => {
         }
 
 		/**
-		* Lit
+		*	Lit
 		*/
 		if (null !== message.content.match(/\blit\b/i)) {
 			message.react("🔥");
 		}
 
 		/**
-		* TODO: rewrite
+		*	Message filter
 		*/
-		if (message.cleanContent === '** **' ||
-			message.cleanContent === '**  **' ||
-			message.cleanContent === '``` ```' ||
-			message.cleanContent === '```\n```' ||
-			message.cleanContent === '`\n`' ||
-			message.cleanContent === '` `' ||
-			message.cleanContent === '.' ||
-			message.cleanContent === ',' ||
-			message.cleanContent === '_' ||
-			message.cleanContent === '-' ||
-			message.cleanContent === '*' ||
-			message.cleanContent === '+' ||
-			message.cleanContent === '=' ||
-			message.cleanContent === '`' ||
-			message.cleanContent === '~'
+		if (
+			//	Remove gimmicky blank messages
+			null !== message.content.match(/```[\s\n\t]+```/g) ||
+			null !== message.content.match(/`[\s\n\t]+`/g) ||
+			null !== message.content.match(/\*\*[\s\n\t]+\*\*/g) ||
+			null !== message.content.match(/_[\s\n\t]+_/g) ||
+
+			//	Remove single character responses
+			null !== message.content.match(/_[.,_\-*+=`~]{1}_/g)
 		) {
+			if (isServerStaff) return;
 			message.delete();
 		}
 
 		/**
-		* Dunk
+		*	Dunk
 		*/
 		if (null !== (message.content.match(/\bdunk[s]?\b/i) || message.content.match(/\bdunked\b/i))) {
 			message.react("🏀");
