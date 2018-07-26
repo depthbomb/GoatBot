@@ -154,7 +154,15 @@ module.exports = (client, message) => {
 			message.react("🔥");
 		}
 
+		/**
+		* TODO: rewrite
+		*/
 		if (message.cleanContent === '** **' ||
+			message.cleanContent === '**  **' ||
+			message.cleanContent === '``` ```' ||
+			message.cleanContent === '```\n```' ||
+			message.cleanContent === '`\n`' ||
+			message.cleanContent === '` `' ||
 			message.cleanContent === '.' ||
 			message.cleanContent === ',' ||
 			message.cleanContent === '_' ||
