@@ -83,10 +83,10 @@ module.exports = async (client) => {
 		},
 
 		check_bans: {
-			interval: 60,
+			interval: 30,
 			action: () => {
 				request(client.config.sourcebans.bans_url, (err, res, body) => {
-					if (err) throw new Error(err);
+					if (err) throw new Error(err);	//	Should probably handle errors better, but this works for now...
 					const data = JSON.parse(body);
 					const outputChannel = client.channels.find('id', client.config.sourcebans.output_channel);
 					Object.keys(data).forEach(key => {
@@ -118,7 +118,7 @@ module.exports = async (client) => {
 		},
 
 		check_comms: {
-			interval: 60,
+			interval: 30,
 			action: () => {
 				request(client.config.sourcebans.comms_url, (err, res, body) => {
 					if (err) throw new Error(err);
