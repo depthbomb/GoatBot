@@ -135,14 +135,14 @@ module.exports = async (client) => {
 							'57': 'Discount'
 						};
 						const types = {
-							'1': 'muted',
-							'2': 'gagged'
+							1: 'muted',
+							2: 'gagged'
 						};
 						if (!fs.existsSync(cacheFile)) {
 							const expiration = commEntry.length !== '0' ? 'for ' + ms((commEntry.length*1000), {long: 1}) : 'permanently';
 							const embed = new RichEmbed()
 								.setColor(client.colors.red)
-								.setTitle('User ' . types[commEntry.type])
+								.setTitle('User ' + types[commEntry.type])
 								.setDescription(`User **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins[commEntry.aid]}.`)
 								.addField('Reason', commEntry.reason)
 								.setTimestamp();
