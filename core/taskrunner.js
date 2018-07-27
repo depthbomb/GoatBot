@@ -139,7 +139,7 @@ module.exports = async (client) => {
 							'2': 'gagged'
 						};
 						if (!fs.existsSync(cacheFile)) {
-							const expiration = commEntry.length !== '0' ? 'for ' + ms((banEntry.length*1000), {long: 1}) : 'permanently';
+							const expiration = commEntry.length !== '0' ? 'for ' + ms((commEntry.length*1000), {long: 1}) : 'permanently';
 							const embed = new RichEmbed()
 								.setColor(client.colors.red)
 								.setTitle('User banned')
