@@ -103,10 +103,11 @@ module.exports = async (client) => {
 							const expiration = banEntry.length !== '0' ? 'for ' + ms((banEntry.length*1000), {long: 1}) : 'permanently';
 							const embed = new RichEmbed()
 								.setColor(client.colors.red)
+								.setURL(`https://cyan.tf/bans/index.php?p=banlist&advSearch=${banEntry.authid}&advType=steamid&Submit`)
 								.setTitle('User banned')
 								.setDescription(`User **${banEntry.name}** was banned ${expiration} by ${admins[banEntry.aid]}.`)
 								.addField('Reason', banEntry.reason)
-								.setTimestamp();
+								.setTimestamp(banEntry.created);
 							
 							fs.writeFile(cacheFile, JSON.stringify(data[key]), (err) => {
 								return outputChannel.send({ embed });
@@ -141,11 +142,12 @@ module.exports = async (client) => {
 						if (!fs.existsSync(cacheFile)) {
 							const expiration = commEntry.length !== '0' ? 'for ' + ms((commEntry.length*1000), {long: 1}) : 'permanently';
 							const embed = new RichEmbed()
-								.setColor(client.colors.red)
+								.setColor(client.colors.orange)
+								.setURL(`https://cyan.tf/bans/index.php?p=banlist&advSearch=${commEntry.authid}&advType=steamid&Submit`)
 								.setTitle('User ' + types[commEntry.type])
 								.setDescription(`User **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins[commEntry.aid]}.`)
 								.addField('Reason', commEntry.reason)
-								.setTimestamp();
+								.setTimestamp(commEntry.created);
 							
 							fs.writeFile(cacheFile, JSON.stringify(data[key]), (err) => {
 								return outputChannel.send({ embed });
