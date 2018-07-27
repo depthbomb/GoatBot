@@ -142,7 +142,7 @@ module.exports = async (client) => {
 							const expiration = commEntry.length !== '0' ? 'for ' + ms((commEntry.length*1000), {long: 1}) : 'permanently';
 							const embed = new RichEmbed()
 								.setColor(client.colors.red)
-								.setTitle('User banned')
+								.setTitle('User ' . types[commEntry.type])
 								.setDescription(`User **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins[commEntry.aid]}.`)
 								.addField('Reason', commEntry.reason)
 								.setTimestamp();
