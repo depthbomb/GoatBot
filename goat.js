@@ -39,6 +39,7 @@ const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
+const request = require('request');
 
 class GoatBot extends Discord.Client {
 	constructor (options) {
@@ -248,6 +249,34 @@ const init = async () => {
 			}
 		});
 	})();
+	/* ===================================================== */
+
+
+	/**
+	* Cache SourceBans bans punishment
+	*/
+	request(client.config.sourcebans.bans_url, (err, res, body) => {
+		if (err) throw new Error(err);
+		const data = JSON.parse(body);
+		Object.keys(data).forEach(key => {
+			const cacheFile = path.join(client.cachePath, 'sb', `b_${key}.cache`);
+			fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
+		});
+	});
+	/* ===================================================== */
+
+
+	/**
+	* Cache SourceBans comms punishments
+	*/
+	request(client.config.sourcebans.comms_url, (err, res, body) => {
+		if (err) throw new Error(err);
+		const data = JSON.parse(body);
+		Object.keys(data).forEach(key => {
+			const cacheFile = path.join(client.cachePath, 'sb', `c_${key}.cache`);
+			fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
+		});
+	});
 	/* ===================================================== */
 
 

@@ -105,6 +105,12 @@
 		"output_channel": ""
 	},
 
+	"sourcebans": {
+		"bans_url": "https://cyan.tf/serverapi/sb.php",
+		"comms_url": "https://cyan.tf/serverapi/sb.php?type=comms",
+		"output_channel": ""
+	},
+
 	"imgur": {
 		"username": "",
 		"password": "",

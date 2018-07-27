@@ -24,8 +24,11 @@
 module.exports = async (client) => {
 	const fs = require('fs');
 	const path = require('path');
+	const { RichEmbed } = require('discord.js');
 	const moment = require('moment');
+	const ms = require('ms');
 	const Parser = require('rss-parser');
+	const request = require('request');
 
 	const tasks = {
 		change_game: {
@@ -58,8 +61,6 @@ module.exports = async (client) => {
 
 					//	If the latest feed item is not cached
 					if (!fs.existsSync(cacheFile)) {
-						const { RichEmbed } = require('discord.js');
-
 						const content = latest.content
 							.replace(/<br>/g, '\n')	//	Replace line break tags with actual line breaks before stripping HTML
 							.replace(/<(.|\n)*?>/g, '');
@@ -70,7 +71,7 @@ module.exports = async (client) => {
 							.setURL(latest.link)
 							.setFooter('Via Cyan.TF Steam Group')
 							.setDescription(client.trunc(content, 900, {ellipsis: "..."}))
-							.setTimestamp()
+							.setTimestamp();
 						
 						const outputChannel = client.channels.find('id', client.config.rss.output_channel);
 						fs.writeFile(cacheFile, JSON.stringify(latest), (err) => {
@@ -78,6 +79,80 @@ module.exports = async (client) => {
 						});
 					}
 				})();
+			}
+		},
+
+		check_bans: {
+			interval: 60,
+			action: () => {
+				request(client.config.sourcebans.bans_url, (err, res, body) => {
+					if (err) throw new Error(err);
+					const data = JSON.parse(body);
+					const outputChannel = client.channels.find('id', client.config.sourcebans.output_channel);
+					Object.keys(data).forEach(key => {
+						const banEntry = data[key];
+						const cacheFile = path.join(client.cachePath, 'sb', `b_${key}.cache`);
+						const admins = {
+							'0': 'CONSOLE',
+							'1': 'depthbomb',
+							'14': 'furugitsune',
+							'31': 'Sarah Bear',
+							'57': 'Discount'
+						};
+						if (!fs.existsSync(cacheFile)) {
+							const expiration = banEntry.length !== '0' ? 'for ' + ms((banEntry.length*1000), {long: 1}) : 'permanently';
+							const embed = new RichEmbed()
+								.setColor(client.colors.red)
+								.setTitle('User banned')
+								.setDescription(`User **${banEntry.name}** was banned ${expiration} by ${admins[banEntry.aid]}.`)
+								.addField('Reason', banEntry.reason)
+								.setTimestamp();
+							
+							fs.writeFile(cacheFile, JSON.stringify(data[key]), (err) => {
+								return outputChannel.send({ embed });
+							});
+						}
+					});
+				});
+			}
+		},
+
+		check_comms: {
+			interval: 60,
+			action: () => {
+				request(client.config.sourcebans.comms_url, (err, res, body) => {
+					if (err) throw new Error(err);
+					const data = JSON.parse(body);
+					const outputChannel = client.channels.find('id', client.config.sourcebans.output_channel);
+					Object.keys(data).forEach(key => {
+						const commEntry = data[key];
+						const cacheFile = path.join(client.cachePath, 'sb', `c_${key}.cache`);
+						const admins = {
+							'0': 'CONSOLE',
+							'1': 'depthbomb',
+							'14': 'furugitsune',
+							'31': 'Sarah Bear',
+							'57': 'Discount'
+						};
+						const types = {
+							'1': 'muted',
+							'2': 'gagged'
+						};
+						if (!fs.existsSync(cacheFile)) {
+							const expiration = commEntry.length !== '0' ? 'for ' + ms((banEntry.length*1000), {long: 1}) : 'permanently';
+							const embed = new RichEmbed()
+								.setColor(client.colors.red)
+								.setTitle('User banned')
+								.setDescription(`User **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins[commEntry.aid]}.`)
+								.addField('Reason', commEntry.reason)
+								.setTimestamp();
+							
+							fs.writeFile(cacheFile, JSON.stringify(data[key]), (err) => {
+								return outputChannel.send({ embed });
+							});
+						}
+					});
+				});
 			}
 		},
 

@@ -2,8 +2,6 @@ node_modules
 config.json
 commands.json
 /storage/logs/*.log
-/storage/database/*
-/storage/cache/albums/*
-/storage/cache/steam/*
 /storage/cache/rss/*
+/storage/cache/sb/*
 /storage/tmp/cooldowns/*
