@@ -25,7 +25,7 @@ module.exports = async (client) => {
 	const fs = require('fs');
 	const path = require('path');
 	const { RichEmbed } = require('discord.js');
-	const moment = require('moment');
+	const moment = require('moment-timezone');
 	const ms = require('ms');
 	const Parser = require('rss-parser');
 	const request = require('request');
@@ -107,7 +107,7 @@ module.exports = async (client) => {
 								.setTitle('User banned')
 								.setDescription(`User **${banEntry.name}** was banned ${expiration} by ${admins[banEntry.aid]}.`)
 								.addField('Reason', banEntry.reason)
-								.setTimestamp(banEntry.created);
+								.addField('Date', moment.unix(banEntry.created).tz("America/Chicago").format('MM/DD/YY, HH:mm:ss z'));
 							
 							fs.writeFile(cacheFile, JSON.stringify(data[key]), (err) => {
 								return outputChannel.send({ embed });
@@ -147,7 +147,7 @@ module.exports = async (client) => {
 								.setTitle('User ' + types[commEntry.type])
 								.setDescription(`User **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins[commEntry.aid]}.`)
 								.addField('Reason', commEntry.reason)
-								.setTimestamp(commEntry.created);
+								.addField('Date', moment.unix(commEntry.created).tz("America/Chicago").format('DD/MM/YY, HH:mm:ss z'));
 							
 							fs.writeFile(cacheFile, JSON.stringify(data[key]), (err) => {
 								return outputChannel.send({ embed });
