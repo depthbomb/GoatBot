@@ -147,7 +147,7 @@ module.exports = async (client) => {
 								.setTitle('User ' + types[commEntry.type])
 								.setDescription(`User **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins[commEntry.aid]}.`)
 								.addField('Reason', commEntry.reason)
-								.addField('Date', moment.unix(commEntry.created).tz("America/Chicago").format('DD/MM/YY, HH:mm:ss z'));
+								.addField('Date', moment.unix(commEntry.created).tz("America/Chicago").format('MM/DD/YY, HH:mm:ss z'));
 							
 							fs.writeFile(cacheFile, JSON.stringify(data[key]), (err) => {
 								return outputChannel.send({ embed });
