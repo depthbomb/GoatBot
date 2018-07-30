@@ -146,7 +146,7 @@ module.exports = async (client) => {
 								.setURL(`https://cyan.tf/bans/index.php?p=banlist&advSearch=${commEntry.authid}&advType=steamid&Submit`)
 								.setTitle('User ' + types[commEntry.type])
 								.setDescription(`User **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins.hasOwnProperty(commEntry.aid) ? admins[commEntry.aid] : 'ADMIN'}.`)
-								.addField('Reason', commEntry.reason)
+								.addField('Reason', commEntry.reason !== '' ? commEntry.reason : '_No reason specified._') // Check for a reason for comms because SB doesn't allow blank reasons for bans, for some reason
 								.addField('Date', moment.unix(commEntry.created).tz("America/Chicago").format('MM/DD/YY, HH:mm:ss z'));
 							
 							fs.writeFile(cacheFile, JSON.stringify(data[key]), (err) => {
