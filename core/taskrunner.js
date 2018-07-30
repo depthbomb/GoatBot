@@ -105,7 +105,7 @@ module.exports = async (client) => {
 								.setColor(client.colors.red)
 								.setURL(`https://cyan.tf/bans/index.php?p=banlist&advSearch=${banEntry.authid}&advType=steamid&Submit`)
 								.setTitle('User banned')
-								.setDescription(`User **${banEntry.name}** was banned ${expiration} by ${admins[banEntry.aid]}.`)
+								.setDescription(`User **${banEntry.name}** was banned ${expiration} by ${admins.hasOwnProperty(banEntry.aid) ? admins[banEntry.aid] : 'ADMIN'}.`)
 								.addField('Reason', banEntry.reason)
 								.addField('Date', moment.unix(banEntry.created).tz("America/Chicago").format('MM/DD/YY, HH:mm:ss z'));
 							
@@ -145,7 +145,7 @@ module.exports = async (client) => {
 								.setColor(client.colors.orange)
 								.setURL(`https://cyan.tf/bans/index.php?p=banlist&advSearch=${commEntry.authid}&advType=steamid&Submit`)
 								.setTitle('User ' + types[commEntry.type])
-								.setDescription(`User **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins[commEntry.aid]}.`)
+								.setDescription(`User **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins.hasOwnProperty(commEntry.aid) ? admins[commEntry.aid] : 'ADMIN'}.`)
 								.addField('Reason', commEntry.reason)
 								.addField('Date', moment.unix(commEntry.created).tz("America/Chicago").format('MM/DD/YY, HH:mm:ss z'));
 							

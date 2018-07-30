@@ -165,7 +165,9 @@ module.exports = (client, message) => {
 			null !== message.content.match(/_[\s\n\t]+_/g) ||
 
 			//	Remove single character responses
-			null !== message.content.match(/_[.,_\-*+=`~]{1}_/g)
+			null !== message.content.match(/_[.,_\-*+=`~]{1}_/g) ||
+			null !== message.content.match(/\*[.,_\-*+=`~]{1}\*/g) ||
+			null !== message.content.match(/[.,_\-*+=`~]{1}/g)
 		) {
 			if (isServerStaff) return;
 			message.delete();
