@@ -43,7 +43,10 @@ exports.run = async (client, message, args, level) => {
 	if (action === 'players') {
 		ssq.players(serverIp, serverPort, (err, data) => {
 			if (err) throw new Error(err);
-			if (data.length < 1) return statusMessage.edit(`<@${message.author.id}>, There are currently no players on the server.`);
+			if (data.length < 1) {
+				clearTimeout(timeOut);
+				return statusMessage.edit(`<@${message.author.id}>, There are currently no players on the server.`);
+			}
 
 			const players = data.sort(sortByKey('score', 'desc'));
 
