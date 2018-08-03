@@ -132,7 +132,7 @@ module.exports = (client, message) => {
 		*/
 		if (message.channel.id === client.config.refugeeChannel) {
 			setTimeout(() => {
-				message.delete();
+				message.delete().catch(e => {});
 			}, (300*1000));
 		}
 
