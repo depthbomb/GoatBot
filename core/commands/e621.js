@@ -52,8 +52,6 @@ exports.run = async (client, message, args, level) => {
 		if (rating === 'e' || rating === 'q' || rating === 'a') {
 			blacklistedTags = blacklistedTags.concat(nsfwBlacklist);
 
-			console.log(blacklistedTags);
-
 			let nbl = nsfwBlacklist.map(w => {
 				return +new RegExp('\\b' + w + '\\b', 'gi').test(tags);
 			});
