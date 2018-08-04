@@ -42,7 +42,7 @@ exports.run = async (client, message, args, level) => {
 
 	if (action === 'players') {
 		ssq.players(serverIp, serverPort, (err, data) => {
-			if (err) throw new Error(err);
+			if (err) return client.error(message, err);
 			if (data.length < 1) {
 				clearTimeout(timeOut);
 				return statusMessage.edit(`<@${message.author.id}>, There are currently no players on the server.`);
@@ -63,7 +63,7 @@ exports.run = async (client, message, args, level) => {
 		});
 	} else {
 		ssq.info(serverIp, serverPort, (err, data) => {
-			if (err) throw new Error(err);
+			if (err) return client.error(message, err);
 	
 			const serverInfoEmbed = new RichEmbed()
 				.setAuthor('Cyan.TF Server Info', 'https://cyan.tf/styles/cyan/images/cyan2018.png', 'https://cyan.tf/')

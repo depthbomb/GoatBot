@@ -22,52 +22,52 @@
 */
 
 exports.run = async (client, message, args, level) => {
+	const uri = 'https://dog.ceo/api/breeds/image/random';
 	const request = require('request');
-	const msg = args.join(' ');
-	const api_key = client.config.cleverbot_api_key;
-
-	let state;
-	let api_url = `http://www.cleverbot.com/getreply?key=${api_key}&input=${msg}&cs=${state}`;
+	const { RichEmbed } = require('discord.js');
 
 	request({
 		headers: {
 			"User-Agent": client.config.userAgent
 		},
-		uri: api_url,
+		uri: uri,
 		method: 'GET'
 	}, (err, res, body) => {
 		if (err) return client.error(message, err);
-
 		const data = JSON.parse(body);
-		state = data.cs;
-
-		return message.reply(data.output);
+		if (data.status) {
+			const image = data.message;
+			const embed = new RichEmbed()
+				.setColor(client.colors.default)
+				.setImage(image)
+				.setTitle('Random dog');
+			return message.reply({ embed });
+		} else {
+			return message.reply('API call was not successful.');
+		}
 	});
 };
 
 exports.conf = {
 	enabled: true,
-	guildOnly: false,
-	cooldown: 2,
-	globalCd: true,
+	guildOnly: true,
+	cooldown: 15,
+	globalCd: false,
 	aliases: [
-		't',
-		'cb',
-		'talk'
+		"dogs",
+		"doggo",
+		"doggos",
 	],
 	permLevel: 0
 };
 
 exports.help = {
-	name: "cleverbot",
+	name: "dog",
 	category: "Fun",
-	description: "Talk to a bot",
-	usage: "cleverbot [message]",
-	params: {
-		"message": "Message to send to the bot"
-	},
+	description: "Get a random dog image",
+	usage: "dog",
+	params: {},
 	examples: [
-		"cleverbot hello!",
-		"t hi there"
+		"dog"
 	]
 };

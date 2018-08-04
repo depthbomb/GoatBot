@@ -37,13 +37,14 @@ exports.run = async (client, message, args, level) => {
 		uri: apiUrl,
 		method: 'GET'
 	}, (err, res, body) => {
-		let data = JSON.parse(body);
+		if (err) return client.error(message, err);
+		const data = JSON.parse(body);
 
 		if (data.result_type === "no_results") {
 			msg.edit(`<@${message.author.id}>, I didn't find any results using your search term :(`);
 		} else {
-			let result = data.list[0];
-			let embed = new RichEmbed()
+			const result = data.list[0];
+			const embed = new RichEmbed()
 				.setTitle(`Results for \`${decodeURIComponent(term)}\``)
 				.setDescription(result.permalink)
 				.addField("Definition", client.trunc(result.definition, 1023))
