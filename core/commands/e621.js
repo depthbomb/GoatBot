@@ -99,16 +99,20 @@ exports.run = async (client, message, args, level) => {
 						}, 1000);
 						return;
 					} else {
-						let desc = `${client.trunc(selected.description, 1000, {ellipsis: "..."})}`;
+						
 						let postEmbed = new RichEmbed()
 							.setAuthor('E621', 'https://e621.net/apple-touch-icon.png', 'https://e621.net/')
 							.setImage(selected.file_url)
 							.setDescription(`https://e621.net/post/show/${selected.id}/`)
-							.addField("Description", `${selected.description !== "" ? desc : "_No description_"}`)
 							.addField("Tags", '```' + client.trunc(selected.tags, 1000, {ellipsis: "..."}) + '```')
 							.addField("Artist(s)", selected.artist.length > 0 ? "`" + selected.artist.join(", ") + "`" : "unknown_artist")
 							.setFooter(`${data.length < 320 ? data.length : '>' + data.length} results`)
 							.setColor("#002d55");
+
+							if (selected.description) {
+								const desc = `${client.trunc(selected.description, 1000, {ellipsis: "..."})}`;
+								postEmbed.addField("Description", `${selected.description !== "" ? desc : "_No description_"}`)
+							}
 
 						msg.edit(`<@${message.author.id}>`, {
 							embed: postEmbed
@@ -129,7 +133,7 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	guildOnly: false,
-	cooldown: 5.5,
+	cooldown: 6,
 	aliases: [
 		"e6",
 		"salt",
