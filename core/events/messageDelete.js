@@ -23,7 +23,7 @@
 
 module.exports = (client, message) => {
 	//	Don't log our own messages
-	if (message.author.id === client.user.id || message.channel.type === 'dm') return;
+	if (message.author.id === client.user.id || message.channel.type === 'dm' || message.author.bot) return;
 
 	let logMessage;
 	let isAttachment = false;
