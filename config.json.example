@@ -11,15 +11,14 @@
 	"color": "#0097A7",
 	"initialGame": "!help",
 	"status": "online",
-	"clientId": "405805435438891008",
 	"userAgent": "GoatBot! Automaton by Caprine Softworks - github.com/depthbomb/GoatBot",
 	"mainGuild": "",
 
 	"database": {
-		"host": "localhost",
-		"user": "username",
-		"pass": "password",
-		"db":   "goatbot"
+		"host": "",
+		"user": "",
+		"pass": "",
+		"db":   ""
 	},
 
 	"roles": {
@@ -46,17 +45,13 @@
 	"allowances": {
 		"enabled": true,
 		"links": 10,
-		"images": 5,
-		"expiration": 5,
-		"channels": [
-			"186978265557237762"
-		]
+		"images": 4,
+		"expiration": 10,
+		"channels": []
 	},
 
 	"strict_mode": {
-		"command_channels": [
-			""
-		],
+		"command_channels": [],
 		"default_expiration": 5
 	},
 
@@ -81,14 +76,15 @@
 		"Changing map to surf_tf_japan_v1",
 		"!help",
 		"Making a furry inside joke",
-		"a True Pacifist run"
+		"a True Pacifist run",
+		"is this Loss?"
 	],
 
 	"greetingChannel": "",
 	"greetings": [
 		"{user} has joined us! Give them a warm welcome.",
 		"Hey, {user} just joined! Let's bully them!",
-		"OwO What's this? {user} has joined!",
+		"*Notices {user}* OwO What's this?",
 		"Everyone hide! {user}'s here"
 	],
 
@@ -104,10 +100,10 @@
 		"url": "https://steamcommunity.com/groups/cyantf/rss/",
 		"output_channel": ""
 	},
-
+	
 	"sourcebans": {
-		"bans_url": "https://cyan.tf/serverapi/sb.php",
-		"comms_url": "https://cyan.tf/serverapi/sb.php?type=comms",
+		"bans_url": "",
+		"comms_url": "",
 		"output_channel": ""
 	},
 
@@ -133,9 +129,7 @@
 		"storage",
 		"storage/cache",
 		"storage/cache/rss",
-		"storage/cache/command_data",
-		"storage/cache/command_data/steam",
-		"storage/cache/command_data/e621",
+		"storage/cache/sb",
 		"storage/tmp",
 		"storage/logs"
 	]
