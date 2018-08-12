@@ -22,10 +22,10 @@
 */
 
 module.exports = (client, member) => {
-	const refugeeRole = member.guild.roles.find('name', 'Refugee').id;
-	const memberRole = member.guild.roles.find('name', 'Member').id;
+	const refugeeRole = member.guild.roles.find(r => r.name === 'Refugee').id;
+	const memberRole = member.guild.roles.find(r => r.name === 'Member').id;
 
-	const greetingChannel = member.guild.channels.find('id', client.config.greetingChannel);
+	const greetingChannel = member.guild.channels.find(c => c.id === client.config.greetingChannel);
 	const greeting = client.config.greetings.shuffle()[0].replace('{user}', `<@${member.id}>`);
 
 	if (!member.user.bot) {

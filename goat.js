@@ -93,14 +93,14 @@ class GoatBot extends Discord.Client {
 		if (!message.guild || !message.member || message.channel.type === "dm") return 0;
 
 		try {
-			const moderatorRole = message.member.roles.find('id', client.config.roles.mod);
+			const moderatorRole = message.member.roles.find(r => r.id === client.config.roles.mod);
 			if (moderatorRole && message.member.roles.has(moderatorRole.id)) permlvl = 2;
 		} catch (e) {
 			client.log('warn', 'Moderator role is not present. Skipping level 2 check.');
 		}
 
 		try {
-			const adminRole = message.member.roles.find('id', client.config.roles.admin);
+			const adminRole = message.member.roles.find(r => r.id === client.config.roles.admin);
 			if (adminRole && message.member.roles.has(adminRole.id)) permlvl = 3;
 		} catch (e) {
 			client.log('warn', 'Admin role is not present. Skipping level 3 check.');

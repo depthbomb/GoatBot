@@ -25,8 +25,8 @@ exports.run = (client, message, args, level) => {
 	const { RichEmbed } = require('discord.js');
 
 	const emoji = {
-		furdesire: client.emojis.find('name', 'furdesire'),
-		pandasurprise: client.emojis.find('name', 'pandasurprise'),
+		furdesire: client.emojis.find(e => e.name === 'furdesire'),
+		pandasurprise: client.emojis.find(e => e.name === 'pandasurprise'),
 	};
 
 	const panel1 = [emoji.furdesire, '\:b:', emoji.pandasurprise];

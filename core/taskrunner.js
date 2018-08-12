@@ -73,7 +73,7 @@ module.exports = async (client) => {
 							.setDescription(client.trunc(content, 900, {ellipsis: "..."}))
 							.setTimestamp();
 						
-						const outputChannel = client.channels.find('id', client.config.rss.output_channel);
+						const outputChannel = client.channels.find(c => c.id === client.config.rss.output_channel);
 						fs.writeFile(cacheFile, JSON.stringify(latest), (err) => {
 							return outputChannel.send({ embed });
 						});
@@ -88,7 +88,7 @@ module.exports = async (client) => {
 				request(client.config.sourcebans.bans_url, (err, res, body) => {
 					if (err) throw new Error(err);	//	Should probably handle errors better, but this works for now...
 					const data = JSON.parse(body);
-					const outputChannel = client.channels.find('id', client.config.sourcebans.output_channel);
+					const outputChannel = client.channels.find(c => c.id === client.config.sourcebans.output_channel);
 					Object.keys(data).forEach(key => {
 						const banEntry = data[key];
 						const cacheFile = path.join(client.cachePath, 'sb', `b_${key}.cache`);
@@ -122,7 +122,7 @@ module.exports = async (client) => {
 				request(client.config.sourcebans.comms_url, (err, res, body) => {
 					if (err) throw new Error(err);
 					const data = JSON.parse(body);
-					const outputChannel = client.channels.find('id', client.config.sourcebans.output_channel);
+					const outputChannel = client.channels.find(c => c.id === client.config.sourcebans.output_channel);
 					Object.keys(data).forEach(key => {
 						const commEntry = data[key];
 						const cacheFile = path.join(client.cachePath, 'sb', `c_${key}.cache`);

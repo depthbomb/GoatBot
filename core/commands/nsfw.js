@@ -22,7 +22,7 @@
 */
 
 exports.run = (client, message, args, level) => {
-	const nsfwRole = message.member.guild.roles.find('name', 'NSFW').id;
+	const nsfwRole = message.member.guild.roles.find(r => r.name === 'NSFW').id;
 	const blacklist = client.config.nsfwBlacklist;
 	const lenny = '( ͡° ͜ʖ ͡°)'; //	Store the face as its own variable because it messes up the text in the line it is in
 

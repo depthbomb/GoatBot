@@ -32,7 +32,7 @@ exports.run = async (client, message, args, level) => {
 		userTarget = message.mentions.users.first();
 	} else {
 		try {
-			userTarget = client.users.find('id', target);
+			userTarget = client.users.find(u => u.id === target);
 		} catch (e) {
 			message.author.send("User does not appear to exist.");
 		}
