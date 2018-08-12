@@ -38,7 +38,7 @@ exports.run = (client, message, args, level) => {
 			}
 			output += `${c.help.name}${" ".repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
 		});
-		message.author.send(output, {code:"asciidoc", split: true}).then((msg) => {
+		return message.author.send(output, {code:"asciidoc", split: true}).then((msg) => {
 			message.react("📨");
 		}).catch(err => {
 			message.reply("I cannot send the commands to you. You _must_ allow DMs from me for some commands to function.");
@@ -75,7 +75,7 @@ exports.run = (client, message, args, level) => {
 
 			if (hasParams) paramLine = `Parameters\n----------\n${parameters.join("\n")}\n\n`;
 
-			message.author.send(
+			return message.author.send(
 				`# ${command.help.name.toProperCase()}\n` +
 				`${command.help.description}\n\n` +
 				`Cooldown\n--------\n${command.conf.hasOwnProperty('cooldown') ? command.conf.cooldown : client.config.cooldowns.default} seconds\n\n` +

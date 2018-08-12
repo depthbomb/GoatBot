@@ -27,7 +27,7 @@ exports.run = async (client, message, args, level) => {
 	let messageID = args[0];
 
 	message.channel.fetchMessage(messageID).then(msg => {
-		msg.delete().then(() => {
+		return msg.delete().then(() => {
 			message.delete();
 		});
 	}).catch(console.error)

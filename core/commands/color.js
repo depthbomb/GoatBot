@@ -53,7 +53,7 @@ exports.run = async (client, message, args, level) => {
 								.setDescription(`Color preview for \`#${colorCode} (0x${colorCode.toUpperCase()}FF)\``)
 								.setColor(`#${colorCode}`)
 								.setImage(imageURL);
-				msg.edit(`<@${message.author.id}>`, {embed: colorEmbed}).then(() => {
+				return msg.edit(`<@${message.author.id}>`, {embed: colorEmbed}).then(() => {
 					fs.unlinkSync(imageName);
 				});
 			});

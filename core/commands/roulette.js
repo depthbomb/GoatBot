@@ -26,11 +26,11 @@ exports.run = (client, message, args, level) => {
 	const chamber = client.randomInt(1, 6);
 
 	if(bullet === chamber) {
-		message.delete().then((msg) => {
+		return message.delete().then((msg) => {
 			msg.channel.send(`\:boom:\:gun: ***BANG!!*** <@${message.author.id}> has shot themselves... Press **F** to pay respects.`);
 		});
 	} else {
-		message.delete().then((msg) => {
+		return message.delete().then((msg) => {
 			msg.channel.send(`\:gun: _Click_... <@${message.author.id}> pulls the trigger and nothing happens...`);
 		});
 	}

@@ -35,8 +35,10 @@ exports.run = async (client, message, args, level) => {
 			evaled = require("util").inspect(evaled);
 		}
 
+		return;
+
 	} catch (err) {
-		message.reply(`\`ERROR\` \`\`\`js\n${err}\n\`\`\``);
+		return message.reply(`\`ERROR\` \`\`\`js\n${err}\n\`\`\``);
 	}
 };
 

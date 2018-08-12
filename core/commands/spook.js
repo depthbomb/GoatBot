@@ -34,7 +34,7 @@ exports.run = async (client, message, args, level) => {
 		try {
 			userTarget = client.users.find(u => u.id === target);
 		} catch (e) {
-			message.author.send("User does not appear to exist.");
+			return message.author.send("User does not appear to exist.");
 		}
 	}
 
@@ -48,7 +48,7 @@ exports.run = async (client, message, args, level) => {
 		"https://i.imgur.com/MWiDknU.jpg"
 	];
 
-	userTarget.send(`${spookyPics.shuffle()[0]}\n\n***OoOOooh!***\n_You have been spooked by ${sender}!_\nHappy Halloween!`).then(msg => {
+	return userTarget.send(`${spookyPics.shuffle()[0]}\n\n***OoOOooh!***\n_You have been spooked by ${sender}!_\nHappy Halloween!`).then(msg => {
 		message.delete();
 	}).catch(err => {
 		message.author.send(`The target does not appear to allow me to send them DMs. I cannot spook them if I cannot send them DMs.`);

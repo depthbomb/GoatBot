@@ -27,7 +27,7 @@ exports.run = async (client, message, args, level) => {
 	if (args.allValuesSame()) return message.reply('Choices cannot be identical.');
 
 	const choice = args.shuffle()[0].usToSp();
-	message.reply(`I choose... ***${choice}***!`);
+	return message.reply(`I choose... ***${choice}***!`);
 };
 
 exports.conf = {

@@ -59,9 +59,9 @@ exports.run = async (client, message, args, level) => {
 					.setColor('#232323')
 					.setDescription(`\:8ball: <@${message.author.id}>, ${responses.shuffle()[0]}`);
 
-		message.channel.send({ embed });
+		return message.channel.send({ embed });
 	} else {
-		client.msg(message, 'orange', 'warning', 'Question must end with a question mark.');
+		return client.msg(message, 'orange', 'warning', 'Question must end with a question mark.');
 	}
 };
 

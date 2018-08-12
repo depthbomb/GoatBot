@@ -41,7 +41,7 @@ exports.run = (client, message, args, level) => {
             type: 0
         }
     }).then(() => {
-		message.delete().then(m => {
+		return message.delete().then(m => {
 			client.msg(m, 'green', 'success', `My status has been set to \`${statusMessage}\`.`);
 		});
 	});

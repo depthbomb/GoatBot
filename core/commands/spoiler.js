@@ -28,8 +28,8 @@ exports.run = (client, message, args, level) => {
 	const algorithm = 'aes-256-cbc';
 	const key = "cyanbot_spoiler_command_key1";
 
-	let topic = args[0];
-	let spoiler = args.slice(1).join(" ");
+	const topic = args[0];
+	const spoiler = args.slice(1).join(" ");
 
 	let cipher = crypto.createCipher(algorithm, key);
 	let encrypted = cipher.update(spoiler, "utf8", "base64");

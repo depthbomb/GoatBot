@@ -34,9 +34,9 @@ exports.run = async (client, message, args, level) => {
 		if (typeof evaled !== "string")
 			evaled = require("util").inspect(evaled);
 
-		message.channel.send(`\:inbox_tray: Input:\n\`\`\`js\n${code}\`\`\`\n\:outbox_tray: Output:\n\`\`\`js\n${clean}\`\`\`\n_Executed in ${execTime[1]/1000000}ms_`);
+		return message.channel.send(`\:inbox_tray: Input:\n\`\`\`js\n${code}\`\`\`\n\:outbox_tray: Output:\n\`\`\`js\n${clean}\`\`\`\n_Executed in ${execTime[1]/1000000}ms_`);
 	} catch (err) {
-		message.reply(`\`ERROR\` \`\`\`js\n${err}\n\`\`\``);
+		return message.reply(`\`ERROR\` \`\`\`js\n${err}\n\`\`\``);
 	}
 };
 

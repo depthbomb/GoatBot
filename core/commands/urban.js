@@ -41,7 +41,7 @@ exports.run = async (client, message, args, level) => {
 		const data = JSON.parse(body);
 
 		if (data.result_type === "no_results") {
-			msg.edit(`<@${message.author.id}>, I didn't find any results using your search term :(`);
+			return msg.edit(`<@${message.author.id}>, I didn't find any results using your search term :(`);
 		} else {
 			const result = data.list[0];
 			const embed = new RichEmbed()
@@ -52,7 +52,7 @@ exports.run = async (client, message, args, level) => {
 
 			if (result.example) embed.addBlankField(1).addField('Example(s)', client.trunc(result.example, 500));
 			
-			msg.edit(`<@${message.author.id}>`, { embed });
+			return msg.edit(`<@${message.author.id}>`, { embed });
 		}
 	});	
 };

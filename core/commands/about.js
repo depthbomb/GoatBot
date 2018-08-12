@@ -34,7 +34,7 @@ exports.run = async (client, message, args, level) => {
 				"`!about logging`\n"
 			)
 			.setFooter(`GoatBot ${client.config.botVersion} by depthbomb#7698`);
-		message.author.send({
+		return message.author.send({
 			embed: aboutEmbed
 		});
 	} else if (args && args[0] == "cooldowns") {
@@ -43,7 +43,7 @@ exports.run = async (client, message, args, level) => {
 			.setColor(client.config.color)
 			.setDescription(`All commands are susceptible to some sort per-user of delay or **cooldown**. This cooldown is to prevent abuse of the bot via command spamming and to limit some commands that rely on a third-party API that may have a request limit. By default, the cooldown of individual commands is ${client.config.cooldowns.default}s.\n\nSome commands may have a **global cooldown** where everyone shares the cooldown. To see what a command's cooldown is and if it has a global cooldown, type \`!help <command name>\`.`)
 			.setFooter(`GoatBot ${client.config.botVersion} by depthbomb#7698`);
-		message.author.send({
+		return message.author.send({
 			embed: featuresEmbed
 		});
 	} else if (args && (args[0] == "logging" || args[0] == "logs")) {
@@ -52,7 +52,7 @@ exports.run = async (client, message, args, level) => {
 			.setColor(client.config.color)
 			.setDescription(`I log all messages and events in channels that I have access to. However, I will keep this info private as it is used for general moderation and statistical purposes. If you wish to have entries related to you removed, please contact my owner.`)
 			.setFooter(`GoatBot ${client.config.botVersion} by depthbomb#7698`);
-		message.author.send({
+		return message.author.send({
 			embed: loggingEmbed
 		});
 	} else {

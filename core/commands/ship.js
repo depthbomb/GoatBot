@@ -69,7 +69,7 @@ exports.run = async (client, message, args, level) => {
 		.setTitle('\:heart: Ship Calculator')
 		.setDescription(`\:small_red_triangle_down: \`${thing}\`\n\:small_red_triangle: \`${thing2}\`\n\n${output}% [\`${bar}${barFill}\`](https://www.buymeacoff.ee/depthbomb) ${response}`)
 
-	message.reply({ embed });
+	return message.reply({ embed });
 };
 
 exports.conf = {

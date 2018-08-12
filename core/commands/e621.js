@@ -114,12 +114,12 @@ exports.run = async (client, message, args, level) => {
 								postEmbed.addField("Description", `${selected.description !== "" ? desc : "_No description_"}`)
 							}
 
-						msg.edit(`<@${message.author.id}>`, {
+						return msg.edit(`<@${message.author.id}>`, {
 							embed: postEmbed
 						});
 					}
 				} else {
-					msg.edit(`Attempt limit reached. Please try again.`);
+					return msg.edit(`Attempt limit reached. Please try again.`);
 				}
 			};
 

@@ -44,7 +44,7 @@ exports.run = async (client, message, args, level) => {
 		client.aliases.set(alias, cmd.help.name);
 	});
 
-	message.reply(`The command \`${command}\` has been reloaded`);
+	return message.reply(`The command \`${command}\` has been reloaded`);
 };
 
 exports.conf = {

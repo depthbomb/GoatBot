@@ -5,20 +5,20 @@ exports.run = async (client, message, args, level) => {
 
 	if(destination.match(/<@!?\d{17,19}>/g)) {
 		let u = message.mentions.users.first();
-		u.send(copypasta).catch((err) => {
+		return u.send(copypasta).catch((err) => {
 			message.reply("I could not send a message to that user: " + err);
 		}).then((m) => {
 			message.delete();
 		});
 	} else {
 		client.fetchUser(destination).then((u) => {
-			u.send(copypasta).catch((err) => {
+			return u.send(copypasta).catch((err) => {
 				message.reply("I could not send a message to that user: " + err);
 			}).then((m) => {
 				message.delete();
 			});
 		}).catch((err) => {
-			message.reply("User does not appear to exist: " + err);
+			return message.reply("User does not appear to exist: " + err);
 		});
 	}
 };
