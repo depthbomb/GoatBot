@@ -16,7 +16,7 @@
 		"url": "https://github.com/depthbomb/GoatBot.git"
 	},
 	"bugs": {
-		"url": "https://github.com/depthbomb/JPEGoat/issues"
+		"url": "https://github.com/depthbomb/GoatBot/issues"
 	},
 	"main": "goat.js",
 	"scripts": {
