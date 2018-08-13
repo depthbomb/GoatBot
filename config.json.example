@@ -114,6 +114,15 @@
 		"secret": ""
 	},
 
+	"unbox": {
+		"rarities": [
+			{ "name": "Poor", "color": "#9C8267", "file": "poor.png" }
+		],
+		"probability": [
+			1.00
+		]
+	},
+
 	"logTypes": [
 		"msg",
 		"event",

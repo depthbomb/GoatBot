@@ -32,7 +32,7 @@ exports.run = (client, message, args, level) => {
 		const crypto = require('crypto');
 		const algorithm = 'aes-256-cbc';
 
-		let decipher = crypto.createDecipher(algorithm, "stackTraceSalt");
+		let decipher = crypto.createDecipher(algorithm, client.config.crypto.errorSalt);
 		let decrypted = decipher.update(option, "base64", "utf8");
 		decrypted += decipher.final('utf8');
 
