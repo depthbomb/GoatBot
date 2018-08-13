@@ -26,17 +26,32 @@ exports.config = {
 	clientSecret: "",
 	token: "",
 
+	//	Bot owner tag
 	ownerName: "depthbomb#7698",
+
+	//Bot owner ID
 	ownerId: "133325534548590594",
 
+	//	Command prefix
 	prefix: "!",
+
+	//	Username bot will use when it starts up
 	botUsername: "GoatBot!",
 	color: "#0097A7",
+
+	//	The initial "game" the bot will be playing when started
 	initialGame: "!help",
+
+	//	Online status, supports online, idle, invisible, and dnd
 	status: "online",
+
+	//	User agent for requests
 	userAgent: "GoatBot! Automaton by Caprine Softworks - github.com/depthbomb/GoatBot",
+
+	//	Primary guild ID
 	mainGuild: "",
 
+	//	Database credentials
 	database: {
 		host: "",
 		user: "",
@@ -44,44 +59,72 @@ exports.config = {
 		db:   ""
 	},
 
+	//	Moderation role IDs
 	roles: {
 		admin: "",
 		mod: ""
 	},
 
+	//	User IDs blacklisted from using the !nsfw command
 	nsfwBlacklist: [],
-	nsfwChannel: "",
+
+	//	Channel ID used for logging actions
 	logChannel: "",
+
+	//	Segregation channel ID for new users
 	refugeeChannel: "",
 
+	//	Crypto options
 	crypto: {
 		salt: "",
 		errorSalt: ""
 	},
 
+	//	Cooldown options
 	cooldowns: {
+		//	Default cooldown in seconds, used if the command config does not specify a cooldown property
 		default: 1.5,
+
+		//	Channel IDs that can bypass the cooldown
 		bypassChannels: [],
+
+		//	User IDs that can bypass the cooldown
 		bypassUsers: []
 	},
 
+	//	Image and URL allowances, basically to throttle links and images on a per-user basis
 	allowances: {
 		enabled: true,
+
+		//	# of links allowed per [expiration] minutes
 		links: 10,
+
+		//	# of images allowed per [expiration] minutes
 		images: 4,
+
+		//	When the user's allowance refreshes in minutes
 		expiration: 10,
+
+		//	Channel IDs where the allowances apply to
 		channels: []
 	},
 
+	//	Strict mode options
 	strict_mode: {
+		//	Channel IDs that allow commands during strict mode
 		command_channels: [],
+
+		//	When strict mode expires if no time is specified, in minutes
 		default_expiration: 5
 	},
 
+	//	Auto role options
 	autoRoles: {
+		//	Delay in seconds after which to remove the user from the refugee role
 		unrestrictDelay: 300
 	},
 
+	//	Random "games" the bot will cycle through hourly
 	playingGames: [
 		"Petting a goat",
 		"Increasing Discount's incoming damage",
@@ -105,7 +148,10 @@ exports.config = {
 		"is this Loss?"
 	],
 
+	//	Channel ID in which to send greetings
 	greetingChannel: "",
+
+	//	Greetings the bot will choose from, replaces {user} with a user mention
 	greetings: [
 		"{user} has joined us! Give them a warm welcome.",
 		"Hey, {user} just joined! Let's bully them!",
@@ -113,25 +159,40 @@ exports.config = {
 		"Everyone hide! {user}'s here"
 	],
 
+	//	Timezone for log timestamps
 	logTimezone: "America/Chicago",
 
+	//	Steam-related options
 	steam: {
+		//	Steam Web API Key
 		api_key: ""
 	},
 
+	//	Cleverbot API Key, no longer obtainable for free and you must purchase one
 	cleverbot_api_key: "",
 
+	//	RSS feed options, somewhat hardcoded. See related tasks for more info
 	rss: {
-		url: "https://steamcommunity.com/groups/cyantf/rss/",
+		//	RSS feed URL
+		url: "",
+
+		//	Channel ID in which to output RSS feed info
 		output_channel: ""
 	},
 	
+	//	SourceBans punishment announcement options, also somewhat hardcoded
 	sourcebans: {
+		//	URL to ban punishment API endpoint
 		bans_url: "",
+		
+		//	URL to comms punishment API endpoint
 		comms_url: "",
+
+		//	Channel ID in which to output punishment announcements
 		output_channel: ""
 	},
 
+	//	Imgur API credentials
 	imgur: {
 		username: "",
 		password: "",
@@ -139,15 +200,20 @@ exports.config = {
 		secret: ""
 	},
 
+	//	Unbox options
 	unbox: {
+		//	Rarities that can be unboxed
 		rarities: [
-			{ "name": "Poor", "color": "#9C8267", "file": "poor.png" }
+			{ "name": "Poor", "color": "#9C8267", "file": "poor.png" },
 		],
+
+		//	Probability that the corresponding rarity will be "unboxed"
 		probability: [
-			0.90
+			0.90,
 		]
 	},
 
+	//	Log types. Old code, avoid modification
 	logTypes: [
 		"msg",
 		"event",
@@ -159,6 +225,7 @@ exports.config = {
 		"debug"
 	],
 
+	//	Required directories. Old code, avoid modification
 	directories: [
 		"storage",
 		"storage/cache",
