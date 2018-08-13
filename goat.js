@@ -45,7 +45,7 @@ class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
 
-		this.config = require("./config.json");
+		this.config = require("./config.js").config;
 		this.commands = new Discord.Collection();
 		this.aliases = new Discord.Collection();
 		this.rootPath = __dirname;

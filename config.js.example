@@ -1,0 +1,170 @@
+/*
+|--------------------------------------------------------------------------
+|	GoatBot! Automation
+|--------------------------------------------------------------------------
+|
+|	Copyright (C) 2017 - 2018 Caprine Softworks - https://caprine.net
+|
+|	This library is free software; you can redistribute it and/or
+|	modify it under the terms of the GNU Lesser General Public
+|	License as published by the Free Software Foundation; either
+|	version 2.1 of the License, or (at your option) any later version.
+|
+|	This library is distributed in the hope that it will be useful,
+|	but WITHOUT ANY WARRANTY; without even the implied warranty of
+|	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+|	Lesser General Public License for more details.
+|
+|	You can receive a copy of the GNU Lesser General Public License from 
+|	http://www.gnu.org/
+|
+|--------------------------------------------------------------------------
+*/
+
+exports.config = {
+	botVersion: "1.0.0",
+	clientSecret: "",
+	token: "",
+
+	ownerName: "depthbomb#7698",
+	ownerId: "133325534548590594",
+
+	prefix: "!",
+	botUsername: "GoatBot!",
+	color: "#0097A7",
+	initialGame: "!help",
+	status: "online",
+	userAgent: "GoatBot! Automaton by Caprine Softworks - github.com/depthbomb/GoatBot",
+	mainGuild: "",
+
+	database: {
+		host: "",
+		user: "",
+		pass: "",
+		db:   ""
+	},
+
+	roles: {
+		admin: "",
+		mod: ""
+	},
+
+	nsfwBlacklist: [],
+	nsfwChannel: "",
+	logChannel: "",
+	refugeeChannel: "",
+
+	crypto: {
+		salt: "",
+		errorSalt: ""
+	},
+
+	cooldowns: {
+		default: 1.5,
+		bypassChannels: [],
+		bypassUsers: []
+	},
+
+	allowances: {
+		enabled: true,
+		links: 10,
+		images: 4,
+		expiration: 10,
+		channels: []
+	},
+
+	strict_mode: {
+		command_channels: [],
+		default_expiration: 5
+	},
+
+	autoRoles: {
+		unrestrictDelay: 300
+	},
+
+	playingGames: [
+		"Petting a goat",
+		"Increasing Discount's incoming damage",
+		"Drinking tap water",
+		"Dividing by zero",
+		"Browsing e621",
+		"Bragging about mechanical keyboards",
+
+		"Praying to the B͠͞ĺ̡́̕a̢͟c̡̢ķ̵̶͝͝ ̵̴̨̧́Ǵ̶̛͘͡o̧̨̡͟a̴̡̧͜͝t͢",
+
+		"Hacking your IP address with HTML",
+		"Snapping my Fortnite win",
+		"Yiffing",
+		"Accidentally crashing the server",
+		"WoW for 16 hours a day",
+		"Thinking of new quotes for this",
+		"Changing map to surf_tf_japan_v1",
+		"!help",
+		"Making a furry inside joke",
+		"a True Pacifist run",
+		"is this Loss?"
+	],
+
+	greetingChannel: "",
+	greetings: [
+		"{user} has joined us! Give them a warm welcome.",
+		"Hey, {user} just joined! Let's bully them!",
+		"*Notices {user}* OwO What's this?",
+		"Everyone hide! {user}'s here"
+	],
+
+	logTimezone: "America/Chicago",
+
+	steam: {
+		api_key: ""
+	},
+
+	cleverbot_api_key: "",
+
+	rss: {
+		url: "https://steamcommunity.com/groups/cyantf/rss/",
+		output_channel: ""
+	},
+	
+	sourcebans: {
+		bans_url: "",
+		comms_url: "",
+		output_channel: ""
+	},
+
+	imgur: {
+		username: "",
+		password: "",
+		client: "",
+		secret: ""
+	},
+
+	unbox: {
+		rarities: [
+			{ "name": "Poor", "color": "#9C8267", "file": "poor.png" }
+		],
+		probability: [
+			0.90
+		]
+	},
+
+	logTypes: [
+		"msg",
+		"event",
+		"bot",
+		"system",
+		"warn",
+		"error",
+		"cron",
+		"debug"
+	],
+
+	directories: [
+		"storage",
+		"storage/cache",
+		"storage/cache/rss",
+		"storage/cache/sb",
+		"storage/tmp",
+		"storage/logs"
+	]
+};
