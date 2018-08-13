@@ -22,29 +22,39 @@
 */
 
 exports.run = async (client, message, args, level) => {
+	const path = require('path');
 	if (!args || args.size < 1) return message.reply("Must provide a command to reload.");
 
-	let command;
-	if (client.commands.has(args[0])) {
-		command = client.commands.get(args[0]);
-	} else if (client.aliases.has(args[0])) {
-		command = client.commands.get(client.aliases.get(args[0]));
+	const item = args[0];
+
+	if (item === 'config') {
+		const configPath = path.join(client.rootPath, 'config.json');
+		delete require.cache[require.resolve(configPath)];
+		client.config = require(configPath);
+		return message.reply('Configuration has been reloaded.');
+	} else {
+		let command;
+		if (client.commands.has(item)) {
+			command = client.commands.get(item);
+		} else if (client.aliases.has(item)) {
+			command = client.commands.get(client.aliases.get(item));
+		}
+		if (!command) return message.reply(`The command \`${item}\` doesn't seem to exist, nor is it an alias. Try again!`);
+		command = command.help.name;
+	
+		delete require.cache[require.resolve(`./${command}.js`)];
+		const cmd = require(`./${command}`);
+		client.commands.delete(command);
+		client.aliases.forEach((cmd, alias) => {
+			if (cmd === command) client.aliases.delete(alias);
+		});
+		client.commands.set(command, cmd);
+		cmd.conf.aliases.forEach(alias => {
+			client.aliases.set(alias, cmd.help.name);
+		});
+	
+		return message.reply(`The command \`${command}\` has been reloaded`);
 	}
-	if (!command) return message.reply(`The command \`${args[0]}\` doesn't seem to exist, nor is it an alias. Try again!`);
-	command = command.help.name;
-
-	delete require.cache[require.resolve(`./${command}.js`)];
-	const cmd = require(`./${command}`);
-	client.commands.delete(command);
-	client.aliases.forEach((cmd, alias) => {
-		if (cmd === command) client.aliases.delete(alias);
-	});
-	client.commands.set(command, cmd);
-	cmd.conf.aliases.forEach(alias => {
-		client.aliases.set(alias, cmd.help.name);
-	});
-
-	return message.reply(`The command \`${command}\` has been reloaded`);
 };
 
 exports.conf = {
