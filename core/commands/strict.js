@@ -56,10 +56,12 @@ exports.help = {
 	name: "strict",
 	category: "Moderation",
 	description: "Toggles strict mode for 5 minutes, requiring commands to be used in the commands channel",
-	usage: "strict",
-	params: {},
+	usage: "strict [duration?]",
+	params: {
+		'duration': '(Optional) Time strict mode should last in minutes'
+	},
 	examples: [
 		"strict",
-		"strictmode"
+		"strictmode 5"
 	]
 };
