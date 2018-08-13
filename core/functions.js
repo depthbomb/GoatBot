@@ -158,7 +158,7 @@ module.exports = (client) => {
 				if (reply) message.reply(`Please try again in about ${ms(timeLeft, {long: true})}.`).then(cdMsg => {
 					setTimeout(() => {
 						cdMsg.delete();
-					}, 5000);
+					}, 10000);
 				});
 			} else {
 				onCooldown = false;
