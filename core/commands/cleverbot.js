@@ -23,7 +23,7 @@
 
 exports.run = async (client, message, args, level) => {
 	const request = require('request');
-	const msg = args.join(' ');
+	const msg = encodeURI(args.join(' '));
 	const api_key = client.config.cleverbot_api_key;
 
 	let state;
