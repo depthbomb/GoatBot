@@ -31,7 +31,7 @@ exports.run = async (client, message, args, level) => {
 	const chosenRarity = chance.weighted(qualities, probability);
 	const name = chosenRarity.name,
 		  color = chosenRarity.color,
-		  image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}?id=${message.author.id}`;
+		  image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}?v=1`;
 	const embed = new RichEmbed()
 		.setColor(color)
 		.setTitle(`Goat Unboxed`)
