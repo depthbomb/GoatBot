@@ -31,12 +31,12 @@ exports.run = async (client, message, args, level) => {
 	const chosenRarity = chance.weighted(qualities, probability);
 	const name = chosenRarity.name,
 		  color = chosenRarity.color,
-		  image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}`;
+		  image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}?id=${message.author.id}`;
 	const embed = new RichEmbed()
 		.setColor(color)
 		.setTitle(`Goat Unboxed`)
 		.setDescription(`<@!${message.author.id}> has unboxed: **${name} Goat!**`)
-		.addField('Rating', `_${(qualities.indexOf(chosenRarity) + 1)}/${qualities.length}_`)
+		.addField('Rating', `_${(qualities.indexOf(chosenRarity) + 1)}/${qualities.length}_`, true)
 		.setImage(image)
 		.setTimestamp();
 

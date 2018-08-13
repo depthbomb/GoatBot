@@ -148,25 +148,27 @@ module.exports = (client) => {
 		let timeLeft;
 		let onCooldown;
 
-		if (cooldownObject.hasOwnProperty(cooldownName)) {
-			onCooldown = true;
-			const ms = require('ms');
-			const expiration = cooldownObject[cooldownName].ex;
-			timeLeft = expiration - messageTime;
-
-			if (reply) message.reply(`Please try again in about ${ms(timeLeft, {long: true})}.`).then(cdMsg => {
+		if (!client.config.cooldowns.bypassUsers.includes(message.author.id)) {	//	If the user cannot bypass cooldowns, do the junk
+			if (cooldownObject.hasOwnProperty(cooldownName)) {
+				onCooldown = true;
+				const ms = require('ms');
+				const expiration = cooldownObject[cooldownName].ex;
+				timeLeft = expiration - messageTime;
+	
+				if (reply) message.reply(`Please try again in about ${ms(timeLeft, {long: true})}.`).then(cdMsg => {
+					setTimeout(() => {
+						cdMsg.delete();
+					}, 5000);
+				});
+			} else {
+				onCooldown = false;
+				cooldownObject[cooldownName] = {
+					ex: (messageTime + cooldownDuration)
+				};
 				setTimeout(() => {
-					cdMsg.delete();
-				}, 5000);
-			});
-		} else {
-			onCooldown = false;
-			cooldownObject[cooldownName] = {
-				ex: (messageTime + cooldownDuration)
-			};
-			setTimeout(() => {
-				delete cooldownObject[cooldownName];	//	Weird operator
-			}, cooldownDuration);
+					delete cooldownObject[cooldownName];	//	Weird operator
+				}, cooldownDuration);
+			}
 		}
 
 		callback(onCooldown);
