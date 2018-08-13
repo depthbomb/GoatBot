@@ -31,6 +31,22 @@ module.exports = async (client) => {
 	const request = require('request');
 
 	const tasks = {
+
+		check_config: {
+			interval: 10,
+			action: () => {
+				const oldConfig = JSON.stringify(client.config);
+				const newConfig = JSON.stringify(require(path.join(client.rootPath, 'config.js')).config);
+
+				if (oldConfig === newConfig) {
+					delete require.cache[path.join(client.rootPath, 'config.js')];
+				} else {
+					delete require.cache[path.join(client.rootPath, 'config.js')];
+					client.config = require(path.join(client.rootPath, 'config.js')).config;
+				}
+			}
+		},
+
 		change_game: {
 			interval: (60 * 60),
 			action: () => {
