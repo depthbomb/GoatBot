@@ -28,9 +28,9 @@ exports.run = async (client, message, args, level) => {
 	const item = args[0];
 
 	if (item === 'config') {
-		const configPath = path.join(client.rootPath, 'config.json');
+		const configPath = path.join(client.rootPath, 'config.js');
 		delete require.cache[require.resolve(configPath)];
-		client.config = require(configPath);
+		client.config = require(configPath).config;
 		return message.reply('Configuration has been reloaded.');
 	} else {
 		let command;
