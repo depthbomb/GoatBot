@@ -166,7 +166,7 @@ module.exports = (client) => {
 					ex: (messageTime + cooldownDuration)
 				};
 				setTimeout(() => {
-					delete cooldownObject[cooldownName];	//	Weird operator
+					delete cooldownObject[cooldownName];
 				}, cooldownDuration);
 			}
 		}
