@@ -26,17 +26,26 @@ exports.run = async (client, message, args, level) => {
 	const Chance = require('chance');
 	const unboxConfig = client.config.unbox;
 	const qualities = unboxConfig.rarities;
-	const probability = unboxConfig.probability;
+	const rarity_weights = unboxConfig.rarity_weights;
 	const chance = new Chance();
-	const chosenRarity = chance.weighted(qualities, probability);
+	const chosenRarity = chance.weighted(qualities, rarity_weights);
 	const name = chosenRarity.name,
 		  color = chosenRarity.color,
-		  image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}?v=1`;
+		  image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}?v=1`,
+		  weight = rarity_weights[qualities.indexOf(chosenRarity)];
+
+	let weightSum = 0;
+	for (let i = 0; i < rarity_weights.length; i++) {
+		weightSum += rarity_weights[i];
+	}
+
+	const percentage = ((weight / weightSum) * 100).toFixed(3);
 	const embed = new RichEmbed()
 		.setColor(color)
 		.setTitle(`Goat Unboxed`)
 		.setDescription(`<@!${message.author.id}> has unboxed: **${name} Goat!**`)
-		.addField('Rating', `_${(qualities.indexOf(chosenRarity) + 1)}/${qualities.length}_`, true)
+		.addField('Rating', `_${(qualities.indexOf(chosenRarity) + 1)}/${qualities.length}_`)
+		.addField('Drop chance', `_~${percentage}%_`)
 		.setImage(image)
 		.setTimestamp();
 
