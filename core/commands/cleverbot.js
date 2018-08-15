@@ -26,6 +26,8 @@ exports.run = async (client, message, args, level) => {
 	const msg = encodeURI(args.join(' '));
 	const api_key = client.config.cleverbot_api_key;
 
+	message.channel.startTyping();
+
 	let state;
 	let api_url = `http://www.cleverbot.com/getreply?key=${api_key}&input=${msg}&cs=${state}`;
 
@@ -41,6 +43,7 @@ exports.run = async (client, message, args, level) => {
 		const data = JSON.parse(body);
 		state = data.cs;
 
+		message.channel.stopTyping();
 		return message.reply(data.output);
 	});
 };
