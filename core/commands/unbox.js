@@ -80,7 +80,7 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	guildOnly: true,
-	cooldown: 1200,
+	cooldown: 900,
 	aliases: [
 		'lootcrate',
 		'lootbox'
