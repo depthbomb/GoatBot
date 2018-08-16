@@ -50,7 +50,7 @@ exports.run = async (client, message, args, level) => {
 			.setColor(color)
 			.setTitle(`Unbox-A-Goat`)
 			.setDescription(`<@!${message.author.id}> has unboxed: **${name} Goat!**`)
-			.addField('Rating', `_${(qualities.indexOf(chosenRarity) + 1)}/${qualities.length}_`)
+			.addField('Rating', `_${qualities.indexOf(chosenRarity)}/${(qualities.length - 1)}_`)
 			.addField('Drop chance', `_~${percentage}%_`)
 			.setImage(image)
 			.setTimestamp();
@@ -63,14 +63,14 @@ exports.run = async (client, message, args, level) => {
 
 		let dropChances = [];
 		for (let i = 0; i < qualities.length; i++) {
-			dropChances.push(`**Rating ${i + 1}/${qualities.length}:** \`${((rarity_weights[i] / weightSum) * 100).toFixed(3)}%\``);
+			dropChances.push(`**Rating ${i}/${(qualities.length - 1)}:** \`${((rarity_weights[i] / weightSum) * 100).toFixed(3)}%\``);
 		}
 
 		embed = new RichEmbed()
 			.setColor(client.colors.brand)
 			.setThumbnail('https://static.caprine.net/goatbot_assets/goats/thumbnail.png?v=1')
 			.setTitle('Unbox-A-Goat')
-			.setDescription(`There are currently ${qualities.length} rarities of Goat that you can unbox. The percentage drop chances are listed below by their rating.`)
+			.setDescription(`There are currently ${(qualities.length - 1)} rarities of Goat that you can unbox. The percentage drop chances are listed below by their rating.`)
 			.addField('Drop chances', dropChances.join('\n'));
 	}
 
