@@ -154,8 +154,10 @@ module.exports = (client) => {
 				const ms = require('ms');
 				const expiration = cooldownObject[cooldownName].ex;
 				timeLeft = expiration - messageTime;
+
+				let response = timeLeft < 1000 ? 'Please try again.' : `Please try again in about ${ms(timeLeft, {long: true})}.`;
 	
-				if (reply) message.reply(`Please try again in about ${ms(timeLeft, {long: true})}.`).then(cdMsg => {
+				if (reply) message.reply(response).then(cdMsg => {
 					setTimeout(() => {
 						cdMsg.delete();
 					}, 10000);
