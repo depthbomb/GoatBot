@@ -23,16 +23,14 @@
 
 exports.run = async (client, message, args, level) => {
 	if (!args) return;
-	const validMoves = ["rock", "paper", "scissors"];
-	const botMoves = ["rock", "paper", "scissors"];
+	const Chance = require('chance');
+	const chance = new Chance();
+	let validMoves = ["rock", "paper", "scissors"];
+	const botMoves = chance.weighted([["rock", "paper", "scissors"], ["rock", "paper", "scissors", "goat"]], [1, 10]);
 	const move = args[0].toLowerCase();
 	const user = `<@${message.author.id}>`;
 	const bot = `<@${client.user.id}>`;
 	
-	const goatChance = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
-	const goatRoll = 7;
-
-	if (goatChance === goatRoll) botMoves.push('goat');
 	if (message.author.id === client.config.ownerId) validMoves.push('goat');
 
 	const emoji = {
