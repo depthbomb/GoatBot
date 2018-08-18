@@ -21,9 +21,6 @@
 |--------------------------------------------------------------------------
 */
 
-/**
-* TODO: Cleanup/rewrite!
-*/
 exports.run = async (client, message, args, level) => {
 	if (args.length < 2) return;
 	const { RichEmbed } = require('discord.js');
@@ -34,39 +31,51 @@ exports.run = async (client, message, args, level) => {
 	let timeLeft = giveawayLimit;
 	let description = `"${giveawayItem}"`;
 	let entered = [];	//	Use our own collection since I've had trouble in the past with the library's
-	let filter = cm => cm.content.toLowerCase() === 'enter' || cm.content.toLowerCase() === '!enter';
+	let displayEntered = [];	//	Array of mention strings for displaying, because I'm lazy
+	let filter = (r, u) => r.emoji.name === '🎉' && !entered.includes(u.id) && u.id !== client.user.id;
 
 	let embed = new RichEmbed()
 		.setColor(client.colors.default)
 		.setTitle(description)
-		.setDescription(`Type \`enter\` to enter.\n\nTime left: **${timeLeft}** seconds`);
+		.setDescription(`React with 🎉 to enter.`)
+		.setFooter(`Time left: ${timeLeft} seconds`);
 
 	message.channel.send('🎉 Giveaway! 🎉', { embed }).then(msg => {
-		let collector = message.channel.createMessageCollector(filter, { time: (giveawayLimit * 1000) });
+
+		msg.react('🎉');
+
+		const collector = msg.createReactionCollector(filter, { time: (giveawayLimit * 1000) });
+
 		let updateTimeLeft = setInterval(() => {
 			timeLeft--;
-		}, (1 * 1000));
+		}, 1000);
 		let updateEmbed = setInterval(() => {
 			embed = new RichEmbed()
 				.setTitle(description)
-				.setDescription(`Type \`enter\` to enter.\n\nTime left: **${timeLeft}** seconds`)
+				.setDescription(`React with 🎉 to enter.`)
+				.setFooter(`Time left: ${timeLeft} seconds`);
 
-			if (timeLeft < 6) {
+			if (entered.length > 0) {
+				embed.addField('Entries', displayEntered.join('\n'));
+			}
+			
+			if (timeLeft < 11) {
 				embed.setColor('#ff0000').addField('\u200b', "\n***Time's almost up!***");
 			} else {
 				embed.setColor(client.colors.default);
 			}
 
 			msg.edit('🎉 Giveaway! 🎉', { embed });
-		}, (1.5 * 1000));
+		}, 2000);
 
-		collector.on('collect', m => {
-			if (entered.includes(m.author.id)) {
-				m.delete((5*1000));	//	Delete the enter message after 5 seconds of sending
-			} else {
-				entered.push(m.author.id);	//	Store the mention because I'm lazy
-				m.react('✅');
+		collector.on('collect', r => {
+			const userId = r.users.last().id;	//	Get the latest user who reacted
+			
+			if (!entered.includes(userId)) {
+				entered.push(userId);
+				displayEntered.push(`<@${userId}>`);
 			}
+
 		});
 
 		collector.on('end', () => {
