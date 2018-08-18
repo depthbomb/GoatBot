@@ -63,13 +63,15 @@ class GoatBot extends Discord.Client {
 		//	Path for storing command-related data
 		this.commandCachePath = `${__dirname}/storage/cache/command_data`;
 
-		//	'Deported' users will not be able to leave the refugee camp automatically and need to be approved manually
-		this.deported = ['168137183805308928'];
+		this.deported = this.config.deported_users;
 
 		//	Object to store command cooldowns
 		this.cooldowns = {};
 
 		this.strictMode = {};
+
+		//	A little runtime-based storage object for command-specific data
+		this.commandData = {};
 		
 		this.allowances = { images: {}, links: {} };
 		this.colors = {
@@ -145,6 +147,8 @@ const client = new GoatBot();
 require(`${client.appPath}/functions.js`)(client);
 
 const init = async () => {
+
+	console.log(client.config.deported_users);
 
 
 	require(`${client.appPath}/taskrunner.js`)(client);

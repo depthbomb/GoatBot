@@ -74,6 +74,9 @@ exports.config = {
 	//	Segregation channel ID for new users
 	refugeeChannel: "",
 
+	//	'Deported' user IDs will not be able to leave the refugee camp automatically and need to be approved manually
+	deported_users: [],
+
 	//	Crypto options
 	crypto: {
 		salt: "",
