@@ -23,15 +23,6 @@
 
 if (process.version.slice(1).split(".")[0] < 8) throw new Error("GoatBot requires Node 8.0.0 or higher. Update Node on your system.");
 
-process.on("uncaughtException", err => {
-	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
-	console.trace("Uncaught Exception: ", err);
-});
-
-process.on("unhandledRejection", err => {
-	console.trace("Uncaught Promise Error: ", err);
-});
-
 const Discord = require('discord.js');
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);

@@ -299,4 +299,17 @@ module.exports = (client) => {
 
 	// `await client.wait(1000);` to "pause" for 1 second.
 	client.wait = require("util").promisify(setTimeout);
+
+
+
+
+
+	process.on("uncaughtException", err => {
+		const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
+		console.trace("Uncaught Exception: ", err);
+	});
+	
+	process.on("unhandledRejection", err => {
+		console.trace("Uncaught Promise Error: ", err);
+	});
 };
