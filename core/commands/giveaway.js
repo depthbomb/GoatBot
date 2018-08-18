@@ -88,13 +88,13 @@ exports.run = async (client, message, args, level) => {
 				});
 			} else {
 				let winner = entered.shuffle()[0];
-				winnerText = `Congratulations, <@!${winner}>! You've won **${giveawayItem}**`;
+				winnerText = `Congratulations, <@${winner}>! You've won **${giveawayItem}**`;
 
 				return message.channel.send(winnerText).then(() => {
 					embed = new RichEmbed()
 						.setColor('#000000')
 						.setTitle(description)
-						.setDescription(`<@!${winner}> has won this giveaway.`)
+						.setDescription(`<@${winner}> has won this giveaway.`)
 						.setFooter('Ended')
 						.setTimestamp();
 					msg.edit('🎉 **GIVEAWAY ENDED!** 🎉', { embed });
