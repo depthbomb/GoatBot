@@ -29,6 +29,8 @@ module.exports = async (client) => {
 	const ms = require('ms');
 	const Parser = require('rss-parser');
 	const request = require('request');
+	const Chance = require('chance');
+	const chance = new Chance();
 
 	const tasks = {
 
@@ -50,12 +52,12 @@ module.exports = async (client) => {
 		change_game: {
 			interval: (60 * 60),
 			action: () => {
-				const quotes = client.config.playingGames.shuffle();
+				const quote = chance.weighted(client.config.status.statuses, client.config.status.weights);
 				client.user.setPresence({
 					status: "online",
 					afk: false,
 					game: {
-						name: quotes[0],
+						name: quote,
 						type: 0
 					}
 				});

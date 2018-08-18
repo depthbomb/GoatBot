@@ -127,29 +127,34 @@ exports.config = {
 		unrestrictDelay: 300
 	},
 
-	//	Random "games" the bot will cycle through hourly
-	playingGames: [
-		"Petting a goat",
-		"Increasing Discount's incoming damage",
-		"Drinking tap water",
-		"Dividing by zero",
-		"Browsing e621",
-		"Bragging about mechanical keyboards",
+	status: {
+		//	Random "games" the bot will cycle through hourly
+		statuses: [
+			"Petting a goat",
+			"Increasing Discount's incoming damage",
+			"Drinking tap water",
+			"Dividing by zero",
+			"Browsing e621",
+			"Bragging about mechanical keyboards",
+	
+			"Praying to the B͠͞ĺ̡́̕a̢͟c̡̢ķ̵̶͝͝ ̵̴̨̧́Ǵ̶̛͘͡o̧̨̡͟a̴̡̧͜͝t͢",
+	
+			"Hacking your IP address with HTML",
+			"Snapping my Fortnite win",
+			"Yiffing",
+			"Accidentally crashing the server",
+			"WoW for 16 hours a day",
+			"Thinking of new quotes for this",
+			"Changing map to surf_tf_japan_v1",
+			"!help",
+			"Making a furry inside joke",
+			"a True Pacifist run",
+			"is this Loss?"
+		],
 
-		"Praying to the B͠͞ĺ̡́̕a̢͟c̡̢ķ̵̶͝͝ ̵̴̨̧́Ǵ̶̛͘͡o̧̨̡͟a̴̡̧͜͝t͢",
-
-		"Hacking your IP address with HTML",
-		"Snapping my Fortnite win",
-		"Yiffing",
-		"Accidentally crashing the server",
-		"WoW for 16 hours a day",
-		"Thinking of new quotes for this",
-		"Changing map to surf_tf_japan_v1",
-		"!help",
-		"Making a furry inside joke",
-		"a True Pacifist run",
-		"is this Loss?"
-	],
+		//	Weights for the corresponding status "game", in case you want some to appear more often than others
+		weights: [ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 50, 10, 10, 10 ]
+	},
 
 	//	Channel ID in which to send greetings
 	greetingChannel: "",
