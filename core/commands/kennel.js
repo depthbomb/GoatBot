@@ -36,15 +36,15 @@ exports.run = async (client, message, args, level) => {
 
 	const kennelRole = message.member.guild.roles.find(r => r.name === 'Kenneled').id;
 
-	if (!message.member.roles.find(r => r.name === 'Kenneled')) {
+	if (!user.roles.find(r => r.name === 'Kenneled')) {
 		const { RichEmbed } = require('discord.js');
 		const embed = new RichEmbed()
 			.setColor(client.colors.red)
 			.setTitle('User Kenneled')
-			.setDescription(`User ${user.displayName} has been kenneled by ${message.member.displayName}.`)
+			.setDescription(`User \`${user.displayName}\` has been kenneled by **${message.member.displayName}**`)
 			.addField('Reason', reason)
 		;
-		message.member.addRole(kennelRole, reason).then(() => {
+		user.addRole(kennelRole, reason).then(() => {
 			message.delete().then(m => {
 				m.channel.send({ embed });
 			});
