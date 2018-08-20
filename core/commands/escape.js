@@ -29,7 +29,7 @@ exports.run = async (client, message, args, level) => {
 	const kenneled = message.member.guild.roles.find(r => r.name === 'Kenneled');
 
 	if (kenneled) {
-		const hasEscaped = chance.weighted([1, 0], [1, 6]);
+		const hasEscaped = chance.weighted([1, 0], [1, 7]);
 		message.delete().then(m => {
 			if (hasEscaped) {
 				m.reply('You have successfully escaped the kennel and are on your way back to the public. Try to behave next time and you might not be back! (You will be freed shortly)');
@@ -48,7 +48,7 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	guildOnly: true,
-	cooldown: 300,
+	cooldown: 180,
 	aliases: [],
 	permLevel: 0
 };
