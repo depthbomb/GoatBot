@@ -48,6 +48,7 @@ exports.run = (client, message, args, level) => {
 		let paramLine = '';
 		let command;
 		let parameters = [];
+		let extraInfo;
 		if (client.commands.has(args[0])) {
 			command = args[0];
 		} else if (client.aliases.has(args[0])) {
@@ -73,6 +74,13 @@ exports.run = (client, message, args, level) => {
 				hasParams = false;
 			}
 
+			if (command.help.hasOwnProperty('extra_info')) {
+				console.log('help object has ', 'extra_info');
+				extraInfo = 'Extra Info\n----------\n' + command.help.extra_info(client, message, args, level);
+			} else {
+				extraInfo = '';
+			}
+			
 			if (hasParams) paramLine = `Parameters\n----------\n${parameters.join("\n")}\n\n`;
 
 			return message.author.send(
@@ -83,7 +91,8 @@ exports.run = (client, message, args, level) => {
 				`Aliases\n-------\n${command.conf.aliases.length > 0 ? command.conf.aliases.join(", ") : 'None'}\n\n` +
 				`Usage\n-----\n${settings.prefix}${command.help.usage}\n\n` +
 				paramLine +
-				`Examples\n--------\n${examples.join("\n")}`
+				`Examples\n--------\n${examples.join("\n")}\n\n` +
+				extraInfo
 
 				, {code: "markdown", split: true}
 			).then((msg) => {

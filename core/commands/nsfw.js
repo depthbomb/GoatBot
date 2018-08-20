@@ -28,7 +28,7 @@ exports.run = (client, message, args, level) => {
 
 	if (blacklist.includes(message.member.id)) return;
 
-	if (message.member.roles.exists('name', 'NSFW')) {
+	if (message.member.roles.find(r => r.name === 'NSFW')) {
 		message.member.removeRole(nsfwRole, 'Via GoatBot!').then(() => {
 			message.delete().then(msg => {
 				msg.reply('Your access to the NSFW channels has been revoked.');

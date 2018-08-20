@@ -24,6 +24,8 @@
 exports.run = async (client, message, args, level) => {
 	const action = args[0];
 	const { RichEmbed } = require('discord.js');
+	const Chance = require('chance');
+	const chance = new Chance();
 
 	const unboxConfig = client.config.unbox;
 	const qualities = unboxConfig.rarities;
@@ -31,48 +33,26 @@ exports.run = async (client, message, args, level) => {
 
 	let embed;
 
-	if (action === null || args.length < 1) {
-		const Chance = require('chance');
-		const chance = new Chance();
-		const chosenRarity = chance.weighted(qualities, rarity_weights);
-		const name = chosenRarity.name,
-			color = chosenRarity.color,
-			image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}?v=1`,
-			weight = rarity_weights[qualities.indexOf(chosenRarity)];
+	const chosenRarity = chance.weighted(qualities, rarity_weights);
+	const name = chosenRarity.name,
+		color = chosenRarity.color,
+		image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}?v=1`,
+		weight = rarity_weights[qualities.indexOf(chosenRarity)];
 
-		let weightSum = 0;
-		for (let i = 0; i < rarity_weights.length; i++) {
-			weightSum += rarity_weights[i];
-		}
-
-		const percentage = ((weight / weightSum) * 100).toFixed(3);
-		embed = new RichEmbed()
-			.setColor(color)
-			.setTitle(`Unbox-A-Goat`)
-			.setDescription(`<@!${message.author.id}> has unboxed: **${name} Goat!**`)
-			.addField('Rating', `_${qualities.indexOf(chosenRarity)}/${(qualities.length - 1)}_`)
-			.addField('Drop chance', `_~${percentage}%_`)
-			.setImage(image)
-			.setTimestamp();
-	} else if (action === 'help') {
-
-		let weightSum = 0;
-		for (let i = 0; i < rarity_weights.length; i++) {
-			weightSum += rarity_weights[i];
-		}
-
-		let dropChances = [];
-		for (let i = 0; i < qualities.length; i++) {
-			dropChances.push(`**Rating ${i}/${(qualities.length - 1)}:** \`${((rarity_weights[i] / weightSum) * 100).toFixed(3)}%\``);
-		}
-
-		embed = new RichEmbed()
-			.setColor(client.colors.brand)
-			.setThumbnail('https://static.caprine.net/goatbot_assets/goats/thumbnail.png?v=1')
-			.setTitle('Unbox-A-Goat')
-			.setDescription(`There are currently ${(qualities.length - 1)} rarities of Goat that you can unbox. The percentage drop chances are listed below by their rating.`)
-			.addField('Drop chances', dropChances.join('\n'));
+	let weightSum = 0;
+	for (let i = 0; i < rarity_weights.length; i++) {
+		weightSum += rarity_weights[i];
 	}
+
+	const percentage = ((weight / weightSum) * 100).toFixed(3);
+	embed = new RichEmbed()
+		.setColor(color)
+		.setTitle(`Unbox-A-Goat`)
+		.setDescription(`<@!${message.author.id}> has unboxed: **${name} Goat!**`)
+		.addField('Rating', `_${qualities.indexOf(chosenRarity)}/${(qualities.length - 1)}_`)
+		.addField('Drop chance', `_~${percentage}%_`)
+		.setImage(image)
+		.setTimestamp();
 
 	return message.channel.send({ embed });
 };
@@ -92,12 +72,27 @@ exports.help = {
 	name: "unbox",
 	category: "Fun",
 	description: "Open a loot box",
-	usage: "unbox [option?]",
-	params: {
-		'option': '(Optional) Option argument, currently supports "help"'
-	},
+	usage: "unbox",
+	params: {},
 	examples: [
-		"unbox",
-		"unbox help"
-	]
+		"unbox"
+	],
+	extra_info: (client, message, args, level) => {
+		const unboxConfig = client.config.unbox;
+		const qualities = unboxConfig.rarities;
+		const rarity_weights = unboxConfig.rarity_weights;
+		let weightSum = 0;
+		for (let i = 0; i < rarity_weights.length; i++) {
+			weightSum += rarity_weights[i];
+		}
+
+		let dropChances = [];
+		for (let i = 0; i < qualities.length; i++) {
+			dropChances.push(`Rating ${i}/${(qualities.length - 1)}: ${((rarity_weights[i] / weightSum) * 100).toFixed(3)}%`);
+		}
+
+		const str = `There are currently ${(qualities.length - 1)} rarities of Goat that you can unbox. The percentage drop chances are listed below by their rating.\n\n${dropChances.join('\n')}`;
+
+		return str;
+	}
 };
