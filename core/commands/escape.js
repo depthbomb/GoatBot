@@ -23,6 +23,7 @@
 
 exports.run = async (client, message, args, level) => {
 	if (args.length > 0) return;
+	if (message.channel.id !== '481201307257012262') return;
 	const Chance = require('chance');
 	const chance = new Chance();
 	const kenneled = message.member.guild.roles.find(r => r.name === 'Kenneled');
@@ -31,7 +32,7 @@ exports.run = async (client, message, args, level) => {
 		const hasEscaped = chance.weighted([1, 0], [1, 6]);
 		message.delete().then(m => {
 			if (hasEscaped) {
-				m.reply('You have successfully escaped the kennel and are on your way back to the public. Try to behave next time and you might not be back!');
+				m.reply('You have successfully escaped the kennel and are on your way back to the public. Try to behave next time and you might not be back! (You will be freed shortly)');
 				setTimeout(() => {
 					return m.member.removeRole(kenneled, 'User escaped!');
 				}, (10*1000));
