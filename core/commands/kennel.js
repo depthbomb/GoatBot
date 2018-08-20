@@ -39,7 +39,7 @@ exports.run = async (client, message, args, level) => {
 	if (!message.member.roles.find(r => r.name === 'Kenneled')) {
 		const { RichEmbed } = require('discord.js');
 		const embed = new RichEmbed()
-			.setColor(client.config.colors.red)
+			.setColor(client.colors.red)
 			.setTitle('User Kenneled')
 			.setDescription(`User ${user.displayName} has been kenneled by ${message.member.displayName}.`)
 			.addField('Reason', reason)
@@ -56,7 +56,10 @@ exports.conf = {
 	enabled: true,
 	guildOnly: true,
 	cooldown: 1.5,
-	aliases: [],
+	aliases: [
+		'ken',
+		'lock'
+	],
 	permLevel: 5
 };
 
