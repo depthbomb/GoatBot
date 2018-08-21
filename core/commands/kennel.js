@@ -34,26 +34,7 @@ exports.run = async (client, message, args, level) => {
 		return message.reply('Could not find user.');
 	}
 
-	const kennelRole = message.member.guild.roles.find(r => r.name === 'Kenneled').id;
-
-	if (!user.roles.find(r => r.name === 'Kenneled')) {
-		const { RichEmbed } = require('discord.js');
-		const embed = new RichEmbed()
-			.setColor(client.colors.red)
-			.setTitle('User Kenneled')
-			.setDescription(`User \`${user.displayName}\` has been kenneled by **${message.member.displayName}**`)
-			.addField('Reason', reason)
-		;
-
-		if (user.roles.find(r => r.name === 'NSFW')) user.removeRole(user.roles.find(r => r.name === 'NSFW'));
-		if (user.roles.find(r => r.name === 'Deejay')) user.removeRole(user.roles.find(r => r.name === 'Deejay'));
-
-		user.addRole(kennelRole, reason).then(() => {
-			message.delete().then(m => {
-				m.channel.send({ embed });
-			});
-		});
-	}
+	return client.kennelUser(user, reason);
 };
 
 exports.conf = {

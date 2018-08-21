@@ -176,6 +176,31 @@ module.exports = (client) => {
 		callback(onCooldown);
 	};
 
+
+	client.kennelUser = (user, reason) => {
+		const kennelRole = message.member.guild.roles.find(r => r.name === 'Kenneled').id;
+
+		if (!user.roles.find(r => r.name === 'Kenneled')) {
+			const { RichEmbed } = require('discord.js');
+			const embed = new RichEmbed()
+				.setColor(client.colors.red)
+				.setTitle('User Kenneled')
+				.setDescription(`User \`${user.displayName}\` has been kenneled by **${message.member.displayName}**`)
+				.addField('Reason', reason)
+			;
+
+			if (user.roles.find(r => r.name === 'NSFW')) user.removeRole(user.roles.find(r => r.name === 'NSFW'));
+			if (user.roles.find(r => r.name === 'Deejay')) user.removeRole(user.roles.find(r => r.name === 'Deejay'));
+
+			user.addRole(kennelRole, reason).then(() => {
+				message.delete().then(m => {
+					m.channel.send({ embed });
+				});
+			});
+		}
+	};
+
+
 	client.clean = async (client, text) => {
 		if (text && text.constructor.name == "Promise")
 		text = await text;
@@ -190,13 +215,14 @@ module.exports = (client) => {
 		return text;
 	};
 
+
 	client.hashString = (str, algo = 'md5') => {
 		const crypto = require('crypto');
 		let data = str;
-
 		//	Should probably catch any errors from this via invalid algorithms, but it should be fine for now~
 		return crypto.createHash(algo).update(data).digest('hex');
 	};
+
 
 	client.fileExists = (path) => {
 		fs.stat(path, (err, stat) => {
@@ -210,9 +236,11 @@ module.exports = (client) => {
 		});
 	};
 
+
 	client.isNaN = (param) => {
 		return isNaN(parseInt(param));
 	};
+
 
 	client.randomInt = (min, max, amount = 1, forceArray = false) => {
 		let results;
@@ -227,7 +255,8 @@ module.exports = (client) => {
 		}
 
 		return results;
-	}
+	};
+
 
 	client.b64 = {
 		encode (str) {
@@ -241,9 +270,11 @@ module.exports = (client) => {
 		}
 	};
 
+
 	String.prototype.toProperCase = function () {
 		return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	};
+
 	
 	/**
 	* Underscore to Space - replaces underscores with spaces, duh
@@ -251,6 +282,7 @@ module.exports = (client) => {
 	String.prototype.usToSp = function () {
 		return this.replace(/_/g, ' ');
 	};
+
 
 	String.prototype.scramble = function () {
 		let a = this.split(""),
@@ -265,9 +297,11 @@ module.exports = (client) => {
 		return a.join("");
 	};
 
+
 	String.prototype.toProperCase = function () {
 		return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	};
+
 
 	Array.prototype.allValuesSame = function () {
 		for(var i = 1; i < this.length; i++)
@@ -276,7 +310,8 @@ module.exports = (client) => {
 				return false;
 		}
 		return true;
-	}
+	};
+
 
 	Array.prototype.shuffle = function () {
 		let currentIndex = this.length, temporaryValue, randomIndex;
@@ -295,7 +330,8 @@ module.exports = (client) => {
 		}
 
 		return this;
-	}
+	};
+
 
 	// `await client.wait(1000);` to "pause" for 1 second.
 	client.wait = require("util").promisify(setTimeout);

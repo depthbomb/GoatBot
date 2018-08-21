@@ -24,13 +24,27 @@
 module.exports = (client, message) => {
 	const ms = require('ms');
 	const moment = require('moment');
+
+	/**
+	*	Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
+	*/
+	if (message.channel.id === client.config.refugeeChannel || message.channel.id === '481201307257012262') {
+		setTimeout(() => {
+			message.delete().catch(e => {});
+		}, (600*1000));
+	}
+
 	if (message.author.bot) return;
 
 	const rawMessage	= message.content;
 	const isAdmin		= (message.author.id === client.config.ownerId);
 	const level			= client.permlevel(message);
-	const isServerStaff = (message.member.roles.find(r => r.id === client.config.roles.admin) || message.member.roles.find(r => r.id === client.config.roles.mod) || level < 2 || isAdmin);
-	//	Yes this is messy, I will fix it later.. maybe
+	const isServerStaff = (
+		message.member.roles.find(r => r.id === client.config.roles.admin) ||
+		message.member.roles.find(r => r.id === client.config.roles.mod) ||
+		level < 2 ||
+		isAdmin
+	);	//	Yes this is messy, I will fix it later.. maybe
 
 	if (!message.system) {
 		let logPrefix = [];
@@ -127,16 +141,6 @@ module.exports = (client, message) => {
         */
 
 
-		/**
-		*	Automatically delete refugee messages after 5 minutes of sending
-		*/
-		if (message.channel.id === client.config.refugeeChannel || message.channel.id === '481201307257012262') {
-			setTimeout(() => {
-				message.delete().catch(e => {});
-			}, (600*1000));
-		}
-
-
         /**
         *	React to OwO's
         */
@@ -169,7 +173,7 @@ module.exports = (client, message) => {
 			null !== message.content.match(/\*[.,_\-*+=`~]{1}\*/g) ||
 			null !== message.content.match(/[.,_\-*+=`~]{1}/g)
 		) {
-			if (isServerStaff) return;
+			// if (isServerStaff) return;
 			message.delete();
 		}
 

@@ -139,11 +139,7 @@ require(`${client.appPath}/functions.js`)(client);
 
 const init = async () => {
 
-	console.log(client.config.deported_users);
-
-
 	require(`${client.appPath}/taskrunner.js`)(client);
-
 
 	/**
 	* Load commands
