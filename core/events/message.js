@@ -130,10 +130,10 @@ module.exports = (client, message) => {
 		/**
 		*	Automatically delete refugee messages after 5 minutes of sending
 		*/
-		if (message.channel.id === client.config.refugeeChannel) {
+		if (message.channel.id === client.config.refugeeChannel || message.channel.id === '481201307257012262') {
 			setTimeout(() => {
 				message.delete().catch(e => {});
-			}, (300*1000));
+			}, (600*1000));
 		}
 
 
