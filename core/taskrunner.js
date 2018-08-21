@@ -120,8 +120,8 @@ module.exports = async (client) => {
 							const embed = new RichEmbed()
 								.setColor(client.colors.red)
 								.setURL(`https://cyan.tf/bans/index.php?p=banlist&advSearch=${banEntry.authid}&advType=steamid&Submit`)
-								.setTitle('User banned')
-								.setDescription(`User **${banEntry.name}** was banned ${expiration} by ${admins.hasOwnProperty(banEntry.aid) ? admins[banEntry.aid] : 'ADMIN'}.`)
+								.setTitle('Player banned')
+								.setDescription(`Player **${banEntry.name}** was banned ${expiration} by ${admins.hasOwnProperty(banEntry.aid) ? admins[banEntry.aid] : 'ADMIN'}.`)
 								.addField('Reason', banEntry.reason)
 								.addField('Date', moment.unix(banEntry.created).tz("America/Chicago").format('MM/DD/YY, HH:mm:ss z'));
 							
@@ -157,8 +157,8 @@ module.exports = async (client) => {
 							const expiration = commEntry.length !== '0' ? 'for ' + ms((commEntry.length*1000), {long: 1}) : 'permanently';
 							const embed = new RichEmbed()
 								.setColor(client.colors.orange)
-								.setTitle('User ' + types[commEntry.type])
-								.setDescription(`User **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins.hasOwnProperty(commEntry.aid) ? admins[commEntry.aid] : 'ADMIN'}.`)
+								.setTitle('Player ' + types[commEntry.type])
+								.setDescription(`Player **${commEntry.name}** was ${types[commEntry.type]} ${expiration} by ${admins.hasOwnProperty(commEntry.aid) ? admins[commEntry.aid] : 'ADMIN'}.`)
 								.addField('Reason', commEntry.reason !== '' ? commEntry.reason : '_No reason specified._') // Check for a reason for comms because SB doesn't allow blank reasons for bans, for some reason
 								.addField('Date', moment.unix(commEntry.created).tz("America/Chicago").format('MM/DD/YY, HH:mm:ss z'));
 							
