@@ -233,6 +233,8 @@ module.exports = (client, message) => {
 	// If the command exists, **AND** the user has permission, run it.
 	if (cmd) {
 
+		if (cmd.help.name !== 'escape' && message.channel.id === '481201307257012262' && level < 3) return;
+
 		if (client.strictMode.enabled && level < 2) {
 			if (!client.config.strict_mode.command_channels.includes(message.channel.id)) {
 				return client.msg(message, 'red', 'error', 'Commands may only be used in the <#420816699626094592> channel while strict mode is enabled.');
@@ -261,7 +263,7 @@ module.exports = (client, message) => {
 					client.log("system", `${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);
 				} else {
 					client.log("system", `${message.author.username} executed command [${cmd.help.name}]`);
-					cmd.run(client, message, args, level);
+					return cmd.run(client, message, args, level);
 				}
 			});
 		} else {
