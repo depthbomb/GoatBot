@@ -42,7 +42,7 @@ module.exports = (client, message) => {
 	const isServerStaff = (
 		message.member.roles.find(r => r.id === client.config.roles.admin) ||
 		message.member.roles.find(r => r.id === client.config.roles.mod) ||
-		level < 2 ||
+		level > 2 ||
 		isAdmin
 	);	//	Yes this is messy, I will fix it later.. maybe
 
@@ -171,10 +171,10 @@ module.exports = (client, message) => {
 			//	Remove single character responses
 			null !== message.content.match(/_[.,_\-*+=`~]{1}_/g) ||
 			null !== message.content.match(/\*[.,_\-*+=`~]{1}\*/g) ||
-			null !== message.content.match(/[.,_\-*+=`~]{1}/g)
+			null !== message.content.match(/^([.,_\-*+=`~]{1})$/g)
 		) {
-			// if (isServerStaff) return;
-			message.delete();
+			if (isServerStaff) return;
+			return message.delete();
 		}
 
 		/**

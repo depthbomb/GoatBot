@@ -26,7 +26,7 @@ exports.run = async (client, message, args, level) => {
 	const Chance = require('chance');
 	const chance = new Chance();
 	let validMoves = ["rock", "paper", "scissors"];
-	const botMoves = chance.weighted([["rock", "paper", "scissors"], ["rock", "paper", "scissors", "goat"]], [1, 10]);
+	const botMoves = chance.weighted([["rock", "paper", "scissors"], ["rock", "paper", "scissors", "goat"]], [1, 15]);
 	const move = args[0].toLowerCase();
 	const user = `<@${message.author.id}>`;
 	const bot = `<@${client.user.id}>`;
