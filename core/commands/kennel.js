@@ -44,6 +44,10 @@ exports.run = async (client, message, args, level) => {
 			.setDescription(`User \`${user.displayName}\` has been kenneled by **${message.member.displayName}**`)
 			.addField('Reason', reason)
 		;
+
+		if (user.roles.find(r => r.name === 'NSFW')) user.removeRole(user.roles.find(r => r.name === 'NSFW'));
+		if (user.roles.find(r => r.name === 'Deejay')) user.removeRole(user.roles.find(r => r.name === 'Deejay'));
+
 		user.addRole(kennelRole, reason).then(() => {
 			message.delete().then(m => {
 				m.channel.send({ embed });
