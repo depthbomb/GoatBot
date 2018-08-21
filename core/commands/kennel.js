@@ -34,7 +34,7 @@ exports.run = async (client, message, args, level) => {
 		return message.reply('Could not find user.');
 	}
 
-	return client.kennelUser(user, reason);
+	return client.kennelUser(message, user, reason);
 };
 
 exports.conf = {

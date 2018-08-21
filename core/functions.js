@@ -177,7 +177,7 @@ module.exports = (client) => {
 	};
 
 
-	client.kennelUser = (user, reason) => {
+	client.kennelUser = (message, user, reason) => {
 		const kennelRole = message.member.guild.roles.find(r => r.name === 'Kenneled').id;
 
 		if (!user.roles.find(r => r.name === 'Kenneled')) {
