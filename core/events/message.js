@@ -145,17 +145,16 @@ module.exports = (client, message) => {
         *	React to OwO's
         */
         if (null !== message.content.match(/\b([O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F][Ww\uA4B3\u03C9][O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F])\b/)) {
-            client.log("bot", 'OwO detected!');
             let reactArray = ['🍌', '🍆', '🥒'];
             reactArray.shuffle();
-            message.react(reactArray[0]);
+            return message.react(reactArray[0]);
         }
 
 		/**
 		*	Lit
 		*/
 		if (null !== message.content.match(/\blit\b/i)) {
-			message.react("🔥");
+			return message.react("🔥");
 		}
 
 		/**
@@ -180,8 +179,11 @@ module.exports = (client, message) => {
 		/**
 		*	Dunk
 		*/
-		if (null !== (message.content.match(/\bdunk[s]?\b/i) || message.content.match(/\bdunked\b/i))) {
-			message.react("🏀");
+		if (
+			null !== (message.content.match(/\bdunk[s]?\b/i) ||
+			message.content.match(/\bdunked\b/i))
+		) {
+			return message.react("🏀");
 		}
 
 		if (message.content.toLowerCase().trim() === "beep beep" ||
@@ -189,37 +191,50 @@ module.exports = (client, message) => {
 			message.content.toLowerCase().trim() === "beep beep i'm a sheep" ||
 			message.content.toLowerCase().trim() === "beep beep ima sheep"
 		) {
-			message.author.send("https://www.youtube.com/watch?v=wCZFISvHmyY");
+			return message.author.send("https://www.youtube.com/watch?v=wCZFISvHmyY");
 		}
 
-		if (null !== message.content.match(/^(https?:\/\/)?discord(?:app\.com|\.gg)[\/invite\/]?(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig)) {
-			if (message.content === 'https://discord.gg/xw624a8' || message.content === 'https://discordapp.com/invite/xw624a8') return;
-			if (!isServerStaff) {
+		if (
+			null !== message.content.match(/^(https?:\/\/)?discord\.gg(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig) ||
+			null !== message.content.match(/^(https?:\/\/)?discord\.gg\/invite\/(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig) ||
+			null !== message.content.match(/^(https?:\/\/)?discordapp\.com\/invite\/(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig)
+		) {
+			if (message.channel.type === 'dm') return;
+			if (isServerStaff) return;
+
+			if (
+				message.content.includes('https://discord.gg/xw624a8') ||
+				message.content.includes('https://discord.gg/invite/xw624a8') ||
+				message.content.includes('https://discordapp.com/invite/xw624a8')
+			) {
 				message.delete().then(m => {
-					m.reply('Discord invite links are not allowed in public channels.');
+					return message.reply('Please use our own Discord invite link: `https://cyan.tf/discord`');
+				});
+			} else {
+				message.delete().then(m => {
+					return client.kennelUser(m, m.member, '[Auto] Discord invite links are not allowed. Please keep those links to DMs.');
 				});
 			}
 		}
 
-		if (null !== message.content.match(/(?:https?:\/\/)?steamcommunity\.com\/groups\/[a-zA-Z0-9-_]{3,32}/ig)) {
+		if (null !== message.cleanContent.match(/(?:https?:\/\/)?steamcommunity\.com\/groups\/[a-zA-Z0-9-_]{3,32}/ig)) {
+			if (null !== message.content.match(/(?:https?:\/\/)?steamcommunity\.com\/groups\/CyanTF/) || message.channel.type === 'dm') return;
 			if (!isServerStaff) {
 				message.delete().then(m => {
-					m.reply('Steam community group links are not allowed in public channels.');
+					return client.kennelUser(m, m.member, '[Auto] Steam community group links are not allowed. Please keep those links to DMs.');
 				});
 			}
 		}
 
-		if (null !== message.content.match(/[n\u00F1]+[\s_\-.,+^*#&:;~$!\`%]*?[i1l\u012F]+[\s_\-.,+^*#&:;~$!\`%]*?[g\u011F]+[\s_\-.,+^*#&:;~$!\`%]*?[g\u011F]+[\s_\-.,+^*#&:;~$!\`%]*?[a4@\u03B1]+/ig) ||
+		if (
+			null !== message.content.match(/[n\u00F1]+[\s_\-.,+^*#&:;~$!\`%]*?[i1l\u012F]+[\s_\-.,+^*#&:;~$!\`%]*?[g\u011F]+[\s_\-.,+^*#&:;~$!\`%]*?[g\u011F]+[\s_\-.,+^*#&:;~$!\`%]*?[a4@\u03B1]+/ig) ||
 			null !== message.content.match(/f[a@α4]+[g\u011F]([g\u011F]+[o\u03BF0]+t)?/ig) ||
-			null !== message.content.match(/[n\u00F1][\s_\-.,+^*#&:;~$!\`%]*?[i1!l|\\\/#*]+[\s_\-.,+^*#&:;~$!\`%\u012F]*?[gq9\u011F][\s_\-.,+^*#&:;~$!\`%]*?[\u011Fgq9#*\s][\s_\-.,+^*#&:;~$!\`%]*?[e3a4\u00E3\u03B1@#*\s]?[\s_\-.,+^*#&:;~$!\`%]*?r/ig)) {
+			null !== message.content.match(/[n\u00F1][\s_\-.,+^*#&:;~$!\`%]*?[i1!l|\\\/#*]+[\s_\-.,+^*#&:;~$!\`%\u012F]*?[gq9\u011F][\s_\-.,+^*#&:;~$!\`%]*?[\u011Fgq9#*\s][\s_\-.,+^*#&:;~$!\`%]*?[e3a4\u00E3\u03B1@#*\s]?[\s_\-.,+^*#&:;~$!\`%]*?r/ig)
+		) {
 			if (message.channel.type === 'dm') return;
 			if (message.author.id !== message.guild.owner.id || level < 2) {
 				message.delete().then(msg => {
-					msg.reply('_Whoops!_ You can\'t say that in a Christian guild!').then(rMessage => {
-						setTimeout(() => {
-							rMessage.delete();
-						}, 10000);
-					});
+					return client.kennelUser(m, m.member, '[Auto] Discriminatory language is not tolerated.');
 				});
 			}
 		}
@@ -230,12 +245,11 @@ module.exports = (client, message) => {
 		return;
 	}
 
-	// Some commands may not be useable in DMs. This check prevents those commands from running
-	// and return a friendly error message.
-	if (cmd && !message.guild && cmd.conf.guildOnly) return message.reply("This command cannot be executed in a DM conversation.");
-
 	// If the command exists, **AND** the user has permission, run it.
 	if (cmd) {
+
+		// Some commands may not be useable in DMs. This check prevents those commands from running and return a friendly error message.
+		if (!message.guild && cmd.conf.guildOnly) return message.reply("This command cannot be executed in a DM conversation.");
 
 		if (cmd.help.name !== 'escape' && message.channel.id === '481201307257012262' && level < 3) return;
 
