@@ -63,7 +63,7 @@ exports.run = (client, message, args, level) => {
 				examples.push(`* ${settings.prefix}${element}`)
 			});
 
-			if(command.help.hasOwnProperty("params")) {
+			if(Object.keys(command.help.params).length !== 0) {
 				hasParams = true;
 				let parameterNum = 1;
 				Object.keys(command.help.params).forEach((key) => {
