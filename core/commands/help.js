@@ -44,11 +44,11 @@ exports.run = (client, message, args, level) => {
 			message.reply("I cannot send the commands to you. You _must_ allow DMs from me for some commands to function.");
 		});
 	} else {
-		let hasParams;
+		let hasParams = false;
 		let paramLine = '';
 		let command;
 		let parameters = [];
-		let extraInfo;
+		let extraInfo = '';
 		if (client.commands.has(args[0])) {
 			command = args[0];
 		} else if (client.aliases.has(args[0])) {
@@ -65,20 +65,14 @@ exports.run = (client, message, args, level) => {
 
 			if(Object.keys(command.help.params).length !== 0) {
 				hasParams = true;
-				let parameterNum = 1;
-				Object.keys(command.help.params).forEach((key) => {
-					parameters.push(`${parameterNum}. [${key}] - ${command.help.params[key]}`);
-					parameterNum++;
+				Object.keys(command.help.params).forEach((key, i) => {
+					parameters.push(`${i + 1}. [${key}] - ${command.help.params[key]}`);
 				});
-			} else {
-				hasParams = false;
 			}
 
 			if (command.help.hasOwnProperty('extra_info')) {
 				console.log('help object has ', 'extra_info');
 				extraInfo = 'Extra Info\n----------\n' + command.help.extra_info(client, message, args, level);
-			} else {
-				extraInfo = '';
 			}
 			
 			if (hasParams) paramLine = `Parameters\n----------\n${parameters.join("\n")}\n\n`;
