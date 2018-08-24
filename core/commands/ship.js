@@ -27,7 +27,7 @@ exports.run = async (client, message, args, level) => {
 	const { RichEmbed } = require('discord.js');
 	const Chance = require('chance');
 	let thing = args[0].usToSp().trim();
-	let thing2 = args[1].usToSp().trim();
+	let thing2 = args.slice(1).join(' ').trim();
 
 	if (thing.toLowerCase() === thing2.toLowerCase()) return message.reply('You cannot ship two identical items.');
 
@@ -39,13 +39,13 @@ exports.run = async (client, message, args, level) => {
 
 	try {
 		if (thing.match(/<@!?\d{17,19}>/g)) {
-			let user1 = message.mentions.users.first();
-			thing = user1.username;
+			let user1 = message.mentions.members.first();
+			thing = user1.displayName;
 		}
 	
 		if (thing2.match(/<@!?\d{17,19}>/g)) {
-			let user2 = message.mentions.users.last();
-			thing2 = user2.username;
+			let user2 = message.mentions.members.last();
+			thing2 = user2.displayName;
 		}
 	} catch (error) {
 		return client.error(message, error);
