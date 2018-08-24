@@ -22,7 +22,7 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (args.length !== 2) return;
+	if (args.length < 2) return;
 
 	const { RichEmbed } = require('discord.js');
 	const Chance = require('chance');
