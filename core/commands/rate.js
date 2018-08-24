@@ -25,8 +25,13 @@ exports.run = (client, message, args, level) => {
 	if (args.length < 1) return;
 	const { RichEmbed } = require('discord.js');
 	const Chance = require('chance');
-	const subject = args.join(' ').toLowerCase().usToSp().trim();
-	const chance = new Chance(subject);
+	let subject = args.join(' ');
+	const seed = subject.toLowerCase().usToSp().trim();
+
+	if (subject.match(/<@!?\d{17,19}>/g)) {
+		subject = message.mentions.members.first().displayName;
+	}
+	const chance = new Chance(seed);
 	const rating = chance.integer({ min: 0, max: 10 });
 	const ratings = [
 		{ color: '#e75a70', emoji: '\:broken_heart:' },		//	0
