@@ -54,7 +54,9 @@ exports.run = async (client, message, args, level) => {
 		.setImage(image)
 		.setTimestamp();
 
-	return message.channel.send({ embed });
+	return message.delete().then(msg => {
+		msg.channel.send({ embed })
+	});
 };
 
 exports.conf = {
