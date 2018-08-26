@@ -36,6 +36,7 @@ class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
 
+		this.localMode = process.platform === 'win32' ? true : false;
 		this.config = require("./config.js").config;
 		this.commands = new Discord.Collection();
 		this.aliases = new Discord.Collection();

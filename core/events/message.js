@@ -264,7 +264,7 @@ module.exports = (client, message) => {
 			} else {
 				cooldownName = `c_${cmd.help.name}_GLOBAL`;
 			}
-			client.cooldown(message, cooldownName, cooldown, true, (cd) => {
+			client.cooldown(message, cooldownName, cooldown, (cd) => {
 				if (cd) {
 					client.log("system", `${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);
 				} else {

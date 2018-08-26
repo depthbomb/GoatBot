@@ -49,7 +49,7 @@ module.exports = async client => {
         status: "online",
         afk: false,
         game: {
-            name: client.config.initialGame,
+            name: client.localMode ? '<DEV MODE>' : client.config.initialGame,
             type: 0
         }
     });

@@ -162,7 +162,7 @@ module.exports = (client) => {
 					.setDescription(`\:timer: <@${message.author.id}>, ${response}`)
 				;
 	
-				return message.channel.send({ embed })
+				message.channel.send({ embed })
 			} else {
 				onCooldown = false;
 				cooldownObject[cooldownName] = {

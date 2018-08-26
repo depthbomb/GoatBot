@@ -52,6 +52,7 @@ module.exports = async (client) => {
 		change_game: {
 			interval: (60 * 60),
 			action: () => {
+				if (client.localMode) return;
 				const quote = chance.weighted(client.config.status.statuses, client.config.status.weights);
 				client.user.setPresence({
 					status: "online",
