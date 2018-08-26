@@ -126,16 +126,9 @@ module.exports = (client, message) => {
 	const cmd			= client.commands.get(command) || client.commands.get(client.aliases.get(command));
 
 	/**
-	*	Reading from non-command messages
+	*	Non-command messages
 	*/
 	if(message.content.indexOf(client.config.prefix) !== 0) {
-        /*
-        |--------------------------------------------------------------------------
-        | Non-commands
-        |--------------------------------------------------------------------------
-        */
-
-
         /**
         *	React to OwO's
         */
