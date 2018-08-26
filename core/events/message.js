@@ -39,12 +39,7 @@ module.exports = (client, message) => {
 	const rawMessage	= message.content;
 	const isAdmin		= (message.author.id === client.config.ownerId);
 	const level			= client.permlevel(message);
-	const isServerStaff = (
-		message.member.roles.find(r => r.id === client.config.roles.admin) ||
-		message.member.roles.find(r => r.id === client.config.roles.mod) ||
-		level > 2 ||
-		isAdmin
-	);	//	Yes this is messy, I will fix it later.. maybe
+	const isServerStaff = message.channel.type === 'dm' ? false : (message.member.roles.find(r => r.id === client.config.roles.admin) || message.member.roles.find(r => r.id === client.config.roles.mod) || level > 2 || isAdmin);
 
 	if (!message.system) {
 		let logPrefix = [];
