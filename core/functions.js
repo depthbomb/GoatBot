@@ -139,7 +139,7 @@ module.exports = (client) => {
 	};
 
 
-	client.cooldown = async (message, cooldownName, cooldownDuration, reply = true, callback) => {
+	client.cooldown = async (message, cooldownName, cooldownDuration, callback) => {
 		const now = require('moment')().unix() * 1000;
 		const messageTime = message.createdTimestamp;
 		
@@ -152,16 +152,17 @@ module.exports = (client) => {
 			if (cooldownObject.hasOwnProperty(cooldownName)) {
 				onCooldown = true;
 				const ms = require('ms');
+				const { RichEmbed } = require('discord.js');
 				const expiration = cooldownObject[cooldownName].ex;
 				timeLeft = expiration - messageTime;
+				const response = timeLeft <= 1000 ? 'Please try again in about 1 second.' : `Please try again in about ${ms(timeLeft, {long: true})}.`;
 
-				let response = timeLeft < 1000 ? 'Please try again.' : `Please try again in about ${ms(timeLeft, {long: true})}.`;
+				const embed = new RichEmbed()
+					.setColor('#aab8c2')
+					.setDescription(`\:timer: <@${message.author.id}>, ${response}`)
+				;
 	
-				if (reply) message.reply(response).then(cdMsg => {
-					setTimeout(() => {
-						cdMsg.delete();
-					}, 10000);
-				});
+				return message.channel.send({ embed })
 			} else {
 				onCooldown = false;
 				cooldownObject[cooldownName] = {
