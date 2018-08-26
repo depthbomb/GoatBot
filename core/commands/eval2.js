@@ -22,7 +22,7 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if(args.length < 0) return;
+	if(args.length < 1) return;
 	const code = args.join(" ");
 
 	try {

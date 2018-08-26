@@ -22,7 +22,7 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if(args.length < 0) return;
+	if(args.length < 1) return;
 	const code = args.join(" ");
 
 	try {
@@ -34,7 +34,7 @@ exports.run = async (client, message, args, level) => {
 		if (typeof evaled !== "string")
 			evaled = require("util").inspect(evaled);
 
-		return message.channel.send(`\:inbox_tray: Input:\n\`\`\`js\n${code}\`\`\`\n\:outbox_tray: Output:\n\`\`\`js\n${clean}\`\`\`\n_Executed in ${execTime[1]/1000000}ms_`);
+		return message.channel.send(`\:inbox_tray: Input:\n\`\`\`js\n${code}\`\`\`\n\:outbox_tray: Output:\n\`\`\`js\n${clean}\`\`\`\n_Executed in ${(execTime[1] / 1000000)}ms_`);
 	} catch (err) {
 		return message.reply(`\`ERROR\` \`\`\`js\n${err}\n\`\`\``);
 	}
