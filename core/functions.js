@@ -344,7 +344,7 @@ module.exports = (client) => {
 
 	process.on("uncaughtException", err => {
 		const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
-		console.trace("Uncaught Exception: ", err);
+		console.trace("Uncaught Exception: ", errorMsg);
 	});
 	
 	process.on("unhandledRejection", err => {
