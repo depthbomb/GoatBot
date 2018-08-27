@@ -22,8 +22,11 @@
 */
 
 module.exports = (client, message) => {
-	//	Don't log our own messages
-	if (message.author.id === client.user.id || message.channel.type === 'dm' || message.author.bot) return;
+	if (
+		message.channel.type === 'dm' ||					//	DMs
+		message.author.bot ||								//	Bot messages
+		message.content.indexOf(client.config.prefix) === 0	//	Dirty way to check for command messages
+	) return;
 
 	let logMessage;
 	let isAttachment = false;
@@ -36,6 +39,6 @@ module.exports = (client, message) => {
 	else if (attachmentWithMessage) logMessage = `${message.author.username}'s attachment [${message.attachments.first().url}] with message [${message.content}] was deleted in ${message.channel.name}`;
 	else logMessage = `${message.author.username}'s message [${message.content}] was deleted in ${message.channel.name}`;
 
-	client.log("event", logMessage);
+	client.log('event', logMessage);
 	client.logAction('Message deleted', logMessage, client.colors.default, message.author.tag, message.author.avatarURL);
 };
