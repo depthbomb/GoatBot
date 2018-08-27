@@ -122,20 +122,19 @@ module.exports = (client) => {
 	 * @param {string} authorName "Author" name
 	 * @param {string} authorImage "Author" image
 	 */
-	client.logAction = (title, logMessage, color = client.colors.default, authorName, authorImage = client.guilds.find('id', client.config.mainGuild).iconURL) => {
+	client.logAction = (title, logMessage, color = client.colors.default, authorName, authorImage = client.guilds.find(g => g.id === client.config.mainGuild).iconURL) => {
 		const { RichEmbed } = require('discord.js');
-		const logChannel = client.channels.find('id', client.config.logChannel);
-
+		const logChannel = client.channels.find(c => c.id === client.config.logChannel);
 		const embed = new RichEmbed()
-						.setColor(color)
-						.setTimestamp()
-						.setTitle(title)
-						.setDescription(logMessage);
+			.setColor(color)
+			.setTimestamp()
+			.setTitle(title)
+			.setDescription(logMessage)
+		;
 
 		if (authorName && authorImage) embed.setAuthor(authorName, authorImage);
 		
 		return logChannel.send({ embed });
-
 	};
 
 
