@@ -41,7 +41,7 @@ exports.run = async (client, message, args, level) => {
 	let prefix = chosenRarity.hasOwnProperty('prefix') ? chosenRarity.prefix : '';
 	let suffix = chosenRarity.hasOwnProperty('suffix') ? chosenRarity.suffix : '';
 
-	const name = `${prefix} Goat ${suffix}`.trim();
+	const name = `${prefix} ${chosenRarity.name} Goat ${suffix}`.trim();
 
 	let weightSum = 0;
 	for (let i = 0; i < rarity_weights.length; i++) {
@@ -56,7 +56,8 @@ exports.run = async (client, message, args, level) => {
 		.addField('Tier', `_${qualities.indexOf(chosenRarity)}/${(qualities.length - 1)}_`)
 		.addField('Drop chance', `_~${percentage}%_`)
 		.setImage(image)
-		.setTimestamp();
+		.setTimestamp()
+	;
 
 	return message.delete().then(msg => {
 		msg.channel.send({ embed })
