@@ -212,7 +212,7 @@ exports.config = {
 	unbox: {
 		//	Rarities that can be unboxed
 		rarities: [
-			{ "name": "Poor", "color": "#9C8267", "file": "poor.png" },
+			{ prefix: "Poor", suffix: '', color: "#9C8267", file: "poor.png" },
 		],
 
 		//	Probability that the corresponding rarity will be "unboxed"

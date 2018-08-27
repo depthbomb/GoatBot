@@ -34,10 +34,14 @@ exports.run = async (client, message, args, level) => {
 	let embed;
 
 	const chosenRarity = chance.weighted(qualities, rarity_weights);
-	const name = chosenRarity.name,
-		color = chosenRarity.color,
-		image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}?v=1`,
+	const color = chosenRarity.color,
+		image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}`,
 		weight = rarity_weights[qualities.indexOf(chosenRarity)];
+
+	let prefix = chosenRarity.hasOwnProperty('prefix') ? chosenRarity.prefix : '';
+	let suffix = chosenRarity.hasOwnProperty('suffix') ? chosenRarity.suffix : '';
+
+	const name = `${prefix} Goat ${suffix}`.trim();
 
 	let weightSum = 0;
 	for (let i = 0; i < rarity_weights.length; i++) {
@@ -49,7 +53,7 @@ exports.run = async (client, message, args, level) => {
 		.setColor(color)
 		.setTitle(`Unbox-A-Goat`)
 		.setDescription(`<@${message.author.id}> has unboxed **The ${name} Goat!**`)
-		.addField('Rating', `_${qualities.indexOf(chosenRarity)}/${(qualities.length - 1)}_`)
+		.addField('Tier', `_${qualities.indexOf(chosenRarity)}/${(qualities.length - 1)}_`)
 		.addField('Drop chance', `_~${percentage}%_`)
 		.setImage(image)
 		.setTimestamp();
@@ -90,10 +94,10 @@ exports.help = {
 
 		let dropChances = [];
 		for (let i = 0; i < qualities.length; i++) {
-			dropChances.push(`Rating ${i}/${(qualities.length - 1)}: ${((rarity_weights[i] / weightSum) * 100).toFixed(3)}%`);
+			dropChances.push(`Tier ${i}/${(qualities.length - 1)}: ${((rarity_weights[i] / weightSum) * 100).toFixed(3)}%`);
 		}
 
-		const str = `There are currently ${(qualities.length - 1)} rarities of Goat that you can unbox. The percentage drop chances are listed below by their rating.\n\n${dropChances.join('\n')}`;
+		const str = `There are currently ${(qualities.length - 1)} tiers of Goat that you can unbox. The percentage drop chances are listed below by their tier.\n\n${dropChances.join('\n')}`;
 
 		return str;
 	}
