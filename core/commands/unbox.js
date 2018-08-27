@@ -52,7 +52,7 @@ exports.run = async (client, message, args, level) => {
 	embed = new RichEmbed()
 		.setColor(color)
 		.setTitle(`Unbox-A-Goat`)
-		.setDescription(`<@${message.author.id}> has unboxed **The ${name} Goat!**`)
+		.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)
 		.addField('Tier', `_${qualities.indexOf(chosenRarity)}/${(qualities.length - 1)}_`)
 		.addField('Drop chance', `_~${percentage}%_`)
 		.setImage(image)
