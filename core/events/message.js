@@ -75,7 +75,7 @@ module.exports = (client, message) => {
 		if (client.slowMode.channels.hasOwnProperty(message.channel.id).enabled && !isServerStaff) {
 			const slowmodeChannel = client.slowMode.channels[message.channel.id];
 			if (slowmodeChannel.users.includes(message.author.id)) {
-				return message.delete();
+				return message.delete().catch(e => {});
 			} else {
 				slowmodeChannel.users.push(message.author.id);
 				setTimeout(() => {
