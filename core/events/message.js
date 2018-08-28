@@ -72,15 +72,21 @@ module.exports = (client, message) => {
 		/**
 		 * Handle messages during slow mode
 		 */
-		if (client.slowMode.channels.hasOwnProperty(message.channel.id).enabled && !isServerStaff) {
+		if (client.slowMode.channels.hasOwnProperty(message.channel.id)) {
 			const slowmodeChannel = client.slowMode.channels[message.channel.id];
-			if (slowmodeChannel.users.includes(message.author.id)) {
-				return message.delete().catch(e => {});
-			} else {
-				slowmodeChannel.users.push(message.author.id);
-				setTimeout(() => {
-					delete slowmodeChannel.users[message.author.id];
-				}, slowmodeChannel.timeout);
+
+			if (slowmodeChannel.enabled && !isServerStaff) {
+				if (slowmodeChannel.users.includes(message.author.id)) {
+					return message.delete().catch(e => {});
+				} else {
+					if (!message.author.bot) {
+						slowmodeChannel.users.push(message.author.id);
+						setTimeout(() => {
+							const userIndex = slowmodeChannel.users.indexOf(message.author.id);
+							slowmodeChannel.users.splice(userIndex, 1);
+						}, slowmodeChannel.timeout);
+					}
+				}
 			}
 		}
 

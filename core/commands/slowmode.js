@@ -28,7 +28,8 @@ exports.run = (client, message, args, level) => {
 	const channelId = message.channel.id;
 
 	if (arg === 'off') {
-		delete client.slowMode.channels[channelId];
+		client.slowMode.channels = {};
+		return client.msg(message, 'green', 'success', `Slow mode has been disabled in this channel.`);
 	} else {
 		try {
 			if (client.isNaN(arg)) return;
