@@ -86,17 +86,17 @@ module.exports = (client) => {
 			"blue": "#3498db"
 		};
 		const emojis = {
-			"gold": client.emojis.find("name", "caprineGold"),
-			"ungag": client.emojis.find("name", "caprineCommentNormal"),
-			"gag": client.emojis.find("name", "caprineGag"),
-			"mute": client.emojis.find("name", "caprineMute"),
-			"search": client.emojis.find("name", "caprineSearch"),
-			"refresh": client.emojis.find("name", "caprineRefresh"),
-			"error": client.emojis.find("name", "caprineError"),
-			"warning": client.emojis.find("name", "caprineWarning"),
-			"success": client.emojis.find("name", "caprineSuccess"),
-			"info": client.emojis.find("name", "caprineInfo"),
-			"close": client.emojis.find("name", "caprineClose")
+			"gold": client.emojis.find(e => e.name === "caprineGold"),
+			"ungag": client.emojis.find(e => e.name === "caprineCommentNormal"),
+			"gag": client.emojis.find(e => e.name === "caprineGag"),
+			"mute": client.emojis.find(e => e.name === "caprineMute"),
+			"search": client.emojis.find(e => e.name === "caprineSearch"),
+			"refresh": client.emojis.find(e => e.name === "caprineRefresh"),
+			"error": client.emojis.find(e => e.name === "caprineError"),
+			"warning": client.emojis.find(e => e.name === "caprineWarning"),
+			"success": client.emojis.find(e => e.name === "caprineSuccess"),
+			"info": client.emojis.find(e => e.name === "caprineInfo"),
+			"close": client.emojis.find(e => e.name === "caprineClose")
 		};
 		const color = colors[type];
 		const emoji = emojis[icon];
