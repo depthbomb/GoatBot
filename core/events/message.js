@@ -68,6 +68,23 @@ module.exports = (client, message) => {
 		else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
 		else logMessage = `${logPrefix.join(" ")} ${username}: ${message.cleanContent}`;
 
+
+		/**
+		 * Handle messages during slow mode
+		 */
+		if (client.slowMode.channels.hasOwnProperty(message.channel.id).enabled && !isServerStaff) {
+			const slowmodeChannel = client.slowMode.channels[message.channel.id];
+			if (slowmodeChannel.users.includes(message.author.id)) {
+				return message.delete();
+			} else {
+				slowmodeChannel.users.push(message.author.id);
+				setTimeout(() => {
+					delete slowmodeChannel.users[message.author.id];
+				}, slowmodeChannel.timeout);
+			}
+		}
+
+
 		if (isImage) {
 			if (!client.config.allowances.enabled) return;
 			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
@@ -129,14 +146,14 @@ module.exports = (client, message) => {
 	*	Non-command messages
 	*/
 	if(message.content.indexOf(client.config.prefix) !== 0) {
-        /**
-        *	React to OwO's
-        */
-        if (null !== message.content.match(/\b([O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F][Ww\uA4B3\u03C9][O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F])\b/)) {
-            let reactArray = ['🍌', '🍆', '🥒'];
-            reactArray.shuffle();
-            return message.react(reactArray[0]);
-        }
+		/**
+		*	React to OwO's
+		*/
+		if (null !== message.content.match(/\b([O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F][Ww\uA4B3\u03C9][O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F])\b/)) {
+			let reactArray = ['🍌', '🍆', '🥒'];
+			reactArray.shuffle();
+			return message.react(reactArray[0]);
+		}
 
 		/**
 		*	Lit
