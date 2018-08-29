@@ -65,7 +65,8 @@ exports.conf = {
 		"urbandictionary"
 	],
 	cooldown: 5.5,
-	permLevel: 0
+	permLevel: 0,
+	deleteTrigger: true,
 };
 
 exports.help = {

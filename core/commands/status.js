@@ -52,7 +52,8 @@ exports.run = (client, message, args, level) => {
 		guildOnly: false,
 		aliases: [],
 		cooldown: 5,
-		permLevel: 10
+		permLevel: 10,
+		deleteTrigger: true,
 	};
 
 	exports.help = {

@@ -30,7 +30,7 @@ exports.run = async (client, message, args, level) => {
 		return msg.delete().then(() => {
 			message.delete();
 		});
-	}).catch(console.error)
+	}).catch(console.error);
 };
 
 exports.conf = {
@@ -40,7 +40,8 @@ exports.conf = {
 		"del",
 		"delet"
 	],
-	permLevel: 3
+	permLevel: 3,
+	deleteTrigger: true,
 };
 
 exports.help = {

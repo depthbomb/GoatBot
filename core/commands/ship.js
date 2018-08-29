@@ -77,7 +77,8 @@ exports.conf = {
 	guildOnly: false,
 	aliases: [],
 	cooldown: 1.5,
-	permLevel: 0
+	permLevel: 0,
+	deleteTrigger: true,
 };
 
 exports.help = {

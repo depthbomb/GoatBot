@@ -30,15 +30,11 @@ exports.run = (client, message, args, level) => {
 
 	if (message.member.roles.find(r => r.name === 'NSFW')) {
 		message.member.removeRole(nsfwRole, 'Via GoatBot!').then(() => {
-			message.delete().then(msg => {
-				msg.reply('Your access to the NSFW channels has been revoked.');
-			});
+			return message.reply('Your access to the NSFW channels has been revoked.');
 		});
 	} else {
 		message.member.addRole(nsfwRole, 'Via GoatBot!').then(() => {
-			message.delete().then(msg => {
-				msg.reply(`You have been given access to the NSFW channels. Have fun ${lenny}\n\n_Abuse of this command, such as using it frequently for no reason, will result in you being blacklisted from using it. If you do not wish to see the content in the channels, then don't bother joining._`);
-			});
+			return message.reply(`You have been given access to the NSFW channels. Have fun ${lenny}\n\n_Abuse of this command, such as using it frequently for no reason, will result in you being blacklisted from using it. If you do not wish to see the content in the channels, then don't bother joining._`);
 		});
 	}
 
@@ -50,7 +46,8 @@ exports.conf = {
 	aliases: [
 		"r18"
 	],
-	permLevel: 0
+	permLevel: 0,
+	deleteTrigger: true,
 };
 
 exports.help = {

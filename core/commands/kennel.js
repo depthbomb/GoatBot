@@ -45,7 +45,8 @@ exports.conf = {
 		'ken',
 		'lock'
 	],
-	permLevel: 5
+	permLevel: 5,
+	deleteTrigger: true,
 };
 
 exports.help = {

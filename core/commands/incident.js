@@ -119,7 +119,8 @@ exports.conf = {
 		"issues"
 	],
 	cooldown: 10,
-	permLevel: 0
+	permLevel: 0,
+	deleteTrigger: true,
 };
 
 exports.help = {

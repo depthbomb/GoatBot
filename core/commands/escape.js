@@ -30,16 +30,14 @@ exports.run = async (client, message, args, level) => {
 
 	if (kenneled) {
 		const hasEscaped = chance.weighted([1, 0], [1, 7]);
-		message.delete().then(m => {
-			if (hasEscaped) {
-				m.reply('You have successfully escaped the kennel and are on your way back to the public. Try to behave next time and you might not be back! (You will be freed shortly)');
-				setTimeout(() => {
-					return m.member.removeRole(kenneled, 'User escaped!');
-				}, (10*1000));
-			} else {
-				m.reply('Drats! You\'ve failed to escape the kennel. Please try again shortly.');
-			}
-		});
+		if (hasEscaped) {
+			message.reply('You have successfully escaped the kennel and are on your way back to the public. Try to behave next time and you might not be back! (You will be freed shortly)');
+			setTimeout(() => {
+				return message.member.removeRole(kenneled, 'User escaped!');
+			}, (10*1000));
+		} else {
+			message.reply('Drats! You\'ve failed to escape the kennel. Please try again shortly.');
+		}
 	} else {
 		return;
 	}
@@ -50,7 +48,8 @@ exports.conf = {
 	guildOnly: true,
 	cooldown: 180,
 	aliases: [],
-	permLevel: 0
+	permLevel: 0,
+	deleteTrigger: true,
 };
 
 exports.help = {

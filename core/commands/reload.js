@@ -61,7 +61,8 @@ exports.conf = {
 	enabled: true,
 	guildOnly: false,
 	aliases: [],
-	permLevel: 10
+	permLevel: 10,
+	deleteTrigger: true,
 };
 
 exports.help = {

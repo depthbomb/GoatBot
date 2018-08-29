@@ -55,7 +55,8 @@ exports.conf = {
 	aliases: [
 		'sm'
 	],
-	permLevel: 0
+	permLevel: 0,
+	deleteTrigger: true,
 };
 
 exports.help = {

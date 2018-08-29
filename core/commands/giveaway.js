@@ -40,7 +40,6 @@ exports.run = async (client, message, args, level) => {
 		.setDescription(`React with 🎉 to enter.`)
 		.setFooter(`Time left: ${timeLeft} seconds`);
 
-	message.delete();
 	message.channel.send('🎉 Giveaway! 🎉', { embed }).then(msg => {
 
 		msg.react('🎉');
@@ -112,7 +111,8 @@ exports.conf = {
 		'ga',
 		'raffle'
 	],
-	permLevel: 3
+	permLevel: 3,
+	deleteTrigger: true,
 };
 
 exports.help = {

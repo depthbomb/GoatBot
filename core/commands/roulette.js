@@ -26,13 +26,9 @@ exports.run = (client, message, args, level) => {
 	const chamber = client.randomInt(1, 6);
 
 	if(bullet === chamber) {
-		return message.delete().then((msg) => {
-			msg.channel.send(`\:boom:\:gun: ***BANG!!*** <@${message.author.id}> has shot themselves... Press **F** to pay respects.`);
-		});
+		return message.channel.send(`\:boom:\:gun: ***BANG!!*** <@${message.author.id}> has shot themselves... Press **F** to pay respects.`);
 	} else {
-		return message.delete().then((msg) => {
-			msg.channel.send(`\:gun: _Click_... <@${message.author.id}> pulls the trigger and nothing happens...`);
-		});
+		return message.channel.send(`\:gun: _Click_... <@${message.author.id}> pulls the trigger and nothing happens...`);
 	}
 };
 
@@ -44,7 +40,8 @@ exports.conf = {
 		"russianroulette"
 	],
 	cooldown: 2,
-	permLevel: 0
+	permLevel: 0,
+	deleteTrigger: true,
 };
 
 exports.help = {

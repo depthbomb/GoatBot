@@ -73,7 +73,8 @@ exports.conf = {
 	aliases: [
 		'rockpaperscissors'
 	],
-	permLevel: 0
+	permLevel: 0,
+	deleteTrigger: true,
 };
 
 exports.help = {

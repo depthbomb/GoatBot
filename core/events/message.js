@@ -220,11 +220,11 @@ module.exports = (client, message) => {
 			) {
 				message.delete().then(m => {
 					return message.reply('Please use our own Discord invite link: `https://cyan.tf/discord`');
-				});
+				}).catch(e => {});
 			} else {
 				message.delete().then(m => {
 					return client.kennelUser(m, m.member, '[Auto] Discord invite links are not allowed. Please keep those links to DMs.');
-				});
+				}).catch(e => {});
 			}
 		}
 
@@ -233,7 +233,7 @@ module.exports = (client, message) => {
 			if (!isServerStaff) {
 				message.delete().then(m => {
 					return client.kennelUser(m, m.member, '[Auto] Steam community group links are not allowed. Please keep those links to DMs.');
-				});
+				}).catch(e => {});
 			}
 		}
 
@@ -245,8 +245,8 @@ module.exports = (client, message) => {
 			if (message.channel.type === 'dm') return;
 			if (message.author.id !== message.guild.owner.id || level < 2) {
 				message.delete().then(msg => {
-					return client.kennelUser(m, m.member, '[Auto] Discriminatory language is not tolerated.');
-				});
+					return client.kennelUser(msg, msg.member, '[Auto] Discriminatory language is not tolerated.');
+				}).catch(e => {});
 			}
 		}
 
@@ -287,6 +287,9 @@ module.exports = (client, message) => {
 			} else {
 				cooldownName = `c_${cmd.help.name}_GLOBAL`;
 			}
+
+			if (cmd.conf.deleteTrigger) message.delete().catch(e => {});
+
 			client.cooldown(message, cooldownName, cooldown, (cd) => {
 				if (cd) {
 					client.log("system", `${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);

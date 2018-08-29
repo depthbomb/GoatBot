@@ -37,8 +37,6 @@ exports.run = (client, message, args, level) => {
 
 	let messageContent = `<@${message.author.id}> sent a spoiler for: \`${topic.usToSp()}\` - _react with :eyes: to decode_\n\n\`${encrypted}\``;
 
-	message.delete();
-
 	message.channel.send(messageContent).then((msg) => {
 		msg.react('👀');
 
@@ -73,7 +71,8 @@ exports.conf = {
 	aliases: [
 		"spoil"
 	],
-	permLevel: 0
+	permLevel: 0,
+	deleteTrigger: true,
 };
 
 exports.help = {

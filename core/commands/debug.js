@@ -60,7 +60,8 @@ exports.run = (client, message, args, level) => {
 			"dbg"
 		],
 		cooldown: 1,
-		permLevel: 10
+		permLevel: 10,
+		deleteTrigger: true,
 	};
 
 	exports.help = {

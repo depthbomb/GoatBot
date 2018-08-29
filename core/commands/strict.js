@@ -49,7 +49,8 @@ exports.conf = {
 		'strictmode'
 	],
 	cooldown: 1.5,
-	permLevel: 3
+	permLevel: 3,
+	deleteTrigger: true,
 };
 
 exports.help = {

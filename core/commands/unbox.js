@@ -59,9 +59,7 @@ exports.run = async (client, message, args, level) => {
 		.setTimestamp()
 	;
 
-	return message.delete().then(msg => {
-		msg.channel.send({ embed })
-	});
+	return message.channel.send({ embed });
 };
 
 exports.conf = {
@@ -72,7 +70,8 @@ exports.conf = {
 		'lootcrate',
 		'lootbox'
 	],
-	permLevel: 0
+	permLevel: 0,
+	deleteTrigger: true,
 };
 
 exports.help = {
