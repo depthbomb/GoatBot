@@ -41,8 +41,9 @@ module.exports = async (client) => {
 				const newConfig = JSON.stringify(require(path.join(client.rootPath, 'config.js')).config);
 
 				if (oldConfig === newConfig) {
-					delete require.cache[path.join(client.rootPath, 'config.js')];
+					client.log('task', 'Config file shows no changes.');
 				} else {
+					client.log('task', 'Config file has changes pending, reloading...');
 					delete require.cache[path.join(client.rootPath, 'config.js')];
 					client.config = require(path.join(client.rootPath, 'config.js')).config;
 				}

@@ -103,7 +103,7 @@ class GoatBot extends Discord.Client {
 		let logName = type + '.log';
 		let logMsg = `[${moment().tz(client.config.logTimezone).format('M/D/YY HH:mm:ss')}] [${type}] ${message}`;
 		let logEntry = "\n" + logMsg;
-		let logAsFile = ['msg', 'event', 'bot', 'system', 'warn', 'error', 'cron', 'debug'];
+		let logAsFile = ['msg', 'event', 'bot', 'system', 'warn', 'error', 'task', 'debug'];
 
 		if (type === "msg") console.log(chalk.yellowBright(logMsg));
 		else if (type === "event") console.log(chalk.magentaBright(logMsg));
@@ -111,7 +111,7 @@ class GoatBot extends Discord.Client {
 		else if (type === "system") console.log(chalk.bgBlueBright.whiteBright(logMsg));
 		else if (type === "warn") console.log(chalk.bgYellowBright.black(logMsg));
 		else if (type === "error") console.log(chalk.bgRedBright.whiteBright(logMsg));
-		else if (type === "cron") console.log(chalk.bgMagentaBright.whiteBright(logMsg));
+		else if (type === "task") console.log(chalk.bgMagentaBright.whiteBright(logMsg));
 		else if (type === "debug") console.log(chalk.bgBlackBright.whiteBright(logMsg));
 		else return;
 
@@ -129,7 +129,7 @@ require(`${client.appPath}/functions.js`)(client);
 
 const init = async () => {
 
-	require(`${client.appPath}/taskrunner.js`)(client);
+	// require(`${client.appPath}/taskrunner.js`)(client);
 
 	/**
 	* Load commands
@@ -168,6 +168,30 @@ const init = async () => {
 			client.on(eventName, event.bind(null, client));
 			delete require.cache[require.resolve(`${client.appPath}/events/${file}`)];
 			console.log(chalk.greenBright(`Loaded event [${file.replace('.js', '')}]`));
+		} catch (e) {
+			console.trace(e);
+			process.exit(1);
+		}
+	});
+	/* ===================================================== */
+
+
+	/**
+	* Load tasks
+	*/
+	const taskFiles = await readdir(`${client.appPath}/tasks/`);
+	console.log(chalk.greenBright(`Loading ${taskFiles.length} tasks...`));
+	taskFiles.forEach(file => {
+		try {
+			const imported = require(`${client.appPath}/tasks/${file}`)(client);
+			const task = Promise.resolve(imported);
+			task.then((t) => {
+				console.log(chalk.greenBright(`Loaded task [${file.replace('.js', '')}]`));
+				setInterval(() => {
+					t.action();
+				}, (t.interval * 1000));
+			});
+			delete require.cache[require.resolve(`${client.appPath}/tasks/${file}`)];
 		} catch (e) {
 			console.trace(e);
 			process.exit(1);
