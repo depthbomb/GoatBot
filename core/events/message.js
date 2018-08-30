@@ -22,6 +22,8 @@
 */
 
 module.exports = (client, message) => {
+	const fs = require('fs');
+	const path = require('path');
 	const ms = require('ms');
 	const moment = require('moment');
 
@@ -34,115 +36,113 @@ module.exports = (client, message) => {
 		}, (600*1000));
 	}
 
-	if (message.author.bot) return;
+	if (message.author.bot || message.system) return;
 
 	const rawMessage	= message.content;
 	const isAdmin		= (message.author.id === client.config.ownerId);
 	const level			= client.permlevel(message);
 	const isServerStaff = message.channel.type === 'dm' ? false : (message.member.roles.find(r => r.id === client.config.roles.admin) || message.member.roles.find(r => r.id === client.config.roles.mod) || level > 2 || isAdmin);
 
-	if (!message.system) {
-		let logPrefix = [];
-		let username = message.member !== null ? message.member.displayName : message.author.tag;
+	let logPrefix = [];
+	let username = message.member !== null ? message.member.displayName : message.author.tag;
 
-		if (message.channel.type !== "dm" && message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
+	if (message.channel.type !== "dm" && message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
 
-		if (message.channel.type === "dm") logPrefix.push("(DM)");
-		else logPrefix.push(`(${message.channel.name})`);
+	if (message.channel.type === "dm") logPrefix.push("(DM)");
+	else logPrefix.push(`(${message.channel.name})`);
 
-		if (message.tts) logPrefix.push('[TTS]');
+	if (message.tts) logPrefix.push('[TTS]');
 
-		let isAttachment = false;
-		let isImage = false;
-		let attachmentWithMessage = false;
-		let isUrl = false;
+	let isAttachment = false;
+	let isImage = false;
+	let attachmentWithMessage = false;
+	let isUrl = false;
 
-		let logMessage;
+	let logMessage;
 
-		if (typeof message.attachments.first() != 'undefined') isAttachment = true;
-		if (isAttachment && message.attachments.first().width != undefined) isImage = true;
-		if (isAttachment && message.content !== "") attachmentWithMessage = true;
-		if (null !== message.cleanContent.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi)) isUrl = true;
+	if (typeof message.attachments.first() != 'undefined') isAttachment = true;
+	if (isAttachment && message.attachments.first().width != undefined) isImage = true;
+	if (isAttachment && message.content !== "") attachmentWithMessage = true;
+	if (null !== message.cleanContent.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi)) isUrl = true;
 
-		if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url}`;
-		else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
-		else logMessage = `${logPrefix.join(" ")} ${username}: ${message.cleanContent}`;
-
-
-		/**
-		 * Handle messages during slow mode
-		 */
-		if (client.slowMode.channels.hasOwnProperty(message.channel.id)) {
-			const slowmodeChannel = client.slowMode.channels[message.channel.id];
-
-			if (slowmodeChannel.enabled && !isServerStaff) {
-				if (slowmodeChannel.users.includes(message.author.id)) {
-					return message.delete().catch(e => {});
-				} else {
-					if (!message.author.bot) {
-						slowmodeChannel.users.push(message.author.id);
-						setTimeout(() => {
-							const userIndex = slowmodeChannel.users.indexOf(message.author.id);
-							slowmodeChannel.users.splice(userIndex, 1);
-						}, slowmodeChannel.timeout);
-					}
-				}
-			}
-		}
+	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment {message.attachments.first().url}`;
+	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment {message.attachments.first().url} with message [${message.cleanContent}]`;
+	else logMessage = `${logPrefix.join(" ")} ${username}: ${message.cleanContent}`;
 
 
-		if (isImage) {
-			if (!client.config.allowances.enabled) return;
-			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
+	/**
+	 * Handle messages during slow mode
+	 */
+	if (client.slowMode.channels.hasOwnProperty(message.channel.id)) {
+		const slowmodeChannel = client.slowMode.channels[message.channel.id];
 
-			const imagesMax = client.config.allowances.images;
-
-			if (!client.allowances.images.hasOwnProperty(message.author.id)) {
-				client.allowances.images[message.author.id] = {
-					amount: 1,
-					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
-				};
+		if (slowmodeChannel.enabled && !isServerStaff) {
+			if (slowmodeChannel.users.includes(message.author.id)) {
+				return message.delete().catch(e => {});
 			} else {
-				if (client.allowances.images[message.author.id].amount < imagesMax) {
-					client.allowances.images[message.author.id] = {
-						amount: client.allowances.images[message.author.id].amount + 1,
-						expires: moment().add(client.config.allowances.expiration, 'm').format('X')
-					};
-				} else {
-					return message.delete().then(m => {
-						m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
-					});
+				if (!message.author.bot) {
+					slowmodeChannel.users.push(message.author.id);
+					setTimeout(() => {
+						const userIndex = slowmodeChannel.users.indexOf(message.author.id);
+						slowmodeChannel.users.splice(userIndex, 1);
+					}, slowmodeChannel.timeout);
 				}
 			}
 		}
-
-		if (isUrl) {
-			if (!client.config.allowances.enabled) return;
-			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
-
-			const urlsMax = client.config.allowances.links;
-
-			if (!client.allowances.links.hasOwnProperty(message.author.id)) {
-				client.allowances.links[message.author.id] = {
-					amount: 1,
-					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
-				};
-			} else {
-				if (client.allowances.links[message.author.id].amount < urlsMax) {
-					client.allowances.links[message.author.id] = {
-						amount: client.allowances.links[message.author.id].amount + 1,
-						expires: moment().add(client.config.allowances.expiration, 'm').format('X')
-					};
-				} else {
-					return message.delete().then(m => {
-						m.reply(`You have reached your max allowance for URLs sent. This allowance resets in ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
-					});
-				}
-			}
-		}
-
-		client.log("msg", logMessage);
 	}
+
+
+	if (isImage) {
+		if (!client.config.allowances.enabled) return;
+		if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
+
+		const imagesMax = client.config.allowances.images;
+
+		if (!client.allowances.images.hasOwnProperty(message.author.id)) {
+			client.allowances.images[message.author.id] = {
+				amount: 1,
+				expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+			};
+		} else {
+			if (client.allowances.images[message.author.id].amount < imagesMax) {
+				client.allowances.images[message.author.id] = {
+					amount: client.allowances.images[message.author.id].amount + 1,
+					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+				};
+			} else {
+				return message.delete().then(m => {
+					m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
+				});
+			}
+		}
+	}
+
+	if (isUrl) {
+		if (!client.config.allowances.enabled) return;
+		if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
+
+		const urlsMax = client.config.allowances.links;
+
+		if (!client.allowances.links.hasOwnProperty(message.author.id)) {
+			client.allowances.links[message.author.id] = {
+				amount: 1,
+				expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+			};
+		} else {
+			if (client.allowances.links[message.author.id].amount < urlsMax) {
+				client.allowances.links[message.author.id] = {
+					amount: client.allowances.links[message.author.id].amount + 1,
+					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+				};
+			} else {
+				return message.delete().then(m => {
+					m.reply(`You have reached your max allowance for URLs sent. This allowance resets in ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
+				});
+			}
+		}
+	}
+
+	client.log("msg", logMessage);
 
 	const args			= message.content.slice(client.config.prefix.length).trim().split(/ +/g);
 	const command		= args.shift().toLowerCase();
@@ -152,6 +152,19 @@ module.exports = (client, message) => {
 	*	Non-command messages
 	*/
 	if(message.content.indexOf(client.config.prefix) !== 0) {
+
+		//	Log messages to seed for markov chain
+		if (
+			!isUrl &&
+			!isImage &&
+			!isAttachment
+		) {
+			const seedMessage = message.cleanContent
+								.replace('*', '')
+								.replace(/<:[a-zA-Z0-9\-_]{2,36}:[0-9]{17,19}>/ig, '');
+			fs.appendFileSync(path.join(client.rootPath, 'data', 'markov', 'seed.txt'), seedMessage + '\n');
+		}
+
 		/**
 		*	React to OwO's
 		*/

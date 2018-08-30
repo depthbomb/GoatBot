@@ -344,10 +344,10 @@ module.exports = (client) => {
 
 	process.on("uncaughtException", err => {
 		const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
-		console.trace("Uncaught Exception: ", errorMsg);
+		console.error("Uncaught Exception: ", JSON.stringify(errorMsg));
 	});
 	
 	process.on("unhandledRejection", err => {
-		console.trace("Uncaught Promise Error: ", err);
+		console.error("Uncaught Promise Error: ", err);
 	});
 };

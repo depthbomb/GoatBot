@@ -128,9 +128,6 @@ const client = new GoatBot();
 require(`${client.appPath}/functions.js`)(client);
 
 const init = async () => {
-
-	// require(`${client.appPath}/taskrunner.js`)(client);
-
 	/**
 	* Load commands
 	*/
