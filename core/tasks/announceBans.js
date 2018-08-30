@@ -4,6 +4,7 @@
 module.exports = async (client) => {
 	const fs = require('fs');
 	const path = require('path');
+	const { RichEmbed } = require('discord.js');
 	const request = require('request');
 	const moment = require('moment-timezone');
 	const ms = require('ms');
