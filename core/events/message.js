@@ -157,7 +157,10 @@ module.exports = (client, message) => {
 		if (
 			!isUrl &&
 			!isImage &&
-			!isAttachment
+			!isAttachment &&
+			!attachmentWithMessage &&
+			message.cleanContent !== '' &&
+			message.cleanContent.length > 3
 		) {
 			const seedMessage = message.cleanContent
 								.replace('*', '')
