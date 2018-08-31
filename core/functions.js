@@ -210,9 +210,9 @@ module.exports = (client) => {
 		text = require("util").inspect(text, {depth: 0});
 
 		text = text
-		.replace(/`/g, "`" + String.fromCharCode(8203))
-		.replace(/@/g, "@" + String.fromCharCode(8203))
-		.replace(client.token, "{null}");
+			.replace(/`/g, "`" + String.fromCharCode(8203))
+			.replace(/@/g, "@" + String.fromCharCode(8203))
+			.replace(client.token, "{null}");
 
 		return text;
 	};
@@ -344,7 +344,7 @@ module.exports = (client) => {
 
 	process.on("uncaughtException", err => {
 		const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
-		console.error("Uncaught Exception: ", JSON.stringify(errorMsg, undefined, 4));
+		console.error("Uncaught Exception: ", errorMsg);
 	});
 	
 	process.on("unhandledRejection", err => {

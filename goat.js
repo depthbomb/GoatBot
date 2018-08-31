@@ -42,19 +42,31 @@ class GoatBot extends Discord.Client {
 		this.aliases = new Discord.Collection();
 		this.rootPath = __dirname;
 		this.appPath = `${__dirname}/core`;
+
 		//	Storage root path
 		this.storagePath = `${__dirname}/storage`;
+
 		//	Path for storing temporary data
 		this.tmpPath = `${__dirname}/storage/tmp`;
+
 		//	Cache root path
 		this.cachePath = `${__dirname}/storage/cache`;
+
 		this.deported = this.config.deported_users;
+
 		//	Object to store command cooldowns
 		this.cooldowns = {};
+
 		this.strictMode = {};
+
 		this.slowMode = { channels: {} };
+
+		this.warnings = {};
+
 		this.commandData = {};
+
 		this.allowances = { images: {}, links: {} };
+		
 		this.colors = {
 			brand:		"#0097a7",
 			yellow:		"#faa61a",
