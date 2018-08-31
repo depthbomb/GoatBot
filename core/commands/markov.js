@@ -26,8 +26,6 @@ exports.run = async (client, message, args, level) => {
 	const text = args.join(' ');
 	if (text.length < 3) return;
 
-	message.channel.startTyping();
-
 	const fs = require('fs');
 	const path = require('path');
 
@@ -37,7 +35,6 @@ exports.run = async (client, message, args, level) => {
 	const seed = fs.createReadStream(path.join(client.rootPath, 'data', 'markov', 'seed.txt'));
 	m.seed(seed, () => {
 		const response = m.respond(text).join(' ').toLowerCase();
-		message.channel.stopTyping();
 		return message.reply(response);
 	});
 };
@@ -49,7 +46,7 @@ exports.conf = {
 	aliases: [
 		'm',
 	],
-	permLevel: 5,
+	permLevel: 0,
 	deleteTrigger: false,
 };
 
