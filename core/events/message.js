@@ -152,22 +152,6 @@ module.exports = (client, message) => {
 	*	Non-command messages
 	*/
 	if(message.content.indexOf(client.config.prefix) !== 0) {
-
-		//	Log messages to seed for markov chain
-		if (
-			!isUrl &&
-			!isImage &&
-			!isAttachment &&
-			!attachmentWithMessage &&
-			message.cleanContent !== '' &&
-			message.cleanContent.length > 3
-		) {
-			const seedMessage = message.cleanContent
-								.replace('*', '')
-								.replace(/<:[a-zA-Z0-9\-_]{2,36}:[0-9]{17,19}>/ig, '');
-			fs.appendFileSync(path.join(client.rootPath, 'data', 'markov', 'seed.txt'), seedMessage + '\n');
-		}
-
 		/**
 		*	React to OwO's
 		*/

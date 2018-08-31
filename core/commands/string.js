@@ -23,13 +23,10 @@
 
 exports.run = (client, message, args, level) => {
 	if (!args) return;
-
 	const atob = require('atob');
 	const btoa = require('btoa');
-	const Entities = require('html-entities').AllHtmlEntities;
 	const zalgo = require('to-zalgo');
 	const dezalgo = require('to-zalgo/banish');
-	const ha = new Entities();
 	const crypto = require('crypto');
 	const algorithm = 'aes-256-cbc';
 
@@ -140,7 +137,6 @@ exports.run = (client, message, args, level) => {
 
 		if (encoding === 'base64' || encoding === 'b64') encoded = btoa(toEncode);
 		if (encoding === 'url' || encoding === 'uri') encoded = encodeURIComponent(toEncode);
-		if (encoding === 'html') encoded = ha.encode(toEncode);
 		if (encoding === 'zalgo') encoded = zalgo(toEncode);
 
 		return message.reply(`Here is your encoded message!\n\`\`\`\n${encoded}\n\`\`\``);
@@ -152,7 +148,6 @@ exports.run = (client, message, args, level) => {
 			'b64',
 			'url',
 			'uri',
-			'html',
 			'zalgo'
 		];
 
@@ -162,7 +157,6 @@ exports.run = (client, message, args, level) => {
 
 		if (encoding === 'base64' || encoding === 'b64') decoded = atob(toDecode);
 		if (encoding === 'url' || encoding === 'uri') decoded = decodeURIComponent(toDecode);
-		if (encoding === 'html') decoded = ha.decode(toDecode);
 		if (encoding === 'zalgo') decoded = dezalgo(toDecode);
 
 		return message.reply(`Here is your encoded message!\n\`\`\`\n${decoded}\n\`\`\``);
