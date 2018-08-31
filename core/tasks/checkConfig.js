@@ -13,6 +13,8 @@ module.exports = async (client) => {
 				client.log('task', 'Config file has changes pending, reloading...');
 				delete require.cache[path.join(client.rootPath, 'config.js')];
 				client.config = require(path.join(client.rootPath, 'config.js')).config;
+			} else {
+				delete require.cache[path.join(client.rootPath, 'config.js')];
 			}
 		}
 	};
