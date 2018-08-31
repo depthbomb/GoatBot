@@ -46,7 +46,7 @@ module.exports = (client, member) => {
 					mem.addRole(memberRole, 'Via GoatBot!');
 				}, (client.config.autoRoles.unrestrictDelay * 1000));
 			} else {
-				return refugeeChannel.send(`<@${member.id}>, you have been flagged as _deported_. This means you have frequently left and joined the server multiple times. You will not automatically be given the member role and must contact an admin directly to get your refugee role lifted.`);
+				return refugeeChannel.send(`<@${member.id}>, you have been flagged as _deported_. This means that you are a former user or have left & joined frequently. You will not automatically be given the member role and must contact an admin directly to get your refugee role lifted.`);
 			}
 		}).catch(e => {
 			throw new Error(e);
