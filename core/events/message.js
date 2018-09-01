@@ -57,6 +57,7 @@ module.exports = (client, message) => {
 	let isImage = false;
 	let attachmentWithMessage = false;
 	let isUrl = false;
+	let isItalics = false;
 
 	let logMessage;
 
@@ -64,6 +65,11 @@ module.exports = (client, message) => {
 	if (isAttachment && message.attachments.first().width != undefined) isImage = true;
 	if (isAttachment && message.content !== "") attachmentWithMessage = true;
 	if (null !== message.cleanContent.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi)) isUrl = true;
+	if (
+		null !== message.cleanContent.match(/\*[a-zA-Z0-9\s\n]{1,}\*/igm) ||
+		null !== message.cleanContent.match(/\*\*\*[a-zA-Z0-9\s\n]{1,}\*\*\*/igm) ||
+		null !== message.cleanContent.match(/_[a-zA-Z0-9\s\n]{1,}_/igm)
+	) isItalics = true;
 
 	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment {message.attachments.first().url}`;
 	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment {message.attachments.first().url} with message [${message.cleanContent}]`;
@@ -92,52 +98,76 @@ module.exports = (client, message) => {
 	}
 
 
-	if (isImage) {
-		if (!client.config.allowances.enabled) return;
-		if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
-
-		const imagesMax = client.config.allowances.images;
-
-		if (!client.allowances.images.hasOwnProperty(message.author.id)) {
-			client.allowances.images[message.author.id] = {
-				amount: 1,
-				expires: moment().add(client.config.allowances.expiration, 'm').format('X')
-			};
-		} else {
-			if (client.allowances.images[message.author.id].amount < imagesMax) {
+	if (client.config.allowances.enabled) {
+		if (isImage) {
+			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
+	
+			const imagesMax = client.config.allowances.images;
+	
+			if (!client.allowances.images.hasOwnProperty(message.author.id)) {
 				client.allowances.images[message.author.id] = {
-					amount: client.allowances.images[message.author.id].amount + 1,
+					amount: 1,
 					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
 				};
 			} else {
-				return message.delete().then(m => {
-					m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
-				});
+				if (client.allowances.images[message.author.id].amount < imagesMax) {
+					client.allowances.images[message.author.id] = {
+						amount: client.allowances.images[message.author.id].amount + 1,
+						expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+					};
+				} else {
+					return message.delete().then(m => {
+						m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
+					});
+				}
 			}
 		}
-	}
-
-	if (isUrl) {
-		if (!client.config.allowances.enabled) return;
-		if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
-
-		const urlsMax = client.config.allowances.links;
-
-		if (!client.allowances.links.hasOwnProperty(message.author.id)) {
-			client.allowances.links[message.author.id] = {
-				amount: 1,
-				expires: moment().add(client.config.allowances.expiration, 'm').format('X')
-			};
-		} else {
-			if (client.allowances.links[message.author.id].amount < urlsMax) {
+	
+		if (isUrl) {
+			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
+	
+			const urlsMax = client.config.allowances.links;
+	
+			if (!client.allowances.links.hasOwnProperty(message.author.id)) {
 				client.allowances.links[message.author.id] = {
-					amount: client.allowances.links[message.author.id].amount + 1,
+					amount: 1,
 					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
 				};
 			} else {
-				return message.delete().then(m => {
-					m.reply(`You have reached your max allowance for URLs sent. This allowance resets in ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
-				});
+				if (client.allowances.links[message.author.id].amount < urlsMax) {
+					client.allowances.links[message.author.id] = {
+						amount: client.allowances.links[message.author.id].amount + 1,
+						expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+					};
+				} else {
+					return message.delete().then(m => {
+						m.reply(`You have reached your max allowance for URLs sent. This allowance resets in ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
+					});
+				}
+			}
+		}
+	
+		if (isItalics) {
+			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
+	
+			const italicsMax = client.config.allowances.italics.limit;
+	
+			if (!client.allowances.links.hasOwnProperty(message.author.id)) {
+				client.allowances.italics[message.author.id] = {
+					amount: 1,
+					expires: moment().add(client.config.allowances.italics.expiration, 'm').format('X')
+				};
+			} else {
+				if (client.allowances.italics[message.author.id].amount < italicsMax) {
+					client.allowances.italics[message.author.id] = {
+						amount: client.allowances.italics[message.author.id].amount + 1,
+						expires: moment().add(client.config.allowances.italics.expiration, 'm').format('X')
+					};
+				} else {
+					return message.delete().then(m => {
+						m.reply(`You have reached your max allowance for italics sent. This allowance resets in ${moment.unix(client.allowances.italics[message.author.id].expires).toNow(true)}.`);
+					});
+				}
 			}
 		}
 	}

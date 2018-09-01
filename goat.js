@@ -65,7 +65,7 @@ class GoatBot extends Discord.Client {
 
 		this.commandData = {};
 
-		this.allowances = { images: {}, links: {} };
+		this.allowances = { images: {}, links: {}, italics: {} };
 		
 		this.colors = {
 			brand:		"#0097a7",
