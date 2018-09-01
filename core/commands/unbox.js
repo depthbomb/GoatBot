@@ -27,9 +27,19 @@ exports.run = async (client, message, args, level) => {
 	const Chance = require('chance');
 	const chance = new Chance();
 
+	let storedWeights = false;
+
+	if (!client.commandData.hasOwnProperty('unbox')) {
+		client.commandData.unbox = {
+			weights: []
+		};
+	} else {
+		storedWeights = true;
+	}
+
 	const unboxConfig = client.config.unbox;
 	const qualities = unboxConfig.rarities;
-	const rarity_weights = unboxConfig.rarity_weights;
+	const rarity_weights = storedWeights ? client.commandData.unbox.weights : unboxConfig.rarity_weights;
 
 	let embed;
 
@@ -48,13 +58,27 @@ exports.run = async (client, message, args, level) => {
 		weightSum += rarity_weights[i];
 	}
 
-	const percentage = ((weight / weightSum) * 100).toFixed(3);
+	/**
+	 * Add config rarities to memory if not already in.
+	 * We will be using this stored data to decrement a rarity when it is unboxed.
+	 */
+	if (client.commandData.unbox.weights.length === 0) {
+		for (let i = 0; i < rarity_weights.length; i++) {
+			const rarity = rarity_weights[i];
+			client.commandData.unbox.weights[rarity_weights.indexOf(rarity)] = rarity;
+		}
+	} else {
+		client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] - 1;
+	}
+
+	console.log(client.commandData.unbox.weights);
+
 	embed = new RichEmbed()
 		.setColor(color)
 		.setTitle(`Unbox-A-Goat`)
 		.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)
 		.addField('Tier', `_${qualities.indexOf(chosenRarity)}/${(qualities.length - 1)}_`)
-		.addField('Drop chance', `_~${percentage}%_`)
+		.addField('Drop chance', `_~${((weight / weightSum) * 100).toFixed(3)}%_`)
 		.setImage(image)
 		.setTimestamp()
 	;
