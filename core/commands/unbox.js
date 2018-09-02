@@ -71,8 +71,6 @@ exports.run = async (client, message, args, level) => {
 		client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] - 1;
 	}
 
-	console.log(client.commandData.unbox.weights);
-
 	embed = new RichEmbed()
 		.setColor(color)
 		.setTitle(`Unbox-A-Goat`)

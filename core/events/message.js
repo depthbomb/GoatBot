@@ -68,7 +68,8 @@ module.exports = (client, message) => {
 	if (
 		null !== message.cleanContent.match(/\*[a-zA-Z0-9\s\n]{1,}\*/igm) ||
 		null !== message.cleanContent.match(/\*\*\*[a-zA-Z0-9\s\n]{1,}\*\*\*/igm) ||
-		null !== message.cleanContent.match(/_[a-zA-Z0-9\s\n]{1,}_/igm)
+		null !== message.cleanContent.match(/_[a-zA-Z0-9\s\n]{1,}_/igm) ||
+		null !== message.cleanContent.match(/[𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡]{1,}/igm)
 	) isItalics = true;
 
 	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment {message.attachments.first().url}`;
@@ -102,18 +103,18 @@ module.exports = (client, message) => {
 		if (isImage) {
 			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
 	
-			const imagesMax = client.config.allowances.images;
+			const imagesMax = client.config.allowances.images.limit;
 	
 			if (!client.allowances.images.hasOwnProperty(message.author.id)) {
 				client.allowances.images[message.author.id] = {
 					amount: 1,
-					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+					expires: moment().add(client.config.allowances.images.expiration, 'm').format('X')
 				};
 			} else {
 				if (client.allowances.images[message.author.id].amount < imagesMax) {
 					client.allowances.images[message.author.id] = {
 						amount: client.allowances.images[message.author.id].amount + 1,
-						expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+						expires: moment().add(client.config.allowances.images.expiration, 'm').format('X')
 					};
 				} else {
 					return message.delete().then(m => {
@@ -126,18 +127,18 @@ module.exports = (client, message) => {
 		if (isUrl) {
 			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
 	
-			const urlsMax = client.config.allowances.links;
+			const urlsMax = client.config.allowances.links.limit;
 	
 			if (!client.allowances.links.hasOwnProperty(message.author.id)) {
 				client.allowances.links[message.author.id] = {
 					amount: 1,
-					expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+					expires: moment().add(client.config.allowances.links.expiration, 'm').format('X')
 				};
 			} else {
 				if (client.allowances.links[message.author.id].amount < urlsMax) {
 					client.allowances.links[message.author.id] = {
 						amount: client.allowances.links[message.author.id].amount + 1,
-						expires: moment().add(client.config.allowances.expiration, 'm').format('X')
+						expires: moment().add(client.config.allowances.links.expiration, 'm').format('X')
 					};
 				} else {
 					return message.delete().then(m => {
@@ -148,11 +149,11 @@ module.exports = (client, message) => {
 		}
 	
 		if (isItalics) {
-			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
+			if (!client.config.allowances.italics.channels.includes(message.channel.id) || isServerStaff) return;
 	
 			const italicsMax = client.config.allowances.italics.limit;
 	
-			if (!client.allowances.links.hasOwnProperty(message.author.id)) {
+			if (!client.allowances.italics.hasOwnProperty(message.author.id)) {
 				client.allowances.italics[message.author.id] = {
 					amount: 1,
 					expires: moment().add(client.config.allowances.italics.expiration, 'm').format('X')
