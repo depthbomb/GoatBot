@@ -311,12 +311,17 @@ module.exports = (client, message) => {
 				cooldown = cmd.conf.cooldown * 1000;
 			}
 
+			//	TODO: rewrite this filter
+			if (message.member.roles.find(r => r.id === (client.config.roles.donor[0] || client.config.roles.donor[1]))) {
+				cooldown = (cooldown / 2);
+			}
+
 			let cooldownName;
 			
 			if (!cmd.conf.globalCd) {
-				cooldownName = `c_${cmd.help.name}_${message.author.id}`;
+				cooldownName = `${cmd.help.name}_${message.author.id}`;
 			} else {
-				cooldownName = `c_${cmd.help.name}_GLOBAL`;
+				cooldownName = `${cmd.help.name}_GLOBAL`;
 			}
 
 			if (cmd.conf.deleteTrigger) message.delete().catch(e => {});
