@@ -64,7 +64,7 @@ exports.conf = {
 exports.help = {
 	name: "slowmode",
 	category: "Moderation",
-	description: "Put the current channel in slow mode. Messages will be deleted",
+	description: "Put the current channel in slow mode. Messages will be deleted if subsequent ones are sent before the user's timeout",
 	usage: "slowmode [timeout]",
 	examples: [
 		"slowmode 10"

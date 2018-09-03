@@ -101,7 +101,7 @@ module.exports = (client, message) => {
 
 	if (client.config.allowances.enabled) {
 		if (isImage) {
-			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
+			if (!client.config.allowances.images.channels.includes(message.channel.id) || isServerStaff) return;
 	
 			const imagesMax = client.config.allowances.images.limit;
 	
@@ -125,7 +125,7 @@ module.exports = (client, message) => {
 		}
 	
 		if (isUrl) {
-			if (!client.config.allowances.channels.includes(message.channel.id) || isServerStaff) return;
+			if (!client.config.allowances.links.channels.includes(message.channel.id) || isServerStaff) return;
 	
 			const urlsMax = client.config.allowances.links.limit;
 	
