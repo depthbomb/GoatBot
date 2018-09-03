@@ -183,6 +183,24 @@ module.exports = (client, message) => {
 	*	Non-command messages
 	*/
 	if(message.content.indexOf(client.config.prefix) !== 0) {
+
+		if (
+			null !== message.cleanContent.match(/\bi\'?m\s+(.*)/i)
+		) {
+			const excludeChannels = [
+				'459576208368205857',
+				'431266723736322048',
+				'481201307257012262',
+				'480236852599717889'
+			];
+			if (excludeChannels.includes(message.channel.id)) return;
+			const Chance = require('chance');
+			const chance = new Chance();
+			const dadJoke = chance.weighted([true, false], [1, 3]);
+			let word = /\bi\'?m\s+(\w+)/i.exec(message.cleanContent)[1];
+			if (dadJoke) return message.channel.send(`Hello, ${word}!`);
+		}
+
 		/**
 		*	React to OwO's
 		*/
