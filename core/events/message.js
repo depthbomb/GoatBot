@@ -26,6 +26,8 @@ module.exports = (client, message) => {
 	const path = require('path');
 	const ms = require('ms');
 	const moment = require('moment');
+	const Chance = require('chance');
+	const chance = new Chance();
 
 	/**
 	*	Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
@@ -49,7 +51,7 @@ module.exports = (client, message) => {
 	if (message.channel.type !== "dm" && message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
 
 	if (message.channel.type === "dm") logPrefix.push("(DM)");
-	else logPrefix.push(`(${message.channel.name})`);
+	else logPrefix.push(`#${message.channel.name}`);
 
 	if (message.tts) logPrefix.push('[TTS]');
 
@@ -183,36 +185,6 @@ module.exports = (client, message) => {
 	*	Non-command messages
 	*/
 	if(message.content.indexOf(client.config.prefix) !== 0) {
-
-		if (
-			null !== message.cleanContent.match(/\bi\'?m\s+(.*)/i)
-		) {
-			const excludeChannels = [
-				'459576208368205857',
-				'431266723736322048',
-				'481201307257012262',
-				'480236852599717889'
-			];
-			if (excludeChannels.includes(message.channel.id)) return;
-			const Chance = require('chance');
-			const chance = new Chance();
-			const dadJoke = chance.weighted([true, false], [1, 3]);
-			let word = /\bi\'?m\s+(\w+)/i.exec(message.cleanContent)[1];
-
-			if (
-				word.length < 3 ||
-				word === 'like' ||
-				word === 'maybe' ||
-				word === 'very' ||
-				word === 'extremely'
-			) return;
-
-			if (dadJoke) {
-				message.member.setNickname(word, 'Via GoatBot! (dad joke)');
-				return message.channel.send(`Hello, ${word}!`);
-			}
-		}
-
 		/**
 		*	React to OwO's
 		*/
@@ -308,6 +280,32 @@ module.exports = (client, message) => {
 				message.delete().then(msg => {
 					return client.kennelUser(msg, msg.member, '[Auto] Discriminatory language is not tolerated.');
 				}).catch(e => {});
+			}
+		}
+
+		if (client.config.dad_joke.enabled && !client.config.dad_joke.exclude_channels.includes(message.channel.id)) {
+			const ex = /^\bi(?:\sa)?\'?m\s+(\w+){3,}$/i;
+			if (null !== message.cleanContent.match(ex)) {
+				//	Chance to trigger the joke
+				const dadJoke = chance.weighted([true, false], [1, 3]);
+
+				//	Extract the first word after "i'm"
+				let word = ex.exec(message.cleanContent)[1];
+	
+				//	Do not trigger joke if the word falls under these
+				if (
+					word.length > 32 ||
+					word === 'like' ||
+					word === 'maybe' ||
+					word === 'very' ||
+					word === 'extremely' ||
+					word === 'going'
+				) return;
+	
+				if (dadJoke) {
+					if (client.config.dad_joke.change_nickname) message.member.setNickname(word, 'Via GoatBot! (dad joke)');
+					return message.channel.send(`Hello, ${word}!`);
+				}
 			}
 		}
 
