@@ -68,11 +68,10 @@ exports.run = async (client, message, args, level) => {
 			client.commandData.unbox.weights[rarity_weights.indexOf(rarity)] = rarity;
 		}
 	} else {
-		const chosenRarityM = client.commandData.unbox.weights[qualities.indexOf(chosenRarity)];
-		if (chosenRarityM - 2 < 0) {
-			chosenRarityM = 0;
+		if (client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] - 2 < 0) {
+			client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = 0;
 		} else {
-			chosenRarityM = chosenRarityM - 2;
+			client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] - 2;
 		}
 	}
 
