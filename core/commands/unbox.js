@@ -63,15 +63,16 @@ exports.run = async (client, message, args, level) => {
 	 * We will be using this stored data to decrement a rarity when it is unboxed.
 	 */
 	if (client.commandData.unbox.weights.length === 0) {
+		let chosenRarityM = client.commandData.unbox.weights[qualities.indexOf(chosenRarity)];
 		for (let i = 0; i < rarity_weights.length; i++) {
 			const rarity = rarity_weights[i];
 			client.commandData.unbox.weights[rarity_weights.indexOf(rarity)] = rarity;
 		}
 	} else {
-		if (client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] - 2 < 0) {
-			client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = 0;
+		if (chosenRarityM - 2 < 0) {
+			chosenRarityM = 0;
 		} else {
-			client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] - 2;
+			chosenRarityM = chosenRarityM - 2;
 		}
 	}
 
