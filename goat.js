@@ -326,7 +326,7 @@ process.on('SIGINT', () => {
 process.on('uncaughtException', err => {
 	const crashFile = path.join(client.storagePath, 'logs', `CRASH__EXCEPTION_${moment().tz(client.config.logTimezone).format('M-D-YY_HH-mm-ss')}.log`);
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
-	fs.appendFile(crashFile, "Uncaught Exception: " + errorMsg + '\n\n', (err) => {
+	fs.writeFile(crashFile, "Uncaught Exception: " + errorMsg + '\n\n', (err) => {
 		console.error("Uncaught Exception: ", errorMsg);
 		process.exit(1);
 	});
@@ -334,7 +334,7 @@ process.on('uncaughtException', err => {
 
 process.on('unhandledRejection', err => {
 	const crashFile = path.join(client.storagePath, 'logs', `CRASH__REJECTION_${moment().tz(client.config.logTimezone).format('M-D-YY_HH-mm-ss')}.log`);
-	fs.appendFile(crashFile, "Uncaught Promise Error: " + errorMsg + '\n\n', (err) => {
+	fs.writeFile(crashFile, "Uncaught Promise Error: " + errorMsg + '\n\n', (err) => {
 		console.error("Uncaught Promise Error: ", err);
 		process.exit(1);
 	});
