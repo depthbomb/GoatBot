@@ -198,7 +198,19 @@ module.exports = (client, message) => {
 			const chance = new Chance();
 			const dadJoke = chance.weighted([true, false], [1, 3]);
 			let word = /\bi\'?m\s+(\w+)/i.exec(message.cleanContent)[1];
-			if (dadJoke) return message.channel.send(`Hello, ${word}!`);
+
+			if (
+				word.length < 3 ||
+				word === 'like' ||
+				word === 'maybe' ||
+				word === 'very' ||
+				word === 'extremely'
+			) return;
+
+			if (dadJoke) {
+				message.member.setNickname(word, 'Via GoatBot! (dad joke)');
+				return message.channel.send(`Hello, ${word}!`);
+			}
 		}
 
 		/**
