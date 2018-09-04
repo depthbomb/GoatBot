@@ -68,11 +68,8 @@ exports.run = async (client, message, args, level) => {
 			client.commandData.unbox.weights[rarity_weights.indexOf(rarity)] = rarity;
 		}
 	} else {
-		if (client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] - 2 < 0) {
-			client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = 0;
-		} else {
-			client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] - 2;
-		}
+		//new_weight = old_weight * 0.995 = 0.5% decrease per unbox
+		client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = (client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] * 0.995);
 	}
 
 	embed = new RichEmbed()
