@@ -147,30 +147,28 @@ module.exports = (client) => {
 		let timeLeft;
 		let onCooldown;
 
-		if (!client.config.cooldowns.bypassUsers.includes(message.author.id)) {	//	If the user cannot bypass cooldowns, do the junk
-			if (cooldownObject.hasOwnProperty(cooldownName)) {
-				onCooldown = true;
-				const ms = require('ms');
-				const { RichEmbed } = require('discord.js');
-				const expiration = cooldownObject[cooldownName].ex;
-				timeLeft = expiration - messageTime;
-				const response = timeLeft <= 1000 ? 'Please try again in about 1 second.' : `Please try again in about ${ms(timeLeft, {long: true})}.`;
+		if (cooldownObject.hasOwnProperty(cooldownName)) {
+			onCooldown = true;
+			const ms = require('ms');
+			const { RichEmbed } = require('discord.js');
+			const expiration = cooldownObject[cooldownName].ex;
+			timeLeft = expiration - messageTime;
+			const response = timeLeft <= 1000 ? 'Please try again in about 1 second.' : `Please try again in about ${ms(timeLeft, {long: true})}.`;
 
-				const embed = new RichEmbed()
-					.setColor('#aab8c2')
-					.setDescription(`\:timer: <@${message.author.id}>, ${response}`)
-				;
-	
-				message.channel.send({ embed })
-			} else {
-				onCooldown = false;
-				cooldownObject[cooldownName] = {
-					ex: (messageTime + cooldownDuration)
-				};
-				setTimeout(() => {
-					delete cooldownObject[cooldownName];
-				}, cooldownDuration);
-			}
+			const embed = new RichEmbed()
+				.setColor('#aab8c2')
+				.setDescription(`\:timer: <@${message.author.id}>, ${response}`)
+			;
+
+			message.channel.send({ embed })
+		} else {
+			onCooldown = false;
+			cooldownObject[cooldownName] = {
+				ex: (messageTime + cooldownDuration)
+			};
+			setTimeout(() => {
+				delete cooldownObject[cooldownName];
+			}, cooldownDuration);
 		}
 
 		callback(onCooldown);
@@ -330,6 +328,20 @@ module.exports = (client) => {
 		}
 
 		return this;
+	};
+
+
+	Number.prototype.reduce = function (percent, fix = false) {
+		let num = (this - this * percent);
+		if (fix) num = num.toFixed(2);
+		return num;
+	};
+
+
+	Number.prototype.increase = function (percent, fix = false) {
+		let num = (this + this * percent);
+		if (fix) num = num.toFixed(2);
+		return num;
 	};
 
 

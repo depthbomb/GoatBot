@@ -340,10 +340,10 @@ module.exports = (client, message) => {
 			}
 
 			//	TODO: rewrite this filter
-			if (message.member.roles.find(
-				r => r.id === (client.config.roles.donor[0] || client.config.roles.donor[1])
-			)) {
-				cooldown = (cooldown / 1.5);
+			if (message.member.roles.find(r => r.id === (client.config.roles.donor[0] || client.config.roles.donor[1]))) {
+				cooldown = cooldown.reduce(client.config.cooldowns.reduction.donor);
+			} else if (message.member.roles.find(r => r.id === client.config.roles.admin)) {
+				cooldown = cooldown.reduce(client.config.cooldowns.reduction.admin);
 			}
 
 			let cooldownName;
