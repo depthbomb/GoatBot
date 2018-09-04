@@ -175,16 +175,16 @@ module.exports = (client) => {
 	};
 
 
-	client.kennelUser = (message, user, reason) => {
+	client.kennelUser = (message, user, reason, issuer = 'GoatBot!') => {
 		const kennelRole = message.member.guild.roles.find(r => r.name === 'Kenneled').id;
 		const kennelChannel = message.member.guild.channels.find(c => c.id === '481201307257012262');
 
 		if (!user.roles.find(r => r.name === 'Kenneled')) {
 			const { RichEmbed } = require('discord.js');
-			const embed = new RichEmbed()
+			let embed = new RichEmbed()
 				.setColor(client.colors.red)
 				.setTitle('User Kenneled')
-				.setDescription(`User \`${user.displayName}\` has been kenneled by **${message.member.displayName}**`)
+				.setDescription(`User \`${user.displayName}\` has been kenneled by **${issuer}**`)
 				.addField('Reason', reason)
 			;
 
@@ -192,8 +192,14 @@ module.exports = (client) => {
 			if (user.roles.find(r => r.name === 'Deejay')) user.removeRole(user.roles.find(r => r.name === 'Deejay'));
 
 			user.addRole(kennelRole, reason).then(() => {
-				kennelChannel.send(`<@${user.id}>, you have been placed in the kennel.\nReason: ${reason}`);
-				message.channel.send({ embed });
+				message.channel.send({ embed }).then(m => {
+					embed = new RichEmbed()
+						.setColor(client.colors.red)
+						.setDescription(`<@${user.id}>, you have been placed in the kennel by ${issuer}. You will be here indefinitely until you can \`!escape\`. Some of your roles have been stripped and will need to be reacquired once you escape.`)
+						.addField('Reason', reason)
+					;
+					kennelChannel.send({ embed });
+				});
 			});
 		}
 	};
