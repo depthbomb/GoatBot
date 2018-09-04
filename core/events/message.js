@@ -340,7 +340,9 @@ module.exports = (client, message) => {
 			}
 
 			//	TODO: rewrite this filter
-			if (message.member.roles.find(r => r.id === (client.config.roles.donor[0] || client.config.roles.donor[1]))) {
+			if (message.member.roles.find(
+				r => r.id === (client.config.roles.donor[0] || client.config.roles.donor[1])
+			)) {
 				cooldown = (cooldown / 1.5);
 			}
 

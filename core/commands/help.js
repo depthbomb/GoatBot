@@ -58,6 +58,7 @@ exports.run = (client, message, args, level) => {
 			command = client.commands.get(command);
 			if (level < command.conf.permLevel) return;
 
+			let cooldown = command.conf.hasOwnProperty('cooldown') ? command.conf.cooldown : client.config.cooldowns.default;
 			let examples = [];
 			command.help.examples.forEach((element) => {
 				examples.push(`* ${settings.prefix}${element}`)
@@ -70,17 +71,13 @@ exports.run = (client, message, args, level) => {
 				});
 			}
 
-			if (command.help.hasOwnProperty('extra_info')) {
-				console.log('help object has ', 'extra_info');
-				extraInfo = 'Extra Info\n----------\n' + command.help.extra_info(client, message, args, level);
-			}
-			
+			if (command.help.hasOwnProperty('extra_info')) extraInfo = 'Extra Info\n----------\n' + command.help.extra_info(client, message, args, level);
 			if (hasParams) paramLine = `Parameters\n----------\n${parameters.join("\n")}\n\n`;
 
 			return message.author.send(
 				`# ${command.help.name.toProperCase()}\n` +
 				`${command.help.description}\n\n` +
-				`Cooldown\n--------\n${command.conf.hasOwnProperty('cooldown') ? command.conf.cooldown : client.config.cooldowns.default} seconds\n\n` +
+				`Cooldown\n--------\n${cooldown} seconds (reduced by 50% for donors)\n\n` +
 				`Guild Only\n----------\n${command.conf.guildOnly.toString()}\n\n` +
 				`Aliases\n-------\n${command.conf.aliases.length > 0 ? command.conf.aliases.join(", ") : 'None'}\n\n` +
 				`Usage\n-----\n${settings.prefix}${command.help.usage}\n\n` +
