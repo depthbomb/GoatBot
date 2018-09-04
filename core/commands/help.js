@@ -77,7 +77,7 @@ exports.run = (client, message, args, level) => {
 			return message.author.send(
 				`# ${command.help.name.toProperCase()}\n` +
 				`${command.help.description}\n\n` +
-				`Cooldown\n--------\n${cooldown} seconds (reduced by 50% for donors)\n\n` +
+				`Cooldown\n--------\n${cooldown} seconds (reduced to ${(cooldown / 1.5)} for donors)\n\n` +
 				`Guild Only\n----------\n${command.conf.guildOnly.toString()}\n\n` +
 				`Aliases\n-------\n${command.conf.aliases.length > 0 ? command.conf.aliases.join(", ") : 'None'}\n\n` +
 				`Usage\n-----\n${settings.prefix}${command.help.usage}\n\n` +
