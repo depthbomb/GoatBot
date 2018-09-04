@@ -195,9 +195,7 @@ module.exports = (client) => {
 
 			user.addRole(kennelRole, reason).then(() => {
 				kennelChannel.send(`<@${user.id}>, you have been placed in the kennel.\nReason: ${reason}`);
-				message.delete().then(m => {
-					m.channel.send({ embed });
-				});
+				message.channel.send({ embed });
 			});
 		}
 	};
