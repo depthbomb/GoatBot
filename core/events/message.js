@@ -103,7 +103,7 @@ module.exports = (client, message) => {
 
 	if (client.config.allowances.enabled) {
 		if (isImage) {
-			if (client.config.allowances.images.channels.includes(message.channel.id) || !isServerStaff) {
+			if (client.config.allowances.images.channels.includes(message.channel.id) && !isServerStaff) {
 				const imagesMax = client.config.allowances.images.limit;
 	
 				if (!client.allowances.images.hasOwnProperty(message.author.id)) {
@@ -127,7 +127,7 @@ module.exports = (client, message) => {
 		}
 	
 		if (isUrl) {
-			if (client.config.allowances.links.channels.includes(message.channel.id) || !isServerStaff) {
+			if (client.config.allowances.links.channels.includes(message.channel.id) && !isServerStaff) {
 				const urlsMax = client.config.allowances.links.limit;
 	
 				if (!client.allowances.links.hasOwnProperty(message.author.id)) {
@@ -151,7 +151,7 @@ module.exports = (client, message) => {
 		}
 	
 		if (isItalics) {
-			if (client.config.allowances.italics.channels.includes(message.channel.id) || !isServerStaff) {
+			if (client.config.allowances.italics.channels.includes(message.channel.id) && !isServerStaff) {
 				const italicsMax = client.config.allowances.italics.limit;
 	
 				if (!client.allowances.italics.hasOwnProperty(message.author.id)) {
