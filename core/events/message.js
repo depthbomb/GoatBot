@@ -283,32 +283,6 @@ module.exports = (client, message) => {
 			}
 		}
 
-		if (client.config.dad_joke.enabled && !client.config.dad_joke.exclude_channels.includes(message.channel.id)) {
-			const ex = /^\bi(?:\sa)?\'?m\s+(\w+){3,}$/i;
-			if (null !== message.cleanContent.match(ex)) {
-				//	Chance to trigger the joke
-				const dadJoke = chance.weighted([true, false], [1, 3]);
-
-				//	Extract the first word after "i'm"
-				let word = ex.exec(message.cleanContent)[1];
-	
-				//	Do not trigger joke if the word falls under these
-				if (
-					word.length > 32 ||
-					word === 'like' ||
-					word === 'maybe' ||
-					word === 'very' ||
-					word === 'extremely' ||
-					word === 'going'
-				) return;
-	
-				if (dadJoke) {
-					if (client.config.dad_joke.change_nickname) message.member.setNickname(word, 'Via GoatBot! (dad joke)');
-					return message.channel.send(`Hello, ${word}!`);
-				}
-			}
-		}
-
 		// if (null !== message.content.match(/word/i)) {}
 		/*--------------------------------------------------------------------------*/
 
