@@ -41,7 +41,7 @@ exports.run = async (client, message, args, level) => {
 
 			const creator = message.author.id;
 			const tagName = args[1].toLowerCase();
-			const tagContent = args.slice(2).join(' ');
+			const tagContent = Buffer.from(args.slice(2).join(' ')).toString('base64');
 			const date = moment().unix();
 
 			if (tagName.length < 3) return message.reply('Tag name must be greater than 2 characters.');
@@ -54,7 +54,7 @@ exports.run = async (client, message, args, level) => {
 				if (r.length > 0) {
 					return message.reply('That tag already exists.');
 				} else {
-					db.query(queries.create, [uuid().toUpperCase(), creator, tagName, db.escape(tagContent), date], (e, r, f) => {
+					db.query(queries.create, [uuid().toUpperCase(), creator, tagName, tagContent, date], (e, r, f) => {
 						if(e) return message.reply('Error creating tag!\n' + e);
 						return message.reply('Tag created!');
 					});
@@ -92,8 +92,9 @@ exports.run = async (client, message, args, level) => {
 			if (r.length < 1) return message.reply('Tag does not exist.');
 
 			const tag = r[0];	//	Get first result since there will always be one result
+			const content = Buffer.from(tag.content, 'base64').toString('ascii');
 
-			return message.channel.send(`:label: #${tag.id}\n${tag.content}`);
+			return message.channel.send(`:label: #${tag.id}\n${content}`);
 		});
 	}
 };
