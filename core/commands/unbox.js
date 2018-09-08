@@ -68,8 +68,8 @@ exports.run = async (client, message, args, level) => {
 			client.commandData.unbox.weights[rarity_weights.indexOf(rarity)] = rarity;
 		}
 	} else {
-		//new_weight = old_weight * 0.995 = 0.5% decrease per unbox
-		client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = (client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] * 0.995);
+		// reduce the unboxed tier's weight by 0.75%
+		client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = client.commandData.unbox.weights[qualities.indexOf(chosenRarity)].reduce(client.config.unbox.decrement_value);
 	}
 
 	embed = new RichEmbed()
