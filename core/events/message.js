@@ -151,25 +151,25 @@ module.exports = (client, message) => {
 		}
 	
 		if (isItalics) {
-			if (!client.config.allowances.italics.channels.includes(message.channel.id) || isServerStaff) return;
+			if (client.config.allowances.italics.channels.includes(message.channel.id) || !isServerStaff) {
+				const italicsMax = client.config.allowances.italics.limit;
 	
-			const italicsMax = client.config.allowances.italics.limit;
-	
-			if (!client.allowances.italics.hasOwnProperty(message.author.id)) {
-				client.allowances.italics[message.author.id] = {
-					amount: 1,
-					expires: moment().add(client.config.allowances.italics.expiration, 'm').format('X')
-				};
-			} else {
-				if (client.allowances.italics[message.author.id].amount < italicsMax) {
+				if (!client.allowances.italics.hasOwnProperty(message.author.id)) {
 					client.allowances.italics[message.author.id] = {
-						amount: client.allowances.italics[message.author.id].amount + 1,
+						amount: 1,
 						expires: moment().add(client.config.allowances.italics.expiration, 'm').format('X')
 					};
 				} else {
-					return message.delete().then(m => {
-						m.reply(`You have reached your max allowance for italics sent. This allowance resets in ${moment.unix(client.allowances.italics[message.author.id].expires).toNow(true)}.`);
-					});
+					if (client.allowances.italics[message.author.id].amount < italicsMax) {
+						client.allowances.italics[message.author.id] = {
+							amount: client.allowances.italics[message.author.id].amount + 1,
+							expires: moment().add(client.config.allowances.italics.expiration, 'm').format('X')
+						};
+					} else {
+						return message.delete().then(m => {
+							m.reply(`You have reached your max allowance for italics sent. This allowance resets in ${moment.unix(client.allowances.italics[message.author.id].expires).toNow(true)}.`);
+						});
+					}
 				}
 			}
 		}

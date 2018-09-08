@@ -41,7 +41,7 @@ exports.run = async (client, message, args, level) => {
 
 			const creator = message.author.id;
 			const tagName = args[1].toLowerCase();
-			const tagContent = Buffer.from(args.slice(2).join(' ')).toString('base64');
+			const tagContent = JSON.stringify(args.slice(2).join(' '));
 			const date = moment().unix();
 
 			if (tagName.length < 3) return message.reply('Tag name must be greater than 2 characters.');
@@ -92,7 +92,7 @@ exports.run = async (client, message, args, level) => {
 			if (r.length < 1) return message.reply('Tag does not exist.');
 
 			const tag = r[0];	//	Get first result since there will always be one result
-			const content = Buffer.from(tag.content, 'base64').toString('ascii');
+			const content = JSON.parse(tag.content);
 
 			return message.channel.send(`:label: #${tag.id}\n${content}`);
 		});
