@@ -283,6 +283,10 @@ module.exports = (client, message) => {
 			}
 		}
 
+		if (null !== message.cleanContent.match(/should[\s]{1,}of/ig)) {
+			return message.reply('I think you mean `should have`!');
+		}
+
 		// if (null !== message.content.match(/word/i)) {}
 		/*--------------------------------------------------------------------------*/
 
