@@ -23,6 +23,9 @@
 
 module.exports = async client => {
     const chalk = require('chalk');
+
+    await client.wait(1000);
+
     client.disableEveryone = true;
     client.disabledEvents = [
         'TYPING_START',
