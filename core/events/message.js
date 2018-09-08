@@ -74,8 +74,8 @@ module.exports = (client, message) => {
 		null !== message.cleanContent.match(/[𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡]{1,}/igm)
 	) isItalics = true;
 
-	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment {message.attachments.first().url}`;
-	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment {message.attachments.first().url} with message [${message.cleanContent}]`;
+	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url}`;
+	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
 	else logMessage = `${logPrefix.join(" ")} ${username}: ${message.cleanContent}`;
 
 
