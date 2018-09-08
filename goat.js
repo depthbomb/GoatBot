@@ -31,6 +31,7 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
 const request = require('request');
+const mysql = require('mysql');
 
 class GoatBot extends Discord.Client {
 	constructor (options) {
@@ -40,6 +41,9 @@ class GoatBot extends Discord.Client {
 		this.config = require("./config.js").config;
 		this.commands = new Discord.Collection();
 		this.aliases = new Discord.Collection();
+
+		this.db = this.localMode ? this.config.database_dev : this.config.database;
+
 		this.rootPath = __dirname;
 		this.appPath = `${__dirname}/core`;
 
@@ -76,7 +80,7 @@ class GoatBot extends Discord.Client {
 			green:		"#43b581",
 			blue:		"#3498db",
 			black:		"#333333"
-		}
+		};
 	}
 
 	permlevel (message) {
@@ -292,6 +296,19 @@ const init = async () => {
 			fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
 		});
 	});
+	/* ===================================================== */
+
+
+	/**
+	* Run startup DB queries
+	*/
+	for (let key in client.config.queries) {
+		const db = mysql.createConnection(client.db);
+		const q = client.config.queries[key];
+		db.query(q, (err, res, f) => {
+			if(err) console.log(err);
+		});
+	}
 	/* ===================================================== */
 
 

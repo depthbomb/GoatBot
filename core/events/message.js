@@ -103,49 +103,49 @@ module.exports = (client, message) => {
 
 	if (client.config.allowances.enabled) {
 		if (isImage) {
-			if (!client.config.allowances.images.channels.includes(message.channel.id) || isServerStaff) return;
+			if (client.config.allowances.images.channels.includes(message.channel.id) || !isServerStaff) {
+				const imagesMax = client.config.allowances.images.limit;
 	
-			const imagesMax = client.config.allowances.images.limit;
-	
-			if (!client.allowances.images.hasOwnProperty(message.author.id)) {
-				client.allowances.images[message.author.id] = {
-					amount: 1,
-					expires: moment().add(client.config.allowances.images.expiration, 'm').format('X')
-				};
-			} else {
-				if (client.allowances.images[message.author.id].amount < imagesMax) {
+				if (!client.allowances.images.hasOwnProperty(message.author.id)) {
 					client.allowances.images[message.author.id] = {
-						amount: client.allowances.images[message.author.id].amount + 1,
+						amount: 1,
 						expires: moment().add(client.config.allowances.images.expiration, 'm').format('X')
 					};
 				} else {
-					return message.delete().then(m => {
-						m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
-					});
+					if (client.allowances.images[message.author.id].amount < imagesMax) {
+						client.allowances.images[message.author.id] = {
+							amount: client.allowances.images[message.author.id].amount + 1,
+							expires: moment().add(client.config.allowances.images.expiration, 'm').format('X')
+						};
+					} else {
+						return message.delete().then(m => {
+							m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
+						});
+					}
 				}
 			}
 		}
 	
 		if (isUrl) {
-			if (!client.config.allowances.links.channels.includes(message.channel.id) || isServerStaff) return;
+			if (client.config.allowances.links.channels.includes(message.channel.id) || !isServerStaff) {
+				const urlsMax = client.config.allowances.links.limit;
 	
-			const urlsMax = client.config.allowances.links.limit;
-	
-			if (!client.allowances.links.hasOwnProperty(message.author.id)) {
-				client.allowances.links[message.author.id] = {
-					amount: 1,
-					expires: moment().add(client.config.allowances.links.expiration, 'm').format('X')
-				};
-			} else {
-				if (client.allowances.links[message.author.id].amount < urlsMax) {
+				if (!client.allowances.links.hasOwnProperty(message.author.id)) {
 					client.allowances.links[message.author.id] = {
-						amount: client.allowances.links[message.author.id].amount + 1,
+						amount: 1,
 						expires: moment().add(client.config.allowances.links.expiration, 'm').format('X')
 					};
 				} else {
-					return message.delete().then(m => {
-						m.reply(`You have reached your max allowance for URLs sent. This allowance resets in ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
-					});
+					if (client.allowances.links[message.author.id].amount < urlsMax) {
+						client.allowances.links[message.author.id] = {
+							amount: client.allowances.links[message.author.id].amount + 1,
+							expires: moment().add(client.config.allowances.links.expiration, 'm').format('X')
+						};
+					} else {
+						return message.delete().then(m => {
+							m.reply(`You have reached your max allowance for URLs sent. This allowance resets in ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
+						});
+					}
 				}
 			}
 		}
@@ -283,10 +283,6 @@ module.exports = (client, message) => {
 			}
 		}
 
-		if (null !== message.cleanContent.match(/should[\s]{1,}of/ig)) {
-			return message.reply('I think you mean `should have`!');
-		}
-
 		// if (null !== message.content.match(/word/i)) {}
 		/*--------------------------------------------------------------------------*/
 
@@ -318,8 +314,10 @@ module.exports = (client, message) => {
 			}
 
 			//	TODO: rewrite this filter
-			if (message.member.roles.find(r => r.id === (client.config.roles.donor[0] || client.config.roles.donor[1]))) {
-				cooldown = cooldown.reduce(client.config.cooldowns.reduction.donor);
+			if (message.channel.type !== 'dm') {
+				if (message.member.roles.find(r => r.id === (client.config.roles.donor[0] || client.config.roles.donor[1]))) {
+					cooldown = cooldown.reduce(client.config.cooldowns.reduction.donor);
+				}
 			}
 
 			if (isServerStaff) {
