@@ -29,7 +29,6 @@ module.exports = async client => {
     client.disableEveryone = true;
     client.disabledEvents = [
         'TYPING_START',
-        'VOICE_STATE_UPDATE',
         'VOICE_SERVER_UPDATE',
         'MESSAGE_REACTION_REMOVE',
         'MESSAGE_REACTION_REMOVE_ALL',
