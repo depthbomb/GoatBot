@@ -47,6 +47,7 @@ exports.run = (client, message, args, level) => {
 		let hasParams = false;
 		let paramLine = '';
 		let command;
+		let requiresRole;
 		let parameters = [];
 		let extraInfo = '';
 		if (client.commands.has(args[0])) {
@@ -71,6 +72,7 @@ exports.run = (client, message, args, level) => {
 				});
 			}
 
+			if (command.conf.hasOwnProperty('requiredRole')) requiresRole = 'Required Role\n-------------\n' + command.conf.requiredRole + '\n\n';
 			if (command.help.hasOwnProperty('extra_info')) extraInfo = 'Extra Info\n----------\n' + command.help.extra_info(client, message, args, level);
 			if (hasParams) paramLine = `Parameters\n----------\n${parameters.join("\n")}\n\n`;
 
@@ -79,6 +81,7 @@ exports.run = (client, message, args, level) => {
 				`${command.help.description}\n\n` +
 				`Cooldown\n--------\n${cooldown} seconds (reduced to ${(cooldown.reduce(client.config.cooldowns.reduction.donor))} for donors, ${cooldown.reduce(client.config.cooldowns.reduction.admin, 1)} for staff)\n\n` +
 				`Guild Only\n----------\n${command.conf.guildOnly.toString()}\n\n` +
+				requiresRole +
 				`Aliases\n-------\n${command.conf.aliases.length > 0 ? command.conf.aliases.join(", ") : 'None'}\n\n` +
 				`Usage\n-----\n${settings.prefix}${command.help.usage}\n\n` +
 				paramLine +

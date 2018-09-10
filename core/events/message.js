@@ -41,9 +41,9 @@ module.exports = (client, message) => {
 	if (message.author.bot || message.system) return;
 
 	const rawMessage	= message.content;
-	const isAdmin		= (message.author.id === client.config.ownerId);
+	const isOwner		= (message.author.id === client.config.ownerId);
 	const level			= client.permlevel(message);
-	const isServerStaff = message.channel.type === 'dm' ? false : (message.member.roles.find(r => r.id === client.config.roles.admin) || message.member.roles.find(r => r.id === client.config.roles.mod) || level > 2 || isAdmin);
+	const isServerStaff = message.channel.type === 'dm' ? false : (message.member.roles.find(r => r.name === client.config.roles.admin) || message.member.roles.find(r => r.name === client.config.roles.mod) || level > 2 || isOwner);
 
 	let logPrefix = [];
 	let username = message.member !== null ? message.member.displayName : message.author.tag;
@@ -305,6 +305,14 @@ module.exports = (client, message) => {
 
 		if (level >= cmd.conf.permLevel) {
 
+
+			if (message.guild && cmd.conf.hasOwnProperty('requiredRole')) {
+				if (message.member.roles.find(r => r.name !== cmd.conf.requiredRole) && !isServerStaff) {
+					return message.reply(`You must have the ${cmd.conf.requiredRole} to use this command.`);
+				}
+			}
+
+
 			let cooldown;
 
 			if (!cmd.conf.hasOwnProperty('cooldown')) {
@@ -314,10 +322,10 @@ module.exports = (client, message) => {
 			}
 
 			//	TODO: rewrite this filter
-			if (message.channel.type !== 'dm') {
-				if (message.member.roles.find(r => r.id === (client.config.roles.donor[0] || client.config.roles.donor[1]))) {
-					cooldown = cooldown.reduce(client.config.cooldowns.reduction.donor);
-				}
+			if (
+				message.member.roles.find(r => r.name === (client.config.roles.donor))
+			) {
+				cooldown = cooldown.reduce(client.config.cooldowns.reduction.donor);
 			}
 
 			if (isServerStaff) {
