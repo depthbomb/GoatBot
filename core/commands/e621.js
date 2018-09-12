@@ -30,7 +30,7 @@ exports.run = async (client, message, args, level) => {
 
 	const ratings = ["e", "q", "s", "a"];
 	let blacklistedTags = ["vore", "inflation", "gore", "macro", "scat", "watersports", "suicide", "fag", "abuse", "imminent_death", "loli", "shota", "diaper", "urine", "vomit",  "torture", "necrophilia", "castration", "hyper", "death_by_penis", "obese", "morbidly_obese", "epilepsy_warning", "feces", "flatulence", "fart", "smegma", "nightmare_fuel", "cboy", "incest", "mutilation", "cheese_grater", "sensory_deprivation", "permanent_bondage", "flash", "family_guy", "death", "what", "advertisement", "what_has_science_done", "where_is_your_god_now", "male_birth", "male_pregnancy", "puffy_anus", "type:swf", "type:webm", "order:score_asc", "swastika", "nazi", "<30_second_webm", ">30_second_webm", "no_sound"];
-	let nsfwBlacklist = ['cub', 'young', 'pregnant', 'nezumi'];	//	Tags that will be disallowed when using Q, E, and A ratings
+	let nsfwBlacklist = ['cub', 'young', 'pregnant', 'nezumi', 'mei_(one_stormy_night)'];	//	Tags that will be disallowed when using Q, E, and A ratings
 
 	let rating = args[0];
 	let pageNum = args[1];
