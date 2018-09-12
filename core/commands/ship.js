@@ -46,7 +46,7 @@ exports.run = async (client, message, args, level) => {
 		return client.error(message, error);
 	}
 
-	const seed = (parseInt('0x' + crypto.createHash('md5').update(thing).digest("hex")) + parseInt('0x' + crypto.createHash('md5').update(thing2).digest("hex")));
+	const seed = parseInt((parseInt('0x' + crypto.createHash('md5').update(thing).digest("hex")) * parseInt('0x' + crypto.createHash('md5').update(thing2).digest("hex"))).toString().replace('.', ''));
 	const chance = new Chance(seed);
 	const output = Math.floor(chance.random() * (100 - 1 + 1)) + 1;
 	const blocks = Math.floor(output / 10);
@@ -70,6 +70,7 @@ exports.run = async (client, message, args, level) => {
 		.setColor('#be1931')
 		.setTitle('\:heart: Ship Calculator')
 		.setDescription(`\:small_red_triangle_down: \`${thing}\`\n\:small_red_triangle: \`${thing2}\`\n\n${output}% [\`${bar}${barFill}\`](https://www.buymeacoff.ee/depthbomb) ${response}`)
+	;
 
 	return message.reply({ embed });
 };
