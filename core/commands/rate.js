@@ -61,7 +61,7 @@ exports.conf = {
 		'rating'
 	],
 	permLevel: 0,
-	deleteTrigger: true,
+	deleteTrigger: false,
 };
 
 exports.help = {

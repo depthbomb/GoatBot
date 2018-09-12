@@ -39,7 +39,7 @@ exports.conf = {
 		"rr",
 		"russianroulette"
 	],
-	cooldown: 2,
+	cooldown: 1.5,
 	permLevel: 0,
 	deleteTrigger: true,
 };

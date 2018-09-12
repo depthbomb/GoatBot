@@ -134,6 +134,7 @@ exports.conf = {
 	enabled: true,
 	guildOnly: false,
 	cooldown: 6,
+	globalCd: true,
 	aliases: [
 		"e6",
 		"salt",
