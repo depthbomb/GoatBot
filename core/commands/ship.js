@@ -24,6 +24,7 @@
 exports.run = async (client, message, args, level) => {
 	if (args.length < 2) return;
 
+	const crypto = require('crypto');
 	const { RichEmbed } = require('discord.js');
 	const Chance = require('chance');
 	let thing = args[0].usToSp().trim();
@@ -31,25 +32,26 @@ exports.run = async (client, message, args, level) => {
 
 	if (thing.toLowerCase() === thing2.toLowerCase()) return message.reply('You cannot ship two identical items.');
 
-	const chance = new Chance(thing, thing2, new Date().getFullYear());
-	const output = Math.floor(chance.random() * (100 - 1 + 1)) + 1;
-	const blocks = Math.floor(output / 10);
-	const bar = '█'.repeat(blocks);
-	const barFill = ' ​'.repeat((10 - blocks));
-
 	try {
 		if (thing.match(/<@!?\d{17,19}>/g)) {
 			let user1 = message.mentions.members.first();
-			thing = user1.displayName;
+			thing = thing.replace(/<@!?\d{17,19}>/ig, user.displayName);
 		}
 	
 		if (thing2.match(/<@!?\d{17,19}>/g)) {
 			let user2 = message.mentions.members.last();
-			thing2 = user2.displayName;
+			thing2 = thing2.replace(/<@!?\d{17,19}>/ig, user2.displayName);
 		}
 	} catch (error) {
 		return client.error(message, error);
 	}
+
+	const seed = (parseInt('0x' + crypto.createHash('md5').update(thing).digest("hex")) + parseInt('0x' + crypto.createHash('md5').update(thing2).digest("hex")));
+	const chance = new Chance(seed);
+	const output = Math.floor(chance.random() * (100 - 1 + 1)) + 1;
+	const blocks = Math.floor(output / 10);
+	const bar = '█'.repeat(blocks);
+	const barFill = ' ​'.repeat((10 - blocks));
 
 	let response;
 	if(output >= 0 && output < 10) response = "_Uh oh!_ Maybe you two should see other people";

@@ -322,9 +322,7 @@ module.exports = (client, message) => {
 			}
 
 			//	TODO: rewrite this filter
-			if (
-				message.member.roles.find(r => r.name === (client.config.roles.donor))
-			) {
+			if (message.member.roles.find(r => r.name === (client.config.roles.donor))) {
 				cooldown = cooldown.reduce(client.config.cooldowns.reduction.donor);
 			}
 
