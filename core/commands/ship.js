@@ -35,7 +35,7 @@ exports.run = async (client, message, args, level) => {
 	try {
 		if (thing.match(/<@!?\d{17,19}>/g)) {
 			let user1 = message.mentions.members.first();
-			thing = thing.replace(/<@!?\d{17,19}>/ig, user.displayName);
+			thing = thing.replace(/<@!?\d{17,19}>/ig, user1.displayName);
 		}
 	
 		if (thing2.match(/<@!?\d{17,19}>/g)) {
