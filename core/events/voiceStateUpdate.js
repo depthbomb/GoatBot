@@ -21,4 +21,4 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (oldMember, newMember) => {};
+module.exports = (client, oldMember, newMember) => {};
