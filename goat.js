@@ -275,12 +275,19 @@ const init = async () => {
 	* Cache SourceBans bans punishment
 	*/
 	request(client.config.sourcebans.bans_url, (err, res, body) => {
-		if (err) throw new Error(err);
-		const data = JSON.parse(body);
-		Object.keys(data).forEach(key => {
-			const cacheFile = path.join(client.cachePath, 'sb', `b_${key}.cache`);
-			fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
-		});
+		if (err) {
+			console.log(err);
+		} else {
+			try {
+				const data = JSON.parse(body);
+				Object.keys(data).forEach(key => {
+					const cacheFile = path.join(client.cachePath, 'sb', `b_${data[key]['bid']}.cache`);
+					fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
+				});
+			} catch (error) {
+				console.log(error);
+			}
+		}
 	});
 	/* ===================================================== */
 
@@ -289,12 +296,19 @@ const init = async () => {
 	* Cache SourceBans comms punishments
 	*/
 	request(client.config.sourcebans.comms_url, (err, res, body) => {
-		if (err) throw new Error(err);
-		const data = JSON.parse(body);
-		Object.keys(data).forEach(key => {
-			const cacheFile = path.join(client.cachePath, 'sb', `c_${key}.cache`);
-			fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
-		});
+		if (err) {
+			console.log(err);
+		} else {
+			try {
+				const data = JSON.parse(body);
+				Object.keys(data).forEach(key => {
+					const cacheFile = path.join(client.cachePath, 'sb', `c_${data[key]['bid']}.cache`);
+					fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
+				});
+			} catch (error) {
+				console.log(error)
+			}
+		}
 	});
 	/* ===================================================== */
 

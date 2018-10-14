@@ -72,7 +72,11 @@ exports.run = (client, message, args, level) => {
 				});
 			}
 
-			if (command.conf.hasOwnProperty('requiredRole')) requiresRole = 'Required Role\n-------------\n' + command.conf.requiredRole + '\n\n';
+			if (command.conf.hasOwnProperty('requiredRole')) {
+				requiresRole = 'Required Role\n-------------\n' + command.conf.requiredRole + '\n\n'
+			} else {
+				requiresRole = '';
+			}
 			if (command.help.hasOwnProperty('extra_info')) extraInfo = 'Extra Info\n----------\n' + command.help.extra_info(client, message, args, level);
 			if (hasParams) paramLine = `Parameters\n----------\n${parameters.join("\n")}\n\n`;
 

@@ -59,7 +59,7 @@ module.exports = (client, message) => {
 	let isImage = false;
 	let attachmentWithMessage = false;
 	let isUrl = false;
-	let isItalics = false;
+	let isFormatted = false;
 
 	let logMessage;
 
@@ -70,9 +70,10 @@ module.exports = (client, message) => {
 	if (
 		null !== message.cleanContent.match(/\*[a-zA-Z0-9\s\n]{1,}\*/igm) ||
 		null !== message.cleanContent.match(/\*\*\*[a-zA-Z0-9\s\n]{1,}\*\*\*/igm) ||
+		null !== message.cleanContent.match(/\*\*[a-zA-Z0-9\s\n]{1,}\*\*/igm) ||
 		null !== message.cleanContent.match(/_[a-zA-Z0-9\s\n]{1,}_/igm) ||
 		null !== message.cleanContent.match(/[𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡]{1,}/igm)
-	) isItalics = true;
+	) isFormatted = true;
 
 	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url}`;
 	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
@@ -82,23 +83,23 @@ module.exports = (client, message) => {
 	/**
 	 * Handle messages during slow mode
 	 */
-	if (client.slowMode.channels.hasOwnProperty(message.channel.id)) {
-		const slowmodeChannel = client.slowMode.channels[message.channel.id];
+	// if (client.slowMode.channels.hasOwnProperty(message.channel.id)) {
+	// 	const slowmodeChannel = client.slowMode.channels[message.channel.id];
 
-		if (slowmodeChannel.enabled && !isServerStaff) {
-			if (slowmodeChannel.users.includes(message.author.id)) {
-				return message.delete().catch(e => {});
-			} else {
-				if (!message.author.bot) {
-					slowmodeChannel.users.push(message.author.id);
-					setTimeout(() => {
-						const userIndex = slowmodeChannel.users.indexOf(message.author.id);
-						slowmodeChannel.users.splice(userIndex, 1);
-					}, slowmodeChannel.timeout);
-				}
-			}
-		}
-	}
+	// 	if (slowmodeChannel.enabled && !isServerStaff) {
+	// 		if (slowmodeChannel.users.includes(message.author.id)) {
+	// 			return message.delete().catch(e => {});
+	// 		} else {
+	// 			if (!message.author.bot) {
+	// 				slowmodeChannel.users.push(message.author.id);
+	// 				setTimeout(() => {
+	// 					const userIndex = slowmodeChannel.users.indexOf(message.author.id);
+	// 					slowmodeChannel.users.splice(userIndex, 1);
+	// 				}, slowmodeChannel.timeout);
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 
 	if (client.config.allowances.enabled) {
@@ -150,24 +151,24 @@ module.exports = (client, message) => {
 			}
 		}
 	
-		if (isItalics) {
-			if (client.config.allowances.italics.channels.includes(message.channel.id) && !isServerStaff) {
-				const italicsMax = client.config.allowances.italics.limit;
+		if (isFormatted) {
+			if (client.config.allowances.formatted.channels.includes(message.channel.id) && !isServerStaff) {
+				const formattedMax = client.config.allowances.formatted.limit;
 	
-				if (!client.allowances.italics.hasOwnProperty(message.author.id)) {
-					client.allowances.italics[message.author.id] = {
+				if (!client.allowances.formatted.hasOwnProperty(message.author.id)) {
+					client.allowances.formatted[message.author.id] = {
 						amount: 1,
-						expires: moment().add(client.config.allowances.italics.expiration, 'm').format('X')
+						expires: moment().add(client.config.allowances.formatted.expiration, 'm').format('X')
 					};
 				} else {
-					if (client.allowances.italics[message.author.id].amount < italicsMax) {
-						client.allowances.italics[message.author.id] = {
-							amount: client.allowances.italics[message.author.id].amount + 1,
-							expires: moment().add(client.config.allowances.italics.expiration, 'm').format('X')
+					if (client.allowances.formatted[message.author.id].amount < formattedMax) {
+						client.allowances.formatted[message.author.id] = {
+							amount: client.allowances.formatted[message.author.id].amount + 1,
+							expires: moment().add(client.config.allowances.formatted.expiration, 'm').format('X')
 						};
 					} else {
 						return message.delete().then(m => {
-							m.reply(`You have reached your max allowance for italics sent. This allowance resets in ${moment.unix(client.allowances.italics[message.author.id].expires).toNow(true)}.`);
+							m.reply(`You have reached your max allowance for formatted messages sent. This allowance resets in ${moment.unix(client.allowances.formatted[message.author.id].expires).toNow(true)}.`);
 						});
 					}
 				}
@@ -206,14 +207,14 @@ module.exports = (client, message) => {
 		*/
 		if (
 			//	Remove gimmicky blank messages
-			null !== message.content.match(/```[\s\n\t]+```/g) ||
-			null !== message.content.match(/`[\s\n\t]+`/g) ||
-			null !== message.content.match(/\*\*[\s\n\t]+\*\*/g) ||
-			null !== message.content.match(/\*[\s\n\t]+\*/g) ||
-			null !== message.content.match(/_[\s\n\t]+_/g) ||
+			null !== message.content.match(/^```[\s\n\t]+```$/g) ||
+			null !== message.content.match(/^`[\s\n\t]+`$/g) ||
+			null !== message.content.match(/^\*\*[\s\n\t]+\*\*$/g) ||
+			null !== message.content.match(/^\*[\s\n\t]+\*$/g) ||
+			null !== message.content.match(/^_[\s\n\t]+_$/g) ||
 
 			//	Remove single character responses
-			null !== message.content.match(/_[.,_\-*+=`~]{1}_/g) ||
+			null !== message.content.match(/^_[.,_\-*+=`~]{1}_$/g) ||
 			null !== message.content.match(/^(\*?[.,_\-*+=`~]{1}\*?)$/g)
 		) {
 			if (isServerStaff) return;

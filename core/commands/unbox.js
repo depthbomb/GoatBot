@@ -45,7 +45,7 @@ exports.run = async (client, message, args, level) => {
 
 	const chosenRarity = chance.weighted(qualities, rarity_weights);
 	const color = chosenRarity.color,
-		image = `https://static.caprine.net/goatbot_assets/goats/${chosenRarity.file}`,
+		image = `https://cyan.tf/goatbot/goats/${chosenRarity.file}`,
 		weight = rarity_weights[qualities.indexOf(chosenRarity)];
 
 	let prefix = chosenRarity.hasOwnProperty('prefix') ? chosenRarity.prefix : '';
