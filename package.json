@@ -44,7 +44,7 @@
 		"mysql": "^2.16.0",
 		"pluralize": "^7.0.0",
 		"request": "^2.88.0",
-		"rss-parser": "^3.4.3",
+		"rss-parser": "^3.5.2",
 		"snekfetch": "^4.0.4",
 		"ssq": "0.0.1",
 		"steamid": "^1.1.0",
