@@ -28,7 +28,7 @@ exports.run = async (client, message, args, level) => {
 			.setAuthor("About GoatBot!", client.user.avatarURL)
 			.setColor(client.config.color)
 			.setDescription(`I am a general purpose Discord bot with a variety of fun, informative, and moderative commands as well as useful statistical functions. I am owned and developed by <@${client.config.ownerId}> using the [Discord.js Node module](https://discord.js.org/).\n\I'm still a work-in-progress and new features as well as commands are still being developed. If you would like something to be added, contact <@${client.config.ownerId}> here on Discord, [Steam](https://steamcommunity.com/id/minorin), or make a post in the [Issue Tracker.](https://github.com/depthbomb/GoatBot/issues)`)
-			.addField("Message from my creator", "GoatBot is maintained and hosted 100% by me out of pocket in my spare time. Like what I do? [Buy me a coffee!](https://www.buymeacoff.ee/depthbomb)")
+			.addField("Message from my creator", "GoatBot is maintained and hosted 100% by me out of pocket in my spare time. Like what I do? [Support me!](https://paypal.me/depthbomb)")
 			.addField("More Info",
 				"`!about cooldowns`\n" +
 				"`!about logging`\n"

@@ -27,19 +27,9 @@ exports.run = async (client, message, args, level) => {
 	const Chance = require('chance');
 	const chance = new Chance();
 
-	let storedWeights = false;
-
-	if (!client.commandData.hasOwnProperty('unbox')) {
-		client.commandData.unbox = {
-			weights: []
-		};
-	} else {
-		storedWeights = true;
-	}
-
 	const unboxConfig = client.config.unbox;
 	const qualities = unboxConfig.rarities;
-	const rarity_weights = storedWeights ? client.commandData.unbox.weights : unboxConfig.rarity_weights;
+	const rarity_weights = unboxConfig.rarity_weights;
 
 	let embed;
 
@@ -56,20 +46,6 @@ exports.run = async (client, message, args, level) => {
 	let weightSum = 0;
 	for (let i = 0; i < rarity_weights.length; i++) {
 		weightSum += rarity_weights[i];
-	}
-
-	/**
-	 * Add config rarities to memory if not already in.
-	 * We will be using this stored data to decrement a rarity when it is unboxed.
-	 */
-	if (client.commandData.unbox.weights.length === 0) {
-		for (let i = 0; i < rarity_weights.length; i++) {
-			const rarity = rarity_weights[i];
-			client.commandData.unbox.weights[rarity_weights.indexOf(rarity)] = rarity;
-		}
-	} else {
-		// reduce the unboxed tier's weight by 0.75%
-		client.commandData.unbox.weights[qualities.indexOf(chosenRarity)] = client.commandData.unbox.weights[qualities.indexOf(chosenRarity)].reduce(client.config.unbox.decrement_value);
 	}
 
 	embed = new RichEmbed()

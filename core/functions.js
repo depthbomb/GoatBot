@@ -23,6 +23,7 @@
 
 module.exports = (client) => {
 	const fs = require('fs');
+	const path = require('path');
 
 	client.trunc = require('truncate');
 	client.uuid = require('uuid/v4');
@@ -123,6 +124,7 @@ module.exports = (client) => {
 	 * @param {string} authorImage "Author" image
 	 */
 	client.logAction = (title, logMessage, color = client.colors.default, authorName, authorImage = client.guilds.find(g => g.id === client.config.mainGuild).iconURL) => {
+		if (client.disableLog) return;
 		const { RichEmbed } = require('discord.js');
 		const logChannel = client.channels.find(c => c.id === client.config.logChannel);
 		const embed = new RichEmbed()

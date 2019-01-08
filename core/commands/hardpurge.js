@@ -22,6 +22,9 @@
 */
 
 exports.run = (client, message, args, level) => {
+	const fs = require('fs'),
+		  path = require('path');
+
 	let num;
 	if (args.length !== 1) {
 		num = 10;				//	Default to 10 messages
@@ -29,11 +32,21 @@ exports.run = (client, message, args, level) => {
 		num = parseInt(args[0]);
 	}
 
-	if (num > 100) num = 100;	//	We can only purge 100 messages at most
+	if (num > 100) num = 100;
 
+	let n = 0;
 	message.delete().then(() => {
-		message.channel.bulkDelete(num, true).catch(e => {
-			console.trace(e);
+		message.channel.fetchMessages({ limit: num }).then(messages => {
+			client.disableLog = true;
+			messages.forEach(m => {
+				m.delete().then(() => {
+					n++;
+					if (n === num) {
+						console.log('Done hardpurging');
+						client.disableLog = false;
+					}
+				});
+			});
 		});
 	});
 };
@@ -41,21 +54,19 @@ exports.run = (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	guildOnly: true,
-	aliases: [
-		"prune"
-	],
+	aliases: [],
 	permLevel: 10
 };
 
 exports.help = {
-	name: "purge",
+	name: "hardpurge",
 	category: "Moderation",
-	description: "Purges a number of messages in the current channel",
-	usage: "purge [number?]",
+	description: "Purges a number of messages in the current channel, without using bulkDelete",
+	usage: "nsfw [number?]",
 	params: {
 		"number": "Number of messages to purge from the current channel. Defaults to 10"
 	},
 	examples: [
-		"purge 15"
+		"hardpurge 15"
 	]
 };

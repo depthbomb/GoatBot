@@ -24,30 +24,15 @@
 module.exports = (client, member) => {
 	const refugeeRole = member.guild.roles.find(r => r.name === 'Refugee').id;
 	const memberRole = member.guild.roles.find(r => r.name === 'Member').id;
-
 	const greetingChannel = member.guild.channels.find(c => c.id === client.config.greetingChannel);
 	const refugeeChannel = member.guild.channels.find(c => c.id === '431266723736322048');
 	const greeting = client.config.greetings.shuffle()[0].replace('{user}', `<@${member.id}>`);
 
 	if (!member.user.bot) {
 		greetingChannel.send(greeting);
-
 		member.addRole(refugeeRole).then(mem => {
-			if (!client.deported.includes(mem.id)) {
-				client.log("bot", `Sending welcome DM to new user, ${member.user.tag}.`);
-	
-				mem.send(`**Hey, ${mem.user.username}!** Welcome to the Cyan.TF Discord server.\n\n**You may notice that you can't see other users or channels. Do not worry!** For security and abuse reasons, you have been given a temporary role that separates you from the other users and channels. You will automatically be given access to the rest of the server after 5 minutes. If you are lucky, an admin will give you the role quicker so you can jump right in!\n\nIn the mean time, you can send messages in the \`#refugee-camp\` channel. Also, make sure to read the rules and other info in the \`#rules\` channel at the top.\n\n_We are glad to have you in the server!\nHave fun!_`);
-			
-				/**
-				* Remove the restricted role and give the user the member role after the provided delay
-				*/
-				setTimeout(() => {
-					mem.removeRole(refugeeRole, 'Via GoatBot!');
-					mem.addRole(memberRole, 'Via GoatBot!');
-				}, (client.config.autoRoles.unrestrictDelay * 1000));
-			} else {
-				return refugeeChannel.send(`<@${member.id}>, you have been flagged as _deported_. This means that you are a former user or have left & joined frequently. You will not automatically be given the member role and must contact an admin directly to get your refugee role lifted.`);
-			}
+			client.log("bot", `Sending welcome DM to new user, ${member.user.tag}.`);
+			refugeeChannel.send(`**Hey, ${mem.user.username}!** Welcome to the Cyan.TF Discord server.\n\n**You may notice that you can't see other users or channels. Do not worry!** For security and abuse reasons, you have been separated from other users and channels. If you are known in the community, you will be given access to the rest of the server quickly. If you aren't, however, you will need to get the admin's attention. Try pinging them (without spamming!) and explaining who you are.\n\nYou can send messages in the \`#refugee-camp\` channel, but a message will automatically be deleted 10 minutes after sending. Also, make sure to read the rules and other info in the \`#rules\` channel at the top.\n\n_We are glad to have you in the server!\nHave fun!_`);
 		}).catch(e => {
 			throw new Error(e);
 		});

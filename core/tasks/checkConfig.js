@@ -4,7 +4,7 @@
 module.exports = async (client) => {
 	const path = require('path');
 	return task = {
-		interval: 10,
+		interval: 60,
 		action: () => {
 			const oldConfig = JSON.stringify(client.config);
 			const newConfig = JSON.stringify(require(path.join(client.rootPath, 'config.js')).config);

@@ -69,7 +69,7 @@ exports.run = async (client, message, args, level) => {
 	let embed = new RichEmbed()
 		.setColor('#be1931')
 		.setTitle('\:heart: Ship Calculator')
-		.setDescription(`\:small_red_triangle_down: \`${thing}\`\n\:small_red_triangle: \`${thing2}\`\n\n${output}% [\`${bar}${barFill}\`](https://www.buymeacoff.ee/depthbomb) ${response}`)
+		.setDescription(`\:small_red_triangle_down: \`${thing}\`\n\:small_red_triangle: \`${thing2}\`\n\n${output}% [\`${bar}${barFill}\`](https://paypal.me/depthbomb) ${response}`)
 	;
 
 	return message.reply({ embed });
@@ -91,10 +91,10 @@ exports.help = {
 	usage: "ship [thing] [thing2?]",
 	params: {
 		"thing": "Thing to ship yourself with, use underscores in place of spaces",
-		"thing2": "(Optional) Ships the first thing with this one"
+		"thing2": "(Optional) Ships the first thing with this one. No need for underscores as spaces"
 	},
 	examples: [
-		"ship me your_mom",
+		"ship your_mom me",
 		"ship @Username#0000"
 	]
 };

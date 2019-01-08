@@ -31,7 +31,6 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
 const request = require('request');
-const mysql = require('mysql');
 
 class GoatBot extends Discord.Client {
 	constructor (options) {
@@ -42,7 +41,7 @@ class GoatBot extends Discord.Client {
 		this.commands = new Discord.Collection();
 		this.aliases = new Discord.Collection();
 
-		this.db = this.localMode ? this.config.database_dev : this.config.database;
+		this.disableLog = false;
 
 		this.rootPath = __dirname;
 		this.appPath = `${__dirname}/core`;
@@ -69,7 +68,7 @@ class GoatBot extends Discord.Client {
 
 		this.commandData = {};
 
-		this.allowances = { images: {}, links: {}, italics: {} };
+		this.allowances = { images: {}, links: {}, formatted: {}, singles: {} };
 		
 		this.colors = {
 			brand:		"#0097a7",
@@ -310,19 +309,6 @@ const init = async () => {
 			}
 		}
 	});
-	/* ===================================================== */
-
-
-	/**
-	* Run startup DB queries
-	*/
-	for (let key in client.config.queries) {
-		const db = mysql.createConnection(client.db);
-		const q = client.config.queries[key];
-		db.query(q, (err, res, f) => {
-			if(err) console.log(err);
-		});
-	}
 	/* ===================================================== */
 
 
