@@ -26,8 +26,6 @@ module.exports = (client, message) => {
 	const path = require('path');
 	const ms = require('ms');
 	const moment = require('moment');
-	const Chance = require('chance');
-	const chance = new Chance();
 
 	/**
 	*	Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
@@ -40,17 +38,19 @@ module.exports = (client, message) => {
 
 	if (message.author.bot || message.system) return;
 
+	const isDm			= message.channel.type === 'dm';
 	const rawMessage	= message.content;
 	const isOwner		= (message.author.id === client.config.ownerId);
 	const level			= client.permlevel(message);
-	const isServerStaff = message.channel.type === 'dm' ? false : (message.member.roles.find(r => r.name === client.config.roles.admin) || message.member.roles.find(r => r.name === client.config.roles.mod) || level > 2 || isOwner);
+	const isServerStaff = isDm ? false : (message.member.roles.find(r => r.name === client.config.roles.admin) || message.member.roles.find(r => r.name === client.config.roles.mod) || level > 2 || isOwner);
+	const isDonor		= isDm ? false : message.member.roles.find(r => r.name === (client.config.roles.donor));
 
 	let logPrefix = [];
 	let username = message.member !== null ? message.member.displayName : message.author.tag;
 
-	if (message.channel.type !== "dm" && message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
+	if (!isDm && message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
 
-	if (message.channel.type === "dm") logPrefix.push("(DM)");
+	if (isDm) logPrefix.push("(DM)");
 	else logPrefix.push(`#${message.channel.name}`);
 
 	if (message.tts) logPrefix.push('[TTS]');
@@ -60,7 +60,6 @@ module.exports = (client, message) => {
 	let attachmentWithMessage = false;
 	let isUrl = false;
 	let isFormatted = false;
-	let isSingle = false;
 
 	let logMessage;
 
@@ -78,9 +77,6 @@ module.exports = (client, message) => {
 		null !== message.cleanContent.match(/[𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡]{1,}/igm) ||
 		null !== message.cleanContent.match(/[🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿]{1,}/igm)
 	) isFormatted = true;
-	if (
-		null !== message.content.match(/^[abcdefghijlmnpqrstvwxz]{1}$/ig)
-	) isSingle = true;
 
 	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url}`;
 	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
@@ -88,97 +84,68 @@ module.exports = (client, message) => {
 
 
 	if (client.config.allowances.enabled) {
-		if (isImage) {
-			if (client.config.allowances.images.channels.includes(message.channel.id) && !isServerStaff) {
-				const imagesMax = client.config.allowances.images.limit;
-	
-				if (!client.allowances.images.hasOwnProperty(message.author.id)) {
-					client.allowances.images[message.author.id] = {
-						amount: 1,
-						expires: moment().add(client.config.allowances.images.expiration, 'm').format('X')
-					};
-				} else {
-					if (client.allowances.images[message.author.id].amount < imagesMax) {
+		if (!isDm) {
+			if (isImage) {
+				if (client.config.allowances.images.channels.includes(message.channel.id) && !isServerStaff) {
+					const imagesMax = client.config.allowances.images.limit;
+					if (!client.allowances.images.hasOwnProperty(message.author.id)) {
 						client.allowances.images[message.author.id] = {
-							amount: client.allowances.images[message.author.id].amount + 1,
+							amount: 1,
 							expires: moment().add(client.config.allowances.images.expiration, 'm').format('X')
 						};
 					} else {
-						return message.delete().then(m => {
-							m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
-						});
+						if (client.allowances.images[message.author.id].amount < imagesMax) {
+							client.allowances.images[message.author.id] = {
+								amount: client.allowances.images[message.author.id].amount + 1,
+								expires: moment().add(client.config.allowances.images.expiration, 'm').format('X')
+							};
+						} else {
+							return message.delete().then(m => {
+								m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
+							});
+						}
 					}
 				}
-			}
-		}
-	
-		if (isUrl) {
-			if (client.config.allowances.links.channels.includes(message.channel.id) && !isServerStaff) {
-				const urlsMax = client.config.allowances.links.limit;
-	
-				if (!client.allowances.links.hasOwnProperty(message.author.id)) {
-					client.allowances.links[message.author.id] = {
-						amount: 1,
-						expires: moment().add(client.config.allowances.links.expiration, 'm').format('X')
-					};
-				} else {
-					if (client.allowances.links[message.author.id].amount < urlsMax) {
+			} else if (isUrl) {
+				if (client.config.allowances.links.channels.includes(message.channel.id) && !isServerStaff) {
+					const urlsMax = client.config.allowances.links.limit;
+					if (!client.allowances.links.hasOwnProperty(message.author.id)) {
 						client.allowances.links[message.author.id] = {
-							amount: client.allowances.links[message.author.id].amount + 1,
+							amount: 1,
 							expires: moment().add(client.config.allowances.links.expiration, 'm').format('X')
 						};
 					} else {
-						return message.delete().then(m => {
-							m.reply(`You have reached your max allowance for URLs sent. This allowance resets in ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
-						});
+						if (client.allowances.links[message.author.id].amount < urlsMax) {
+							client.allowances.links[message.author.id] = {
+								amount: client.allowances.links[message.author.id].amount + 1,
+								expires: moment().add(client.config.allowances.links.expiration, 'm').format('X')
+							};
+						} else {
+							return message.delete().then(m => {
+								m.reply(`You have reached your max allowance for URLs sent. This allowance resets in ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
+							});
+						}
 					}
 				}
-			}
-		}
-	
-		if (isFormatted) {
-			if (client.config.allowances.formatted.channels.includes(message.channel.id) && !isServerStaff) {
-				const formattedMax = client.config.allowances.formatted.limit;
-	
-				if (!client.allowances.formatted.hasOwnProperty(message.author.id)) {
-					client.allowances.formatted[message.author.id] = {
-						amount: 1,
-						expires: moment().add(client.config.allowances.formatted.expiration, 'm').format('X')
-					};
-				} else {
-					if (client.allowances.formatted[message.author.id].amount < formattedMax) {
+			} else if (isFormatted) {
+				if (client.config.allowances.formatted.channels.includes(message.channel.id) && !isServerStaff) {
+					const formattedMax = client.config.allowances.formatted.limit;
+					if (!client.allowances.formatted.hasOwnProperty(message.author.id)) {
 						client.allowances.formatted[message.author.id] = {
-							amount: client.allowances.formatted[message.author.id].amount + 1,
+							amount: 1,
 							expires: moment().add(client.config.allowances.formatted.expiration, 'm').format('X')
 						};
 					} else {
-						return message.delete().then(m => {
-							m.reply(`You have reached your max allowance for formatted messages sent. This allowance resets in ${moment.unix(client.allowances.formatted[message.author.id].expires).toNow(true)}.`);
-						});
-					}
-				}
-			}
-		}
-
-		if (isSingle) {
-			if (client.config.allowances.singles.channels.includes(message.channel.id) && !isServerStaff) {
-				const singlesMax = client.config.allowances.singles.limit;
-	
-				if (!client.allowances.singles.hasOwnProperty(message.author.id)) {
-					client.allowances.singles[message.author.id] = {
-						amount: 1,
-						expires: moment().add(client.config.allowances.singles.expiration, 'm').format('X')
-					};
-				} else {
-					if (client.allowances.singles[message.author.id].amount < singlesMax) {
-						client.allowances.singles[message.author.id] = {
-							amount: client.allowances.singles[message.author.id].amount + 1,
-							expires: moment().add(client.config.allowances.singles.expiration, 'm').format('X')
-						};
-					} else {
-						return message.delete().then(m => {
-							m.reply(`You have reached your max allowance for single-letter messages sent. This allowance resets in ${moment.unix(client.allowances.singles[message.author.id].expires).toNow(true)}.`);
-						});
+						if (client.allowances.formatted[message.author.id].amount < formattedMax) {
+							client.allowances.formatted[message.author.id] = {
+								amount: client.allowances.formatted[message.author.id].amount + 1,
+								expires: moment().add(client.config.allowances.formatted.expiration, 'm').format('X')
+							};
+						} else {
+							return message.delete().then(m => {
+								m.reply(`You have reached your max allowance for formatted messages sent. This allowance resets in ${moment.unix(client.allowances.formatted[message.author.id].expires).toNow(true)}.`);
+							});
+						}
 					}
 				}
 			}

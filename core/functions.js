@@ -140,6 +140,11 @@ module.exports = (client) => {
 	};
 
 
+	client.processRewards = (message) => {
+		
+	};
+
+
 	client.cooldown = async (message, cooldownName, cooldownDuration, callback) => {
 		const now = require('moment')().unix() * 1000;
 		const messageTime = message.createdTimestamp;
