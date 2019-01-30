@@ -351,7 +351,7 @@ process.on('uncaughtException', err => {
 
 process.on('unhandledRejection', err => {
 	const crashFile = path.join(client.storagePath, 'logs', 'crash', `REJECTION_${moment().tz(client.config.logTimezone).format('M-D-YY_HH-mm-ss')}.log`);
-	fs.writeFile(crashFile, "Uncaught Promise Error: " + errorMsg + '\n\n', (err) => {
+	fs.writeFile(crashFile, "Uncaught Promise Error: " + err + '\n\n', (err) => {
 		console.error("Uncaught Promise Error: ", err);
 		process.exit(1);
 	});
