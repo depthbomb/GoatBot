@@ -23,6 +23,7 @@
 
 exports.run = async (client, message, args, level) => {
 	const ssq = require('ssq');
+	const truncate = require('truncate');
 	const { RichEmbed } = require('discord.js');
 	const AsciiTable = require('ascii-table');
 	const ms = require('ms');
@@ -48,13 +49,13 @@ exports.run = async (client, message, args, level) => {
 			hasPlayers = false;
 		} else {
 			hasPlayers = true;
-
 			const players = data.sort(sortByKey('score', 'desc'));
 			const table = new AsciiTable();
 			table.setHeading('Name', 'Score', 'Time')
 
 			players.forEach(user => {
-				table.addRow(user.name !== '' ? user.name : '<Connecting...>', user.score, `${ms(Math.floor(user.duration * 1000), {long: true})}`);
+				const username = truncate(user.name.trim(), 27);
+				table.addRow(user.name !== '' ? username : '<Connecting...>', user.score, `${ms(Math.floor(user.duration * 1000))}`);
 			});
 
 			tableString = `\`\`\`${table.toString()}\`\`\``;
