@@ -43,6 +43,7 @@ module.exports = (client, message) => {
 	const isOwner		= (message.author.id === client.config.ownerId);
 	const level			= client.permlevel(message);
 	const isServerStaff = isDm ? false : (message.member.roles.find(r => r.name === client.config.roles.admin) || message.member.roles.find(r => r.name === client.config.roles.mod) || level > 2 || isOwner);
+	const isTF2Staff = isDm ? false : (message.member.roles.find(r => r.name === 'TF2 Server Staff'));
 	const isDonor		= isDm ? false : message.member.roles.find(r => r.name === (client.config.roles.donor));
 
 	let logPrefix = [];
@@ -197,16 +198,6 @@ module.exports = (client, message) => {
 			return message.delete();
 		}
 
-		/**
-		*	Dunk
-		*/
-		if (
-			null !== (message.content.match(/\bdunk[s]?\b/i) ||
-			message.content.match(/\bdunked\b/i))
-		) {
-			return message.react("🏀");
-		}
-
 		if (message.content.toLowerCase().trim() === "beep beep" ||
 			message.content.toLowerCase().trim() === "beep beep im a sheep" ||
 			message.content.toLowerCase().trim() === "beep beep i'm a sheep" ||
@@ -239,12 +230,8 @@ module.exports = (client, message) => {
 		}
 
 		if (null !== message.cleanContent.match(/(?:https?:\/\/)?steamcommunity\.com\/groups\/[a-zA-Z0-9-_]{3,32}/ig)) {
-			if (null !== message.content.match(/(?:https?:\/\/)?steamcommunity\.com\/groups\/CyanTF/) || message.channel.type === 'dm') return;
-			if (!isServerStaff) {
-				message.delete().then(m => {
-					return client.kennelUser(m, m.member, '[Auto] Steam community group links are not allowed. Please keep those links to DMs.');
-				}).catch(e => {});
-			}
+			if (null !== message.content.match(/(?:https?:\/\/)?steamcommunity\.com\/groups\/CyanTF/) || message.channel.type === 'dm' || isTF2Staff || isServerStaff) return;
+			message.delete().catch(e => {});
 		}
 
 		if (
@@ -252,7 +239,7 @@ module.exports = (client, message) => {
 			null !== message.content.match(/f[a@α4]+[g\u011F]([g\u011F]+[o\u03BF0]+t)?/ig) ||
 			null !== message.content.match(/[n\u00F1][\s_\-.,+^*#&:;~$!\`%]*?[i1!l|\\\/#*]+[\s_\-.,+^*#&:;~$!\`%\u012F]*?[gq9\u011F][\s_\-.,+^*#&:;~$!\`%]*?[\u011Fgq9#*\s][\s_\-.,+^*#&:;~$!\`%]*?[e3a4\u00E3\u03B1@#*\s]?[\s_\-.,+^*#&:;~$!\`%]*?r/ig)
 		) {
-			if (message.channel.type === 'dm') return;
+			if (message.channel.type === 'dm' || isTF2Staff) return;
 			if (message.author.id !== message.guild.owner.id || level < 2) {
 				message.delete().then(msg => {
 					return client.kennelUser(msg, msg.member, '[Auto] Discriminatory language is not tolerated.');
