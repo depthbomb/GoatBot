@@ -42,6 +42,7 @@ class GoatBot extends Discord.Client {
 		this.aliases = new Discord.Collection();
 
 		this.disableLog = false;
+		this.doSteamGroupAnnouncements = true;
 
 		this.rootPath = __dirname;
 		this.appPath = `${__dirname}/core`;
@@ -255,18 +256,23 @@ const init = async () => {
 	*/
 	const Parser = require('rss-parser');
 	const parser = new Parser();
-	(async () => {
-		let feed = await parser.parseURL(client.config.rss.url);
-		feed.items.forEach(item => {
-			//  We cache the current items so we may check for new entries
-			const cacheName = encodeURIComponent(item.link);
-			const cacheFile = path.join(client.cachePath, 'rss', `${cacheName}.cache`);
-
-			if (!client.fileExists(cacheFile)) {
-				fs.writeFileSync(cacheFile, JSON.stringify(item));
-			}
-		});
-	})();
+	try {
+		(async () => {
+			let feed = await parser.parseURL(client.config.rss.url);
+			feed.items.forEach(item => {
+				//  We cache the current items so we may check for new entries
+				const cacheName = encodeURIComponent(item.link);
+				const cacheFile = path.join(client.cachePath, 'rss', `${cacheName}.cache`);
+	
+				if (!client.fileExists(cacheFile)) {
+					fs.writeFileSync(cacheFile, JSON.stringify(item));
+				}
+			});
+		})();	
+	} catch (error) {
+		client.doSteamGroupAnnouncements = false;
+		return console.log(error);
+	}
 	/* ===================================================== */
 
 

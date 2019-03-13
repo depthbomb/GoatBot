@@ -71,7 +71,7 @@ exports.run = async (client, message, args, level) => {
 				.addField('Map', data.map, true);
 	
 			if (hasPlayers) {
-				serverInfoEmbed.addField(`Players: ${data.numplayers}/${data.maxplayers}`, tableString);
+				serverInfoEmbed.addField(`Players: ${data.numplayers}/${data.maxplayers}`, (tableString.length > 1024 ? 'Too many to show.' : tableString));
 			} else {
 				serverInfoEmbed.addField('Players', 'None', true)
 			}
