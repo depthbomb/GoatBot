@@ -12,8 +12,8 @@ module.exports = async (client) => {
 				if (err) return console.log(err);
 				const data = JSON.parse(body);
 				if (data.results !== null) {
-					playerCat.setName(data.results.playercount);
-					mapCat.setName(data.results.servermap);
+					if (playerCat.name !== data.results.playercount) playerCat.setName(data.results.playercount);
+					if (mapCat.name !== data.results.servermap) mapCat.setName(data.results.servermap);
 					return;
 				} else {
 					return;
