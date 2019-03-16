@@ -43,7 +43,7 @@
 		"ms": "^2.1.1",
 		"pluralize": "^7.0.0",
 		"request": "^2.88.0",
-		"rss-parser": "^3.6.2",
+		"rss-parser": "^3.7.0",
 		"snekfetch": "^4.0.4",
 		"ssq": "0.0.1",
 		"steamid": "^1.1.0",
