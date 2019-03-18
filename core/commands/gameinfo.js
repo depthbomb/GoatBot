@@ -106,7 +106,7 @@ exports.run = async (client, message, args, level) => {
 				(order == 'desc') ? (comparison * -1) : comparison
 			);
 		};
-	}
+	};
 };
 
 exports.conf = {
