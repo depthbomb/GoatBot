@@ -23,6 +23,7 @@ module.exports = async (client) => {
 						const admins = {
 							'0': 'CONSOLE',
 							'1': 'depthbomb',
+							'31': 'Sarah Bear',
 							'57': 'Discount'
 						};
 						if (!fs.existsSync(cacheFile)) {
