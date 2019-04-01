@@ -22,8 +22,10 @@ module.exports = async (client) => {
 				if (err) return console.log(err);
 				const data = JSON.parse(body);
 				if (data.results !== null) {
-					if (playerCat.name !== data.results.playercount) playerCat.setName(data.results.playercount);
-					if (mapCat.name !== data.results.servermap) mapCat.setName(data.results.servermap);
+					if (playerCat.name !== data.results.players) playerCat.setName(data.results.players);
+					if (mapCat.name !== data.results.map) mapCat.setName(data.results.map);
+
+					client.disableLog = true;
 
 					let messageContent;
 
@@ -45,14 +47,16 @@ module.exports = async (client) => {
 						}
 
 						playerChan.fetchMessages({ limit: 10 }).then(messages => {
-							client.disableLog = true;
 							lastMessage = messages.first();
 							lastMessage.edit(messageContent);
 						});
 					});
 
+					client.disableLog = false;
+
 					return;
 				} else {
+					client.disableLog = false;
 					return;
 				}
 			});

@@ -319,6 +319,27 @@ const init = async () => {
 
 
 	/**
+	* Cache suggestions
+	*/
+	request('https://cyan.tf/api/suggestions', (err, res, body) => {
+		if (err) {
+			console.log(err);
+		} else {
+			try {
+				const data = JSON.parse(body);
+				data.results.forEach(suggestion => {
+					const cacheFile = path.join(client.cachePath, 'suggestions', `s_${suggestion.uuid}.cache`);
+					fs.writeFileSync(cacheFile, JSON.stringify(`https://cyan.tf/suggestions/${suggestion.uuid}`));
+				});
+			} catch (error) {
+				console.log(error)
+			}
+		}
+	});
+	/* ===================================================== */
+
+
+	/**
 	* Log the bot into its account
 	*/
 	client.login(client.config.token);
