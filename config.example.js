@@ -260,23 +260,6 @@ exports.config = {
 		secret: ""
 	},
 
-	//	Unbox options
-	unbox: {
-		//	Tiers that can be unboxed
-		//	<prefix> <name> Goat <suffix>
-		//	prefix and suffix properties can be omitted
-		rarities: [
-			{ prefix: 'Unfortunate', name: 'Poor', color: '#9C8267', file: 'poor.png' },
-			{ name: 'Common', color: '#9d9d9d', file: 'common.png' },
-		],
-
-		//	Probability that the corresponding rarity will be "unboxed"
-		rarity_weights: [
-			50,		//	Poor
-			280,	//	Common
-		]
-	},
-
 	//	Log types. Old code, avoid modification
 	logTypes: [
 		"msg",

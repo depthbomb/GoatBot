@@ -23,48 +23,53 @@
 
 exports.run = async (client, message, args, level) => {
 	const action = args[0];
+	const u = message.author;
+	const uri = `https://unbox.caprine.net/api/unbox_discord?id=${u.id}&username=${u.username}&avatar=${u.avatar}&discriminator=${u.discriminator}`;
+	const request = require('request');
 	const { RichEmbed } = require('discord.js');
-	const Chance = require('chance');
-	const chance = new Chance();
 
-	const unboxConfig = client.config.unbox;
-	const qualities = unboxConfig.rarities;
-	const rarity_weights = unboxConfig.rarity_weights;
+	request({
+		headers: {
+			"User-Agent": client.config.userAgent
+		},
+		uri: uri,
+		method: 'POST'
+	}, (err, res, body) => {
+		if (err) return client.error(message, err);
+		const resp = JSON.parse(body);
+		const data = resp.results;
+		if (data.success) {
+			const name = data.goat.name;
+			const color = data.goat.color;
+			const file = data.goat.file;
+			const value = data.goat.value;
+			const tier = data.tier;
+			const tiers = data.tiers;
+			const chance = data.chance;
 
-	let embed;
+			let embed;
 
-	const chosenRarity = chance.weighted(qualities, rarity_weights);
-	const color = chosenRarity.color,
-		image = `https://cyan.tf/goatbot/goats/${chosenRarity.file}`,
-		weight = rarity_weights[qualities.indexOf(chosenRarity)];
-
-	let prefix = chosenRarity.hasOwnProperty('prefix') ? chosenRarity.prefix : '';
-	let suffix = chosenRarity.hasOwnProperty('suffix') ? chosenRarity.suffix : '';
-
-	const name = `${prefix} ${chosenRarity.name} Goat ${suffix}`.trim();
-
-	let weightSum = 0;
-	for (let i = 0; i < rarity_weights.length; i++) {
-		weightSum += rarity_weights[i];
-	}
-
-	embed = new RichEmbed()
-		.setColor(color)
-		.setTitle(`Unbox-A-Goat`)
-		.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)
-		.addField('Tier', `_${qualities.indexOf(chosenRarity)}/${(qualities.length - 1)}_`)
-		.addField('Drop chance', `_~${((weight / weightSum) * 100).toFixed(3)}%_`)
-		.setImage(image)
-		.setTimestamp()
-	;
-
-	return message.channel.send({ embed });
+			embed = new RichEmbed()
+				.setColor(color)
+				.setTitle(`Unbox a Goat`)
+				.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)
+				.addField('Tier', `_${tier}/${tiers}_`)
+				.addField('Value', `_${value} points_`)
+				.addField('Drop chance', `_~${chance}_`)
+				.setImage(file)
+				.setTimestamp()
+			;
+			return message.channel.send({ embed });
+		} else {
+			return message.channel.send(resp.message);
+		}
+	});
 };
 
 exports.conf = {
 	enabled: true,
 	guildOnly: true,
-	cooldown: 900,
+	cooldown: 305,
 	aliases: [
 		'lootcrate',
 		'lootbox'
@@ -81,23 +86,5 @@ exports.help = {
 	params: {},
 	examples: [
 		"unbox"
-	],
-	extra_info: (client, message, args, level) => {
-		const unboxConfig = client.config.unbox;
-		const qualities = unboxConfig.rarities;
-		const rarity_weights = client.commandData.hasOwnProperty('unbox') ? client.commandData.unbox.weights : unboxConfig.rarity_weights;
-		let weightSum = 0;
-		for (let i = 0; i < rarity_weights.length; i++) {
-			weightSum += rarity_weights[i];
-		}
-
-		let dropChances = [];
-		for (let i = 0; i < qualities.length; i++) {
-			dropChances.push(`Tier ${i}/${(qualities.length - 1)}: ${((rarity_weights[i] / weightSum) * 100).toFixed(3)}%`);
-		}
-
-		const str = `There are currently ${(qualities.length - 1)} tiers of Goat that you can unbox. The percentage drop chances are listed below by their tier.\n\n${dropChances.join('\n')}`;
-
-		return str;
-	}
+	]
 };
