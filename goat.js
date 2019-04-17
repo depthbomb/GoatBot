@@ -327,10 +327,12 @@ const init = async () => {
 		} else {
 			try {
 				const data = JSON.parse(body);
-				data.results.forEach(suggestion => {
-					const cacheFile = path.join(client.cachePath, 'suggestions', `s_${suggestion.uuid}.cache`);
-					fs.writeFileSync(cacheFile, JSON.stringify(`https://cyan.tf/suggestions/${suggestion.uuid}`));
-				});
+				if (data.results !== null) {
+					data.results.forEach(suggestion => {
+						const cacheFile = path.join(client.cachePath, 'suggestions', `s_${suggestion.uuid}.cache`);
+						fs.writeFileSync(cacheFile, JSON.stringify(`https://cyan.tf/suggestions/${suggestion.uuid}`));
+					});
+				}
 			} catch (error) {
 				console.log(error)
 			}
