@@ -48,6 +48,7 @@ module.exports = async (client) => {
 
 						playerChan.fetchMessages({ limit: 10 }).then(messages => {
 							lastMessage = messages.first();
+							lastMessage.clearReactions();
 							lastMessage.edit(messageContent);
 						});
 					});
