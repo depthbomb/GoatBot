@@ -259,6 +259,9 @@ module.exports = (client, message) => {
 		// Some commands may not be useable in DMs. This check prevents those commands from running and return a friendly error message.
 		if (!message.guild && cmd.conf.guildOnly) return message.reply("This command cannot be executed in a DM conversation.");
 
+		//	Prevent commands from being used in refugee camp
+		if (message.channel.id === '431266723736322048') return;
+
 		if (cmd.help.name !== 'escape' && message.channel.id === '481201307257012262' && level < 3) return;
 
 		if (client.strictMode.enabled && level < 2) {
