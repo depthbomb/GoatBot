@@ -21,6 +21,6 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (client, rateLimitInfo) => {
-	client.log("event", `[RATE LIMIT] requestLimit: ${rateLimitInfo.requestLimit} | timeDifference: ${rateLimitInfo.timeDifference} | method: ${rateLimitInfo.method} | path: ${rateLimitInfo.path}`);
-};
+// module.exports = (client, rateLimitInfo) => {
+// 	client.log("event", `[RATE LIMIT] requestLimit: ${rateLimitInfo.requestLimit} | timeDifference: ${rateLimitInfo.timeDifference} | method: ${rateLimitInfo.method} | path: ${rateLimitInfo.path}`);
+// };
