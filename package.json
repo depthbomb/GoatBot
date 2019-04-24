@@ -39,7 +39,7 @@
 		"libsodium-wrappers": "^0.7.4",
 		"moment": "^2.24.0",
 		"moment-duration-format": "^2.2.2",
-		"moment-timezone": "^0.5.23",
+		"moment-timezone": "^0.5.25",
 		"ms": "^2.1.1",
 		"pluralize": "^7.0.0",
 		"request": "^2.88.0",
