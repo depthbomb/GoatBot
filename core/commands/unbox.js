@@ -38,7 +38,7 @@ exports.run = async (client, message, args, level) => {
 		if (err) return client.error(message, err);
 		const resp = JSON.parse(body);
 		const data = resp.results;
-		if (data.success) {
+		if (resp.success) {
 			const name = data.goat.name;
 			const color = data.goat.color;
 			const file = data.goat.file;
@@ -61,7 +61,7 @@ exports.run = async (client, message, args, level) => {
 			;
 			return message.channel.send({ embed });
 		} else {
-			return message.channel.send(resp.message);
+			return message.reply(resp.message);
 		}
 	});
 };
@@ -69,7 +69,7 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	guildOnly: true,
-	cooldown: 305,
+	cooldown: 900,
 	aliases: [
 		'lootcrate',
 		'lootbox'
