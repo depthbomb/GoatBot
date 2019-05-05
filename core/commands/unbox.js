@@ -24,7 +24,7 @@
 exports.run = async (client, message, args, level) => {
 	const action = args[0];
 	const u = message.author;
-	const uri = `https://unbox.caprine.net/api/unbox_discord?id=${u.id}&username=${u.username}&avatar=${u.avatar}&discriminator=${u.discriminator}`;
+	const uri = `https://unbox.caprine.net/api/unbox_discord?id=${u.id}&username=${encodeURIComponent(u.username)}&avatar=${u.avatar}&discriminator=${u.discriminator}`;
 	const request = require('request');
 	const { RichEmbed } = require('discord.js');
 
@@ -36,32 +36,36 @@ exports.run = async (client, message, args, level) => {
 		method: 'POST'
 	}, (err, res, body) => {
 		if (err) return client.error(message, err);
-		const resp = JSON.parse(body);
-		const data = resp.results;
-		if (resp.success) {
-			const name = data.goat.name;
-			const color = data.goat.color;
-			const file = data.goat.file;
-			const value = data.goat.value;
-			const tier = data.tier;
-			const tiers = data.tiers;
-			const chance = data.chance;
+		try {
+			const resp = JSON.parse(body);
+			const data = resp.results;
+			if (resp.success) {
+				const name = data.goat.name;
+				const color = data.goat.color;
+				const file = data.goat.file;
+				const value = data.goat.value;
+				const tier = data.tier;
+				const tiers = data.tiers;
+				const chance = data.chance;
 
-			let embed;
+				let embed;
 
-			embed = new RichEmbed()
-				.setColor(color)
-				.setTitle(`Unbox a Goat`)
-				.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)
-				.addField('Tier', `_${tier}/${tiers}_`)
-				.addField('Value', `_${value} points_`)
-				.addField('Drop chance', `_~${chance}_`)
-				.setImage(file)
-				.setTimestamp()
-			;
-			return message.channel.send({ embed });
-		} else {
-			return message.reply(resp.message);
+				embed = new RichEmbed()
+					.setColor(color)
+					.setTitle(`Unbox a Goat`)
+					.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)
+					.addField('Tier', `_${tier}/${tiers}_`)
+					.addField('Value', `_${value} points_`)
+					.addField('Drop chance', `_~${chance}_`)
+					.setImage(file)
+					.setTimestamp()
+				;
+				return message.channel.send({ embed });
+			} else {
+				return message.reply(resp.message);
+			}
+		} catch (e) {
+			return client.msg(message, 'red', 'error', e, false)
 		}
 	});
 };

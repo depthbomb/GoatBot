@@ -11,6 +11,8 @@ module.exports = async (client) => {
 		interval: 30,
 		action: () => {
 
+			return;
+
 			const serverIp = '66.150.188.17';
 			const serverPort = 27015;
 

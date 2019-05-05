@@ -110,7 +110,7 @@ exports.run = async (client, message, args, level) => {
 };
 
 exports.conf = {
-	enabled: true,
+	enabled: false,
 	guildOnly: true,
 	cooldown: 5,
 	globalCd: true,
