@@ -140,11 +140,6 @@ module.exports = (client) => {
 	};
 
 
-	client.processRewards = (message) => {
-		
-	};
-
-
 	client.cooldown = async (message, cooldownName, cooldownDuration, callback) => {
 		const now = require('moment')().unix() * 1000;
 		const messageTime = message.createdTimestamp;
@@ -240,13 +235,7 @@ module.exports = (client) => {
 
 	client.fileExists = (path) => {
 		fs.stat(path, (err, stat) => {
-			if(err == null) {
-				return true;
-			} else if(err.code == 'ENOENT') {
-				return false;
-			} else {
-				return false;
-			}
+			return (err == null) && err.code != 'ENOENT';
 		});
 	};
 
@@ -273,13 +262,13 @@ module.exports = (client) => {
 
 
 	client.b64 = {
-		encode (str) {
+		encode: (str) => {
 			return require('btoa')(str);
 		},
-		decode (str) {
+		decode: (str) => {
 			return require('atob')(str);
 		},
-		check (str) {
+		check: (str) => {
 			return (client.b64.decode(client.b64.encode(str)) == str);
 		}
 	};
