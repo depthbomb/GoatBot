@@ -57,107 +57,22 @@ module.exports = (client, message) => {
 	if (message.tts) logPrefix.push('[TTS]');
 
 	let isAttachment = false;
-	let isImage = false;
 	let attachmentWithMessage = false;
-	let isUrl = false;
-	let isFormatted = false;
 
 	let logMessage;
 
 	if (typeof message.attachments.first() != 'undefined') isAttachment = true;
-	if (isAttachment && message.attachments.first().width != undefined) isImage = true;
 	if (isAttachment && message.content !== "") attachmentWithMessage = true;
-	if (null !== message.cleanContent.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi)) isUrl = true;
-	if (
-		null !== message.cleanContent.match(/\*[a-zA-Z0-9\s\n]{1,}\*/igm) ||
-		null !== message.cleanContent.match(/\*\*\*[a-zA-Z0-9\s\n]{1,}\*\*\*/igm) ||
-		null !== message.cleanContent.match(/\*\*[a-zA-Z0-9\s\n]{1,}\*\*/igm) ||
-		null !== message.cleanContent.match(/_[a-zA-Z0-9\s\n]{1,}_/igm) ||
-		null !== message.cleanContent.match(/```[a-zA-Z0-9\s\n]{1,}```/igm) ||
-		null !== message.cleanContent.match(/`[a-zA-Z0-9\s\n]{1,}`/igm) ||
-		null !== message.cleanContent.match(/[𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡]{1,}/igm) ||
-		null !== message.cleanContent.match(/[🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿]{1,}/igm)
-	) isFormatted = true;
 
 	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url}`;
 	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
 	else logMessage = `${logPrefix.join(" ")} ${username}: ${message.cleanContent}`;
 
-
-	if (client.config.allowances.enabled) {
-		if (!isDm) {
-			if (isImage) {
-				if (client.config.allowances.images.channels.includes(message.channel.id) && !isServerStaff) {
-					const imagesMax = client.config.allowances.images.limit;
-					if (!client.allowances.images.hasOwnProperty(message.author.id)) {
-						client.allowances.images[message.author.id] = {
-							amount: 1,
-							expires: moment().add(client.config.allowances.images.expiration, 'm').format('X')
-						};
-					} else {
-						if (client.allowances.images[message.author.id].amount < imagesMax) {
-							client.allowances.images[message.author.id] = {
-								amount: client.allowances.images[message.author.id].amount + 1,
-								expires: moment().add(client.config.allowances.images.expiration, 'm').format('X')
-							};
-						} else {
-							return message.delete().then(m => {
-								m.reply(`You have reached your max allowance for images sent in non-media channels. This allowance resets in ${moment.unix(client.allowances.images[message.author.id].expires).toNow(true)}.`);
-							});
-						}
-					}
-				}
-			} else if (isUrl) {
-				if (client.config.allowances.links.channels.includes(message.channel.id) && !isServerStaff) {
-					const urlsMax = client.config.allowances.links.limit;
-					if (!client.allowances.links.hasOwnProperty(message.author.id)) {
-						client.allowances.links[message.author.id] = {
-							amount: 1,
-							expires: moment().add(client.config.allowances.links.expiration, 'm').format('X')
-						};
-					} else {
-						if (client.allowances.links[message.author.id].amount < urlsMax) {
-							client.allowances.links[message.author.id] = {
-								amount: client.allowances.links[message.author.id].amount + 1,
-								expires: moment().add(client.config.allowances.links.expiration, 'm').format('X')
-							};
-						} else {
-							return message.delete().then(m => {
-								m.reply(`You have reached your max allowance for URLs sent. This allowance resets in ${moment.unix(client.allowances.links[message.author.id].expires).toNow(true)}.`);
-							});
-						}
-					}
-				}
-			} else if (isFormatted) {
-				if (client.config.allowances.formatted.channels.includes(message.channel.id) && !isServerStaff) {
-					const formattedMax = client.config.allowances.formatted.limit;
-					if (!client.allowances.formatted.hasOwnProperty(message.author.id)) {
-						client.allowances.formatted[message.author.id] = {
-							amount: 1,
-							expires: moment().add(client.config.allowances.formatted.expiration, 'm').format('X')
-						};
-					} else {
-						if (client.allowances.formatted[message.author.id].amount < formattedMax) {
-							client.allowances.formatted[message.author.id] = {
-								amount: client.allowances.formatted[message.author.id].amount + 1,
-								expires: moment().add(client.config.allowances.formatted.expiration, 'm').format('X')
-							};
-						} else {
-							return message.delete().then(m => {
-								m.reply(`You have reached your max allowance for formatted messages sent. This allowance resets in ${moment.unix(client.allowances.formatted[message.author.id].expires).toNow(true)}.`);
-							});
-						}
-					}
-				}
-			}
-		}
-	}
-
 	client.log("msg", logMessage);
 
-	const args			= message.content.slice(client.config.prefix.length).trim().split(/ +/g);
-	const command		= args.shift().toLowerCase();
-	const cmd			= client.commands.get(command) || client.commands.get(client.aliases.get(command));
+	const args		= message.content.slice(client.config.prefix.length).trim().split(/ +/g);
+	const command	= args.shift().toLowerCase();
+	const cmd		= client.commands.get(command) || client.commands.get(client.aliases.get(command));
 
 	/**
 	*	Non-command messages
@@ -167,25 +82,15 @@ module.exports = (client, message) => {
 		*	React to OwO's
 		*/
 		if (null !== message.content.match(/\b([O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F][Ww\uA4B3\u03C9][O\u00D2\u00D3\u00D4\u00D5\u00D6o\u00F2\u00F3\u00F4\u00F5\u00F6\u1D52\u25CF\u0150\uFF65\u03C3\u2579\u25CD0\u2661\u01A1\u25D5\u273F])\b/)) {
-			let reactArray = ['🍌', '🍆', '🥒'];
-			reactArray.shuffle();
-			return message.react(reactArray[0]);
+			const reactArray = ['🍌', '🍆', '🥒'];
+			const randomEmoji = reactArray.shuffle()[0];
+			return message.react(randomEmoji);
 		}
 
 		/**
 		*	Lit
 		*/
-		if (null !== message.content.match(/\blit\b/i)) {
-			return message.react("🔥");
-		}
-
-		if (message.content.toLowerCase().trim() === "beep beep" ||
-			message.content.toLowerCase().trim() === "beep beep im a sheep" ||
-			message.content.toLowerCase().trim() === "beep beep i'm a sheep" ||
-			message.content.toLowerCase().trim() === "beep beep ima sheep"
-		) {
-			return message.author.send("https://www.youtube.com/watch?v=wCZFISvHmyY");
-		}
+		if (null !== message.content.match(/\blit\b/i)) message.react("🔥");
 
 		if (
 			null !== message.content.match(/^(https?:\/\/)?discord\.gg(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig) ||
@@ -195,24 +100,11 @@ module.exports = (client, message) => {
 			if (message.channel.type === 'dm') return;
 			if (isServerStaff) return;
 
-			if (
-				message.content.includes('https://discord.gg/xw624a8') ||
-				message.content.includes('https://discord.gg/invite/xw624a8') ||
-				message.content.includes('https://discordapp.com/invite/xw624a8')
-			) {
+			if (!message.content.includes('discord.gg/xw624a8') || !message.content.includes('discord.gg/invite/xw624a8') || !message.content.includes('discordapp.com/invite/xw624a8')) {
 				message.delete().then(m => {
-					return message.reply('Please use our own Discord invite link: `https://cyan.tf/discord`');
-				}).catch(e => {});
-			} else {
-				message.delete().then(m => {
-					return client.kennelUser(m, m.member, '[Auto] Discord invite links are not allowed. Please keep those links to DMs.');
+					return m.reply('Discord invite links are not allowed. Please keep those links to DMs.');
 				}).catch(e => {});
 			}
-		}
-
-		if (null !== message.cleanContent.match(/(?:https?:\/\/)?steamcommunity\.com\/groups\/[a-zA-Z0-9-_]{3,32}/ig)) {
-			if (null !== message.content.match(/(?:https?:\/\/)?steamcommunity\.com\/groups\/CyanTF/) || message.channel.type === 'dm' || isTF2Staff || isServerStaff) return;
-			message.delete().catch(e => {});
 		}
 
 		if (
@@ -252,7 +144,8 @@ module.exports = (client, message) => {
 		}
 
 		if (level >= cmd.conf.permLevel) {
-
+			let cooldown;
+			let cooldownName;
 
 			if (message.guild && cmd.conf.hasOwnProperty('requiredRole')) {
 				if (message.member.roles.find(r => r.name !== cmd.conf.requiredRole) && !isServerStaff) {
@@ -260,26 +153,12 @@ module.exports = (client, message) => {
 				}
 			}
 
-
-			let cooldown;
-
 			if (!cmd.conf.hasOwnProperty('cooldown')) {
 				cooldown = client.config.cooldowns.default * 1000;
 			} else {
 				cooldown = cmd.conf.cooldown * 1000;
 			}
 
-			//	TODO: rewrite this filter
-			if (message.member.roles.find(r => r.name === (client.config.roles.donor))) {
-				cooldown = cooldown.reduce(client.config.cooldowns.reduction.donor);
-			}
-
-			if (isServerStaff) {
-				cooldown = cooldown.reduce(client.config.cooldowns.reduction.admin);
-			}
-
-			let cooldownName;
-			
 			if (!cmd.conf.globalCd) {
 				cooldownName = `${cmd.help.name}_${message.author.id}`;
 			} else {
@@ -298,7 +177,6 @@ module.exports = (client, message) => {
 			});
 		} else {
 			client.log("system", `${message.author.username} attempted to execute command [${cmd.help.name}] but does not have permission`);
-
 			return client.msg(message, 'red', 'error', `You do not have permission to use this command. It requires a permission level of ${cmd.conf.permLevel} and you have a permission level of ${level}.`, true);
 		}
 	}
