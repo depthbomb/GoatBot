@@ -121,15 +121,33 @@ class GoatBot extends Discord.Client {
 		let logEntry = "\n" + logMsg;
 		let logAsFile = ['msg', 'event', 'bot', 'system', 'warn', 'error', 'task', 'debug'];
 
-		if (type === "msg") console.log(chalk.yellowBright(logMsg));
-		else if (type === "event") console.log(chalk.magentaBright(logMsg));
-		else if (type === "bot") console.log(chalk.cyanBright(logMsg));
-		else if (type === "system") console.log(chalk.bgBlueBright.whiteBright(logMsg));
-		else if (type === "warn") console.log(chalk.bgYellowBright.black(logMsg));
-		else if (type === "error") console.log(chalk.bgRedBright.whiteBright(logMsg));
-		else if (type === "task") console.log(chalk.bgMagentaBright.whiteBright(logMsg));
-		else if (type === "debug") console.log(chalk.bgBlackBright.whiteBright(logMsg));
-		else return;
+		switch (type) {
+			case 'msg':
+				console.log(chalk.yellowBright(logMsg));
+				break;
+			case 'event':
+				console.log(chalk.magentaBright(logMsg));
+				break;
+			case 'system':
+				console.log(chalk.bgBlueBright.whiteBright(logMsg));
+				break;
+			case 'warn':
+				console.log(chalk.bgYellowBright.black(logMsg));
+				break;
+			case 'error':
+				console.log(chalk.bgRedBright.whiteBright(logMsg));
+				break;
+			case 'task':
+				console.log(chalk.bgMagentaBright.whiteBright(logMsg));
+				break;
+			case 'debug':
+				console.log(chalk.bgBlackBright.whiteBright(logMsg));
+				break;
+			case 'bot':
+			default:
+				console.log(chalk.cyanBright(logMsg));
+				break;
+		}
 
 		if (logAsFile.includes(type) && writeFile) {
 			fs.appendFile(`${client.storagePath}/logs/${logName}`, logEntry, (err) => {
