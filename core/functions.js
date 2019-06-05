@@ -30,7 +30,7 @@ module.exports = (client) => {
 
 	/*
 		USAGE:
-		const response = await client.awaitReply(msg, "Favourite Color?");
+		const response = await client.awaitReply(msg, "Favorite Color?");
 		msg.reply(`Oh, I really love ${response} too!`);
 	*/
 	client.awaitReply = async (msg, question, limit = 60000) => {
@@ -143,34 +143,39 @@ module.exports = (client) => {
 	client.cooldown = async (message, cooldownName, cooldownDuration, callback) => {
 		const now = require('moment')().unix() * 1000;
 		const messageTime = message.createdTimestamp;
-		
+		const bypassCooldown = message.member.roles.keyArray().some(k => client.config.cooldowns.rolesExcluded.includes(k));
+
 		//	Object to store command cooldowns
 		let cooldownObject = client.cooldowns;
 		let timeLeft;
 		let onCooldown;
 
-		if (cooldownObject.hasOwnProperty(cooldownName)) {
-			onCooldown = true;
-			const ms = require('ms');
-			const { RichEmbed } = require('discord.js');
-			const expiration = cooldownObject[cooldownName].ex;
-			timeLeft = expiration - messageTime;
-			const response = timeLeft <= 1000 ? 'Please try again in about 1 second.' : `Please try again in about ${ms(timeLeft, {long: true})}.`;
-
-			const embed = new RichEmbed()
-				.setColor('#aab8c2')
-				.setDescription(`\:timer: <@${message.author.id}>, ${response}`)
-			;
-
-			message.channel.send({ embed })
+		if (!bypassCooldown) {
+			if (cooldownObject.hasOwnProperty(cooldownName)) {
+				onCooldown = true;
+				const ms = require('ms');
+				const { RichEmbed } = require('discord.js');
+				const expiration = cooldownObject[cooldownName].ex;
+				timeLeft = expiration - messageTime;
+				const response = timeLeft <= 1000 ? 'Please try again in about 1 second.' : `Please try again in about ${ms(timeLeft, {long: true})}.`;
+	
+				const embed = new RichEmbed()
+					.setColor('#aab8c2')
+					.setDescription(`\:timer: <@${message.author.id}>, ${response}`)
+				;
+	
+				message.channel.send({ embed })
+			} else {
+				onCooldown = false;
+				cooldownObject[cooldownName] = {
+					ex: (messageTime + cooldownDuration)
+				};
+				setTimeout(() => {
+					delete cooldownObject[cooldownName];
+				}, cooldownDuration);
+			}
 		} else {
 			onCooldown = false;
-			cooldownObject[cooldownName] = {
-				ex: (messageTime + cooldownDuration)
-			};
-			setTimeout(() => {
-				delete cooldownObject[cooldownName];
-			}, cooldownDuration);
 		}
 
 		callback(onCooldown);
@@ -235,7 +240,7 @@ module.exports = (client) => {
 
 	client.fileExists = (path) => {
 		fs.stat(path, (err, stat) => {
-			return (err == null) && err.code != 'ENOENT';
+			return err == null || (err !== null && err.code != 'ENOENT');
 		});
 	};
 
