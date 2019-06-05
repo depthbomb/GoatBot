@@ -279,65 +279,65 @@ const init = async () => {
 	/**
 	* Cache SourceBans bans punishment
 	*/
-	request(client.config.sourcebans.bans_url, (err, res, body) => {
-		if (err) {
-			console.log(err);
-		} else {
-			try {
-				const data = JSON.parse(body);
-				Object.keys(data).forEach(key => {
-					const cacheFile = path.join(client.cachePath, 'sb', `b_${data[key]['bid']}.cache`);
-					fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
-				});
-			} catch (error) {
-				console.log(error);
-			}
-		}
-	});
+	// request(client.config.sourcebans.bans_url, (err, res, body) => {
+	// 	if (err) {
+	// 		console.log(err);
+	// 	} else {
+	// 		try {
+	// 			const data = JSON.parse(body);
+	// 			Object.keys(data).forEach(key => {
+	// 				const cacheFile = path.join(client.cachePath, 'sb', `b_${data[key]['bid']}.cache`);
+	// 				fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
+	// 			});
+	// 		} catch (error) {
+	// 			console.log(error);
+	// 		}
+	// 	}
+	// });
 	/* ===================================================== */
 
 
 	/**
 	* Cache SourceBans comms punishments
 	*/
-	request(client.config.sourcebans.comms_url, (err, res, body) => {
-		if (err) {
-			console.log(err);
-		} else {
-			try {
-				const data = JSON.parse(body);
-				Object.keys(data).forEach(key => {
-					const cacheFile = path.join(client.cachePath, 'sb', `c_${data[key]['bid']}.cache`);
-					fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
-				});
-			} catch (error) {
-				console.log(error)
-			}
-		}
-	});
+	// request(client.config.sourcebans.comms_url, (err, res, body) => {
+	// 	if (err) {
+	// 		console.log(err);
+	// 	} else {
+	// 		try {
+	// 			const data = JSON.parse(body);
+	// 			Object.keys(data).forEach(key => {
+	// 				const cacheFile = path.join(client.cachePath, 'sb', `c_${data[key]['bid']}.cache`);
+	// 				fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
+	// 			});
+	// 		} catch (error) {
+	// 			console.log(error)
+	// 		}
+	// 	}
+	// });
 	/* ===================================================== */
 
 
 	/**
 	* Cache suggestions
 	*/
-	request('https://cyan.tf/api/suggestions', (err, res, body) => {
-		if (err) {
-			console.log(err);
-		} else {
-			try {
-				const data = JSON.parse(body);
-				if (data.results !== null) {
-					data.results.forEach(suggestion => {
-						const cacheFile = path.join(client.cachePath, 'suggestions', `s_${suggestion.uuid}.cache`);
-						fs.writeFileSync(cacheFile, JSON.stringify(`https://cyan.tf/suggestions/${suggestion.uuid}`));
-					});
-				}
-			} catch (error) {
-				console.log(error)
-			}
-		}
-	});
+	// request('https://cyan.tf/api/suggestions', (err, res, body) => {
+	// 	if (err) {
+	// 		console.log(err);
+	// 	} else {
+	// 		try {
+	// 			const data = JSON.parse(body);
+	// 			if (data.results !== null) {
+	// 				data.results.forEach(suggestion => {
+	// 					const cacheFile = path.join(client.cachePath, 'suggestions', `s_${suggestion.uuid}.cache`);
+	// 					fs.writeFileSync(cacheFile, JSON.stringify(`https://cyan.tf/suggestions/${suggestion.uuid}`));
+	// 				});
+	// 			}
+	// 		} catch (error) {
+	// 			console.log(error)
+	// 		}
+	// 	}
+	// });
 	/* ===================================================== */
 
 
