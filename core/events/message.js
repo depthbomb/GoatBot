@@ -179,25 +179,6 @@ module.exports = (client, message) => {
 			return message.react("🔥");
 		}
 
-		/**
-		*	Message filter
-		*/
-		if (
-			//	Remove gimmicky blank messages
-			null !== message.content.match(/^```[\s\n\t]+```$/g) ||
-			null !== message.content.match(/^`[\s\n\t]+`$/g) ||
-			null !== message.content.match(/^\*\*[\s\n\t]+\*\*$/g) ||
-			null !== message.content.match(/^\*\*\*[\s\n\t]+\*\*\*$/g) ||
-			null !== message.content.match(/^\*[\s\n\t]+\*$/g) ||
-			null !== message.content.match(/^_[\s\n\t]+_$/g) ||
-			//	Remove single character responses
-			null !== message.content.match(/^_[.,_\-*+=`~]{1}_$/g) ||
-			null !== message.content.match(/^(\*?[.,_\-*+=`~]{1}\*?)$/g)
-		) {
-			if (isServerStaff) return;
-			return message.delete();
-		}
-
 		if (message.content.toLowerCase().trim() === "beep beep" ||
 			message.content.toLowerCase().trim() === "beep beep im a sheep" ||
 			message.content.toLowerCase().trim() === "beep beep i'm a sheep" ||
