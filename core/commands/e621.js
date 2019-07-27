@@ -76,10 +76,10 @@ exports.run = async (client, message, args, level) => {
 		}, (err, res, body) => {
 			if (err) return msg.edit("There was a problem when requesting API data. Please try again.");
 
-			const data = body;
+			const b = body;
 
 			try {
-				const json = JSON.parse(data);
+				const data = JSON.parse(b);
 			} catch (error) {
 				return msg.edit(`Invalid response from the e621 API. Is the website down?`);
 			}
