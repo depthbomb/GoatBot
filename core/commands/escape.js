@@ -22,8 +22,8 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (args.length > 0) return;
 	if (message.channel.id !== '481201307257012262') return;
+	if (args.length > 0) return;
 	const Chance = require('chance');
 	const chance = new Chance();
 	const kenneled = message.member.guild.roles.find(r => r.name === 'Kenneled');
