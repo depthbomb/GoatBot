@@ -23,19 +23,15 @@
 
 exports.run = (client, message, args, level) => {
 	const { RichEmbed } = require('discord.js');
-
 	const emoji = {
 		furdesire: client.emojis.find(e => e.name === 'furdesire'),
 		pandasurprise: client.emojis.find(e => e.name === 'pandasurprise'),
+		dab: client.emojis.find(e => e.name === 'dab'),
 	};
-
-	const panel1 = [emoji.furdesire, '\:b:', emoji.pandasurprise];
-	const panel2 = [emoji.furdesire, '\:b:', emoji.pandasurprise];
-	const panel3 = [emoji.furdesire, '\:b:', emoji.pandasurprise];
-
-	const choice1 = panel1.shuffle()[0];
-	const choice2 = panel2.shuffle()[0];
-	const choice3 = panel3.shuffle()[0];
+	const choices = [emoji.furdesire, '\:b:', emoji.pandasurprise, '\:eggplant:'];
+	const choice1 = choices.shuffle()[0];
+	const choice2 = choices.shuffle()[0];
+	const choice3 = choices.shuffle()[0];
 
 	let jackpotText;
 	if (choice1 === choice2 && choice2 === choice3) {

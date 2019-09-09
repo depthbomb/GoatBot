@@ -23,8 +23,7 @@
 
 exports.run = async (client, message, args, level) => {
 	const action = args[0];
-	const u = message.author;
-	const uri = `https://unbox.caprine.net/api/unbox_discord?id=${u.id}&username=${encodeURIComponent(u.username)}&avatar=${u.avatar}&discriminator=${u.discriminator}`;
+	const uri = `https://unbox.caprine.net/api/unbox`;
 	const request = require('request');
 	const { RichEmbed } = require('discord.js');
 
@@ -43,7 +42,6 @@ exports.run = async (client, message, args, level) => {
 				const name = data.goat.name;
 				const color = data.goat.color;
 				const file = data.goat.file;
-				const value = data.goat.value;
 				const tier = data.tier;
 				const tiers = data.tiers;
 				const chance = data.chance;
@@ -55,7 +53,6 @@ exports.run = async (client, message, args, level) => {
 					.setTitle(`Unbox a Goat`)
 					.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)
 					.addField('Tier', `_${tier}/${tiers}_`)
-					.addField('Value', `_${value} points_`)
 					.addField('Drop chance', `_~${chance}_`)
 					.setImage(file)
 					.setTimestamp()

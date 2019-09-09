@@ -200,8 +200,8 @@ module.exports = (client) => {
 			if (user.roles.find(r => r.name === 'Deejay')) user.removeRole(user.roles.find(r => r.name === 'Deejay'));
 
 			user.addRole(kennelRole, reason).then(() => {
-				member.setDeaf(true, 'Deafened due to kenneling');
-				member.setMute(true, 'Muted due to kenneling');
+				member.setDeaf(true, 'Deafened due to kenneling').catch(() => {});
+				member.setMute(true, 'Muted due to kenneling').catch(() => {});
 				message.channel.send({ embed }).then(m => {
 					embed = new RichEmbed()
 						.setColor(client.colors.red)
