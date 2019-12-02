@@ -3,7 +3,7 @@
 |	GoatBot! Automation
 |--------------------------------------------------------------------------
 |
-|	Copyright (C) 2017 - 2018 Caprine Softworks - https://caprine.net
+|	Copyright (C) 2017 - 2020 Caprine Logic - https://caprine.net
 |
 |	This library is free software; you can redistribute it and/or
 |	modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,6 @@
 |
 |--------------------------------------------------------------------------
 */
-
 if (process.version.slice(1).split(".")[0] < 8) throw new Error("GoatBot requires Node 8.0.0 or higher. Update Node on your system.");
 
 const Discord = require('discord.js');
@@ -30,12 +29,13 @@ const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
-const request = require('request');
 
 class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
 
+		//	Local mode (or dev mode) means that the bot is running locally on my development machine
+		//	rather than a server.
 		this.localMode = process.platform === 'win32' ? true : false;
 		this.config = require("./config.js").config;
 		this.commands = new Discord.Collection();
@@ -45,7 +45,7 @@ class GoatBot extends Discord.Client {
 		this.doSteamGroupAnnouncements = true;
 
 		this.rootPath = __dirname;
-		this.appPath = `${__dirname}/core`;
+		this.appPath = `${__dirname}/src`;
 
 		//	Storage root path
 		this.storagePath = `${__dirname}/storage`;
@@ -109,12 +109,6 @@ class GoatBot extends Discord.Client {
 		return permlvl;
 	}
 
-	/**
-	 * Logs a message
-	 * @param {string} type Log type
-	 * @param {string} message Message to log
-	 * @param {boolean} writeFile Whether to write message to file
-	 */
 	log (type, message, writeFile = true) {
 		let logName = type + '.log';
 		let logMsg = `[${moment().tz(client.config.logTimezone).format('M/D/YY HH:mm:ss')}] [${type}] ${message}`;
@@ -270,96 +264,6 @@ const init = async () => {
 
 
 	/**
-	* Required for RSS functionality
-	*/
-	const Parser = require('rss-parser');
-	const parser = new Parser();
-	try {
-		(async () => {
-			let feed = await parser.parseURL(client.config.rss.url);
-			feed.items.forEach(item => {
-				//  We cache the current items so we may check for new entries
-				const cacheName = encodeURIComponent(item.link);
-				const cacheFile = path.join(client.cachePath, 'rss', `${cacheName}.cache`);
-	
-				if (!client.fileExists(cacheFile)) {
-					fs.writeFileSync(cacheFile, JSON.stringify(item));
-				}
-			});
-		})();	
-	} catch (error) {
-		client.doSteamGroupAnnouncements = false;
-		return console.log(error);
-	}
-	/* ===================================================== */
-
-
-	/**
-	* Cache SourceBans bans punishment
-	*/
-	// request(client.config.sourcebans.bans_url, (err, res, body) => {
-	// 	if (err) {
-	// 		console.log(err);
-	// 	} else {
-	// 		try {
-	// 			const data = JSON.parse(body);
-	// 			Object.keys(data).forEach(key => {
-	// 				const cacheFile = path.join(client.cachePath, 'sb', `b_${data[key]['bid']}.cache`);
-	// 				fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
-	// 			});
-	// 		} catch (error) {
-	// 			console.log(error);
-	// 		}
-	// 	}
-	// });
-	/* ===================================================== */
-
-
-	/**
-	* Cache SourceBans comms punishments
-	*/
-	// request(client.config.sourcebans.comms_url, (err, res, body) => {
-	// 	if (err) {
-	// 		console.log(err);
-	// 	} else {
-	// 		try {
-	// 			const data = JSON.parse(body);
-	// 			Object.keys(data).forEach(key => {
-	// 				const cacheFile = path.join(client.cachePath, 'sb', `c_${data[key]['bid']}.cache`);
-	// 				fs.writeFileSync(cacheFile, JSON.stringify(data[key]));
-	// 			});
-	// 		} catch (error) {
-	// 			console.log(error)
-	// 		}
-	// 	}
-	// });
-	/* ===================================================== */
-
-
-	/**
-	* Cache suggestions
-	*/
-	// request('https://cyan.tf/api/suggestions', (err, res, body) => {
-	// 	if (err) {
-	// 		console.log(err);
-	// 	} else {
-	// 		try {
-	// 			const data = JSON.parse(body);
-	// 			if (data.results !== null) {
-	// 				data.results.forEach(suggestion => {
-	// 					const cacheFile = path.join(client.cachePath, 'suggestions', `s_${suggestion.uuid}.cache`);
-	// 					fs.writeFileSync(cacheFile, JSON.stringify(`https://cyan.tf/suggestions/${suggestion.uuid}`));
-	// 				});
-	// 			}
-	// 		} catch (error) {
-	// 			console.log(error)
-	// 		}
-	// 	}
-	// });
-	/* ===================================================== */
-
-
-	/**
 	* Log the bot into its account
 	*/
 	client.login(client.config.token);
@@ -388,18 +292,21 @@ process.on('SIGINT', () => {
 * Log exceptions to a unique crash file
 */
 process.on('uncaughtException', err => {
-	const crashFile = path.join(client.storagePath, 'logs', 'crash', `EXCEPTION_${moment().tz(client.config.logTimezone).format('M-D-YY_HH-mm-ss')}.log`);
+	const crashFile = path.join(client.storagePath, 'logs', 'crash', `EXCEPTION_${moment().tz(client.config.logTimezone).format('M-D-YY')}.log`);
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
+	console.error("Uncaught Exception: ", errorMsg);
 	fs.writeFile(crashFile, "Uncaught Exception: " + errorMsg + '\n\n', (err) => {
-		console.error("Uncaught Exception: ", errorMsg);
+		client.destroy();
 		process.exit(1);
 	});
 });
 
 process.on('unhandledRejection', err => {
-	const crashFile = path.join(client.storagePath, 'logs', 'crash', `REJECTION_${moment().tz(client.config.logTimezone).format('M-D-YY_HH-mm-ss')}.log`);
-	fs.writeFile(crashFile, "Uncaught Promise Error: " + err + '\n\n', (err) => {
-		console.error("Uncaught Promise Error: ", err);
+	const crashFile = path.join(client.storagePath, 'logs', 'crash', `REJECTION_${moment().tz(client.config.logTimezone).format('M-D-YY')}.log`);
+	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
+	console.error("Uncaught Promise Error: ", errorMsg);
+	fs.writeFile(crashFile, "Uncaught Promise Error: " + errorMsg + '\n\n', (err) => {
+		client.destroy();
 		process.exit(1);
 	});
 });

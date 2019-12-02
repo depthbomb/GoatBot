@@ -3,7 +3,7 @@
 |	GoatBot! Automation
 |--------------------------------------------------------------------------
 |
-|	Copyright (C) 2017 - 2018 Caprine Softworks - https://caprine.net
+|	Copyright (C) 2017 - 2020 Caprine Logic - https://caprine.net
 |
 |	This library is free software; you can redistribute it and/or
 |	modify it under the terms of the GNU Lesser General Public
