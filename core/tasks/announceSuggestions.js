@@ -11,6 +11,7 @@ module.exports = async (client) => {
 	return task = {
 		interval: 500,
 		action: () => {
+			return;
 			request('https://cyan.tf/api/suggestions', (err, res, body) => {
 				if (err) return console.log(err);
 				const types = [ 'Map', 'SaySound', 'Rebalance', 'Plugin' ];

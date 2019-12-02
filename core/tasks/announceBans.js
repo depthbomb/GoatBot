@@ -11,6 +11,7 @@ module.exports = async (client) => {
 	return task = {
 		interval: 30,
 		action: () => {
+			return;
 			request(client.config.sourcebans.bans_url, (err, res, body) => {
 				if (err) return console.log(err);
 				

@@ -39,12 +39,10 @@ module.exports = (client, message) => {
 	if (message.author.bot || message.system) return;
 
 	const isDm			= message.channel.type === 'dm';
-	const rawMessage	= message.content;
 	const isOwner		= (message.author.id === client.config.ownerId);
 	const level			= client.permlevel(message);
 	const isServerStaff = isDm ? false : (message.member.roles.find(r => r.name === client.config.roles.admin) || message.member.roles.find(r => r.name === client.config.roles.mod) || level > 2 || isOwner);
-	const isTF2Staff = isDm ? false : (message.member.roles.find(r => r.name === 'TF2 Server Staff'));
-	const isDonor		= isDm ? false : message.member.roles.find(r => r.name === (client.config.roles.donor));
+	const isTF2Staff 	= isDm ? false : (message.member.roles.find(r => r.name === 'TF2 Server Staff'));
 
 	let logPrefix = [];
 	let username = message.member !== null ? message.member.displayName : message.author.tag;

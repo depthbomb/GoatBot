@@ -37,14 +37,14 @@ exports.run = (client, message, args, level) => {
 		{ color: '#e75a70', emoji: '\:broken_heart:' },		//	0
 		{ color: '#e75a70', emoji: '\:broken_heart:' },		//	1
 		{ color: '#e75a70', emoji: '\:broken_heart:' },		//	2
-		{ color: '#e75a70', emoji: '\:broken_heart:' },
-		{ color: '#be1931', emoji: '\:heart:' },
-		{ color: '#be1931', emoji: '\:heart:' },
-		{ color: '#e75a70', emoji: '\:heartbeat:' },
-		{ color: '#e75a70', emoji: '\:heartbeat:' },
-		{ color: '#e75a70', emoji: '\:heartbeat:' },
-		{ color: '#e75a70', emoji: '\:sparkling_heart:' },
-		{ color: '#e75a70', emoji: '\:two_hearts:' },
+		{ color: '#e75a70', emoji: '\:broken_heart:' },		//	3
+		{ color: '#be1931', emoji: '\:heart:' },				//	4
+		{ color: '#be1931', emoji: '\:heart:' },				//	5
+		{ color: '#e75a70', emoji: '\:heartbeat:' },			//	6
+		{ color: '#e75a70', emoji: '\:heartbeat:' },			//	7
+		{ color: '#e75a70', emoji: '\:heartbeat:' },			//	8
+		{ color: '#e75a70', emoji: '\:sparkling_heart:' },	//	9
+		{ color: '#e75a70', emoji: '\:two_hearts:' },		//	10
 	];
 	const embed = new RichEmbed()
 		.setColor(ratings[rating].color)

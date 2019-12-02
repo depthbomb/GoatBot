@@ -23,15 +23,11 @@
 
 exports.run = async (client, message, args, level) => {
 	if (!args) return;
-	const Chance = require('chance');
-	const chance = new Chance();
-	let validMoves = ["rock", "paper", "scissors"];
-	const botMoves = chance.weighted([["rock", "paper", "scissors"], ["rock", "paper", "scissors", "goat"]], [1, 15]);
+	const validMoves = ["rock", "paper", "scissors"];
+	const botMoves = ["rock", "paper", "scissors"];
 	const move = args[0].toLowerCase();
 	const user = `<@${message.author.id}>`;
 	const bot = `<@${client.user.id}>`;
-	
-	if (message.author.id === client.config.ownerId) validMoves.push('goat');
 
 	const emoji = {
 		rock: "✊",
@@ -56,9 +52,6 @@ exports.run = async (client, message, args, level) => {
 		if ((botMove === "rock" && move === "scissors") ||
 			(botMove === "paper" && move === "rock") ||
 			(botMove === "scissors" && move === "paper")) outcomeMessage = `${bot}'s ${botMove} beats ${user}'s ${move}!`;
-
-		if (move === "goat") outcomeMessage = `${user}'s ${move} beats ${bot}'s ${botMove}!`;
-		if (botMove === "goat") outcomeMessage = `${bot}'s ${botMove} beats ${user}'s ${move}!`;
 
 		return message.channel.send(`${vsMessage}\n\n${outcomeMessage}`);
 	} else {
