@@ -38,11 +38,11 @@ class GoatBot extends Discord.Client {
 		//	rather than a server.
 		this.localMode = process.platform === 'win32' ? true : false;
 		this.config = require("./config.js").config;
+
 		this.commands = new Discord.Collection();
 		this.aliases = new Discord.Collection();
 
 		this.disableLog = false;
-		this.doSteamGroupAnnouncements = true;
 
 		this.rootPath = __dirname;
 		this.appPath = `${__dirname}/src`;
@@ -156,29 +156,25 @@ const client = new GoatBot();
 require(`${client.appPath}/functions.js`)(client);
 
 const init = async () => {
-	/**
-	* Load commands
-	*/
-	const commandFiles = await readdir(`${client.appPath}/commands/`);
-	console.log(chalk.greenBright(`Loading ${commandFiles.length} commands...`));
-	commandFiles.forEach(f => {
-		try {
-			if (f !== 'disabled') {	//	Skip directory
-				const props = require(`${client.appPath}/commands/${f}`);
-				if (!props.conf.enabled) return console.log(chalk.greenBright(`Skipping command [${props.help.name}] because it is disabled`));
-				if (f.split(".").slice(-1)[0] !== "js") return;
+	['Dev', 'Info', 'Moderation', 'NSFW', 'Random'].forEach(folder => {
+		const commandFiles = fs.readdirSync(`${client.appPath}/commands/${folder}/`);
+		console.log(chalk.greenBright(`Loading ${commandFiles.length} commands in ${folder}...`));
+		commandFiles.forEach(f => {
+			try {
+				const props = require(`${client.appPath}/commands/${folder}/${f}`);
+				if (!props.conf.enabled)
+					return console.log(chalk.greenBright(`Skipping command [${props.help.name}] because it is disabled`));
+				if (f.split(".").slice(-1)[0] !== "js")
+					return;
 				console.log(chalk.greenBright(`Loaded command [${props.help.name}]`));
 				client.commands.set(props.help.name, props);
-				props.conf.aliases.forEach(alias => {
-					client.aliases.set(alias, props.help.name);
-				});
+				props.conf.aliases.forEach(alias => client.aliases.set(alias, props.help.name));
+			} catch (e) {
+				console.trace(e);
+				process.exit(1);
 			}
-		} catch (e) {
-			console.trace(e);
-			process.exit(1);
-		}
+		});
 	});
-	/* ===================================================== */
 
 
 	/**
@@ -236,8 +232,6 @@ const init = async () => {
 				if (err) {
 					console.log(`Failed to create ${dir}. Exiting...`);
 					process.exit(1);
-				} else {
-					console.log(chalk.greenBright(`${dir} successfully created!`));
 				}
 			});
 		}
