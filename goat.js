@@ -36,7 +36,7 @@ class GoatBot extends Discord.Client {
 
 		//	Local mode (or dev mode) means that the bot is running locally on my development machine
 		//	rather than a server.
-		this.localMode = process.platform === 'win32' ? true : false;
+		this.localMode = process.platform === 'win32';
 		this.config = require("./config.js").config;
 
 		this.commands = new Discord.Collection();

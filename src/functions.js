@@ -93,7 +93,7 @@ module.exports = (client) => {
 			"mute": client.emojis.find(e => e.name === "caprineMute"),
 			"search": client.emojis.find(e => e.name === "caprineSearch"),
 			"refresh": client.emojis.find(e => e.name === "caprineRefresh"),
-			"error": client.emojis.find(e => e.name === "caprineError"),
+			"error": client.emojis.find(e => e.name === "caprineClose"),
 			"warning": client.emojis.find(e => e.name === "caprineWarning"),
 			"success": client.emojis.find(e => e.name === "caprineSuccess"),
 			"info": client.emojis.find(e => e.name === "caprineInfo"),
