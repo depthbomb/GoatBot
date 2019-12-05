@@ -27,7 +27,7 @@ exports.config = {
 	token: "",
 
 	//	Bot owner tag
-	ownerName: "depthbomb#7698",
+	ownerName: "depthbomb#0163",
 
 	//Bot owner ID
 	ownerId: "133325534548590594",
@@ -46,7 +46,7 @@ exports.config = {
 	status: "online",
 
 	//	User agent for requests
-	userAgent: "GoatBot! Automaton by Caprine Softworks - github.com/depthbomb/GoatBot",
+	userAgent: "GoatBot! Automaton by Caprine Logic - github.com/depthbomb/GoatBot",
 
 	//	Primary guild ID
 	mainGuild: "186978265557237762",
@@ -110,75 +110,6 @@ exports.config = {
 		}
 	},
 
-	//	Allowances for things like URLs, images, and others
-	//	limit = # of allowed item per <expiration> minutes
-	//	expiration = time in which the user's allowance refreshes
-	//	channels = channels in which the allowance type applies
-	allowances: {
-		enabled: true,
-
-		singles: {
-			limit: 3,
-			expiration: 10,
-			channels: [
-				'186978265557237762',
-				'459576208368205857',
-				'429030866585518080',
-				'481201307257012262'
-			]
-		},
-
-		links: {
-			limit: 6,
-			expiration: 10,
-			channels: [
-				'186978265557237762',
-				'459576208368205857',
-				'429030866585518080',
-				'481201307257012262'
-			]
-		},
-
-		images: {
-			limit: 3,
-			expiration: 15,
-			channels: [
-				'186978265557237762',
-				'459576208368205857',
-				'429030866585518080',
-				'481201307257012262'
-			]
-		},
-
-		//	When users use formatted text a bit too much
-		formatted: {
-			limit: 4,
-			expiration: 10,
-			channels: [
-				'426818323137822730',
-				'186978265557237762',
-				'459576208368205857',
-				'437832772887773195',
-				'429030866585518080',
-				'429029339888353300',
-				'481201307257012262'
-			]
-		}
-	},
-
-	//	Strict mode options
-	strict_mode: {
-		//	Channel IDs that allow commands during strict mode
-		command_channels: [
-			"420816699626094592",
-			"437832772887773195",
-			"481201307257012262"
-		],
-
-		//	When strict mode expires if no time is specified, in minutes
-		default_expiration: 5
-	},
-
 	//	Auto role options
 	autoRoles: {},
 
@@ -231,26 +162,7 @@ exports.config = {
 	//	Cleverbot API Key, no longer obtainable for free and you must purchase one
 	cleverbot_api_key: "",
 
-	//	RSS feed options, somewhat hardcoded. See related tasks for more info
-	rss: {
-		//	RSS feed URL
-		url: "https://steamcommunity.com/groups/cyantf/rss/",
-
-		//	Channel ID in which to output RSS feed info
-		output_channel: "186978265557237762"
-	},
-	
-	//	SourceBans punishment announcement options, also somewhat hardcoded
-	sourcebans: {
-		//	URL to ban punishment API endpoint
-		bans_url: "https://cyan.tf/api/punishments?type=bans",
-		
-		//	URL to comms punishment API endpoint
-		comms_url: "https://cyan.tf/api/punishments?type=comms",
-
-		//	Channel ID in which to output punishment announcements
-		output_channel: "512075316471136267"
-	},
+	wolfram_alpha_api_key: '',
 
 	//	Imgur API credentials
 	imgur: {
@@ -275,6 +187,7 @@ exports.config = {
 	//	Required directories. Old code, avoid modification
 	directories: [
 		"storage",
+		"storage/database",
 		"storage/cache",
 		"storage/cache/rss",
 		"storage/cache/sb",
