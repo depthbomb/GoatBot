@@ -27,7 +27,6 @@ exports.run = async (client, message, args, level) => {
 	const reason = args.length > 1 ? args.slice(1).join(' ') : '*No reason given.*';
 	
 	let user;
-
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		user = message.mentions.members.first();
 	} else {

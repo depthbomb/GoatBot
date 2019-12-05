@@ -30,6 +30,9 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
 
+const low = require('lowdb'),
+	  FileSync = require('lowdb/adapters/FileSync');
+
 class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
@@ -51,7 +54,9 @@ class GoatBot extends Discord.Client {
 		this.storagePath = `${__dirname}/storage`;
 
 		//	Path for storing temporary data
-		this.tmpPath = `${__dirname}/storage/tmp`;
+		this.tmpPath = `${this.storagePath}/tmp`;
+
+		this.dbPath = `${this.storagePath}/database/db.goat`;
 
 		//	Cache root path
 		this.cachePath = `${__dirname}/storage/cache`;
@@ -156,6 +161,10 @@ const client = new GoatBot();
 require(`${client.appPath}/functions.js`)(client);
 
 const init = async () => {
+	const adapter = new FileSync(client.dbPath);
+	client.db = low(adapter);
+	client.db.defaults({ warnings: [] }).write();
+
 	['Dev', 'Info', 'Moderation', 'NSFW', 'Random'].forEach(folder => {
 		const commandFiles = fs.readdirSync(`${client.appPath}/commands/${folder}/`);
 		console.log(chalk.greenBright(`Loading ${commandFiles.length} commands in ${folder}...`));
