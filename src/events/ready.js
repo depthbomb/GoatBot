@@ -22,53 +22,53 @@
 */
 
 module.exports = async client => {
-    const chalk = require('chalk');
+	const chalk = require('chalk');
 
-    await client.wait(1000);
+	await client.wait(1000);
 
-    client.disableEveryone = true;
-    client.disabledEvents = [
-        'TYPING_START',
-        'VOICE_SERVER_UPDATE',
-        'MESSAGE_REACTION_REMOVE',
-        'MESSAGE_REACTION_REMOVE_ALL',
-        'CHANNEL_PINS_UPDATE',
-        'USER_NOTE_UPDATE',
-        'RELATIONSHIP_ADD',
-        'RELATIONSHIP_REMOVE'
-    ];
+	client.disableEveryone = true;
+	client.disabledEvents = [
+		'TYPING_START',
+		'VOICE_SERVER_UPDATE',
+		'MESSAGE_REACTION_REMOVE',
+		'MESSAGE_REACTION_REMOVE_ALL',
+		'CHANNEL_PINS_UPDATE',
+		'USER_NOTE_UPDATE',
+		'RELATIONSHIP_ADD',
+		'RELATIONSHIP_REMOVE'
+	];
 
-    if(client.user.username !== client.config.botUsername) {
-        client.user.setUsername(client.config.botUsername);
-    }
+	if(client.user.username !== client.config.botUsername) {
+		client.user.setUsername(client.config.botUsername);
+	}
 
-    client.user.setPresence({
-        status: "online",
-        afk: false,
-        game: {
-            name: client.localMode ? '<DEV MODE>' : client.config.initialGame,
-            type: 0
-        }
-    });
+	client.user.setPresence({
+		status: "online",
+		afk: false,
+		game: {
+			name: client.localMode ? '<DEV MODE>' : client.config.initialGame,
+			type: 0
+		}
+	});
 
-    process.stdout.write('\033c');	//	Clear console
+	process.stdout.write('\033c');	//	Clear console
 
-    const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
-                 "│                                                                         │",
-                 "│                                                                         │",
-                 "│                 ______            __  ____        __  __                │",
-                 "│                / ____/___  ____ _/ /_/ __ )____  / /_/ /                │",
-                 "│               / / __/ __ \\/ __ `/ __/ __  / __ \\/ __/ /                 │",
-                 "│              / /_/ / /_/ / /_/ / /_/ /_/ / /_/ / /_/_/                  │",
-                 "│              \\____/\\____/\\__,_/\\__/_____/\\____/\\__(_)                   │",
-                 "│                                                                         │",
-                 "│                                                                         │",
-                 "│                                                                         │",
-                 "├─────────────────────────────────────────────────────────────────────────┤",
-                 "│            « Made by depthbomb#7698, powered by goat butts »            │",
-                 "└─────────────────────────────────────────────────────────────────────────┘"];
+	const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
+				 "│                                                                         │",
+				 "│                                                                         │",
+				 "│                 ______            __  ____        __  __                │",
+				 "│                / ____/___  ____ _/ /_/ __ )____  / /_/ /                │",
+				 "│               / / __/ __ \\/ __ `/ __/ __  / __ \\/ __/ /                 │",
+				 "│              / /_/ / /_/ / /_/ / /_/ /_/ / /_/ / /_/_/                  │",
+				 "│              \\____/\\____/\\__,_/\\__/_____/\\____/\\__(_)                   │",
+				 "│                                                                         │",
+				 "│                                                                         │",
+				 "│                                                                         │",
+				 "├─────────────────────────────────────────────────────────────────────────┤",
+				 "│            « Made by depthbomb#7698, powered by goat butts »            │",
+				 "└─────────────────────────────────────────────────────────────────────────┘"];
 
-    //	 Write our pretty logo
-    console.log(chalk.bgCyan.whiteBright(ascii.join("\n")));
-    console.log(chalk.bgCyan.whiteBright(`Ready to serve ${client.users.size} users in ${client.guilds.size} servers.`));
+	//	 Write our pretty logo
+	console.log(chalk.bgCyan.whiteBright(ascii.join("\n")));
+	console.log(chalk.bgCyan.whiteBright(`Ready to serve ${client.users.size} users in ${client.guilds.size} servers.`));
 };
