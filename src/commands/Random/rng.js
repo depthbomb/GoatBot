@@ -26,14 +26,14 @@ exports.run = async (client, message, args, level) => {
 		  chance = new Chance();
 	const { RichEmbed } = require('discord.js');
 	
-	const difficulty = args[0] || 'easy';
+	const difficulty = args[0].toLowerCase() || 'easy';
 	let settings = {};
 	switch (difficulty) {
 		default:
 		case 'easy':
 			settings = {
 				max: 10,
-				time: 15
+				time: 10
 			};
 			break;
 		case 'medium':
@@ -47,7 +47,7 @@ exports.run = async (client, message, args, level) => {
 		case 'hard':
 			settings = {
 				max: 100,
-				time: 25
+				time: 30
 			};
 			break;
 	}
@@ -56,7 +56,7 @@ exports.run = async (client, message, args, level) => {
 	const time = settings.time;
 
 	let embed = new RichEmbed()
-		.setTitle(`RNG`)
+		.setTitle(`RNG (${difficulty})`)
 		.setColor(client.colors.default)
 		.setDescription(`I have chosen a number between **1** and **${settings.max}**\n\nEveryone in this channel can guess by typing a number.\n\nThe game will end if __${time} seconds__ has elapsed.\n\n**GO**.`);
 	
@@ -79,8 +79,6 @@ exports.run = async (client, message, args, level) => {
 			m.channel.send({ embed })
 		});
 	});
-
-	return;
 };
 
 exports.conf = {
