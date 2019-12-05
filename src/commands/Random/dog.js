@@ -38,9 +38,9 @@ exports.run = async (client, message, args, level) => {
 		if (data.status) {
 			const image = data.message;
 			const embed = new RichEmbed()
-				.setColor(client.colors.default)
+				.setColor('RANDOM')
 				.setImage(image)
-				.setTitle('Random dog');
+				.setTitle('Random Dog');
 			return message.reply({ embed });
 		} else {
 			return message.reply('API call was not successful.');
