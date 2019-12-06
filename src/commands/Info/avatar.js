@@ -22,13 +22,18 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (!args || args.length !== 1) return;
 	const { RichEmbed } = require('discord.js');
-	const mention = args[0];
-	if (mention.match(/<@!?\d{17,19}>/g)) {
-		member = message.mentions.members.first();
+	let mention,
+		member;
+	if (args.length > 0) {
+		mention = args.join(' ');
+		if (mention.match(/<@!?\d{17,19}>/g)) {
+			member = message.mentions.members.first();
+		} else {
+			member = message.guild.members.find(m => m.id === mention);
+		}
 	} else {
-		member = message.guild.members.find(m => m.id === mention);
+		member = message.member;
 	}
 
 	if (member) {
@@ -70,12 +75,13 @@ exports.conf = {
 exports.help = {
 	name: "avatar",
 	category: "Info",
-	description: "Retrieves the URL to a user's Discord avatar",
-	usage: "avatar [@mention|user ID]",
+	description: "Retrieves info on a user's Discord avatar",
+	usage: "avatar [@mention?|user ID?]",
 	params: {
-		"@mention|user ID": "Mention or user ID to retrieve the avatar of"
+		"@mention|user ID": "(Optional) Mention or user ID to retrieve the info on, otherwise you will be chosen"
 	},
 	examples: [
+		"avatar",
 		"avatar @Username#0000"
 	]
 };
