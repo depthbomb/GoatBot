@@ -50,7 +50,6 @@ exports.run = (client, message, args, level) => {
 
 exports.conf = {
 	enabled: false,
-	guildOnly: true,
 	cooldown: 5,
 	globalCd: true,
 	aliases: [

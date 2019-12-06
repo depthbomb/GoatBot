@@ -50,7 +50,6 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	guildOnly: true,
 	cooldown: 1.5,
 	aliases: [
 		'app',

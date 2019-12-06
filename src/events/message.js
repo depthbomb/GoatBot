@@ -121,14 +121,14 @@ module.exports = (client, message) => {
 
 	// If the command exists, **AND** the user has permission, run it.
 	if (cmd) {
-
-		// Some commands may not be useable in DMs. This check prevents those commands from running and return a friendly error message.
-		if (!message.guild && cmd.conf.guildOnly) return message.reply("This command cannot be executed in a DM conversation.");
-
-		//	Prevent commands from being used in refugee camp
-		if (message.channel.id === '431266723736322048') return;
-
-		if (cmd.help.name !== 'escape' && message.channel.id === '481201307257012262' && level < 3) return;
+		if (
+			//	Prevent commands from being used in refugee camp
+			message.channel.id === '431266723736322048' ||
+			//	Prevent commands from being used outside of guilds
+			!message.guild ||
+			//	Prevent commands from being used in the Kennel if the command is not !escape and the user is not elevated
+			(cmd.help.name !== 'escape' && message.channel.id === '481201307257012262' && level < 3)
+		) return;
 
 		if (client.strictMode.enabled && level < 2) {
 			if (!client.config.strict_mode.command_channels.includes(message.channel.id)) {
