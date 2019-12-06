@@ -42,12 +42,7 @@ exports.run = async (client, message, args, level) => {
 		if (err) return client.error(message, err);
 		const data = JSON.parse(body);
 		let embed;
-		if (data.cod) {
-			embed = new RichEmbed()
-				.setTitle(`Error ${data.cod}`)
-				.setColor(client.colors.red)
-				.setDescription(data.message);
-		} else {
+		if (data.cod && data.cod === 200) {
 			const weather = data.weather[0];
 			const icon = `http://openweathermap.org/img/w/${weather.icon}.png`;
 			embed = new RichEmbed()
@@ -61,6 +56,11 @@ exports.run = async (client, message, args, level) => {
 				.addField('Sunrise', moment.unix(data.sys.sunrise).fromNow(), true)
 				.addField('Sunset', moment.unix(data.sys.sunset).fromNow(), true)
 				.setFooter(`Updated ${moment.unix(data.dt).fromNow()}`);
+		} else {
+			embed = new RichEmbed()
+				.setTitle(`Error ${data.cod}`)
+				.setColor(client.colors.red)
+				.setDescription(data.message);
 		}
 
 		return msg.edit({ embed });
