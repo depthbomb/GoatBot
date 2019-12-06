@@ -30,7 +30,6 @@ exports.run = async (client, message, args, level) => {
 	const uri = `http://api.wolframalpha.com/v2/query?appid=${client.config.wolfram_alpha_api_key}&input=${query}&format=plaintext&output=json&units=nonmetric`;
 
 	let msg = await message.reply("Sending request...");
-
 	request({
 		headers: {
 			"User-Agent": client.config.userAgent
