@@ -21,22 +21,22 @@
 |--------------------------------------------------------------------------
 */
 
+let state = '';
 exports.run = async (client, message, args, level) => {
-	if (args.length < 1) return;
+	if (args.length === 0) return;
 	const request = require('request');
 	const msg = encodeURI(args.join(' '));
-	const api_key = client.config.cleverbot_api_key;
+	const apiKey = client.config.apiKeys.cleverbot;
 
 	message.channel.startTyping();
 
-	let state;
-	let api_url = `http://www.cleverbot.com/getreply?key=${api_key}&input=${msg}&cs=${state}`;
+	let uri = `http://www.cleverbot.com/getreply?key=${apiKey}&input=${msg}&cs=${state}`;
 
 	request({
 		headers: {
 			"User-Agent": client.config.userAgent
 		},
-		uri: api_url,
+		uri: uri,
 		method: 'GET'
 	}, (err, res, body) => {
 		if (err) return client.error(message, err);
@@ -51,7 +51,6 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	guildOnly: false,
 	cooldown: 2,
 	globalCd: true,
 	aliases: [
@@ -71,7 +70,6 @@ exports.help = {
 		"message": "Message to send to the bot"
 	},
 	examples: [
-		"cleverbot hello!",
-		"t hi there"
+		"cleverbot hello!"
 	]
 };
