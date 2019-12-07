@@ -22,49 +22,42 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	const action = args[0];
-	const uri = `https://unbox.caprine.net/api/unbox`;
 	const request = require('request');
 	const { RichEmbed } = require('discord.js');
+	//https://caprine.s3.amazonaws.com/bot/goats/{}.jpg
+	const zalgo = "C̡͓̩̞̬̞͇̱̫̿͌̽̓͗̎̚ọ̧̗̮̰̟͙̠̫ͧ͡r̵̬̟̼̟̪̾͛͝r̰̈̀͗͆̏͘͝͡ṳ̡̫̥̹̟͓̯̟ͨͫ̐̅̀p̍ͩ̿ͯ̎͗ͣ̕͏̧̦̳t̠̲̤̣̼͈̄̑͜e̡̮̥̝̗̱͐̓̿͑͆̚ͅd͎̫̏̈́͋ͪ̓̓́";
+	const zalgo2 = "ǫ̹̜̖͉͇́ͤͯf̰͙̤̆̈̈́͜ ̹̗̯̩̺̂͛̅͋ͦͦ͌̎t͐͗̚҉̡̤͕̬̗̩͡h̘͍͍̱̉ͤ͑͛͋͜ě̙̞̖̬͔̩̥̱͍̐ͯ̄̆̈͜ ̸̰̺̬̹̤̙̬̐ͭ́ͅͅB̛̛̹̪ͯ̇͐̍̈́̆̂l̥͓̮ͪ͊ͮ̍ͬͥ̎̽͢a̤̟̘̻̒̓c̵̡̖̦ͯ̓͟k̵̖̼̳̫̊ͤ͐̓̇̓̀ͨ ̷̸̮̼͔ͨ̓͐̆ͨ̈́͞E͛̽͏̢͏͇͉͕̞̬̩͓m͓͖̦͋̿̍͡͝p̛̦͎̻̯̟̫̺ͤ͛͑́ͣ̊ͮ͘i̝͛̿ͧͪ̄̔̅̀r͕͇̹̬̥̘̗̍ͪ̿͆͐̊̀͢ͅě̘̬͚͜͢͝";
+	const rarities = [
+		{ prefix: 'Unfortunate', name: 'Poor', color: '#837546', file: 'poor' },
+		{ name: 'Common', color: '#9d9d9d', file: 'common' },
+		{ name: 'Uncommon', color: '#10883e', file: 'uncommon' },
+		{ name: 'Rare', color: '#0078d7', file: 'rare' },
+		{ name: 'Epic', color: '#881898', file: 'epic' },
+		{ name: 'Legendary', color: '#f7630d', file: 'legendary' },
+		{ name: 'Fire', color: '#ff8b00', file: 'fire' },
+		{ name: 'Aqua', color: '#01b7c4', file: 'water' },
+		{ name: 'Snow', color: '#ffffff', file: 'snow' },
+		{ prefix: 'Corrupting', name: 'Void', color: '#9b008a', file: 'void' },
+		{ name: 'Solar', color: '#ffb901', file: 'solar' },
+		{ name: 'Nebular', color: '#e3008d', file: 'nebular' },
+		{ prefix: 'Exceedingly Rare', name: 'Omniscient', color: '#0d0d0d', file: 'omniscient' },
+		{ prefix: 'Flamboyantly Rare', name: 'Gay', color: '#e81123', file: 'gay' },
+		{ name: zalgo, suffix: zalgo2, color: '#2d193b', file: 'old_god' },
+	];
+	const weights = [
 
-	request({
-		headers: {
-			"User-Agent": client.config.userAgent
-		},
-		uri: uri,
-		method: 'POST'
-	}, (err, res, body) => {
-		if (err) return client.error(message, err);
-		try {
-			const resp = JSON.parse(body);
-			const data = resp.results;
-			if (resp.success) {
-				const name = data.goat.name;
-				const color = data.goat.color;
-				const file = data.goat.file;
-				const tier = data.tier;
-				const tiers = data.tiers;
-				const chance = data.chance;
+	];
 
-				let embed;
-
-				embed = new RichEmbed()
-					.setColor(color)
-					.setTitle(`Unbox a Goat`)
-					.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)
-					.addField('Tier', `_${tier}/${tiers}_`)
-					.addField('Drop chance', `_~${chance}_`)
-					.setImage(file)
-					.setTimestamp()
-				;
-				return message.channel.send({ embed });
-			} else {
-				return message.reply(resp.message);
-			}
-		} catch (e) {
-			return client.msg(message, 'red', 'error', e, false)
-		}
-	});
+	const embed = new RichEmbed()
+		.setColor(color)
+		.setTitle(`Unbox a Goat`)
+		.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)
+		.addField('Tier', `_${tier}/${tiers}_`)
+		.addField('Drop chance', `_~${chance}_`)
+		.setImage(file)
+		.setTimestamp()
+	;
+	return message.channel.send({ embed });
 };
 
 exports.conf = {

@@ -22,62 +22,57 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (!args) return;
+	if (args.length === 0) return;
 	const request = require('request');
-	const { RichEmbed } = require('discord.js');
-	const term = encodeURIComponent(args.join(" "));
-	const apiUrl = `http://api.urbandictionary.com/v0/define?term=${term}`;
+	const text = encodeURIComponent(args.join(''));
+	const apiUrl = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${client.config.apiKeys.perspective}`;
 
-	let msg = await message.channel.send("Searching...");
+	let msg = await message.channel.send('One moment...');
 
 	request({
 		headers: {
 			"User-Agent": client.config.userAgent
 		},
 		uri: apiUrl,
-		method: 'GET'
+		method: 'POST',
+		json: { comment: { text }, languages: ['en'], requestedAttributes: {SEVERE_TOXICITY: {}} }
 	}, (err, res, body) => {
-		if (err) return client.error(message, err);
-		const data = JSON.parse(body);
-
-		if (data.result_type === "no_results") {
-			return msg.edit(`<@${message.author.id}>, I didn't find any results using your search term :(`);
+		if (err) {
+			console.log('Error', err);
 		} else {
-			const result = data.list[0];
-			const embed = new RichEmbed()
-				.setTitle(`Results for \`${decodeURIComponent(term)}\``)
-				.setDescription(result.permalink)
-				.addField("Definition", client.trunc(result.definition, 1023))
-				.setColor("#134FE6");
-
-			if (result.example) embed.addBlankField(1).addField('Example(s)', client.trunc(result.example, 500));
-			
-			return msg.edit(`<@${message.author.id}>`, { embed });
+			const data = body;
+			const toxicity = Math.round(data.attributeScores.SEVERE_TOXICITY.summaryScore.value*100);
+			if (toxicity >= 70) {
+				return msg.edit(`Text is likely to be perceived as toxic. (${toxicity}%)`);
+			} else if (toxicity >= 40) {
+				return msg.edit(`Text _may_ be perceived as toxic. (${toxicity}%)`);
+			} else {
+				return msg.edit(`Text is unlikely to be perceived as toxic. (${toxicity}%)`);
+			}
 		}
 	});
 };
 
 exports.conf = {
 	enabled: true,
-	guildOnly: false,
+	guildOnly: true,
 	aliases: [
-		"ud",
-		"urbandictionary"
+		"toxic"
 	],
-	cooldown: 5.5,
+	cooldown: 5,
 	permLevel: 0,
-	deleteTrigger: true,
+	deleteTrigger: false,
 };
 
 exports.help = {
-	name: "urban",
+	name: "toxicity",
 	category: "Info",
-	description: "Find a definition on Urban Dictionary",
-	usage: "urban [term]",
+	description: "Determines toxicity of the provided text",
+	usage: "toxicity [text]",
 	params: {
-		"term": "Term to search for"
+		"text": "Text to check toxicity of"
 	},
 	examples: [
-		"urban thought itch"
+		"toxicity your mom gay"
 	]
 };
