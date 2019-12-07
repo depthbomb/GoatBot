@@ -22,5 +22,6 @@
 */
 
 module.exports = client => {
+	client.online = false;
 	client.log('system', `Bot disconnected`);
 };

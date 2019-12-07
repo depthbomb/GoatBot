@@ -35,8 +35,7 @@ module.exports = (client) => {
 				if (client.online) {
 					client.heartbeat = time;
 				}
-
-				client.log('debug', `Heartbeat: ${time - heartbeat}, Ping: ${client.ping}`);
+				// client.log('debug', `Heartbeat: ${time - heartbeat}, Ping: ${client.ping}`);
 			}
 		}
 	};

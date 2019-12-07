@@ -34,13 +34,13 @@ exports.run = (client, message, args, level) => {
 	}
 
 	client.user.setPresence({
-        status: "online",
-        afk: false,
-        game: {
-            name: statusMessage,
-            type: 0
-        }
-    }).then(() => {
+		status: "online",
+		afk: false,
+		game: {
+			name: statusMessage,
+			type: 0
+		}
+	}).then(() => {
 		return message.delete().then(m => {
 			client.msg(m, 'green', 'success', `My status has been set to \`${statusMessage}\`.`);
 		});
