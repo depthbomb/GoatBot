@@ -21,16 +21,20 @@
 |--------------------------------------------------------------------------
 */
 
-let state = '';
+let state = {};
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const request = require('request');
 	const msg = encodeURI(args.join(' '));
 	const apiKey = client.config.apiKeys.cleverbot;
+	const authorId = message.author.id;
+
+	if (!state.hasOwnProperty(authorId))
+		state[authorId] = '';
 
 	message.channel.startTyping();
 
-	let uri = `http://www.cleverbot.com/getreply?key=${apiKey}&input=${msg}&cs=${state}`;
+	let uri = `http://www.cleverbot.com/getreply?key=${apiKey}&input=${msg}&cs=${state[authorId]}`;
 
 	request({
 		headers: {
@@ -42,7 +46,7 @@ exports.run = async (client, message, args, level) => {
 		if (err) return client.error(message, err);
 
 		const data = JSON.parse(body);
-		state = data.cs;
+		state[authorId] = data.cs;
 
 		message.channel.stopTyping();
 		return message.reply(data.output);
