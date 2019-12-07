@@ -42,6 +42,7 @@ class GoatBot extends Discord.Client {
 		this.localMode = process.platform === 'win32';
 		this.config = require("./config.js").config;
 
+		this.reconnecting = false;
 		this.commands = new Discord.Collection();
 		this.aliases = new Discord.Collection();
 
@@ -61,16 +62,10 @@ class GoatBot extends Discord.Client {
 		//	Cache root path
 		this.cachePath = `${__dirname}/storage/cache`;
 
-		this.deported = this.config.deported_users;
-
 		//	Object to store command cooldowns
 		this.cooldowns = {};
 
 		this.strictMode = {};
-
-		this.slowMode = { channels: {} };
-
-		this.warnings = {};
 
 		this.commandData = {};
 

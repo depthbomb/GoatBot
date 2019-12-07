@@ -41,6 +41,6 @@ module.exports = (client, oldMember, newMember) => {
 		{"Color": [oldMember.displayHexColor, newMember.displayHexColor]}
 	);
 
-	client.log("event", `${oldMember.displayName} was updated in ${oldMember.guild.name}:`);
+	client.log('event', `${oldMember.displayName} was updated in ${oldMember.guild.name}:`);
 	console.log(table.toString());
 };

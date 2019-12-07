@@ -22,5 +22,5 @@
 */
 
 module.exports = (client, guild) => {
-	client.log("event", `Guild [${guild.name}] has become unavailable. Outage?`)
+	client.log('event', `Guild [${guild.name}] has become unavailable. Outage?`)
 };

@@ -22,5 +22,5 @@
 */
 
 module.exports = (client, emoji) => {
-	client.log("event", `Emoji ${emoji.name} (${emoji.identifier}) has been deleted`);
+	client.log('event', `Emoji ${emoji.name} (${emoji.identifier}) has been deleted`);
 };

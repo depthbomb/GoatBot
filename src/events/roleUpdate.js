@@ -31,6 +31,6 @@ module.exports = (client, oldRole, newRole) => {
 		{"Permissions": [oldRole.permissions, newRole.permissions]}
 	);
 
-	client.log("event", `${oldRole.name} was updated in ${oldRole.guild.name}:`);
+	client.log('event', `${oldRole.name} was updated in ${oldRole.guild.name}:`);
 	console.log(table.toString());
 };

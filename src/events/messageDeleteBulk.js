@@ -30,6 +30,6 @@ module.exports = (client, messages) => {
 		if (!messageAuthors.includes(msg.author.username)) messageAuthors.push(msg.author.username);
 	}
 
-	client.log("event", `${messages.array().length} messages by ${messageAuthors.join(', ')} have been deleted in ${channel}.`);
+	client.log('event', `${messages.array().length} messages by ${messageAuthors.join(', ')} have been deleted in ${channel}.`);
 	client.logAction('Bulk message deletion', `${messages.array().length} messages by ${messageAuthors.join(', ')} have been deleted in ${channel}.`);
 };

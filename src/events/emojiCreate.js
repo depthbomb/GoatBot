@@ -22,5 +22,5 @@
 */
 
 module.exports = (client, emoji) => {
-	client.log("event", `Emoji ${emoji.name} (${emoji.identifier}) has been added to ${emoji.guild.name}.`);
+	client.log('event', `Emoji ${emoji.name} (${emoji.identifier}) has been added to ${emoji.guild.name}.`);
 };

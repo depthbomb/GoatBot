@@ -22,5 +22,5 @@
 */
 
 module.exports = client => {
-	client.log("system", `Bot disconnected`);
+	client.log('system', `Bot disconnected`);
 };

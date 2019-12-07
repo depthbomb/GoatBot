@@ -23,5 +23,5 @@
 
 module.exports = (client, role) => {
 	const chalk = require('chalk');
-	client.log("event", `Role [${role.name}] was created in guild ${role.guild.name} with color ${chalk.bgHex(role.hexColor).whiteBright(role.hexColor)} and permissions ${role.permissions}.`);
+	client.log('event', `Role [${role.name}] was created in guild ${role.guild.name} with color ${chalk.bgHex(role.hexColor).whiteBright(role.hexColor)} and permissions ${role.permissions}.`);
 };

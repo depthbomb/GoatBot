@@ -28,7 +28,6 @@ exports.run = async (client, message, args, level) => {
 	const apiUrl = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${client.config.apiKeys.perspective}`;
 
 	let msg = await message.channel.send('One moment...');
-
 	request({
 		headers: {
 			"User-Agent": client.config.userAgent

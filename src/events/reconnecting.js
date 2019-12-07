@@ -22,5 +22,13 @@
 */
 
 module.exports = client => {
-	client.log("system", `Reconnecting...`);
+	client.reconnecting = true;
+	client.log('system', 'Reconnecting...');
+	setTimeout(() => {
+		if (!client.reconnecting) {
+			client.log('system', 'Failed to reconnect after 30 seconds, restarting...');
+			client.destroy();
+			process.exit(1);
+		}
+	}, 30*1000);
 };
