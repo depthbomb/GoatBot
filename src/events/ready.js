@@ -26,6 +26,7 @@ module.exports = async client => {
 
 	await client.wait(1000);
 
+	client.online = true;
 	client.disableEveryone = true;
 	client.disabledEvents = [
 		'TYPING_START',
@@ -65,10 +66,9 @@ module.exports = async client => {
 				 "│                                                                         │",
 				 "│                                                                         │",
 				 "├─────────────────────────────────────────────────────────────────────────┤",
-				 "│            « Made by depthbomb#7698, powered by goat butts »            │",
+				 "│            « Made by depthbomb#0163, powered by goat butts »            │",
 				 "└─────────────────────────────────────────────────────────────────────────┘"];
 
-	//	 Write our pretty logo
 	console.log(chalk.bgCyan.whiteBright(ascii.join("\n")));
 	console.log(chalk.bgCyan.whiteBright(`Ready to serve ${client.users.size} users in ${client.guilds.size} servers.`));
 };

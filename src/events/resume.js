@@ -22,6 +22,6 @@
 */
 
 module.exports = (client, replayed) => {
-	client.reconnecting = false;
+	client.online = true;
 	client.log("system", `WebSocket resumed, replaying ${replayed} event(s)`);
 };

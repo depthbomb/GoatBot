@@ -36,17 +36,18 @@ const low = require('lowdb'),
 class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
+		this.online = false;
 
 		//	Local mode (or dev mode) means that the bot is running locally on my development machine
 		//	rather than a server.
 		this.localMode = process.platform === 'win32';
 		this.config = require("./config.js").config;
 
-		this.reconnecting = false;
 		this.commands = new Discord.Collection();
 		this.aliases = new Discord.Collection();
 
 		this.disableLog = false;
+		this.heartbeat = Math.floor(new Date() / 1000);
 
 		this.rootPath = __dirname;
 		this.appPath = `${__dirname}/src`;

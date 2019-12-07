@@ -21,7 +21,23 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = client => {
-	client.online = false;
-	client.log('system', 'Reconnecting...');
+module.exports = (client) => {
+	return task = {
+		interval: 30,
+		action: () => {
+			const heartbeat = client.heartbeat;
+			const time = Math.floor(new Date() / 1000);
+			if ((heartbeat + 35) < time) {
+				client.log('error', `Last heartbeat is behind by ${time - heartbeat} seconds. Restarting bot...`);
+				client.destroy();
+				process.exit(1);
+			} else {
+				if (client.online) {
+					client.heartbeat = time;
+				}
+
+				client.log('debug', `Heartbeat: ${time - heartbeat}, Ping: ${client.ping}`);
+			}
+		}
+	};
 };
