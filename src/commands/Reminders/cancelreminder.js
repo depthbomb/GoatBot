@@ -26,7 +26,9 @@ exports.run = async (client, message, args, level) => {
 	const db = client.db.get('reminders');
 	const uuid = args.join(' ');
 	const userId = message.author.id;
-	const reminder = db.find({ uuid, userId }).value();
+	const reminder = (userId === client.config.ownerId) ?
+					 db.find({ uuid }).value() :
+					 db.find({ uuid, userId }).value();
 	if (reminder) {
 		db.remove({ uuid }).write();
 		return client.msg(message, 'green', 'success', 'That reminder has been cancelled!');

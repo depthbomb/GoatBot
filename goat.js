@@ -297,14 +297,11 @@ process.on('SIGINT', () => {
 	});
 });
 
-/**
-* Log exceptions to a unique crash file
-*/
 process.on('uncaughtException', err => {
 	const crashFile = path.join(client.storagePath, 'logs', 'crash', `EXCEPTION_${moment().tz(client.config.logTimezone).format('M-D-YY')}.log`);
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
 	console.error("Uncaught Exception: ", errorMsg);
-	fs.writeFile(crashFile, "Uncaught Exception: " + errorMsg + '\n\n', (err) => {
+	fs.appendFile(crashFile, "Uncaught Exception: " + errorMsg + '\n', (err) => {
 		client.destroy();
 		process.exit(1);
 	});
@@ -314,7 +311,7 @@ process.on('unhandledRejection', err => {
 	const crashFile = path.join(client.storagePath, 'logs', 'crash', `REJECTION_${moment().tz(client.config.logTimezone).format('M-D-YY')}.log`);
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
 	console.error("Uncaught Promise Error: ", errorMsg);
-	fs.writeFile(crashFile, "Uncaught Promise Error: " + errorMsg + '\n\n', (err) => {
+	fs.appendFile(crashFile, "Uncaught Promise Error: " + errorMsg + '\n', (err) => {
 		client.destroy();
 		process.exit(1);
 	});
