@@ -83,6 +83,8 @@ class GoatBot extends Discord.Client {
 			blue:		"#3498db",
 			black:		"#333333"
 		};
+
+		this.timestamp = () => Math.floor(new Date() / 1000);
 	}
 
 	permlevel (message) {
@@ -160,9 +162,9 @@ require(`${client.appPath}/functions.js`)(client);
 const init = async () => {
 	const adapter = new FileSync(client.dbPath);
 	client.db = low(adapter);
-	client.db.defaults({ warnings: [] }).write();
+	client.db.defaults({ warnings: [], reminders: [] }).write();
 
-	['Dev', 'Fun', 'Info', 'Moderation', 'NSFW', 'Random'].forEach(folder => {
+	['Dev', 'Fun', 'Info', 'Moderation', 'NSFW', 'Random', 'Reminders', 'Useful'].forEach(folder => {
 		const commandFiles = fs.readdirSync(`${client.appPath}/commands/${folder}/`);
 		console.log(chalk.greenBright(`Loading ${commandFiles.length} commands in ${folder}...`));
 		commandFiles.forEach(f => {

@@ -6,4 +6,6 @@ GoatBot is a modified (and improved) version of my private Discord bot: *Koza*.
 
 This bot was made specifically for use in the Caprine.net Discord server so some aspects of it are somewhat hardcoded. GoatBot is also very much an unfinished product that is still being actively developed.
 
-I generally push updates without fully testing so there might be broken things. *You have been warned.*
+## Disclaimer
+
+_GoatBot!_ is intended to have **Administrator** permission in the server it operates in. This is potentially very dangerous if someone were to gain access to the bot's token. You have been warned!

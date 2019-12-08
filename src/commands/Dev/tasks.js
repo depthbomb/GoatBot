@@ -48,7 +48,7 @@ exports.run = (client, message, args, level) => {
 
 	tasks.forEach(task => {
 		const interval = formatInterval(task.interval);
-		const lastRan = "\n* " + (task.lastRan > 0 ? moment.unix(task.lastRan).fromNow() : 'Never')
+		const lastRan = "\n* Last ran: " + (task.lastRan > 0 ? moment.unix(task.lastRan).fromNow() : 'Never')
 		embed.addField(task.name, `\`\`\`markdown\n* ${task.description}\n* Interval: ${interval}${lastRan}\`\`\``);
 	});
 
