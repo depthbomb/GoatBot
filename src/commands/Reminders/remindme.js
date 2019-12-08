@@ -44,7 +44,7 @@ exports.run = async (client, message, args, level) => {
 		let duration = 0;
 		const now = client.timestamp();
 		for (let match of matches) {
-			const dur = match.replace(/[1-9]/g, '');
+			const dur = match.replace(/[0-9]/g, '');
 			const num = parseInt(match.replace(/\D/g, ''));
 			const out = num * converter[dur];
 			duration = (duration + out);

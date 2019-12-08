@@ -26,7 +26,7 @@ module.exports = async (client) => {
 		name: 'processReminders',
 		description: 'Processes outstanding reminders',
 		enabled: true,
-		interval: 30,
+		interval: 60,
 		action: () => {
 			const moment = require('moment');
 			const { RichEmbed } = require('discord.js');
@@ -34,17 +34,22 @@ module.exports = async (client) => {
 			const db = client.db.get('reminders');
 			const reminders = db.value();
 			for (let rem of reminders) {
-				if (rem.arrival <= now) {
-					const uuid = rem.uuid;
-					const userId = rem.userId;
-					const channel = client.channels.find(c => c.id === rem.channelId);
-					const embed = new RichEmbed()
-						  .setTitle(`Reminder (from ${moment.unix(rem.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss')})`)
-						  .setColor(client.colors.brand)
-						  .setDescription(rem.reminderMessage);
-
+				if (rem.arrival === null) {
+					//	Remove invalid reminders if the arrival date is somehow broken
 					db.remove({ uuid }).write();
-					channel.send(`<@${userId}>`, { embed });
+				} else {
+					if (rem.arrival <= now) {
+						const uuid = rem.uuid;
+						const userId = rem.userId;
+						const channel = client.channels.find(c => c.id === rem.channelId);
+						const embed = new RichEmbed()
+							  .setTitle(`Reminder (from ${moment.unix(rem.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss')})`)
+							  .setColor(client.colors.brand)
+							  .setDescription(rem.reminderMessage);
+	
+						db.remove({ uuid }).write();
+						channel.send(`<@${userId}>`, { embed });
+					}
 				}
 			}
 		}

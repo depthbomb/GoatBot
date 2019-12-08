@@ -34,7 +34,7 @@ exports.run = async (client, message, args, level) => {
 			  .setDescription(`You can cancel a reminder by typing \`${client.config.prefix}rcancel [uuid]\``);
 
 		for (let rem of reminders) {
-			embed.addField(`About ${moment.unix(rem.arrival).toNow()} (${rem.uuid})`, rem.reminderMessage);
+			embed.addField(`In about ${moment.unix(rem.arrival).fromNow(true)} (${rem.uuid})`, rem.reminderMessage);
 		}
 		
 		return message.reply({ embed });
