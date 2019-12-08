@@ -101,12 +101,11 @@ module.exports = (client, message) => {
 		}
 
 		if (
-			null !== message.content.match(/[n\u00F1]+[\s_\-.,+^*#&:;~$!\`%]*?[i1l\u012F]+[\s_\-.,+^*#&:;~$!\`%]*?[g\u011F]+[\s_\-.,+^*#&:;~$!\`%]*?[g\u011F]+[\s_\-.,+^*#&:;~$!\`%]*?[a4@\u03B1]+/ig) ||
 			null !== message.content.match(/f[a@α4]+[g\u011F]([g\u011F]+[o\u03BF0]+t)?/ig) ||
 			null !== message.content.match(/[n\u00F1][\s_\-.,+^*#&:;~$!\`%]*?[i1!l|\\\/#*]+[\s_\-.,+^*#&:;~$!\`%\u012F]*?[gq9\u011F][\s_\-.,+^*#&:;~$!\`%]*?[\u011Fgq9#*\s][\s_\-.,+^*#&:;~$!\`%]*?[e3a4\u00E3\u03B1@#*\s]?[\s_\-.,+^*#&:;~$!\`%]*?r/ig)
 		) {
 			if (message.channel.type === 'dm' || isTF2Staff) return;
-			if (message.author.id !== message.guild.owner.id || level < 2) {
+			if (!isOwner || level < 2) {
 				message.delete().then(msg => {
 					return client.kennelUser(msg, msg.member, '[Auto] Discriminatory language is not tolerated.');
 				}).catch(e => {});

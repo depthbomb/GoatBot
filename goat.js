@@ -213,6 +213,7 @@ const init = async () => {
 			const task = Promise.resolve(imported);
 			task.then((t) => {
 				console.log(chalk.greenBright(`Loaded task [${file.replace('.js', '')}]`));
+				if (t.hasOwnProperty('start')) t.start();
 				setInterval(() => {
 					t.action();
 				}, (t.interval * 1000));
