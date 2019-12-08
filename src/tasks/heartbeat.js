@@ -23,6 +23,9 @@
 
 module.exports = (client) => {
 	return task = {
+		name: 'heartbeat',
+		description: 'Manages the bot\'s heartbeat. Restarts the bot if there are abnormalities.',
+		enabled: true,
 		interval: 30,
 		action: () => {
 			const heartbeat = client.heartbeat;
@@ -35,7 +38,6 @@ module.exports = (client) => {
 				if (client.online) {
 					client.heartbeat = time;
 				}
-				// client.log('debug', `Heartbeat: ${time - heartbeat}, Ping: ${client.ping}`);
 			}
 		}
 	};

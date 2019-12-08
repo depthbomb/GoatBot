@@ -21,24 +21,25 @@
 |--------------------------------------------------------------------------
 */
 
-const Chance = require('chance'),
-	  chance = new Chance();
-module.exports = async (client) => {
+module.exports = (client) => {
 	return task = {
-		name: 'changeGame',
-		description: 'Changes the bot\'s "playing" game.',
-		enabled: !client.localMode,
-		interval: 60*60,
+		enabled: false,
+		interval: 60,
 		action: () => {
-			const quote = chance.weighted(client.config.status.statuses, client.config.status.weights);
-			client.user.setPresence({
-				status: "online",
-				afk: false,
-				game: {
-					name: quote,
-					type: 0
-				}
-			});
+			const colors = [ '#e81123', '#f7630d', '#ffb901', '#107c0f', '#0063b1', '#881898' ];
+			const role = client.guilds.find(g => g.id === '186978265557237762').roles.find(r => r.name === 'Gay');
+			const currentColor = role.hexColor;
+			const currentPosition = colors.indexOf(currentColor);
+
+			let nextColor;
+			if (currentPosition === 5) {
+				nextColor = colors[0];
+			} else {
+				nextColor = colors[currentPosition + 1];
+			}
+
+			role.setColor(nextColor);
+			client.db.update('rainbowRole', nextColor).write();
 		}
 	};
 };

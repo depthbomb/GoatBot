@@ -21,24 +21,14 @@
 |--------------------------------------------------------------------------
 */
 
-const Chance = require('chance'),
-	  chance = new Chance();
-module.exports = async (client) => {
+module.exports = (client) => {
 	return task = {
-		name: 'changeGame',
-		description: 'Changes the bot\'s "playing" game.',
-		enabled: !client.localMode,
+		name: 'clearWarnings',
+		description: 'Clears outstanding outdated user warnings.',
+		enabled: true,
 		interval: 60*60,
 		action: () => {
-			const quote = chance.weighted(client.config.status.statuses, client.config.status.weights);
-			client.user.setPresence({
-				status: "online",
-				afk: false,
-				game: {
-					name: quote,
-					type: 0
-				}
-			});
+			
 		}
 	};
 };

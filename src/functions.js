@@ -310,9 +310,8 @@ module.exports = (client) => {
 		return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	};
 
-
 	Array.prototype.allValuesSame = function () {
-		for(var i = 1; i < this.length; i++)
+		for(let i = 1; i < this.length; i++)
 		{
 			if(this[i] !== this[0])
 				return false;
@@ -339,7 +338,6 @@ module.exports = (client) => {
 
 		return this;
 	};
-
 
 	Number.prototype.reduce = function (percent, fix = false) {
 		let num = (this - this * percent);

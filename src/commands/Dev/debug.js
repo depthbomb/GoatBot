@@ -53,19 +53,19 @@ exports.run = (client, message, args, level) => {
 	}
 };
 
-	exports.conf = {
-		enabled: true,
-		aliases: [
-			"dbg"
-		],
-		cooldown: 1,
-		permLevel: 10,
-		deleteTrigger: true,
-	};
+exports.conf = {
+	enabled: true,
+	aliases: [
+		"dbg"
+	],
+	cooldown: 1,
+	permLevel: 10,
+	deleteTrigger: true,
+};
 
-	exports.help = {
-		name: "debug",
-		category: "System",
-		description: "General purpose debug command, creator-only",
-		usage: "debug"
-	};
+exports.help = {
+	name: "debug",
+	category: "Dev",
+	description: "General purpose debug command, creator-only",
+	usage: "debug"
+};

@@ -54,7 +54,7 @@ exports.conf = {
 
 exports.help = {
 	name: "eval2",
-	category: "System",
+	category: "Dev",
 	description: "Evaluates arbitrary JavaScript code, but without output.",
 	usage: "eval2 [code]",
 	params: {

@@ -45,6 +45,7 @@ class GoatBot extends Discord.Client {
 
 		this.commands = new Discord.Collection();
 		this.aliases = new Discord.Collection();
+		this.tasks = [];
 
 		this.disableLog = false;
 		this.heartbeat = Math.floor(new Date() / 1000);
@@ -212,11 +213,17 @@ const init = async () => {
 			const imported = require(`${client.appPath}/tasks/${file}`)(client);
 			const task = Promise.resolve(imported);
 			task.then((t) => {
-				console.log(chalk.greenBright(`Loaded task [${file.replace('.js', '')}]`));
-				if (t.hasOwnProperty('start')) t.start();
-				setInterval(() => {
-					t.action();
-				}, (t.interval * 1000));
+				if (t.enabled) {
+					client.tasks.push(t);
+					if (t.hasOwnProperty('start')) t.start();
+					const storedTask = client.tasks[client.tasks.indexOf(t)];
+					setInterval(() => {
+						t.action();
+						storedTask.lastRan = Math.floor(new Date() / 1000);
+					}, (t.interval * 1000));
+					storedTask.lastRan = 0;
+					console.log(chalk.greenBright(`Loaded task [${file.replace('.js', '')}]`));
+				}
 			});
 			delete require.cache[require.resolve(`${client.appPath}/tasks/${file}`)];
 		} catch (e) {
