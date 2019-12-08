@@ -34,14 +34,14 @@ module.exports = async (client) => {
 			const db = client.db.get('reminders');
 			const reminders = db.value();
 			for (let rem of reminders) {
+				const uuid = rem.uuid;
+				const userId = rem.userId;
+				const channel = client.channels.find(c => c.id === rem.channelId);
 				if (rem.arrival === null) {
 					//	Remove invalid reminders if the arrival date is somehow broken
 					db.remove({ uuid }).write();
 				} else {
 					if (rem.arrival <= now) {
-						const uuid = rem.uuid;
-						const userId = rem.userId;
-						const channel = client.channels.find(c => c.id === rem.channelId);
 						const embed = new RichEmbed()
 							  .setTitle(`Reminder (from ${moment.unix(rem.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss')})`)
 							  .setColor(client.colors.brand)
