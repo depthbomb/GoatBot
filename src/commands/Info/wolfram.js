@@ -99,7 +99,6 @@ exports.conf = {
 		'wa'
 	],
 	permLevel: 0,
-	deleteTrigger: false,
 };
 
 exports.help = {

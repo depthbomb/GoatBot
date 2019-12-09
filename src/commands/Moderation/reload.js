@@ -61,7 +61,6 @@ exports.conf = {
 	enabled: true,
 	aliases: [],
 	permLevel: 10,
-	deleteTrigger: true,
 };
 
 exports.help = {

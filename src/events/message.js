@@ -139,12 +139,6 @@ module.exports = (client, message) => {
 			let cooldown;
 			let cooldownName;
 
-			if (message.guild && cmd.conf.hasOwnProperty('requiredRole')) {
-				if (message.member.roles.find(r => r.name !== cmd.conf.requiredRole) && !isServerStaff) {
-					return message.reply(`You must have the ${cmd.conf.requiredRole} to use this command.`);
-				}
-			}
-
 			if (!cmd.conf.hasOwnProperty('cooldown')) {
 				cooldown = client.config.cooldowns.default * 1000;
 			} else {
@@ -157,18 +151,16 @@ module.exports = (client, message) => {
 				cooldownName = `${cmd.help.name}_GLOBAL`;
 			}
 
-			if (cmd.conf.deleteTrigger) message.delete().catch(e => {});
-
 			client.cooldown(message, cooldownName, cooldown, (cd) => {
 				if (cd) {
-					client.log("system", `${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);
+					client.log('system', `${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);
 				} else {
-					client.log("system", `${message.author.username} executed command [${cmd.help.name}]`);
+					client.log('system', `${message.author.username} executed command [${cmd.help.name}]`);
 					return cmd.run(client, message, args, level);
 				}
 			});
 		} else {
-			client.log("system", `${message.author.username} attempted to execute command [${cmd.help.name}] but does not have permission`);
+			client.log('system', `${message.author.username} attempted to execute command [${cmd.help.name}] but does not have permission`);
 			return client.msg(message, 'red', 'error', `You do not have permission to use this command. It requires a permission level of ${cmd.conf.permLevel} and you have a permission level of ${level}.`, true);
 		}
 	}

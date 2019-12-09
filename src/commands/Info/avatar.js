@@ -69,7 +69,6 @@ exports.conf = {
 		'profilepicture'
 	],
 	permLevel: 0,
-	deleteTrigger: false,
 };
 
 exports.help = {

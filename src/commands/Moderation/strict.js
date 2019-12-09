@@ -49,7 +49,6 @@ exports.conf = {
 		'strictmode'
 	],
 	permLevel: 3,
-	deleteTrigger: true,
 };
 
 exports.help = {

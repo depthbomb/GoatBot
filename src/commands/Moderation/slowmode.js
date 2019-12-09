@@ -57,7 +57,6 @@ exports.conf = {
 		'throttle'
 	],
 	permLevel: 5,
-	deleteTrigger: true,
 };
 
 exports.help = {

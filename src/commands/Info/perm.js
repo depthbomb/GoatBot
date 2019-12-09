@@ -34,7 +34,6 @@ exports.conf = {
 		"mylvl"
 	],
 	permLevel: 0,
-	deleteTrigger: true,
 };
 
 exports.help = {

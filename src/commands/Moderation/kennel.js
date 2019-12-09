@@ -44,7 +44,6 @@ exports.conf = {
 		'lock'
 	],
 	permLevel: 5,
-	deleteTrigger: true,
 };
 
 exports.help = {

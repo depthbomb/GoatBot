@@ -69,7 +69,6 @@ exports.conf = {
 		'userstats'
 	],
 	permLevel: 0,
-	deleteTrigger: false,
 };
 
 exports.help = {

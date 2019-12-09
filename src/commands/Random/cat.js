@@ -56,7 +56,6 @@ exports.conf = {
 		"gato",
 	],
 	permLevel: 0,
-	deleteTrigger: false,
 };
 
 exports.help = {

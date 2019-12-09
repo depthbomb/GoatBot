@@ -60,7 +60,6 @@ exports.conf = {
 		"dbg"
 	],
 	permLevel: 10,
-	deleteTrigger: true,
 };
 
 exports.help = {

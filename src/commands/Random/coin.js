@@ -34,7 +34,6 @@ exports.conf = {
 		'flip'
 	],
 	permLevel: 0,
-	deleteTrigger: true,
 };
 
 exports.help = {

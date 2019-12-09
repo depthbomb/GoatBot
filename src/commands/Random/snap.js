@@ -43,7 +43,6 @@ exports.conf = {
 		'thanos'
 	],
 	permLevel: 0,
-	deleteTrigger: true,
 };
 
 exports.help = {

@@ -65,7 +65,6 @@ exports.conf = {
 		"urbandictionary"
 	],
 	permLevel: 0,
-	deleteTrigger: true,
 };
 
 exports.help = {

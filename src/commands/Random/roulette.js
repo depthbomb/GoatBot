@@ -34,13 +34,12 @@ exports.run = (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
+	cooldown: 1.5,
 	aliases: [
 		"rr",
 		"russianroulette"
 	],
-	cooldown: 1.5,
 	permLevel: 0,
-	deleteTrigger: true,
 };
 
 exports.help = {

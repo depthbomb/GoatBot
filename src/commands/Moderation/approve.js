@@ -55,7 +55,6 @@ exports.conf = {
 		'app',
 	],
 	permLevel: 5,
-	deleteTrigger: false,
 };
 
 exports.help = {

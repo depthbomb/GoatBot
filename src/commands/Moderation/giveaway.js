@@ -109,7 +109,6 @@ exports.conf = {
 		'raffle'
 	],
 	permLevel: 3,
-	deleteTrigger: true,
 };
 
 exports.help = {

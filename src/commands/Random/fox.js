@@ -57,7 +57,6 @@ exports.conf = {
 		"foxs",
 	],
 	permLevel: 0,
-	deleteTrigger: false,
 };
 
 exports.help = {

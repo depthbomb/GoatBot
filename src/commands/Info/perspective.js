@@ -100,7 +100,6 @@ exports.conf = {
 		'pers'
 	],
 	permLevel: 0,
-	deleteTrigger: false,
 };
 
 exports.help = {

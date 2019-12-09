@@ -40,7 +40,6 @@ exports.conf = {
 		"delet"
 	],
 	permLevel: 3,
-	deleteTrigger: true,
 };
 
 exports.help = {

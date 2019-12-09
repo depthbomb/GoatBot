@@ -50,7 +50,6 @@ exports.conf = {
 	cooldown: 185,
 	aliases: [],
 	permLevel: 0,
-	deleteTrigger: false,
 };
 
 exports.help = {

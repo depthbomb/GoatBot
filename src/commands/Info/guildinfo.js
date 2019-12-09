@@ -50,7 +50,6 @@ exports.conf = {
 		'gs'
 	],
 	permLevel: 0,
-	deleteTrigger: true,
 };
 
 exports.help = {

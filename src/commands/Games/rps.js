@@ -66,7 +66,6 @@ exports.conf = {
 		'rockpaperscissors'
 	],
 	permLevel: 0,
-	deleteTrigger: true,
 };
 
 exports.help = {

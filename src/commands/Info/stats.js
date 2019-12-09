@@ -45,7 +45,6 @@ exports.conf = {
 		"statistics"
 	],
 	permLevel: 0,
-	deleteTrigger: true,
 };
 
 exports.help = {
