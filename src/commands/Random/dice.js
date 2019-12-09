@@ -51,7 +51,7 @@ exports.conf = {
 
 exports.help = {
 	name: "dice",
-	category: "Fun",
+	category: "Random",
 	description: "Roll a dice.",
 	usage: "dice [side count] [die count?]",
 	params: {

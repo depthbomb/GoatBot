@@ -63,7 +63,7 @@ exports.conf = {
 
 exports.help = {
 	name: "dog",
-	category: "Fun",
+	category: "Random",
 	description: "Get a random dog image",
 	usage: "dog",
 	params: {},

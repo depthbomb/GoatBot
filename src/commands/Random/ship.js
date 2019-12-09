@@ -85,7 +85,7 @@ exports.conf = {
 
 exports.help = {
 	name: "ship",
-	category: "Fun",
+	category: "Random",
 	description: "Ship two things together and see how much they belong with eachother!",
 	usage: "ship [thing] [thing2?]",
 	params: {

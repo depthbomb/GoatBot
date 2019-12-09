@@ -55,7 +55,7 @@ exports.conf = {
 
 exports.help = {
 	name: "slotmachine",
-	category: "Fun",
+	category: "Random",
 	description: "Play the slots",
 	usage: "slotmachine",
 	examples: [

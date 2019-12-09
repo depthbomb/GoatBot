@@ -41,7 +41,7 @@ exports.conf = {
 
 exports.help = {
 	name: "choice",
-	category: "Fun",
+	category: "Random",
 	description: "Let the bot choose between a list of items",
 	usage: "choice [item] [item2] [...?]",
 	params: {

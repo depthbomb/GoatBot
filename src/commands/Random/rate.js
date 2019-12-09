@@ -65,7 +65,7 @@ exports.conf = {
 
 exports.help = {
 	name: "rate",
-	category: "Fun",
+	category: "Random",
 	description: "Have the bot rate the attractiveness of your subject.",
 	usage: "rate [subject]",
 	params: {

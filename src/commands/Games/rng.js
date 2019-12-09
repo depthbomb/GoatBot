@@ -21,11 +21,10 @@
 |--------------------------------------------------------------------------
 */
 
+const Chance = require('chance'),
+	  chance = new Chance();
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const Chance = require('chance'),
-		  chance = new Chance();
-	const { RichEmbed } = require('discord.js');
-	
 	const difficulty = args[0].toLowerCase() || 'easy';
 	let settings = {};
 	switch (difficulty) {
@@ -111,7 +110,7 @@ exports.conf = {
 
 exports.help = {
 	name: "rng",
-	category: "Fun",
+	category: "Games",
 	description: "I come up with a number and people have to guess it!",
 	usage: "rng [difficulty?]",
 	params: {

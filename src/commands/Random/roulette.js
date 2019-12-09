@@ -45,7 +45,7 @@ exports.conf = {
 
 exports.help = {
 	name: "roulette",
-	category: "Fun",
+	category: "Random",
 	description: "Play a game of Russian Roulette. Spin the barrel and pull the trigger.",
 	usage: "roulette",
 	examples: [

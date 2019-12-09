@@ -105,7 +105,7 @@ exports.conf = {
 
 exports.help = {
 	name: "unbox",
-	category: "Fun",
+	category: "Random",
 	description: "Open a loot box",
 	usage: "unbox",
 	params: {},

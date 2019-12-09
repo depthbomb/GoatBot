@@ -24,7 +24,7 @@
 exports.run = (client, message, args, level) => {
 	const settings = client.config;
 	if (!args[0]) {
-		const myCommands = message.guild ? client.commands.filter(cmd => cmd.conf.permLevel <= level) : client.commands.filter(cmd => cmd.conf.permLevel <= level &&  cmd.conf.guildOnly !== true);
+		const myCommands = message.guild ? client.commands.filter(cmd => cmd.conf.permLevel <= level) : client.commands.filter(cmd => cmd.conf.permLevel <= level);
 		const commandNames = myCommands.keyArray();
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 		let currentCategory = "";
@@ -47,7 +47,6 @@ exports.run = (client, message, args, level) => {
 		let hasParams = false;
 		let paramLine = '';
 		let command;
-		let requiresRole;
 		let parameters = [];
 		let extraInfo = '';
 		if (client.commands.has(args[0])) {
@@ -83,15 +82,12 @@ exports.run = (client, message, args, level) => {
 			return message.author.send(
 				`# ${command.help.name.toProperCase()}\n` +
 				`${command.help.description}\n\n` +
-				`Cooldown\n--------\n${cooldown} seconds (reduced to ${(cooldown.reduce(client.config.cooldowns.reduction.donor))} for donors, ${cooldown.reduce(client.config.cooldowns.reduction.admin, 1)} for staff)\n\n` +
-				`Guild Only\n----------\n${command.conf.guildOnly.toString()}\n\n` +
+				`Cooldown\n--------\n${cooldown} seconds\n\n` +
 				requiresRole +
 				`Aliases\n-------\n${command.conf.aliases.length > 0 ? command.conf.aliases.join(", ") : 'None'}\n\n` +
 				`Usage\n-----\n${settings.prefix}${command.help.usage}\n\n` +
 				paramLine +
-				`Examples\n--------\n${examples.join("\n")}\n\n` +
-				extraInfo
-
+				`Examples\n--------\n${examples.join("\n")}\n\n`
 				, {code: "markdown", split: true}
 			).then((msg) => {
 				message.react("📨");

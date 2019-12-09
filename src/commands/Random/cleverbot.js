@@ -67,7 +67,7 @@ exports.conf = {
 
 exports.help = {
 	name: "cleverbot",
-	category: "Fun",
+	category: "Random",
 	description: "Talk to a bot",
 	usage: "cleverbot [message]",
 	params: {

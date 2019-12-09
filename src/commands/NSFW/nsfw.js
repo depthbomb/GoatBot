@@ -48,7 +48,7 @@ exports.conf = {
 
 exports.help = {
 	name: "nsfw",
-	category: "Server",
+	category: "NSFW",
 	description: "Gives or revokes access to the NSFW channels",
 	usage: "nsfw",
 	params: {},

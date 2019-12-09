@@ -151,7 +151,7 @@ exports.conf = {
 
 exports.help = {
 	name: 'e621',
-	category: 'Search',
+	category: 'NSFW',
 	description: 'Command for getting data from e621.net.',
 	usage: 'e621 [rating] [page] [tags]',
 	params: {

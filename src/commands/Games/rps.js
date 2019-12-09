@@ -71,7 +71,7 @@ exports.conf = {
 
 exports.help = {
 	name: "rps",
-	category: "Fun",
+	category: "Games",
 	description: "Play Rock, Paper, Scissors against a bot.",
 	usage: "rps [move]",
 	params: {

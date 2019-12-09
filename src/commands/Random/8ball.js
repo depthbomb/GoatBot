@@ -74,7 +74,7 @@ exports.conf = {
 
 exports.help = {
 	name: "8ball",
-	category: "Fun",
+	category: "Random",
 	description: "Ask the Magic 8-Ball (almost) anything!",
 	usage: "8ball [question]",
 	params: {

@@ -39,7 +39,7 @@ exports.conf = {
 
 exports.help = {
 	name: "coin",
-	category: "Fun",
+	category: "Random",
 	description: "Flips a coin",
 	usage: "coin",
 	params: {},

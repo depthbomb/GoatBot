@@ -48,7 +48,7 @@ exports.conf = {
 
 exports.help = {
 	name: "snap",
-	category: "Fun",
+	category: "Random",
 	description: "Bring balance to the guild",
 	usage: "snap",
 	examples: [
