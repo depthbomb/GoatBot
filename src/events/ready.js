@@ -21,11 +21,9 @@
 |--------------------------------------------------------------------------
 */
 
+const chalk = require('chalk');
 module.exports = async client => {
-	const chalk = require('chalk');
-
 	await client.wait(1000);
-
 	client.online = true;
 	client.disableEveryone = true;
 	client.disabledEvents = [
@@ -38,10 +36,6 @@ module.exports = async client => {
 		'RELATIONSHIP_ADD',
 		'RELATIONSHIP_REMOVE'
 	];
-
-	if(client.user.username !== client.config.botUsername) {
-		client.user.setUsername(client.config.botUsername);
-	}
 
 	client.user.setPresence({
 		status: "online",

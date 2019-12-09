@@ -20,11 +20,16 @@
 |
 |--------------------------------------------------------------------------
 */
-if (process.version.slice(1).split(".")[0] < 8) throw new Error("GoatBot requires Node 8.0.0 or higher. Update Node on your system.");
+
+if (
+	process.version.slice(1).split('.')[0] < 10 ||
+	process.version.slice(1).split('.')[0] >= 10 && process.version.slice(2).split('.')[0] < 2
+) throw new Error('GoatBot requires Node 10.2.0 or higher.');
+
 
 const Discord = require('discord.js');
-const { promisify } = require("util");
-const readdir = promisify(require("fs").readdir);
+const { promisify } = require('util');
+const readdir = promisify(require('fs').readdir);
 const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
