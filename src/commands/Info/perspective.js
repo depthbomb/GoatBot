@@ -91,6 +91,7 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
+	cooldown: 5,
 	aliases: [
 		'analyze',
 		'toxicity',
@@ -98,7 +99,6 @@ exports.conf = {
 		'perspective',
 		'pers'
 	],
-	cooldown: 5,
 	permLevel: 0,
 	deleteTrigger: false,
 };

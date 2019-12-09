@@ -50,9 +50,9 @@ exports.run = async (client, message, args, level) => {
 			imgur.uploadFile(imageName, 'yalU7').then((json) => {
 				let imageURL = json.data.link;
 				let colorEmbed = new RichEmbed()
-								.setDescription(`Color preview for \`#${colorCode} (0x${colorCode.toUpperCase()}FF)\``)
-								.setColor(`#${colorCode}`)
-								.setImage(imageURL);
+					.setDescription(`Color preview for \`#${colorCode} (0x${colorCode.toUpperCase()}FF)\``)
+					.setColor(`#${colorCode}`)
+					.setImage(imageURL);
 				return msg.edit(`<@${message.author.id}>`, {embed: colorEmbed}).then(() => {
 					fs.unlinkSync(imageName);
 				});
@@ -63,7 +63,6 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	guildOnly: false,
 	aliases: [],
 	permLevel: 0,
 	deleteTrigger: true,

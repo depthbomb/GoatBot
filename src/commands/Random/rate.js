@@ -56,7 +56,6 @@ exports.run = (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	guildOnly: false,
 	aliases: [
 		'rating'
 	],

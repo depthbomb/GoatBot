@@ -112,13 +112,12 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	guildOnly: false,
+	cooldown: 10,
 	aliases: [
 		"incidents",
 		"issue",
 		"issues"
 	],
-	cooldown: 10,
 	permLevel: 0,
 	deleteTrigger: true,
 };

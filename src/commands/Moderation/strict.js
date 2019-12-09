@@ -44,10 +44,10 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
+	cooldown: 1.5,
 	aliases: [
 		'strictmode'
 	],
-	cooldown: 1.5,
 	permLevel: 3,
 	deleteTrigger: true,
 };

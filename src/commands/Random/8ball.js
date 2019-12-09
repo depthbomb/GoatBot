@@ -21,11 +21,10 @@
 |--------------------------------------------------------------------------
 */
 
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const { RichEmbed } = require('discord.js');
-	let question = args.join(" ");
+	const question = args.join(' ');
 	if(question.endsWith("?")) {
-
 		const responses = [
 			// Affirmative
 			"It is certain",
@@ -56,8 +55,8 @@ exports.run = async (client, message, args, level) => {
 			"Very doubtful"
 		];
 		const embed = new RichEmbed()
-					.setColor('#232323')
-					.setDescription(`\:8ball: <@${message.author.id}>, ${responses.shuffle()[0]}`);
+			  .setColor('#232323')
+			  .setDescription(`\:8ball: <@${message.author.id}>, ${responses.shuffle()[0]}`);
 
 		return message.channel.send({ embed });
 	} else {
@@ -67,7 +66,6 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	guildOnly: false,
 	aliases: [
 		'8b'
 	],

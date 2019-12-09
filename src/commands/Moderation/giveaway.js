@@ -41,9 +41,7 @@ exports.run = async (client, message, args, level) => {
 		.setFooter(`Time left: ${timeLeft} seconds`);
 
 	message.channel.send('🎉 Giveaway! 🎉', { embed }).then(msg => {
-
 		msg.react('🎉');
-
 		const collector = msg.createReactionCollector(filter, { time: (giveawayLimit * 1000) });
 
 		let updateTimeLeft = setInterval(() => {

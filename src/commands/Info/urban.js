@@ -59,12 +59,11 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	guildOnly: false,
+	cooldown: 5.5,
 	aliases: [
 		"ud",
 		"urbandictionary"
 	],
-	cooldown: 5.5,
 	permLevel: 0,
 	deleteTrigger: true,
 };

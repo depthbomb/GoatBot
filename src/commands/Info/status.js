@@ -47,17 +47,17 @@ exports.run = (client, message, args, level) => {
 	});
 };
 
-	exports.conf = {
-		enabled: true,
-		aliases: [],
-		cooldown: 5,
-		permLevel: 10,
-		deleteTrigger: true,
-	};
+exports.conf = {
+	enabled: true,
+	cooldown: 5,
+	aliases: [],
+	permLevel: 10,
+	deleteTrigger: true,
+};
 
-	exports.help = {
-		name: "status",
-		category: "System",
-		description: "Sets my status",
-		usage: "status Hello!"
-	};
+exports.help = {
+	name: "status",
+	category: "System",
+	description: "Sets my status",
+	usage: "status Hello!"
+};

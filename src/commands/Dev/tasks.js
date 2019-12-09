@@ -57,8 +57,8 @@ exports.run = (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	aliases: [],
 	cooldown: 1,
+	aliases: [],
 	permLevel: 0,
 };
 

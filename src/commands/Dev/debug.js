@@ -55,10 +55,10 @@ exports.run = (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
+	cooldown: 1,
 	aliases: [
 		"dbg"
 	],
-	cooldown: 1,
 	permLevel: 10,
 	deleteTrigger: true,
 };
