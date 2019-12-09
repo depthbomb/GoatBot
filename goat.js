@@ -34,6 +34,21 @@ const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment-timezone');
+const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
+				"│                                                                         │",
+				"│                                                                         │",
+				"│                 ______            __  ____        __  __                │",
+				"│                / ____/___  ____ _/ /_/ __ )____  / /_/ /                │",
+				"│               / / __/ __ \\/ __ `/ __/ __  / __ \\/ __/ /                 │",
+				"│              / /_/ / /_/ / /_/ / /_/ /_/ / /_/ / /_/_/                  │",
+				"│              \\____/\\____/\\__,_/\\__/_____/\\____/\\__(_)                   │",
+				"│                                                                         │",
+				"│                                                                         │",
+				"│                                                                         │",
+				"├─────────────────────────────────────────────────────────────────────────┤",
+				"│            « Made by depthbomb#0163, powered by goat butts »            │",
+				"└─────────────────────────────────────────────────────────────────────────┘"];
+console.log(chalk.bgCyan.whiteBright(ascii.join("\n")));
 
 const low = require('lowdb'),
 	  FileSync = require('lowdb/adapters/FileSync');
@@ -174,13 +189,11 @@ const init = async () => {
 		commandFiles.forEach(f => {
 			try {
 				const props = require(`${client.appPath}/commands/${folder}/${f}`);
-				if (!props.conf.enabled)
-					return console.log(chalk.greenBright(`Skipping command [${props.help.name}] because it is disabled`));
-				if (f.split(".").slice(-1)[0] !== "js")
-					return;
-				console.log(chalk.greenBright(`Loaded command [${props.help.name}]`));
-				client.commands.set(props.help.name, props);
-				props.conf.aliases.forEach(alias => client.aliases.set(alias, props.help.name));
+				if (props.conf.enabled) {
+					if (f.split(".").slice(-1)[0] !== "js") return;
+					client.commands.set(props.help.name, props);
+					props.conf.aliases.forEach(alias => client.aliases.set(alias, props.help.name));
+				}
 			} catch (e) {
 				console.trace(e);
 				process.exit(1);
@@ -200,7 +213,7 @@ const init = async () => {
 			const event = require(`${client.appPath}/events/${file}`);
 			client.on(eventName, event.bind(null, client));
 			delete require.cache[require.resolve(`${client.appPath}/events/${file}`)];
-			console.log(chalk.greenBright(`Loaded event [${file.replace('.js', '')}]`));
+			// console.log(chalk.greenBright(`Loaded event [${file.replace('.js', '')}]`));
 		} catch (e) {
 			console.trace(e);
 			process.exit(1);
@@ -228,7 +241,7 @@ const init = async () => {
 						storedTask.lastRan = Math.floor(new Date() / 1000);
 					}, (t.interval * 1000));
 					storedTask.lastRan = 0;
-					console.log(chalk.greenBright(`Loaded task [${file.replace('.js', '')}]`));
+					// console.log(chalk.greenBright(`Loaded task [${file.replace('.js', '')}]`));
 				}
 			});
 			delete require.cache[require.resolve(`${client.appPath}/tasks/${file}`)];
