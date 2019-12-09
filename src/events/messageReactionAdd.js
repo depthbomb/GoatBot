@@ -21,42 +21,11 @@
 |--------------------------------------------------------------------------
 */
 
-exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
-	const mention = args[0];
-	const reason = args.length > 1 ? args.slice(1).join(' ') : 'No reason given';
-	
-	let user;
-	if (mention.match(/<@!?\d{17,19}>/g)) {
-		user = message.mentions.members.first();
-	} else {
-		return message.reply('Could not find user.');
+module.exports = (client, messageReaction, user) => {
+	const db = client.db.get('bans.reaction');
+	const message = messageReaction.message;
+	const userId = message.author.id;
+	if (db.filter({ userId }).value().length > 0) {
+		messageReaction.remove(user);
 	}
-
-	return client.kennelUser(message, user, reason, message.member.displayName);
-};
-
-exports.conf = {
-	enabled: true,
-	cooldown: 1.5,
-	aliases: [
-		'ken',
-		'lock'
-	],
-	permLevel: 5,
-};
-
-exports.help = {
-	name: 'kennel',
-	category: 'Moderation',
-	description: 'Places a user in the kennel.',
-	usage: 'kennel [@mention|user ID] [reason?]',
-	params: {
-		'@user': 'Mention of user to kennel',
-		'reason': '(Optional) Reason that the user gets kenneled.'
-	},
-	examples: [
-		'kennel @Username#0000',
-		'kennel @Username#0001 Being a bad boy'
-	]
 };

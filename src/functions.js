@@ -142,8 +142,7 @@ module.exports = (client) => {
 	client.cooldown = async (message, cooldownName, cooldownDuration, callback) => {
 		const now = require('moment')().unix() * 1000;
 		const messageTime = message.createdTimestamp;
-		const bypassCooldown = message.member.roles.keyArray().some(k =>
-			client.config.cooldowns.rolesExcluded.includes(k));
+		const bypassCooldown = message.author.id === client.config.ownerId;
 
 		//	Object to store command cooldowns
 		let cooldownObject = client.cooldowns;

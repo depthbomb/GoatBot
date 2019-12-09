@@ -21,14 +21,14 @@
 |--------------------------------------------------------------------------
 */
 
-exports.run = (client, message, args, level) => {
-	if(args.length === 0) return;
-	const db = client.db.get('warnings');
-	const moment = require('moment');
-
+const { RichEmbed } = require('discord.js');
+exports.run = async (client, message, args, level) => {
+	if (args.length === 0) return;
+	const db      = client.db.get('bans.reaction');
 	const mention = args[0];
-	const reason = args.length > 1 ? args.slice(1).join(' ') : 'No reason given';
-
+	const reason  = args.slice(1).join(' ') || 'No reason given';
+	
+	let user;
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		user = message.mentions.members.first();
 	} else {
@@ -36,25 +36,23 @@ exports.run = (client, message, args, level) => {
 	}
 
 	if (user) {
-		const expiration = moment().add(3, 'days').unix();
-		let warnings = db.filter({ userId: user.id }).value().length;
-
-		if (warnings > 2) {
-			db.remove({ userId: user.id }).write();
-			return client.kennelUser(message, user, reason, user.displayName);
+		const userId = user.id;
+		const embed = new RichEmbed()
+			  .setAuthor(message.member.displayName, message.author.avatarURL)
+			  .setTimestamp();
+		if (db.filter({ userId }).value().length > 0) {
+			db.remove({ userId }).write();
+			embed
+				.setColor(client.colors.orange)
+				.setDescription(`Reaction ban on ${user.displayName} has been lifted.`);
+		} else {
+			db.push({ userId, reason }).write();
+			embed
+				.setColor(client.colors.red)
+				.setDescription(`${user.displayName} has been banned from adding reactions.`);
 		}
 
-		db.push({ userId: user.id, reason: reason, expires: expiration }).write();
-		//	Get updated number of warnings
-		warnings = db.filter({ userId: user.id }).value().length;
-
-		const warningMessage = [
-			`<@${user.id}>, you have recieved warning \`${warnings} / 3\`.`,
-			`Reason: \`${reason}\``,
-		];
-		if (warnings === 3) warningMessage.push('Your next warning will result in punishment.');
-
-		return message.channel.send(warningMessage);
+		return message.channel.send({ embed });
 	} else {
 		return message.reply(`Could not find member.`);
 	}
@@ -62,23 +60,24 @@ exports.run = (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
+	cooldown: 1.5,
 	aliases: [
-		"w"
+		'banreact',
+		'reactban',
+		'reactionban',
 	],
-	permLevel: 4
+	permLevel: 5,
 };
 
 exports.help = {
-	name: "warn",
-	category: "Moderation",
-	description: "Warns a user",
-	usage: "warn [@mention|user ID] [reason?]",
+	name: 'banreactions',
+	category: 'Moderation',
+	description: 'Bans/unbans a user from adding reactions to any message',
+	usage: 'banreactions [@mention|user ID]',
 	params: {
-		"@mention|user ID": "Mention or ID of user to warn",
-		"reason": "(Optional) Reason for the warning",
+		'@mention|user ID': 'Mention or user ID'
 	},
 	examples: [
-		"warn @Username#0000",
-		"warn @Username#0000 Don't do that!",
+		'banreactions @Username#0000'
 	]
 };

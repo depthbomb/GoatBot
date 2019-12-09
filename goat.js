@@ -70,11 +70,9 @@ class GoatBot extends Discord.Client {
 		this.strictMode = {};
 
 		this.commandData = {};
-
-		this.allowances = { images: {}, links: {}, formatted: {}, singles: {} };
 		
 		this.colors = {
-			brand:		this.config.color || '#ea005f',
+			brand:		this.config.color,
 			yellow:		'#ffb901',
 			default:	'#99aab5',
 			red:		'#e81123',
@@ -162,7 +160,8 @@ require(`${client.appPath}/functions.js`)(client);
 const init = async () => {
 	const adapter = new FileSync(client.dbPath);
 	client.db = low(adapter);
-	client.db.defaults({ warnings: [], reminders: [] }).write();
+	client.db.defaults({ warnings: [], reminders: [], bans: { reaction: [] } }).write();
+
 
 	['Dev', 'Games', 'Info', 'Moderation', 'NSFW', 'Random', 'Reminders', 'Useful'].forEach(folder => {
 		const commandFiles = fs.readdirSync(`${client.appPath}/commands/${folder}/`);
