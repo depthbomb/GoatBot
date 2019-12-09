@@ -65,9 +65,7 @@ exports.run = async (client, message, args, level) => {
 	];
 
 	let weightSum = 0;
-	for (let w of weights) {
-		weightSum += w;
-	}
+	for (let w of weights) weightSum += w;
 
 	const chosen = chance.weighted(rarities, weights);
 	const color  = chosen.color,
@@ -78,14 +76,14 @@ exports.run = async (client, message, args, level) => {
 		  name   = `${prefix} ${chosen.name} Goat ${suffix}`.trim(),
 		  tier   = rarities.indexOf(chosen),
 		  tiers  = (rarities.length - 1),
-		  dropChance = ((weight / weightSum) * 100).toFixed(3);
+		  dropChance = ((weight / weightSum) * 100).toFixed(2);
 
 	const embed = new RichEmbed()
 		.setColor(color)
 		.setTitle(`Unbox a Goat`)
 		.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)
 		.addField('Tier', `\`${tier}/${tiers}\``)
-		.addField('Drop chance', `\`~${dropChance}\``)
+		.addField('Drop chance', `\`~${dropChance}%\``)
 		.setImage(image)
 		.setTimestamp()
 	;

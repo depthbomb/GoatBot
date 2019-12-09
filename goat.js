@@ -74,14 +74,14 @@ class GoatBot extends Discord.Client {
 		this.allowances = { images: {}, links: {}, formatted: {}, singles: {} };
 		
 		this.colors = {
-			brand:		"#0097a7",
-			yellow:		"#faa61a",
-			default:	"#99aab5",
-			red:		"#f04747",
-			orange:		"#f57731",
-			green:		"#43b581",
-			blue:		"#3498db",
-			black:		"#333333"
+			brand:		this.config.color || '#ea005f',
+			yellow:		'#ffb901',
+			default:	'#99aab5',
+			red:		'#e81123',
+			orange:		'#f7630d',
+			green:		'#10883e',
+			blue:		'#0078d7',
+			black:		'#222222'
 		};
 
 		this.timestamp = () => Math.floor(new Date() / 1000);

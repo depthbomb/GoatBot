@@ -21,10 +21,9 @@
 |--------------------------------------------------------------------------
 */
 
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length < 2) return;
-	const { RichEmbed } = require('discord.js');
-	const moment = require('moment');
 	const giveawayLimit = args[0];
 	const giveawayItem = args.slice(1).join(' ');
 
@@ -68,12 +67,10 @@ exports.run = async (client, message, args, level) => {
 
 		collector.on('collect', r => {
 			const userId = r.users.last().id;	//	Get the latest user who reacted
-			
 			if (!entered.includes(userId)) {
 				entered.push(userId);
 				displayEntered.push(`<@${userId}>`);
 			}
-
 		});
 
 		collector.on('end', () => {
@@ -87,7 +84,6 @@ exports.run = async (client, message, args, level) => {
 			} else {
 				let winner = entered.shuffle()[0];
 				winnerText = `Congratulations, <@${winner}>! You've won **${giveawayItem}**`;
-
 				return message.channel.send(winnerText).then(() => {
 					embed = new RichEmbed()
 						.setColor('#000000')
