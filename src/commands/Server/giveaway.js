@@ -113,7 +113,7 @@ exports.conf = {
 
 exports.help = {
 	name: 'giveaway',
-	category: 'Fun',
+	category: 'Giveaway',
 	description: 'Starts a giveaway. Users can enter by reacting with the appropriate emoji.',
 	usage: 'giveaway [time] [winners] [item]',
 	params: {
