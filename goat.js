@@ -128,7 +128,7 @@ class GoatBot extends Discord.Client {
 		return permlvl;
 	}
 
-	log (type, message, writeFile = true) {
+	log (type, message, writeFile = !client.localMode) {
 		let logName = type + '.log';
 		let logMsg = `[${moment().tz(client.config.logTimezone).format('M/D/YY HH:mm:ss')}] [${type}] ${message}`;
 		let logEntry = "\n" + logMsg;
