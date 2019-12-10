@@ -53,7 +53,7 @@ exports.run = (client, message, args, level) => {
 			});
 		}).catch(err => client.msg(message, 'red', 'error', `Failed to ban ${member.displayName}, likely a permission error.`));
 	} else {
-		return message.reply('Could not find member.');
+		message.reply('Could not find member.');
 	}
 };
 

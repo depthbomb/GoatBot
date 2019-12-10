@@ -23,7 +23,7 @@
 
 if (
 	process.version.slice(1).split('.')[0] < 10 ||
-	process.version.slice(1).split('.')[0] >= 10 && process.version.slice(2).split('.')[0] < 2
+	process.version.slice(1).split('.')[0] >= 10 && process.version.slice(1).split('.')[1] < 2
 ) throw new Error('GoatBot requires Node 10.2.0 or higher.');
 
 
