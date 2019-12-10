@@ -128,48 +128,6 @@ module.exports = (client) => {
 	};
 
 
-	client.cooldown = async (message, cooldownName, cooldownDuration, callback) => {
-		const now = require('moment')().unix() * 1000;
-		const messageTime = message.createdTimestamp;
-		const bypassCooldown = message.author.id === client.config.ownerId;
-
-		//	Object to store command cooldowns
-		let cooldownObject = client.cooldowns;
-		let timeLeft;
-		let onCooldown;
-
-		if (!bypassCooldown) {
-			if (cooldownObject.hasOwnProperty(cooldownName)) {
-				onCooldown = true;
-				const ms = require('ms');
-				const { RichEmbed } = require('discord.js');
-				const expiration = cooldownObject[cooldownName].ex;
-				timeLeft = expiration - messageTime;
-				const response = timeLeft <= 1000 ? 'Please try again in about 1 second.' : `Please try again in about ${ms(timeLeft, {long: true})}.`;
-	
-				const embed = new RichEmbed()
-					.setColor('#aab8c2')
-					.setDescription(`\:timer: <@${message.author.id}>, ${response}`)
-				;
-	
-				message.channel.send({ embed })
-			} else {
-				onCooldown = false;
-				cooldownObject[cooldownName] = {
-					ex: (messageTime + cooldownDuration)
-				};
-				setTimeout(() => {
-					delete cooldownObject[cooldownName];
-				}, cooldownDuration);
-			}
-		} else {
-			onCooldown = false;
-		}
-
-		callback(onCooldown);
-	};
-
-
 	client.kennelUser = (message, user, reason, issuer = 'GoatBot!') => {
 		const member = message.member;
 		const kennelRole = member.guild.roles.find(r => r.name === 'Kenneled').id;

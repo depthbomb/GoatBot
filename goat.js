@@ -84,9 +84,6 @@ class GoatBot extends Discord.Client {
 		//	Cache root path
 		this.cachePath = `${__dirname}/storage/cache`;
 
-		//	Object to store command cooldowns
-		this.cooldowns = {};
-
 		this.strictMode = {};
 
 		this.commandData = {};

@@ -21,6 +21,9 @@
 |--------------------------------------------------------------------------
 */
 
+const cooldowns = {};
+const ms = require('ms');
+const { RichEmbed } = require('discord.js');
 module.exports = (client, message) => {
 	/**
 	*	Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
@@ -136,29 +139,32 @@ module.exports = (client, message) => {
 		}
 
 		if (level >= cmd.conf.permLevel) {
-			let cooldown;
-			let cooldownName;
+			const cooldown = (cmd.conf.cooldown * 1000) || 1500;
+			const cooldownName = cmd.conf.globalCd ?
+				  `${cmd.help.name}_GLOBAL` :
+				  `${cmd.help.name}_${message.author.id}`;
+			const messageTime = message.createdTimestamp;
+			const bypassCooldown = message.author.id === client.config.ownerId;
 
-			if (!cmd.conf.hasOwnProperty('cooldown')) {
-				cooldown = client.config.cooldowns.default * 1000;
+			if (cooldowns.hasOwnProperty(cooldownName)) {
+				const expiration = cooldowns[cooldownName].ex;
+				const timeLeft   = (expiration - messageTime);
+				const response   = timeLeft <= 1000 ? 'Please try again.' : `Please try again in about ${ms(timeLeft, { long: true })}.`;
+				const embed = new RichEmbed()
+					  .setColor('#aab8c2')
+					  .setDescription(`\:timer: <@${message.author.id}>, ${response}`);
+
+				client.log('system', `${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);
+				return message.channel.send({ embed });
 			} else {
-				cooldown = cmd.conf.cooldown * 1000;
-			}
-
-			if (!cmd.conf.globalCd) {
-				cooldownName = `${cmd.help.name}_${message.author.id}`;
-			} else {
-				cooldownName = `${cmd.help.name}_GLOBAL`;
-			}
-
-			client.cooldown(message, cooldownName, cooldown, (cd) => {
-				if (cd) {
-					client.log('system', `${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);
-				} else {
-					client.log('system', `${message.author.username} executed command [${cmd.help.name}]`);
-					return cmd.run(client, message, args, level);
+				if (!bypassCooldown) {
+					cooldowns[cooldownName] = { ex: (messageTime + cooldown) };
+					setTimeout(() => delete cooldowns[cooldownName], cooldown);
 				}
-			});
+
+				client.log('system', `${message.author.username} executed command [${cmd.help.name}]`);
+				return cmd.run(client, message, args, level);
+			}
 		} else {
 			client.log('system', `${message.author.username} attempted to execute command [${cmd.help.name}] but does not have permission`);
 			return client.msg(message, 'red', 'error', `You do not have permission to use this command. It requires a permission level of ${cmd.conf.permLevel} and you have a permission level of ${level}.`, true);
