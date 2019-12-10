@@ -23,33 +23,19 @@
 
 module.exports = async (client) => {
 	return task = {
-		name: 'processReminders',
-		description: 'Processes outstanding reminders',
+		name: 'clearTempBans',
+		description: 'Clears expired temporary user bans',
 		enabled: true,
-		interval: 59,
+		interval: 60,
 		action: () => {
-			const moment = require('moment');
-			const { RichEmbed } = require('discord.js');
 			const now = client.timestamp();
-			const db = client.db.get('reminders');
-			const reminders = db.value();
-			for (let rem of reminders) {
-				const uuid = rem.uuid;
-				const userId = rem.userId;
-				const channel = client.channels.find(c => c.id === rem.channelId);
-				if (rem.arrival === null) {
-					//	Remove invalid reminders if the arrival date is somehow broken
-					db.remove({ uuid }).write();
-				} else {
-					if (rem.arrival <= now) {
-						const embed = new RichEmbed()
-							  .setTitle(`Reminder (from ${moment.unix(rem.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss')})`)
-							  .setColor(client.colors.brand)
-							  .setDescription(rem.reminderMessage);
-	
-						db.remove({ uuid }).write();
-						channel.send(`<@${userId}>`, { embed });
-					}
+			const db = client.db.get('bans.user');
+			const bans = db.value();
+			if (bans.length > 0) {
+				for (let ban of bans) {
+					const userId = ban.userId;
+					const expires = ban.expires;
+					if (expires <= now) db.remove({ userId }).write();
 				}
 			}
 		}

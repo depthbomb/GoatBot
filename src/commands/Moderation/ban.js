@@ -22,12 +22,11 @@
 */
 
 const { RichEmbed } = require('discord.js');
-exports.run = async (client, message, args, level) => {
+exports.run = (client, message, args, level) => {
 	if (args.length === 0) return;
-	const db      = client.db.get('bans.reaction');
 	const mention = args[0];
-	const reason  = args.slice(1).join(' ') || 'No reason given';
-	
+	const reason = args.slice(1).join(' ') || 'No reason given';
+
 	let member;
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		member = message.mentions.members.first();
@@ -36,48 +35,45 @@ exports.run = async (client, message, args, level) => {
 	}
 
 	if (member) {
-		const userId = member.id;
-		const embed = new RichEmbed()
-			  .setAuthor(message.member.displayName, message.author.avatarURL)
-			  .setTimestamp();
-		if (db.filter({ userId }).value().length > 0) {
-			db.remove({ userId }).write();
-			embed
-				.setColor(client.colors.orange)
-				.setDescription(`Reaction ban on ${member.displayName} has been lifted.`);
-		} else {
-			db.push({ userId, reason }).write();
-			embed
+		member.ban({ days: 7, reason }).then(() => {
+			let embed = new RichEmbed()
+				.setAuthor(member.displayName, member.user.avatarURL)
 				.setColor(client.colors.red)
-				.setDescription(`${member.displayName} has been banned from adding reactions.`);
-		}
+				.setDescription(`${member.displayName} has been banned.`)
+				.addField('Reason', reason)
+				.setTimestamp();
 
-		return message.channel.send({ embed });
+			message.channel.send({ embed }).then(() => {
+				embed = new RichEmbed()
+					  .setColor(client.colors.red)
+					  .setDescription(`You have been banned permanently from the server by ${message.member.displayName}.\nAs this is a permanent ban (which are rare) it is unlikely that you will be able to appeal it. This is not to say that you _will_ remain banned permanently.`)
+					  .addField('Reason', reason)
+					  .setTimestamp();
+				member.send({ embed }).catch(_ => {});
+			});
+		}).catch(err => client.msg(message, 'red', 'error', `Failed to ban ${member.displayName}, likely a permission error.`));
 	} else {
-		return message.reply(`Could not find member.`);
+		return message.reply('Could not find member.');
 	}
 };
 
 exports.conf = {
 	enabled: true,
-	cooldown: 1.5,
 	aliases: [
-		'banreact',
-		'reactban',
-		'reactionban',
+		'permban'
 	],
-	permLevel: 5,
+	permLevel: 5
 };
 
 exports.help = {
-	name: 'banreactions',
+	name: 'ban',
 	category: 'Moderation',
-	description: 'Bans/unbans a user from adding reactions to any message',
-	usage: 'banreactions [@mention|user ID]',
+	description: 'Permanently bans a user from the guild',
+	usage: 'ban [@mention|user ID]',
 	params: {
-		'@mention|user ID': 'Mention or user ID'
+		'@mention|user ID': 'Mention or ID of user to ban'
 	},
 	examples: [
-		'banreactions @Username#0000'
+		'ban @Username#0000 Bad'
 	]
 };

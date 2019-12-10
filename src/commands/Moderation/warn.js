@@ -27,7 +27,7 @@ exports.run = (client, message, args, level) => {
 	const moment = require('moment');
 
 	const mention = args[0];
-	const reason = args.length > 1 ? args.slice(1).join(' ') : 'No reason given';
+	const reason = args.slice(1).join(' ') || 'No reason given';
 
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		user = message.mentions.members.first();
@@ -51,34 +51,32 @@ exports.run = (client, message, args, level) => {
 		const warningMessage = [
 			`<@${user.id}>, you have recieved warning \`${warnings} / 3\`.`,
 			`Reason: \`${reason}\``,
-		];
+		].join('\n');
 		if (warnings === 3) warningMessage.push('Your next warning will result in punishment.');
 
 		return message.channel.send(warningMessage);
 	} else {
-		return message.reply(`Could not find member.`);
+		return message.reply('Could not find member.');
 	}
 };
 
 exports.conf = {
 	enabled: true,
-	aliases: [
-		"w"
-	],
+	aliases: [],
 	permLevel: 4
 };
 
 exports.help = {
-	name: "warn",
-	category: "Moderation",
-	description: "Warns a user",
-	usage: "warn [@mention|user ID] [reason?]",
+	name: 'warn',
+	category: 'Moderation',
+	description: 'Warns a user',
+	usage: 'warn [@mention|user ID] [reason?]',
 	params: {
-		"@mention|user ID": "Mention or ID of user to warn",
-		"reason": "(Optional) Reason for the warning",
+		'@mention|user ID': 'Mention or ID of user to warn',
+		'reason': '(Optional) Reason for the warning',
 	},
 	examples: [
-		"warn @Username#0000",
-		"warn @Username#0000 Don't do that!",
+		'warn @Username#0000',
+		'warn @Username#0000 Don\'t do that!',
 	]
 };

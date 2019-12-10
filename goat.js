@@ -166,7 +166,9 @@ class GoatBot extends Discord.Client {
 		}
 
 		if (logAsFile.includes(type) && writeFile) {
-			fs.appendFile(`${client.storagePath}/logs/${logName}`, logEntry, (err) => {
+			const logFile = `${client.storagePath}/logs/${logName}`;
+			if (!fs.existsSync(logFile)) fs.writeFile(logFile, "", () => {});
+			fs.appendFile(logFile, logEntry, (err) => {
 				if (err) throw new Error(err);
 			});
 		}
@@ -180,7 +182,7 @@ require(`${client.appPath}/functions.js`)(client);
 const init = async () => {
 	const adapter = new FileSync(client.dbPath);
 	client.db = low(adapter);
-	client.db.defaults({ warnings: [], reminders: [], bans: { reaction: [] } }).write();
+	client.db.defaults({ warnings: [], reminders: [], bans: { user: [], reaction: [] } }).write();
 
 
 	['Dev', 'Games', 'Info', 'Moderation', 'NSFW', 'Random', 'Reminders', 'Useful'].forEach(folder => {
@@ -213,7 +215,6 @@ const init = async () => {
 			const event = require(`${client.appPath}/events/${file}`);
 			client.on(eventName, event.bind(null, client));
 			delete require.cache[require.resolve(`${client.appPath}/events/${file}`)];
-			// console.log(chalk.greenBright(`Loaded event [${file.replace('.js', '')}]`));
 		} catch (e) {
 			console.trace(e);
 			process.exit(1);
@@ -241,7 +242,6 @@ const init = async () => {
 						storedTask.lastRan = Math.floor(new Date() / 1000);
 					}, (t.interval * 1000));
 					storedTask.lastRan = 0;
-					// console.log(chalk.greenBright(`Loaded task [${file.replace('.js', '')}]`));
 				}
 			});
 			delete require.cache[require.resolve(`${client.appPath}/tasks/${file}`)];
@@ -250,42 +250,6 @@ const init = async () => {
 			process.exit(1);
 		}
 	});
-	/* ===================================================== */
-
-
-	/**
-	* Create required directories if they do not exist
-	*/
-	for (let i = 0, len = client.config.directories.length; i < len; i++) {
-		const dir = `${__dirname}/${client.config.directories[i]}`;
-		if (!fs.existsSync(dir)){
-			console.log(chalk.greenBright(`${dir} doesn't exist, creating...`));
-			fs.mkdirSync(dir, (err) => {
-				if (err) {
-					console.log(`Failed to create ${dir}. Exiting...`);
-					process.exit(1);
-				}
-			});
-		}
-	}
-	/* ===================================================== */
-
-
-	/**
-	 * Create empty log files
-	 */
-	for (let i = 0, len = client.config.logTypes.length; i < len; i++) {
-		const logFile = `${client.storagePath}/logs/${client.config.logTypes[i]}.log`;
-		if (!fs.existsSync(logFile)) {
-			console.log(chalk.greenBright(`${logFile} doesn't exist, creating...`));
-			fs.writeFile(logFile, "", (err) => {
-				if (err) {
-					console.log(`Failed to create ${logFile}. Exiting...`);
-					process.exit(1);
-				}
-			});
-		}
-	}
 	/* ===================================================== */
 
 

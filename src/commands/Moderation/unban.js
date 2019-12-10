@@ -22,62 +22,52 @@
 */
 
 const { RichEmbed } = require('discord.js');
-exports.run = async (client, message, args, level) => {
+exports.run = (client, message, args, level) => {
 	if (args.length === 0) return;
-	const db      = client.db.get('bans.reaction');
-	const mention = args[0];
-	const reason  = args.slice(1).join(' ') || 'No reason given';
-	
-	let member;
-	if (mention.match(/<@!?\d{17,19}>/g)) {
-		member = message.mentions.members.first();
+	const userId = args[0];
+	const guild = message.guild;
+	const ban = guild.fetchBan(userId);
+	const embed = new RichEmbed().setTimestamp();
+	if (ban) {
+		const bannedUser = ban.user;
+		guild.unban(userId, `Requested by ${message.member.displayName}`).then(() => {
+			embed
+				.setAuthor(user.username, user.avatarURL)
+				.setColor(client.colors.green)
+				.setDescription(`${user.username} has been unbanned by ${message.member.displayName}.`);
+		}).catch(err => client.msg(message, 'red', 'error', `Unable to lift ban: ${err}`));
 	} else {
-		member = message.guild.members.find(m => m.id === mention);
-	}
-
-	if (member) {
-		const userId = member.id;
-		const embed = new RichEmbed()
-			  .setAuthor(message.member.displayName, message.author.avatarURL)
-			  .setTimestamp();
+		const db = client.db.get('bans.user');
 		if (db.filter({ userId }).value().length > 0) {
 			db.remove({ userId }).write();
 			embed
-				.setColor(client.colors.orange)
-				.setDescription(`Reaction ban on ${member.displayName} has been lifted.`);
+				.setColor(client.colors.green)
+				.setDescription(`Temp ban on ${member.displayName} has been lifted by ${message.member.displayName}`);
 		} else {
-			db.push({ userId, reason }).write();
 			embed
 				.setColor(client.colors.red)
-				.setDescription(`${member.displayName} has been banned from adding reactions.`);
+				.setDescription(`No user with ID \`${userId}\` has any active bans.`);
 		}
-
-		return message.channel.send({ embed });
-	} else {
-		return message.reply(`Could not find member.`);
 	}
+
+	return message.channel.send({ embed });
 };
 
 exports.conf = {
 	enabled: true,
-	cooldown: 1.5,
-	aliases: [
-		'banreact',
-		'reactban',
-		'reactionban',
-	],
-	permLevel: 5,
+	aliases: [],
+	permLevel: 5
 };
 
 exports.help = {
-	name: 'banreactions',
+	name: 'unban',
 	category: 'Moderation',
-	description: 'Bans/unbans a user from adding reactions to any message',
-	usage: 'banreactions [@mention|user ID]',
+	description: 'Removes server ban for user or removes their temp ban',
+	usage: 'unban [user ID]',
 	params: {
-		'@mention|user ID': 'Mention or user ID'
+		'user ID': 'ID of user to ban'
 	},
 	examples: [
-		'banreactions @Username#0000'
+		'unban 12345678910'
 	]
 };

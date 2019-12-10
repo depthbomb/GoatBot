@@ -278,6 +278,32 @@ module.exports = (client) => {
 	};
 
 
+	String.prototype.parseTimeFormat = function() {
+		const format          = this;
+		const timeFormatRegex = /(\d+w)?(\d+d)?(\d+h)?(\d+m)?/i;
+		const converter       = { m: 60, h: 60*60, d: 60*60*24, w: 60*60*24*7 };
+		if (timeFormatRegex.test(format)) {
+			let matches = timeFormatRegex.exec(format);
+			//	Remove first item from matches (full group match, useless in this case)	
+			matches.shift();
+			//	Remove all undefined/blank/false values
+			matches = matches.filter(Boolean);
+
+			let duration = 0;
+			const now = client.timestamp();
+			for (let match of matches) {
+				const dur = match.replace(/[0-9]/g, '');
+				const num = parseInt(match.replace(/\D/g, ''));
+				const out = num * converter[dur];
+				duration = (duration + out);
+			}
+			return (now + duration);
+		} else {
+			return null;
+		}
+	};
+
+
 	String.prototype.toProperCase = function () {
 		return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	};

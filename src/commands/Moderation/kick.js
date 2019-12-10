@@ -22,12 +22,11 @@
 */
 
 const { RichEmbed } = require('discord.js');
-exports.run = async (client, message, args, level) => {
+exports.run = (client, message, args, level) => {
 	if (args.length === 0) return;
-	const db      = client.db.get('bans.reaction');
 	const mention = args[0];
-	const reason  = args.slice(1).join(' ') || 'No reason given';
-	
+	const reason = args.slice(1).join(' ') || 'No reason given';
+
 	let member;
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		member = message.mentions.members.first();
@@ -36,48 +35,50 @@ exports.run = async (client, message, args, level) => {
 	}
 
 	if (member) {
-		const userId = member.id;
-		const embed = new RichEmbed()
-			  .setAuthor(message.member.displayName, message.author.avatarURL)
-			  .setTimestamp();
-		if (db.filter({ userId }).value().length > 0) {
-			db.remove({ userId }).write();
-			embed
-				.setColor(client.colors.orange)
-				.setDescription(`Reaction ban on ${member.displayName} has been lifted.`);
-		} else {
-			db.push({ userId, reason }).write();
-			embed
+		const executor = message.member;
+		member.kick(reason).then(() => {
+			let embed = new RichEmbed()
+				.setAuthor(member.displayName, member.user.avatarURL)
 				.setColor(client.colors.red)
-				.setDescription(`${member.displayName} has been banned from adding reactions.`);
-		}
+				.setDescription(`Kicked from the server by ${executor.displayName}.`)
+				.addField('Reason', reason)
+				.setTimestamp();
 
-		return message.channel.send({ embed });
+			message.channel.send({ embed }).then(() => {
+				embed = new RichEmbed()
+					  .setColor(client.colors.red)
+					  .setDescription(`You have been kicked from the server by ${executor.displayName}.\nYou may rejoin the server but you should behave so you don't find yourself kicked again.`)
+					  .addField('Reason', reason)
+					  .setTimestamp();
+				member.send({ embed }).catch(_ => {});
+			});
+		}).catch(err => client.msg(message, 'red', 'error', `Failed to kick ${member.displayName}, likely a permission error.`));
+
 	} else {
-		return message.reply(`Could not find member.`);
+		return message.reply('Could not find member.');
 	}
 };
 
 exports.conf = {
 	enabled: true,
-	cooldown: 1.5,
 	aliases: [
-		'banreact',
-		'reactban',
-		'reactionban',
+		'kick',
+		'boot',
+		'yeet'
 	],
-	permLevel: 5,
+	permLevel: 5
 };
 
 exports.help = {
-	name: 'banreactions',
+	name: 'ban',
 	category: 'Moderation',
-	description: 'Bans/unbans a user from adding reactions to any message',
-	usage: 'banreactions [@mention|user ID]',
+	description: 'Kicks a user from the guild',
+	usage: 'ban [@mention|user ID] [reason?]',
 	params: {
-		'@mention|user ID': 'Mention or user ID'
+		'@mention|user ID': 'Mention or ID of user to kick',
+		'reason': 'Reason for kicking the user'
 	},
 	examples: [
-		'banreactions @Username#0000'
+		'kick @Username#0000 Bad'
 	]
 };
