@@ -132,11 +132,11 @@ module.exports = (client, message) => {
 			(cmd.help.name !== 'escape' && message.channel.id === '481201307257012262' && level < 3)
 		) return;
 
-		if (client.strictMode.enabled && level < 2) {
-			if (!client.config.strictMode.command_channels.includes(message.channel.id)) {
-				return client.msg(message, 'red', 'error', 'Commands may only be used in the <#420816699626094592> channel while strict mode is enabled.');
-			}
-		}
+		// if (client.strictMode.enabled && level < 2) {
+		// 	if (!client.config.strictMode.command_channels.includes(message.channel.id)) {
+		// 		return client.msg(message, 'red', 'error', 'Commands may only be used in the <#420816699626094592> channel while strict mode is enabled.');
+		// 	}
+		// }
 
 		if (level >= cmd.conf.permLevel) {
 			const cooldown = (cmd.conf.cooldown * 1000) || 1500;

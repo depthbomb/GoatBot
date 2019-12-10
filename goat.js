@@ -88,6 +88,7 @@ class GoatBot extends Discord.Client {
 		};
 
 		this.timestamp = () => Math.floor(new Date() / 1000);
+		this.printCmd = (commandName) => this.config.prefix + commandName;
 	}
 
 	permlevel (message) {

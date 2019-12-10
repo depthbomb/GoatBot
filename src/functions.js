@@ -151,7 +151,7 @@ module.exports = (client) => {
 				message.channel.send({ embed }).then(m => {
 					embed = new RichEmbed()
 						.setColor(client.colors.red)
-						.setDescription(`<@${user.id}>, you have been placed in the kennel by ${issuer}. You will be here indefinitely until you can \`!escape\`. Some of your roles have been stripped and will need to be reacquired once you escape.`)
+						.setDescription(`<@${user.id}>, you have been placed in the kennel by ${issuer}. You will be here indefinitely until you can \`${client.printCmd('escape')}\`. Some of your roles have been stripped and will need to be reacquired once you escape.`)
 						.addField('Reason', reason)
 					;
 					kennelChannel.send({ embed });
