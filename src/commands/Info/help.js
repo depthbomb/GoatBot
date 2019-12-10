@@ -27,8 +27,10 @@ exports.run = (client, message, args, level) => {
 		const myCommands = message.guild ? client.commands.filter(cmd => cmd.conf.permLevel <= level) : client.commands.filter(cmd => cmd.conf.permLevel <= level);
 		const commandNames = myCommands.keyArray();
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
-		let currentCategory = "";
-		let output = `= Command List =\n\n[Use ${settings.prefix}help <command> for details. For bot details, type !about]\n`;
+
+		let currentCategory = '';
+		let output = `= Command List =\n\n[Use ${client.printCmd('help')} <command> for details. For bot details, type !about]\n`;
+
 		const sorted = myCommands.sort((p, c) => p.help.category > c.help.category ? 1 : -1);
 		sorted.forEach( c => {
 			const cat = c.help.category.toProperCase();
@@ -36,13 +38,11 @@ exports.run = (client, message, args, level) => {
 				output += `\n== ${cat} ==\n`;
 				currentCategory = cat;
 			}
-			output += `${c.help.name}${" ".repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
+			output += `${c.help.name}${' '.repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
 		});
-		return message.author.send(output, { code:"asciidoc", split: true }).then((msg) => {
-			message.react("📨");
-		}).catch(err => {
-			message.reply("I cannot send the commands to you. You _must_ allow DMs from me for some commands to function.");
-		});
+		return message.author.send(output, { code: 'asciidoc', split: true })
+			  .then((msg) => message.react('📨'))
+			  .catch(err => message.reply('I cannot send the commands to you. You must allow DMs from me for some commands to function.'));
 	} else {
 		let hasParams = false;
 		let paramLine = '';
@@ -58,7 +58,7 @@ exports.run = (client, message, args, level) => {
 			command = client.commands.get(command);
 			if (level < command.conf.permLevel) return;
 
-			let cooldown = command.conf.hasOwnProperty('cooldown') ? command.conf.cooldown : client.config.cooldowns.default;
+			let cooldown = command.conf.hasOwnProperty('cooldown') || 1.5;
 			let examples = [];
 			command.help.examples.forEach((element) => {
 				examples.push(`* ${settings.prefix}${element}`)
@@ -76,7 +76,7 @@ exports.run = (client, message, args, level) => {
 			} else {
 				requiresRole = '';
 			}
-			if (command.help.hasOwnProperty('extra_info')) extraInfo = 'Extra Info\n----------\n' + command.help.extra_info(client, message, args, level);
+
 			if (hasParams) paramLine = `Parameters\n----------\n${parameters.join("\n")}\n\n`;
 
 			return message.author.send(
@@ -88,12 +88,10 @@ exports.run = (client, message, args, level) => {
 				`Usage\n-----\n${settings.prefix}${command.help.usage}\n\n` +
 				paramLine +
 				`Examples\n--------\n${examples.join("\n")}\n\n`
-				, {code: "markdown", split: true}
-			).then((msg) => {
-				message.react("📨");
-			}).catch(err => {
-				message.reply("I cannot send the commands to you. You _must_ allow DMs from me for some commands to function.");
-			});
+				, {code: 'markdown', split: true}
+			)
+			.then((msg) => message.react('📨'))
+			.catch(err => message.reply('I cannot send the commands to you. You must allow DMs from me for some commands to function.'));
 		}
 	}
 };
@@ -101,24 +99,24 @@ exports.run = (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	aliases: [
-		"h",
-		"halp",
-		"cmds",
-		"commands"
+		'h',
+		'halp',
+		'cmds',
+		'commands'
 	],
 	permLevel: 0
 };
 
 exports.help = {
-	name: "help",
-	category: "System",
-	description: "Displays all the available commands for your permission level.",
-	usage: "help [command?]",
+	name: 'help',
+	category: 'Info',
+	description: 'Displays all the available commands for your permission level.',
+	usage: 'help [command?]',
 	params: {
-		"command": "(Optional) command to view details on"
+		'command': '(Optional) command to view details on'
 	},
 	examples: [
-		"help",
-		"help dice"
+		'help',
+		'help dice'
 	]
 };
