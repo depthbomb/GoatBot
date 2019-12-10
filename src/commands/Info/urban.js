@@ -21,10 +21,11 @@
 |--------------------------------------------------------------------------
 */
 
+const trunc = require('truncate');
+const request = require('request');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	if (!args) return;
-	const request = require('request');
-	const { RichEmbed } = require('discord.js');
+	if (args.length === 0) return;
 	const term = encodeURIComponent(args.join(" "));
 	const apiUrl = `http://api.urbandictionary.com/v0/define?term=${term}`;
 
@@ -47,10 +48,10 @@ exports.run = async (client, message, args, level) => {
 			const embed = new RichEmbed()
 				.setTitle(`Results for \`${decodeURIComponent(term)}\``)
 				.setDescription(result.permalink)
-				.addField("Definition", client.trunc(result.definition, 1023))
+				.addField("Definition", trunc(result.definition, 1023))
 				.setColor("#134FE6");
 
-			if (result.example) embed.addBlankField(1).addField('Example(s)', client.trunc(result.example, 500));
+			if (result.example) embed.addBlankField(1).addField('Example(s)', trunc(result.example, 500));
 			
 			return msg.edit(`<@${message.author.id}>`, { embed });
 		}

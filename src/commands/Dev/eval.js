@@ -21,6 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
+const trunc = require('truncate');
 exports.run = async (client, message, args, level) => {
 	if(args.length === 0) return;
 	const code = args.join(' ');
@@ -35,7 +36,7 @@ exports.run = async (client, message, args, level) => {
 			evaled = require("util").inspect(evaled);
 
 		if (clean.length > 1999)
-			clean = client.trunc(clean, 1800);
+			clean = trunc(clean, 1800);
 
 		return message.channel.send(`\:inbox_tray: Input:\n\`\`\`js\n${code}\`\`\`\n\:outbox_tray: Output:\n\`\`\`js\n${clean}\`\`\`\n_Executed in ${(execTime[1] / 1000000)}ms_`);
 	} catch (err) {

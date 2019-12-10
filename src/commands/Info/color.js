@@ -21,17 +21,18 @@
 |--------------------------------------------------------------------------
 */
 
+const fs = require('fs');
+const jimp = require('jimp');
+const uuid = require('uuid/v4');
+const imgur = require('imgur');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	if (!args || args.length !== 1) return;
-
+	if (args.length === 0) return;
 	const color = args[0];
-	const fs = require('fs');
-	const jimp = require('jimp');
-	const imgur = require('imgur');
-	const { RichEmbed } = require('discord.js');
-	const imageName = `${client.tmpPath}/color_${client.uuid()}.png`;
+	const imageName = `${client.tmpPath}/color_${uuid()}.png`;
 
-	if (!color.match(/#?[a-fA-F0-9]{6}/i)) return client.msg(message, "red", "error", "The color code you provided is invalid.");
+	if (!color.match(/#?[a-fA-F0-9]{6}/i))
+		return client.msg(message, "red", "error", "The color code you provided is invalid.");
 
 	let msg = await message.channel.send("Generating image, please wait...");
 
@@ -63,6 +64,7 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
+	cooldown: 10,
 	aliases: [],
 	permLevel: 0,
 };

@@ -21,12 +21,13 @@
 |--------------------------------------------------------------------------
 */
 
+const trunc = require('truncate');
+const request = require('request');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	if (!args || args.length === 0) return;
-	if (!message.channel.nsfw && message.channel.type !== "dm") return client.msg(message, "red", "error", "This command can only be used in NSFW channels.");
-
-	const request = require('request');
-	const { RichEmbed } = require('discord.js');
+	if (args.length === 0) return;
+	if (!message.channel.nsfw)
+		return client.msg(message, "red", "error", "This command can only be used in NSFW channels.");
 
 	const ratings = ["e", "q", "s", "a"];
 	let blacklistedTags = ["male_lactation", "vore", "inflation", "gore", "macro", "scat", "watersports", "suicide", "fag", "abuse", "imminent_death", "loli", "shota", "diaper", "urine", "vomit",  "torture", "necrophilia", "castration", "hyper", "death_by_penis", "obese", "morbidly_obese", "epilepsy_warning", "feces", "flatulence", "fart", "smegma", "nightmare_fuel", "cboy", "incest", "mutilation", "cheese_grater", "sensory_deprivation", "permanent_bondage", "flash", "family_guy", "death", "what", "advertisement", "what_has_science_done", "where_is_your_god_now", "male_birth", "male_pregnancy", "puffy_anus", "type:swf", "type:webm", "order:score_asc", "swastika", "nazi", "<30_second_webm", ">30_second_webm", "no_sound"];
@@ -43,7 +44,7 @@ exports.run = async (client, message, args, level) => {
 	if (bl.indexOf(1) >= 0) return client.msg(message, "red", "error", "Your tags contain blacklisted terms.");
 
 	if (rating == null) return client.msg(message, "red", "error", "Rating argument is required");
-	if (client.isNaN(pageNum)) return client.msg(message, "red", "error", "Page must be a number");
+	if (isNaN(pageNum)) return client.msg(message, "red", "error", "Page must be a number");
 	if (pageNum > 750 || pageNum < 1) return client.msg(message, "red", "error", "Page number must be greater than 0 and less than 750");
 	if (tags == null) return client.msg(message, "red", "error", "Tags are required");
 	if (tags.split(" ").length > 5) return client.msg(message, "red", "error", "You may only search 5 tags at a time.");
@@ -111,13 +112,13 @@ exports.run = async (client, message, args, level) => {
 							.setAuthor('E621', 'https://e621.net/apple-touch-icon.png', 'https://e621.net/')
 							.setImage(selected.file_url)
 							.setDescription(`https://e621.net/post/show/${selected.id}/`)
-							.addField("Tags", '```' + client.trunc(selected.tags, 1000, {ellipsis: "..."}) + '```')
+							.addField("Tags", '```' + trunc(selected.tags, 1000, {ellipsis: "..."}) + '```')
 							.addField("Artist(s)", selected.artist.length > 0 ? "`" + selected.artist.join(", ") + "`" : "unknown_artist")
 							.setFooter(`${data.length < 320 ? data.length : '>' + data.length} results`)
 							.setColor("#002d55");
 
 							if (selected.description) {
-								const desc = `${client.trunc(selected.description, 1000, {ellipsis: "..."})}`;
+								const desc = `${trunc(selected.description, 1000, {ellipsis: "..."})}`;
 								postEmbed.addField("Description", `${selected.description !== "" ? desc : "_No description_"}`)
 							}
 

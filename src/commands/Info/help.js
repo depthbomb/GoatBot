@@ -38,7 +38,7 @@ exports.run = (client, message, args, level) => {
 			}
 			output += `${c.help.name}${" ".repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
 		});
-		return message.author.send(output, {code:"asciidoc", split: true}).then((msg) => {
+		return message.author.send(output, { code:"asciidoc", split: true }).then((msg) => {
 			message.react("📨");
 		}).catch(err => {
 			message.reply("I cannot send the commands to you. You _must_ allow DMs from me for some commands to function.");

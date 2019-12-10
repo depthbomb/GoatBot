@@ -22,17 +22,6 @@
 */
 
 module.exports = (client) => {
-	const fs = require('fs');
-	const path = require('path');
-
-	client.trunc = require('truncate');
-	client.uuid = require('uuid/v4');
-
-	/*
-		USAGE:
-		const response = await client.awaitReply(msg, "Favorite Color?");
-		msg.reply(`Oh, I really love ${response} too!`);
-	*/
 	client.awaitReply = async (msg, question, limit = 60000) => {
 		const filter = m => m.author.id = msg.author.id;
 		await msg.channel.send(question);
@@ -53,14 +42,14 @@ module.exports = (client) => {
 		const errorStack = `**UserID:** ${msg.author.id}\n**ChannelID:** ${msg.channel.id}\n**DM?:** ${msg.channel.type === "dm"}\n${msg.guild.available ? "**Guild:** " + msg.guild.name + "\n" : ""}\n\`\`\`JS\n${err}\n\`\`\``;
 
 		let encrypted = cipher.update(errorStack, "utf8", "base64");
-		encrypted += cipher.final('base64');
+			encrypted += cipher.final('base64');
 
 		let embed = new RichEmbed()
-						.setAuthor("OOPSIE WOOPSIE!!", client.user.avatarURL)
-						.setColor(client.colors.red)
-						.setDescription("OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this code belowo if you see him!")
-						.addField("\u200B", `\`\`\`\n${encrypted}\n\`\`\``, true)
-						.setThumbnail(client.emojis.find("name", "caprineError").url);
+			.setAuthor("OOPSIE WOOPSIE!!", client.user.avatarURL)
+			.setColor(client.colors.red)
+			.setDescription("OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this code belowo if you see him!")
+			.addField("\u200B", `\`\`\`\n${encrypted}\n\`\`\``, true)
+			.setThumbnail(client.emojis.find("name", "caprineError").url);
 
 		return msg.reply({ embed });
 	};
@@ -229,26 +218,6 @@ module.exports = (client) => {
 	};
 
 
-	client.hashString = (str, algo = 'md5') => {
-		const crypto = require('crypto');
-		let data = str;
-		//	Should probably catch any errors from this via invalid algorithms, but it should be fine for now~
-		return crypto.createHash(algo).update(data).digest('hex');
-	};
-
-
-	client.fileExists = (path) => {
-		fs.stat(path, (err, stat) => {
-			return err == null || (err !== null && err.code != 'ENOENT');
-		});
-	};
-
-
-	client.isNaN = (param) => {
-		return isNaN(parseInt(param));
-	};
-
-
 	client.randomInt = (min, max, amount = 1, forceArray = false) => {
 		let results;
 		if (amount > 1 || forceArray) {
@@ -262,19 +231,6 @@ module.exports = (client) => {
 		}
 
 		return results;
-	};
-
-
-	client.b64 = {
-		encode: (str) => {
-			return require('btoa')(str);
-		},
-		decode: (str) => {
-			return require('atob')(str);
-		},
-		check: (str) => {
-			return (client.b64.decode(client.b64.encode(str)) == str);
-		}
 	};
 
 
@@ -308,10 +264,7 @@ module.exports = (client) => {
 		return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	};
 
-	
-	/**
-	* Underscore to Space - replaces underscores with spaces, duh
-	*/
+
 	String.prototype.usToSp = function () {
 		return this.replace(/_/g, ' ');
 	};
@@ -334,6 +287,7 @@ module.exports = (client) => {
 	String.prototype.toProperCase = function () {
 		return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	};
+
 
 	Array.prototype.allValuesSame = function () {
 		for(let i = 1; i < this.length; i++)
