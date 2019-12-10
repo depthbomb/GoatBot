@@ -22,17 +22,20 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if(args.length < 1) return;
-	const code = args.join(" ");
+	if(args.length === 0) return;
+	const code = args.join(' ');
 
 	try {
 		const start = process.hrtime();
-		let execTime = process.hrtime(start);
+		const execTime = process.hrtime(start);
 		let evaled = eval(code);
-		const clean = await client.clean(client, evaled);
+		let clean = await client.clean(client, evaled);
 
 		if (typeof evaled !== "string")
 			evaled = require("util").inspect(evaled);
+
+		if (clean.length > 1999)
+			clean = client.trunc(clean, 1800);
 
 		return message.channel.send(`\:inbox_tray: Input:\n\`\`\`js\n${code}\`\`\`\n\:outbox_tray: Output:\n\`\`\`js\n${clean}\`\`\`\n_Executed in ${(execTime[1] / 1000000)}ms_`);
 	} catch (err) {
