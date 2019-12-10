@@ -43,12 +43,11 @@ exports.run = (client, message, args, level) => {
 	const tasks = client.tasks;
 	const embed = new RichEmbed()
 		  .setColor(client.colors.brand)
-		  .setDescription('Tasks are pieces of code that run automatically on their own intervals.')
 		  .setTimestamp();
 
 	tasks.forEach(task => {
 		const interval = formatInterval(task.interval);
-		const lastRan = "\n* Last ran: " + (task.lastRan > 0 ? moment.unix(task.lastRan).fromNow() : 'Never')
+		const lastRan = '\n* Last ran ' + (task.lastRan > 0 ? moment.unix(task.lastRan).fromNow() : 'Never')
 		embed.addField(task.name, `\`\`\`markdown\n* ${task.description}\n* Interval: ${interval}${lastRan}\`\`\``);
 	});
 
@@ -57,14 +56,13 @@ exports.run = (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	cooldown: 1,
 	aliases: [],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "tasks",
-	category: "Dev",
-	description: "Shows the bot's enable automated tasks",
-	usage: "tasks"
+	name: 'tasks',
+	category: 'Dev',
+	description: 'Shows the bot\'s enable automated tasks',
+	usage: 'tasks'
 };

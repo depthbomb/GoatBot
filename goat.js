@@ -26,7 +26,6 @@ if (
 	process.version.slice(1).split('.')[0] >= 10 && process.version.slice(1).split('.')[1] < 2
 ) throw new Error('GoatBot requires Node 10.2.0 or higher.');
 
-
 const Discord = require('discord.js');
 const { promisify } = require('util');
 const readdir = promisify(require('fs').readdir);
@@ -61,32 +60,21 @@ class GoatBot extends Discord.Client {
 		//	Local mode (or dev mode) means that the bot is running locally on my development machine
 		//	rather than a server.
 		this.localMode = process.platform === 'win32';
-		this.config = require("./config.js").config;
+		this.config    = require("./config.js").config;
 
 		this.commands = new Discord.Collection();
-		this.aliases = new Discord.Collection();
-		this.tasks = [];
+		this.aliases  = new Discord.Collection();
+		this.tasks    = [];
 
 		this.disableLog = false;
-		this.heartbeat = Math.floor(new Date() / 1000);
+		this.heartbeat  = Math.floor(new Date() / 1000);
 
-		this.rootPath = __dirname;
-		this.appPath = `${__dirname}/src`;
-
-		//	Storage root path
-		this.storagePath = `${__dirname}/storage`;
-
-		//	Path for storing temporary data
-		this.tmpPath = `${this.storagePath}/tmp`;
-
-		this.dbPath = `${this.storagePath}/database/db.goat`;
-
-		//	Cache root path
-		this.cachePath = `${__dirname}/storage/cache`;
-
-		this.strictMode = {};
-
-		this.commandData = {};
+		this.rootPath    = __dirname;
+		this.appPath     = `${this.rootPath}/src`;
+		this.storagePath = `${this.rootPath}/storage`;
+		this.tmpPath     = `${this.storagePath}/tmp`;
+		this.dbPath      = `${this.storagePath}/database/db.goat`;
+		this.cachePath   = `${this.storagePath}/cache`;
 		
 		this.colors = {
 			brand:		this.config.color,
