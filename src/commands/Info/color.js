@@ -21,7 +21,6 @@
 |--------------------------------------------------------------------------
 */
 
-const fs = require('fs');
 const jimp = require('jimp');
 const uuid = require('uuid/v4');
 const imgur = require('imgur');
@@ -32,31 +31,24 @@ exports.run = async (client, message, args, level) => {
 	const imageName = `${client.tmpPath}/color_${uuid()}.png`;
 
 	if (!color.match(/#?[a-fA-F0-9]{6}/i))
-		return client.msg(message, "red", "error", "The color code you provided is invalid.");
+		return client.msg(message, 'red', 'error', 'The color code you provided is invalid.');
 
 	let msg = await message.channel.send("Generating image, please wait...");
 
-	const colorCode = color.replace(/^#/, '');
+	const colorCode = color.replace(/^#/, '').toUpperCase();
 
-	let image = new jimp(1280, 720, parseInt("0x" + colorCode.toUpperCase() + "FF", 16), (err, img) => {
+	const _ = new jimp(640, 360, parseInt('0x' + colorCode + 'FF', 16), (err, img) => {
 		if (err) throw new Error(err);
-
 		img.write(imageName, () => {
-			imgur.setCredentials(
-				client.config.imgur.username,
-				client.config.imgur.password,
-				client.config.imgur.client
-			);
-			msg.edit("Almost done...");
+			imgur.setCredentials(client.config.imgur.username, client.config.imgur.password, client.config.imgur.client);
+			msg.edit('Almost done...');
 			imgur.uploadFile(imageName, 'yalU7').then((json) => {
-				let imageURL = json.data.link;
-				let colorEmbed = new RichEmbed()
-					.setDescription(`Color preview for \`#${colorCode} (0x${colorCode.toUpperCase()}FF)\``)
-					.setColor(`#${colorCode}`)
-					.setImage(imageURL);
-				return msg.edit(`<@${message.author.id}>`, {embed: colorEmbed}).then(() => {
-					fs.unlinkSync(imageName);
-				});
+				const imageURL = json.data.link;
+				const embed = new RichEmbed()
+					  .setDescription(`Color preview for \`#${colorCode} (0x${colorCode}FF)\``)
+					  .setColor(`#${colorCode}`)
+					  .setImage(imageURL);
+				return msg.edit(`<@${message.author.id}>`, { embed });
 			});
 		});
 	});

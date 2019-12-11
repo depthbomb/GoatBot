@@ -23,7 +23,7 @@
 
 exports.run = async (client, message, args, level) => {
 	const validMoves = ['rock', 'paper', 'scissors'];
-	const botMoves = ['rock', 'paper', 'scissors'];s
+	const botMoves = ['rock', 'paper', 'scissors'];
 	const inputMove = args.join(' ').toLowerCase();
 	const move = validMoves.includes(inputMove) ? inputMove : validMoves.shuffle()[0];
 	const user = `<@${message.author.id}>`;

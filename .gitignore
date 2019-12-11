@@ -4,5 +4,5 @@ config.js
 /storage/logs/crash/*.log
 /storage/cache/rss/*
 /storage/cache/sb/*
-/storage/tmp/cooldowns/*
+/storage/tmp/*
 /storage/database/*
