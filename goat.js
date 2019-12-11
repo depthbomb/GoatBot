@@ -267,39 +267,32 @@ const init = () => new Listr([
 	process.exit(1);
 });
 
-
 init();
-
 
 /**
 * Listen for CTRL+C and shut the bot down gracefully
 */
 process.on('SIGINT', () => {
 	console.log(`\n${chalk.bgRedBright.whiteBright('Caught shutdown signal')}`);
-	client.destroy().then(() => {
-		console.log(`${chalk.bgYellowBright.whiteBright('Client destroyed, exiting...')}`);
-		process.exit(1);
-	}).catch(err => {
-		console.log("Caught error when destroying client, shutting down anyways...", err);
-		process.exit(1);
-	});
+	client.destroy().then(() => console.log(`${chalk.bgYellowBright.whiteBright('Client destroyed, exiting...')}`));
+	process.exit(1);
 });
 
 process.on('uncaughtException', err => {
-	const crashFile = path.join(client.storagePath, 'logs', 'crash', `EXCEPTION_${moment().tz(client.config.logTimezone).format('M-D-YY')}.log`);
-	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
-	console.error("Uncaught Exception: ", errorMsg);
-	fs.appendFile(crashFile, "Uncaught Exception: " + errorMsg + '\n', (err) => {
+	const crashFile = path.join(client.storagePath, 'logs', 'crash', `EXCEPTION_${moment().format('M-D-YY')}.log`);
+	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), "./");
+	console.error('Uncaught Exception: ', errorMsg);
+	fs.appendFile(crashFile, 'Uncaught Exception: ' + errorMsg + '\n', (err) => {
 		client.destroy();
 		process.exit(1);
 	});
 });
 
 process.on('unhandledRejection', err => {
-	const crashFile = path.join(client.storagePath, 'logs', 'crash', `REJECTION_${moment().tz(client.config.logTimezone).format('M-D-YY')}.log`);
-	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, "g"), "./");
-	console.error("Uncaught Promise Error: ", errorMsg);
-	fs.appendFile(crashFile, "Uncaught Promise Error: " + errorMsg + '\n', (err) => {
+	const crashFile = path.join(client.storagePath, 'logs', 'crash', `REJECTION_${moment().format('M-D-YY')}.log`);
+	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), "./");
+	console.error('Uncaught Promise Error: ', errorMsg);
+	fs.appendFile(crashFile, 'Uncaught Promise Error: ' + errorMsg + '\n', (err) => {
 		client.destroy();
 		process.exit(1);
 	});
