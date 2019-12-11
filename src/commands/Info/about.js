@@ -37,7 +37,7 @@ exports.run = async (client, message, args, level) => {
 			break;
 		case 'cooldown':
 		case 'cooldowns':
-			embed.setDescription(`All commands are susceptible to some sort per-user of delay or **cooldown**. This cooldown is to prevent abuse of the bot via command spamming and to limit some commands that rely on a third-party API that may have a request limit. By default, the cooldown of individual commands is ${client.config.cooldowns.default}s.\n\nSome commands may have a **global cooldown** where everyone shares the cooldown. To see what a command's cooldown is and if it has a global cooldown, type \`!help <command name>\`.`);
+			embed.setDescription(`All commands are susceptible to some sort per-user of delay or **cooldown**. This cooldown is to prevent abuse of the bot via command spamming and to limit some commands that rely on a third-party API that may have a request limit. By default, the cooldown of individual commands is 1.5s.\n\nSome commands may have a **global cooldown** where everyone shares the cooldown. To see what a command's cooldown is and if it has a global cooldown, type \`!help <command name>\`.`);
 			break;
 		case 'logging':
 		case 'log':

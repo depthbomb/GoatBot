@@ -21,14 +21,13 @@
 |--------------------------------------------------------------------------
 */
 
+const request = require('request');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const uri = 'https://dog.ceo/api/breeds/image/random';
-	const request = require('request');
-	const { RichEmbed } = require('discord.js');
-
 	request({
 		headers: {
-			"User-Agent": client.config.userAgent
+			'User-Agent': client.config.userAgent
 		},
 		uri: uri,
 		method: 'GET'
@@ -53,20 +52,20 @@ exports.conf = {
 	cooldown: 15,
 	globalCd: false,
 	aliases: [
-		"dogs",
-		"doggo",
-		"doggos",
+		'dogs',
+		'doggo',
+		'doggos',
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "dog",
-	category: "Random",
-	description: "Get a random dog image",
-	usage: "dog",
+	name: 'dog',
+	category: 'Random',
+	description: 'Get a random dog image',
+	usage: 'dog',
 	params: {},
 	examples: [
-		"dog"
+		'dog'
 	]
 };

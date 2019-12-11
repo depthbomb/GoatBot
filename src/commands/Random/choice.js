@@ -22,10 +22,8 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (!args || args.length < 2 || args.length > 50) return;
-
+	if (args.length < 2 || args.length > 50) return;
 	if (args.allValuesSame()) return message.reply('Choices cannot be identical.');
-
 	const choice = args.shuffle()[0].usToSp();
 	return message.reply(`I choose... ***${choice}***!`);
 };
@@ -40,17 +38,17 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "choice",
-	category: "Random",
-	description: "Let the bot choose between a list of items",
-	usage: "choice [item] [item2] [...?]",
+	name: 'choice',
+	category: 'Random',
+	description: 'Let the bot choose between a list of items',
+	usage: 'choice [item] [item2] [...?]',
 	params: {
-		"item": "First choice, use underscores for spacces",
-		"item2": "Second choice",
-		"...?": "Additional choices, need at least two"
+		'item': 'First choice, use underscores for spacces',
+		'item2': 'Second choice',
+		'...?': 'Additional choices, need at least two'
 	},
 	examples: [
-		"choice paper plastic",
-		"choose beef pork chicken tofu"
+		'choice paper plastic',
+		'choose beef pork chicken tofu'
 	]
 };

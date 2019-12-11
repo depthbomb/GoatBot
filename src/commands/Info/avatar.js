@@ -57,7 +57,7 @@ exports.run = async (client, message, args, level) => {
 
 		return message.reply({ embed });
 	} else {
-		return message.reply(`Could not find member.`);
+		return message.reply('Could not find member.');
 	}
 };
 
@@ -72,15 +72,15 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "avatar",
-	category: "Info",
-	description: "Retrieves info on a user's Discord avatar",
-	usage: "avatar [@mention?|user ID?]",
+	name: 'avatar',
+	category: 'Info',
+	description: 'Retrieves info on a user\'s Discord avatar',
+	usage: 'avatar [@mention?|user ID?]',
 	params: {
-		"@mention|user ID": "(Optional) Mention or user ID to retrieve the info on, otherwise you will be chosen"
+		'@mention|user ID': '(Optional) Mention or user ID to retrieve the info on, otherwise you will be chosen'
 	},
 	examples: [
-		"avatar",
-		"avatar @Username#0000"
+		'avatar',
+		'avatar @Username#0000'
 	]
 };

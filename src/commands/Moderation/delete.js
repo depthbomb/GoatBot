@@ -22,35 +22,31 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (!args) return message.reply("Please supply a message ID");
-
-	let messageID = args[0];
-
+	if (args.length === 0) return;
+	const messageID = args.join(' ');
 	message.channel.fetchMessage(messageID).then(msg => {
-		return msg.delete().then(() => {
-			message.delete();
-		});
+		return msg.delete().then(() => message.delete());
 	}).catch(console.error);
 };
 
 exports.conf = {
 	enabled: true,
 	aliases: [
-		"del",
-		"delet"
+		'del',
+		'delet'
 	],
 	permLevel: 3,
 };
 
 exports.help = {
-	name: "delete",
-	category: "Moderation",
-	description: "Deletes a message by ID",
-	usage: "delete [message ID]",
+	name: 'delete',
+	category: 'Moderation',
+	description: 'Deletes a message by ID',
+	usage: 'delete [message ID]',
 	params: {
-		"message ID": "ID of the message you want to delete"
+		'message ID': 'ID of the message you want to delete'
 	},
 	examples: [
-		"delete 357686677051985921"
+		'delete 357686677051985921'
 	]
 };

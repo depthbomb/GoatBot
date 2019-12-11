@@ -22,9 +22,9 @@
 */
 
 let state = {};
+const request = require('request');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
-	const request = require('request');
 	const msg = encodeURI(args.join(' '));
 	const apiKey = client.config.apiKeys.cleverbot;
 	const authorId = message.author.id;
@@ -34,11 +34,11 @@ exports.run = async (client, message, args, level) => {
 
 	message.channel.startTyping();
 
-	let uri = `http://www.cleverbot.com/getreply?key=${apiKey}&input=${msg}&cs=${state[authorId]}`;
+	const uri = `http://www.cleverbot.com/getreply?key=${apiKey}&input=${msg}&cs=${state[authorId]}`;
 
 	request({
 		headers: {
-			"User-Agent": client.config.userAgent
+			'User-Agent': client.config.userAgent
 		},
 		uri: uri,
 		method: 'GET'
@@ -66,14 +66,14 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "cleverbot",
-	category: "Random",
-	description: "Talk to a bot",
-	usage: "cleverbot [message]",
+	name: 'cleverbot',
+	category: 'Random',
+	description: 'Talk to a bot',
+	usage: 'cleverbot [message]',
 	params: {
-		"message": "Message to send to the bot"
+		'message': 'Message to send to the bot'
 	},
 	examples: [
-		"cleverbot hello!"
+		'cleverbot hello!'
 	]
 };

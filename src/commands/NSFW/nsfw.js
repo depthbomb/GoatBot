@@ -23,8 +23,7 @@
 
 exports.run = (client, message, args, level) => {
 	const nsfwRole = message.member.guild.roles.find(r => r.name === 'NSFW').id;
-	const lenny = '( ͡° ͜ʖ ͡°)'; //	Store the face as its own variable because it messes up the text in the line it is in
-
+	const lenny = '( ͡° ͜ʖ ͡°)';
 	if (message.member.roles.find(r => r.name === 'NSFW')) {
 		message.member.removeRole(nsfwRole, 'Via GoatBot!').then(() => {
 			return message.reply('Your access to the NSFW channels has been revoked.');
@@ -40,19 +39,19 @@ exports.run = (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	aliases: [
-		"r18"
+		'r18'
 	],
 	permLevel: 0,
 	deleteTrigger: true,
 };
 
 exports.help = {
-	name: "nsfw",
-	category: "NSFW",
-	description: "Gives or revokes access to the NSFW channels",
-	usage: "nsfw",
+	name: 'nsfw',
+	category: 'NSFW',
+	description: 'Gives or revokes access to the NSFW channels',
+	usage: 'nsfw',
 	params: {},
 	examples: [
-		"nsfw"
+		'nsfw'
 	]
 };

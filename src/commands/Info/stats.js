@@ -42,17 +42,17 @@ exports.run = (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	aliases: [
-		"statistics"
+		'statistics'
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "stats",
-	category: "System",
-	description: "Bot statistics",
-	usage: "stats",
+	name: 'stats',
+	category: 'Info',
+	description: 'Bot statistics',
+	usage: 'stats',
 	examples: [
-		"stats"
+		'stats'
 	]
 };

@@ -21,16 +21,14 @@
 |--------------------------------------------------------------------------
 */
 
+const Chance = require('chance');
+const { RichEmbed } = require('discord.js');
 exports.run = (client, message, args, level) => {
 	if (args.length < 1) return;
-	const { RichEmbed } = require('discord.js');
-	const Chance = require('chance');
 	let subject = args.join(' ');
 	const seed = subject.toLowerCase().usToSp().trim();
 
-	if (subject.match(/<@!?\d{17,19}>/g)) {
-		subject = message.mentions.members.first().displayName;
-	}
+	if (subject.match(/<@!?\d{17,19}>/g)) subject = message.mentions.members.first().displayName;
 	const chance = new Chance(seed);
 	const rating = chance.integer({ min: 0, max: 10 });
 	const ratings = [
@@ -38,19 +36,17 @@ exports.run = (client, message, args, level) => {
 		{ color: '#e75a70', emoji: '\:broken_heart:' },		//	1
 		{ color: '#e75a70', emoji: '\:broken_heart:' },		//	2
 		{ color: '#e75a70', emoji: '\:broken_heart:' },		//	3
-		{ color: '#be1931', emoji: '\:heart:' },				//	4
-		{ color: '#be1931', emoji: '\:heart:' },				//	5
-		{ color: '#e75a70', emoji: '\:heartbeat:' },			//	6
-		{ color: '#e75a70', emoji: '\:heartbeat:' },			//	7
-		{ color: '#e75a70', emoji: '\:heartbeat:' },			//	8
+		{ color: '#be1931', emoji: '\:heart:' },			//	4
+		{ color: '#be1931', emoji: '\:heart:' },			//	5
+		{ color: '#e75a70', emoji: '\:heartbeat:' },		//	6
+		{ color: '#e75a70', emoji: '\:heartbeat:' },		//	7
+		{ color: '#e75a70', emoji: '\:heartbeat:' },		//	8
 		{ color: '#e75a70', emoji: '\:sparkling_heart:' },	//	9
 		{ color: '#e75a70', emoji: '\:two_hearts:' },		//	10
 	];
 	const embed = new RichEmbed()
-		.setColor(ratings[rating].color)
-		.setDescription(`Hmm... I rate \`${subject}\` **${rating}/10!** ${ratings[rating].emoji}`)
-	;
-
+		  .setColor(ratings[rating].color)
+		  .setDescription(`Hmm... I rate \`${subject}\` **${rating}/10!** ${ratings[rating].emoji}`);
 	return message.reply({ embed });
 };
 
@@ -63,14 +59,14 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "rate",
-	category: "Random",
-	description: "Have the bot rate the attractiveness of your subject.",
-	usage: "rate [subject]",
+	name: 'rate',
+	category: 'Random',
+	description: 'Have the bot rate the attractiveness of your subject.',
+	usage: 'rate [subject]',
 	params: {
 		'subject': 'Subject being rated'
 	},
 	examples: [
-		"subject yer mum"
+		'subject yer mum'
 	]
 };

@@ -24,8 +24,9 @@
 const Chance = require('chance'),
 	  chance = new Chance();
 const { RichEmbed } = require('discord.js');
+let inProgress = false;
 exports.run = async (client, message, args, level) => {
-	const difficulty = args[0].toLowerCase() || 'easy';
+	const difficulty = args.join(' ').toLowerCase() || 'easy';
 	let settings = {};
 	switch (difficulty) {
 		default:
@@ -62,9 +63,12 @@ exports.run = async (client, message, args, level) => {
 			break;
 	}
 
+	if (inProgress) return message.reply('A game is currently in progress. Please wait for it to conclude.');
+
 	const chosenNumber = chance.integer({ min: 1, max: settings.max });
 	const time = settings.time;
 
+	inProgress = true;
 	let embed = new RichEmbed()
 		.setTitle(`RNG (${difficulty})`)
 		.setColor(client.colors.default)
@@ -74,22 +78,20 @@ exports.run = async (client, message, args, level) => {
 
 	if (settings.mode < 2) {
 		message.channel.awaitMessages(m => m.cleanContent.trim() === `${chosenNumber}`, { max: 1, time: (time*1000), errors: ['time'] }).then(col => {
+			inProgress = false;
 			const winner = col.first().member;
 			embed = new RichEmbed()
 				.setTitle('RNG')
 				.setColor(client.colors.green)
 				.setDescription(`<@${winner.user.id}> has guessed the number first (0 - ${settings.max})!\n**The number was __${chosenNumber}__!**`);
-			msg.delete().then(m => {
-				m.channel.send({ embed })
-			});
+			msg.delete().then(m => m.channel.send({ embed }));
 		}).catch(() => {
+			inProgress = false;
 			embed = new RichEmbed()
 				.setTitle('RNG')
 				.setColor(client.colors.red)
 				.setDescription(`No one guessed the number (0 - ${settings.max})!\n**The number was __${chosenNumber}__!**`);
-			msg.delete().then(m => {
-				m.channel.send({ embed })
-			});
+			msg.delete().then(m => m.channel.send({ embed }));
 		});
 	} else {
 
@@ -99,25 +101,24 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	aliases: [
-		"numberguess",
-		"numguess",
-		"guessnumber",
-		"guessnum",
-		"ng",
+		'numberguess',
+		'numguess',
+		'guessnumber',
+		'guessnum'
 	],
 	permLevel: 0
 };
 
 exports.help = {
-	name: "rng",
-	category: "Games",
-	description: "I come up with a number and people have to guess it!",
-	usage: "rng [difficulty?]",
+	name: 'rng',
+	category: 'Games',
+	description: 'I come up with a number and people have to guess it!',
+	usage: 'rng [difficulty?]',
 	params: {
-		"difficulty": "(Optional) Easy (default), medium or hard."
+		'difficulty': '(Optional) Easy (default), medium or hard'
 	},
 	examples: [
-		"rng",
-		"rng medium"
+		'rng',
+		'rng medium'
 	]
 };

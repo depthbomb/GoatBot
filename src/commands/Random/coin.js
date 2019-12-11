@@ -24,7 +24,6 @@
 exports.run = async (client, message, args, level) => {
 	const sides = ['Heads', 'Tails'];
 	const decision = sides.shuffle()[0];
-	
 	return message.reply(`The coin lands on ***${decision}!***`);
 };
 
@@ -37,13 +36,13 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "coin",
-	category: "Random",
-	description: "Flips a coin",
-	usage: "coin",
+	name: 'coin',
+	category: 'Random',
+	description: 'Flips a coin',
+	usage: 'coin',
 	params: {},
 	examples: [
-		"coin",
-		"flip"
+		'coin',
+		'flip'
 	]
 };

@@ -21,14 +21,13 @@
 |--------------------------------------------------------------------------
 */
 
+const request = require('request');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const uri = 'https://randomfox.ca/floof';
-	const request = require('request');
-	const { RichEmbed } = require('discord.js');
-
 	request({
 		headers: {
-			"User-Agent": client.config.userAgent
+			'User-Agent': client.config.userAgent
 		},
 		uri: uri,
 		method: 'GET'
@@ -49,23 +48,23 @@ exports.conf = {
 	cooldown: 5,
 	globalCd: false,
 	aliases: [
-		"foxxer",
-		"foxxy",
-		"foxy",
-		"foxes",
-		"vulpes",
-		"foxs",
+		'foxxer',
+		'foxxy',
+		'foxy',
+		'foxes',
+		'vulpes',
+		'foxs',
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "fox",
-	category: "Random",
-	description: "Get a random fox image",
-	usage: "fox",
+	name: 'fox',
+	category: 'Random',
+	description: 'Get a random fox image',
+	usage: 'fox',
 	params: {},
 	examples: [
-		"fox"
+		'fox'
 	]
 };

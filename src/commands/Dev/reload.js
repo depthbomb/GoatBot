@@ -21,11 +21,10 @@
 |--------------------------------------------------------------------------
 */
 
+const path = require('path');
 exports.run = async (client, message, args, level) => {
-	const path = require('path');
-	if (!args || args.size < 1) return message.reply("Must provide a command to reload.");
-
-	const item = args[0];
+	if (args.length === 0) return;
+	const item = args.join(' ');
 
 	if (item === 'config') {
 		const configPath = path.join(client.rootPath, 'config.js');
@@ -64,14 +63,15 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "reload",
-	category: "System",
-	description: "Reloads a command that has been modified.",
-	usage: "reload [command]",
+	name: 'reload',
+	category: 'Dev',
+	description: 'Reloads a part of the bot',
+	usage: 'reload [part]',
 	params: {
-		"command": "Command to reload"
+		'part': 'Command name or "config" to reload the bot config'
 	},
 	examples: [
-		"reload help"
+		'reload help',
+		'reload config'
 	]
 };

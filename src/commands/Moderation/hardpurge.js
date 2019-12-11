@@ -22,9 +22,6 @@
 */
 
 exports.run = (client, message, args, level) => {
-	const fs = require('fs'),
-		  path = require('path');
-
 	let num;
 	if (args.length !== 1) {
 		num = 10;				//	Default to 10 messages
@@ -58,14 +55,14 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "hardpurge",
-	category: "Moderation",
-	description: "Purges a number of messages in the current channel, without using bulkDelete",
-	usage: "nsfw [number?]",
+	name: 'hardpurge',
+	category: 'Moderation',
+	description: 'Purges a number of messages in the current channel, without using bulkDelete',
+	usage: 'nsfw [number?]',
 	params: {
-		"number": "Number of messages to purge from the current channel. Defaults to 10"
+		'number': 'Number of messages to purge from the current channel. Defaults to 10'
 	},
 	examples: [
-		"hardpurge 15"
+		'hardpurge 15'
 	]
 };

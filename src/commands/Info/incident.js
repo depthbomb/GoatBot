@@ -114,20 +114,20 @@ exports.conf = {
 	enabled: true,
 	cooldown: 10,
 	aliases: [
-		"incidents",
-		"issue",
-		"issues"
+		'incidents',
+		'issue',
+		'issues'
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "incident",
-	category: "Info",
-	description: "Looks for a current incident/issue from the Discord status page",
-	usage: "incident",
+	name: 'incident',
+	category: 'Info',
+	description: 'Looks for a current incident/issue from the Discord status page',
+	usage: 'incident',
 	params: {},
 	examples: [
-		"incident"
+		'incident'
 	]
 };

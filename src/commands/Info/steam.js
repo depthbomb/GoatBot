@@ -21,13 +21,13 @@
 |--------------------------------------------------------------------------
 */
 
+const SteamID = require('steamid');
+const request = require('request');
+const cheerio = require('cheerio');
+const moment = require('moment');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	if (!args) return;
-	const SteamID = require('steamid');
-	const { RichEmbed } = require('discord.js');
-	const request = require('request');
-	const cheerio = require('cheerio');
-	const moment = require('moment');
+	if (args.length === 0) return;
 	const action = args[0];
 	const option = args[1];
 	const option2 = args[2];
@@ -75,7 +75,7 @@ exports.run = async (client, message, args, level) => {
 			return client.msg(message, "red", "error", responseMessages.invalid.replace(/%steamid%/g, inputSteamID));
 		}
 		const communityId = sid.getSteamID64();
-		const apiUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${client.config.steam.api_key}&steamids=${communityId}`;
+		const apiUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${client.config.apiKeys.steam}&steamids=${communityId}`;
 		const personaStates = [
 			"Offline",
 			"Online",
@@ -190,10 +190,10 @@ exports.run = async (client, message, args, level) => {
 				final = sid.getSteam3RenderedID();
 			}
 		} catch (e) {
-			return client.msg(message, "red", "error", `I could not convert \`${inputSteamID}\` to \`${toType}\``);
+			return client.msg(message, 'red', 'error', `I could not convert \`${inputSteamID}\` to \`${toType}\``);
 		}
 
-		return client.msg(message, "green", "success", `\`${inputSteamID}\` **⇨** \`${final}\``);
+		return client.msg(message, 'green', 'success', `\`${inputSteamID}\` **⇨** \`${final}\``);
 	} else {
 
 	}
@@ -206,17 +206,17 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "steam",
-	category: "Info",
-	description: "Steam super command",
-	usage: "steam [action] [options?..]",
+	name: 'steam',
+	category: 'Info',
+	description: 'Steam super command',
+	usage: 'steam [action] [options?..]',
 	params: {
-		"action": "Action to use",
-		"options": "(Optional) Option(s) to compliment the action. Some actions may or may not have options and some actions may require multiple options"
+		'action': 'Action to use',
+		'options': '(Optional) Option(s) to compliment the action. Some actions may or may not have options and some actions may require multiple options'
 	},
 	examples: [
-		"steam validate [U:1:43436151]",
-		"steam summary 76561198026398801",
-		"steam convert STEAM_0:1:33066536 steamID64"
+		'steam validate [U:1:43436151]',
+		'steam summary 76561198026398801',
+		'steam convert STEAM_0:1:33066536 steamID64'
 	]
 };

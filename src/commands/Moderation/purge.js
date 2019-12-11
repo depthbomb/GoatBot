@@ -41,20 +41,20 @@ exports.run = (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	aliases: [
-		"prune"
+		'prune'
 	],
 	permLevel: 10
 };
 
 exports.help = {
-	name: "purge",
-	category: "Moderation",
-	description: "Purges a number of messages in the current channel",
-	usage: "purge [number?]",
+	name: 'purge',
+	category: 'Moderation',
+	description: 'Purges a number of messages in the current channel',
+	usage: 'purge [number?]',
 	params: {
-		"number": "Number of messages to purge from the current channel. Defaults to 10"
+		'number': 'Number of messages to purge from the current channel. Defaults to 10'
 	},
 	examples: [
-		"purge 15"
+		'purge 15'
 	]
 };

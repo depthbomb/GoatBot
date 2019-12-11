@@ -57,7 +57,6 @@ exports.run = async (client, message, args, level) => {
 		const embed = new RichEmbed()
 			  .setColor('#232323')
 			  .setDescription(`\:8ball: <@${message.author.id}>, ${responses.shuffle()[0]}`);
-
 		return message.channel.send({ embed });
 	} else {
 		return client.msg(message, 'orange', 'warning', 'Question must end with a question mark.');
@@ -73,14 +72,14 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "8ball",
-	category: "Random",
-	description: "Ask the Magic 8-Ball (almost) anything!",
-	usage: "8ball [question]",
+	name: '8ball',
+	category: 'Random',
+	description: 'Ask the Magic 8-Ball (almost) anything!',
+	usage: '8ball [question]',
 	params: {
-		"question": "Question to ask, must end with ?"
+		'question': 'Question to ask, must end with ?'
 	},
 	examples: [
-		"8ball Will I ever get married?"
+		'8ball Will I ever get married?'
 	]
 };

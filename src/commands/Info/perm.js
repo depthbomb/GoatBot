@@ -21,27 +21,25 @@
 |--------------------------------------------------------------------------
 */
 
-exports.run = async (client, message, args, level) => {
-	return client.msg(message, 'blue', 'info', `You have a permission level of ${level}.`);
-};
+exports.run = async (client, message, args, level) => client.msg(message, 'blue', 'info', `You have a permission level of ${level}.`);
 
 exports.conf = {
 	enabled: true,
 	aliases: [
-		"permission",
-		"permissions",
-		"mylevel",
-		"mylvl"
+		'permission',
+		'permissions',
+		'mylevel',
+		'mylvl'
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "perm",
-	category: "System",
-	description: "Displays your command permission level",
-	usage: "perm",
+	name: 'perm',
+	category: 'Info',
+	description: 'Displays your command permission level',
+	usage: 'perm',
 	examples: [
-		"perm"
+		'perm'
 	]
 };

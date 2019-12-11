@@ -102,15 +102,15 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "wolfram",
-	category: "Info",
-	description: "Input a color code and see a preview",
-	usage: "wolfram [query]",
+	name: 'wolfram',
+	category: 'Info',
+	description: 'Input a color code and see a preview',
+	usage: 'wolfram [query]',
 	params: {
-		"query": "Query"
+		'query': 'Query'
 	},
 	examples: [
-		"wolfwam 4+4",
-		"wolfram population of the USA"
+		'wolfwam 4+4',
+		'wolfram population of the USA'
 	]
 };

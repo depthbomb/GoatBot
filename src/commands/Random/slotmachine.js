@@ -21,8 +21,8 @@
 |--------------------------------------------------------------------------
 */
 
+const { RichEmbed } = require('discord.js');
 exports.run = (client, message, args, level) => {
-	const { RichEmbed } = require('discord.js');
 	const emoji = {
 		furdesire: client.emojis.find(e => e.name === 'furdesire'),
 		pandasurprise: client.emojis.find(e => e.name === 'pandasurprise'),
@@ -54,12 +54,12 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "slotmachine",
-	category: "Random",
-	description: "Play the slots",
-	usage: "slotmachine",
+	name: 'slotmachine',
+	category: 'Random',
+	description: 'Play the slots',
+	usage: 'slotmachine',
 	examples: [
-		"slotmachine",
-		"sm"
+		'slotmachine',
+		'sm'
 	]
 };

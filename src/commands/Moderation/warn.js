@@ -21,11 +21,10 @@
 |--------------------------------------------------------------------------
 */
 
+const moment = require('moment');
 exports.run = (client, message, args, level) => {
 	if(args.length === 0) return;
 	const db = client.db.get('warnings');
-	const moment = require('moment');
-
 	const mention = args[0];
 	const reason = args.slice(1).join(' ') || 'No reason given';
 

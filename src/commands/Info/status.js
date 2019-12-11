@@ -23,7 +23,6 @@
 
 exports.run = (client, message, args, level) => {
 	const status = args[0];
-
 	let statusMessage;
 	if (typeof status !== 'undefined') {
 		//	Set custom status
@@ -34,7 +33,7 @@ exports.run = (client, message, args, level) => {
 	}
 
 	client.user.setPresence({
-		status: "online",
+		status: 'online',
 		afk: false,
 		game: {
 			name: statusMessage,
@@ -55,8 +54,13 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "status",
-	category: "System",
-	description: "Sets my status",
-	usage: "status Hello!"
+	name: 'status',
+	category: 'Info',
+	description: 'Sets my status',
+	params: {
+		'text': 'Text to analyze'
+	},
+	examples: [
+		'status Hello!',
+	]
 };

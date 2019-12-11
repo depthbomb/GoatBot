@@ -33,23 +33,22 @@ exports.run = async (client, message, args, level) => {
 
 	request({
 		headers: {
-			"User-Agent": client.config.userAgent
+			'User-Agent': client.config.userAgent
 		},
 		uri: apiUrl,
 		method: 'GET'
 	}, (err, res, body) => {
 		if (err) return client.error(message, err);
 		const data = JSON.parse(body);
-
-		if (data.result_type === "no_results") {
+		if (data.result_type === 'no_results') {
 			return msg.edit(`<@${message.author.id}>, I didn't find any results using your search term :(`);
 		} else {
 			const result = data.list[0];
 			const embed = new RichEmbed()
 				.setTitle(`Results for \`${decodeURIComponent(term)}\``)
 				.setDescription(result.permalink)
-				.addField("Definition", trunc(result.definition, 1023))
-				.setColor("#134FE6");
+				.addField('Definition', trunc(result.definition, 1023))
+				.setColor('#134FE6');
 
 			if (result.example) embed.addBlankField(1).addField('Example(s)', trunc(result.example, 500));
 			
@@ -62,21 +61,21 @@ exports.conf = {
 	enabled: true,
 	cooldown: 5.5,
 	aliases: [
-		"ud",
-		"urbandictionary"
+		'ud',
+		'urbandictionary'
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "urban",
-	category: "Info",
-	description: "Find a definition on Urban Dictionary",
-	usage: "urban [term]",
+	name: 'urban',
+	category: 'Info',
+	description: 'Find a definition on Urban Dictionary',
+	usage: 'urban [term]',
 	params: {
-		"term": "Term to search for"
+		'term': 'Term to search for'
 	},
 	examples: [
-		"urban thought itch"
+		'urban fuzzy logic'
 	]
 };

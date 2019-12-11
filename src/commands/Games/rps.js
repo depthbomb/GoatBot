@@ -22,13 +22,12 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (!args) return;
-	const validMoves = ["rock", "paper", "scissors"];
-	const botMoves = ["rock", "paper", "scissors"];
-	const move = args[0].toLowerCase();
+	const validMoves = ['rock', 'paper', 'scissors'];
+	const botMoves = ['rock', 'paper', 'scissors'];s
+	const inputMove = args.join(' ').toLowerCase();
+	const move = validMoves.includes(inputMove) ? inputMove : validMoves.shuffle()[0];
 	const user = `<@${message.author.id}>`;
 	const bot = `<@${client.user.id}>`;
-
 	const emoji = {
 		rock: "✊",
 		paper: "✋",
@@ -36,27 +35,23 @@ exports.run = async (client, message, args, level) => {
 		goat: "🐐"
 	};
 
-	if (validMoves.includes(move)) {
-		let botMove = botMoves.shuffle()[0];
-		let outcomeMessage;
-		let vsMessage = `${user} ${emoji[move]} _vs._ ${emoji[botMove]} ${bot}`;
+	const botMove = botMoves.shuffle()[0];
+	const vsMessage = `${user} ${emoji[move]} _vs._ ${emoji[botMove]} ${bot}`;
+	let outcomeMessage;
 
-		if ((move === "rock" && botMove === "rock") ||
-			(move === "paper" && botMove === "paper") ||
-			(move === "scissors" && botMove === "scissors")) outcomeMessage = `It's a tie, we are both losers!`;
+	if ((move === 'rock' && botMove === 'rock') ||
+		(move === 'paper' && botMove === 'paper') ||
+		(move === 'scissors' && botMove === 'scissors')) outcomeMessage = `It's a tie, we are both losers!`;
 
-		if ((move === "rock" && botMove === "scissors") ||
-			(move === "paper" && botMove === "rock") ||
-			(move === "scissors" && botMove === "paper")) outcomeMessage = `${user}'s ${move} beats ${bot}'s ${botMove}!`;
+	if ((move === 'rock' && botMove === 'scissors') ||
+		(move === 'paper' && botMove === 'rock') ||
+		(move === 'scissors' && botMove === 'paper')) outcomeMessage = `${user}'s ${move} beats ${bot}'s ${botMove}!`;
 
-		if ((botMove === "rock" && move === "scissors") ||
-			(botMove === "paper" && move === "rock") ||
-			(botMove === "scissors" && move === "paper")) outcomeMessage = `${bot}'s ${botMove} beats ${user}'s ${move}!`;
+	if ((botMove === 'rock' && move === 'scissors') ||
+		(botMove === 'paper' && move === 'rock') ||
+		(botMove === 'scissors' && move === 'paper')) outcomeMessage = `${bot}'s ${botMove} beats ${user}'s ${move}!`;
 
-		return message.channel.send(`${vsMessage}\n\n${outcomeMessage}`);
-	} else {
-		return message.reply('Invalid move');
-	}
+	return message.channel.send(`${vsMessage}\n\n${outcomeMessage}`);
 };
 
 exports.conf = {
@@ -69,14 +64,14 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "rps",
-	category: "Games",
-	description: "Play Rock, Paper, Scissors against a bot.",
-	usage: "rps [move]",
+	name: 'rps',
+	category: 'Games',
+	description: 'Play Rock, Paper, Scissors against me!',
+	usage: 'rps [move]',
 	params: {
-		"move": "Your move, either Rock, Paper, or Scissors"
+		'move': 'Your move, either Rock, Paper, or Scissors'
 	},
 	examples: [
-		"rps paper"
+		'rps paper'
 	]
 };

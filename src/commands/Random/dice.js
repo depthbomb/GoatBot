@@ -21,10 +21,9 @@
 |--------------------------------------------------------------------------
 */
 
+const pluralize = require('pluralize');
 exports.run = async (client, message, args, level) => {
-	if (!args || args.length < 1) return message.reply("Both arguments are required.");
-	const pluralize = require('pluralize');
-
+	if (args.length < 1) return message.reply('Both arguments are required.');
 	const numSides = args[0];
 	let numDice = args[1];
 	
@@ -50,16 +49,16 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "dice",
-	category: "Random",
-	description: "Roll a dice.",
-	usage: "dice [side count] [die count?]",
+	name: 'dice',
+	category: 'Random',
+	description: 'Roll a dice.',
+	usage: 'dice [side count] [die count?]',
 	params: {
-		"side count": "Number of sides per die",
-		"die count": "(Optional) Number of die to roll, defaults to 1 if not specified or non-numeric"
+		'side count': 'Number of sides per die',
+		'die count': '(Optional) Number of die to roll, defaults to 1 if not specified or non-numeric'
 	},
 	examples: [
-		"dice 5 10",
-		"dice 6"
+		'dice 5 10',
+		'dice 6'
 	]
 };

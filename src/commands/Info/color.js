@@ -70,15 +70,15 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "color",
-	category: "Info",
-	description: "Input a color code and see a preview",
-	usage: "color [code]",
+	name: 'color',
+	category: 'Info',
+	description: 'Input a color code and see a preview',
+	usage: 'color [code]',
 	params: {
-		"code": "Full hexadecimal color code, # is optional"
+		'code': 'Full hexadecimal color code, # is optional'
 	},
 	examples: [
-		"color #ff69b4",
-		"color ff00ff"
+		'color #ff69b4',
+		'color ff00ff'
 	]
 };

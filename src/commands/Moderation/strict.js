@@ -52,15 +52,15 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "strict",
-	category: "Moderation",
-	description: "Toggles strict mode for 5 minutes, requiring commands to be used in the commands channel",
-	usage: "strict [duration?]",
+	name: 'strict',
+	category: 'Moderation',
+	description: 'Toggles strict mode for 5 minutes, requiring commands to be used in the commands channel',
+	usage: 'strict [duration?]',
 	params: {
 		'duration': '(Optional) Time strict mode should last in minutes'
 	},
 	examples: [
-		"strict",
-		"strictmode 5"
+		'strict',
+		'strictmode 5'
 	]
 };

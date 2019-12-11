@@ -21,15 +21,13 @@
 |--------------------------------------------------------------------------
 */
 
+const ssq = require('ssq');
+const truncate = require('truncate');
+const { RichEmbed } = require('discord.js');
+const AsciiTable = require('ascii-table');
+const ms = require('ms');
 exports.run = async (client, message, args, level) => {
-	const ssq = require('ssq');
-	const truncate = require('truncate');
-	const { RichEmbed } = require('discord.js');
-	const AsciiTable = require('ascii-table');
-	const ms = require('ms');
-
 	const action = args[0];
-
 	const serverIp = '66.150.188.17';
 	const serverPort = 27015;
 
@@ -114,19 +112,18 @@ exports.conf = {
 	cooldown: 5,
 	globalCd: true,
 	aliases: [
-		"gi"
+		'gi'
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "gameinfo",
-	category: "Info",
-	description: "Returns info on the Cyan.TF server",
-	usage: "gameinfo",
+	name: 'gameinfo',
+	category: 'Info',
+	description: 'Returns info on the Cyan.TF server',
+	usage: 'gameinfo',
 	params: {},
 	examples: [
-		"gameinfo",
-		"gi",
+		'gameinfo'
 	]
 };

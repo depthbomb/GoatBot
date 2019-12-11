@@ -57,7 +57,7 @@ exports.run = async (client, message, args, level) => {
 			}
 			
 			if (timeLeft < 11) {
-				embed.setColor('#ff0000').addField('\u200b', "\n***Time's almost up!***");
+				embed.setColor('#ff0000').addField('\u200b', '\n***Time's almost up!***');
 			} else {
 				embed.setColor(client.colors.default);
 			}

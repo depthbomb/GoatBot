@@ -21,12 +21,11 @@
 |--------------------------------------------------------------------------
 */
 
+const Chance = require('chance');
+const crypto = require('crypto');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length < 2) return;
-
-	const crypto = require('crypto');
-	const { RichEmbed } = require('discord.js');
-	const Chance = require('chance');
 	let thing = args[0].usToSp().trim();
 	let thing2 = args.slice(1).join(' ').trim();
 
@@ -54,16 +53,16 @@ exports.run = async (client, message, args, level) => {
 	const barFill = ' ​'.repeat((10 - blocks));
 
 	let response;
-	if(output >= 0 && output < 10) response = "_Uh oh!_ Maybe you two should see other people";
-	else if(output >= 10 && output < 20) response = "Awful... \:cry:";
-	else if(output >= 20 && output < 40) response = "Not too great \:cry:";
-	else if(output >= 40 && output < 50) response = "Worse than average \:neutral_face:";
-	else if(output == 50) response = "There could be a chance \:neutral_face:";
-	else if(output > 50 && output < 75 && output !== 69) response = "Not bad! \:slight_smile:";
-	else if(output === 69) response = "***( ͡° ͜ʖ ͡°)***";
-	else if(output >= 75 && output < 90) response = "Pretty good! \:grinning:";
-	else if(output >= 90 && output < 100) response = "Great! \:kissing_heart:";
-	else if(output >= 100) response = "A perfect match! \:heart_eyes: ";
+	if(output >= 0 && output < 10) response = '_Uh oh!_ Maybe you two should see other people';
+	else if(output >= 10 && output < 20) response = 'Awful... \:cry:';
+	else if(output >= 20 && output < 40) response = 'Not too great \:cry:';
+	else if(output >= 40 && output < 50) response = 'Worse than average \:neutral_face:';
+	else if(output == 50) response = 'There could be a chance \:neutral_face:';
+	else if(output > 50 && output < 75 && output !== 69) response = 'Not bad! \:slight_smile:';
+	else if(output === 69) response = '**( ͡° ͜ʖ ͡°)**';
+	else if(output >= 75 && output < 90) response = 'Pretty good! \:grinning:';
+	else if(output >= 90 && output < 100) response = 'Great! \:kissing_heart:';
+	else if(output >= 100) response = 'A perfect match! \:heart_eyes:';
 	else response = 'You should not see this';
 
 	let embed = new RichEmbed()
@@ -83,16 +82,16 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "ship",
-	category: "Random",
-	description: "Ship two things together and see how much they belong with eachother!",
-	usage: "ship [thing] [thing2?]",
+	name: 'ship',
+	category: 'Random',
+	description: 'Ship two things together and see how much they belong with eachother!',
+	usage: 'ship [thing] [thing2?]',
 	params: {
-		"thing": "Thing to ship yourself with, use underscores in place of spaces",
-		"thing2": "(Optional) Ships the first thing with this one. No need for underscores as spaces"
+		'thing': 'Thing to ship yourself with, use underscores in place of spaces',
+		'thing2': '(Optional) Ships the first thing with this one. No need for underscores as spaces'
 	},
 	examples: [
-		"ship your_mom me",
-		"ship @Username#0000"
+		'ship your_mom me',
+		'ship @Username#0000'
 	]
 };

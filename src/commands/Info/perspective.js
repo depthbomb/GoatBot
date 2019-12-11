@@ -21,10 +21,10 @@
 |--------------------------------------------------------------------------
 */
 
+const request = require('request');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
-	const { RichEmbed } = require('discord.js');
-	const request = require('request');
 	const text = encodeURIComponent(args.join(''));
 	const apiUrl = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${client.config.apiKeys.perspective}`;
 
@@ -96,19 +96,18 @@ exports.conf = {
 		'analyze',
 		'toxicity',
 		'toxic',
-		'perspective',
 		'pers'
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "perspective",
-	category: "Info",
+	name: 'perspective',
+	category: 'Info',
 	description: 'Analyzes text and displays various attributes about it',
-	usage: "perspective [text]",
+	usage: 'perspective [text]',
 	params: {
-		"text": "Text to analyze"
+		'text': 'Text to analyze'
 	},
 	examples: [
 		'perspective You suck',

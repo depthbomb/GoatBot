@@ -24,7 +24,6 @@
 exports.run = (client, message, args, level) => {
 	const bullet = 3;
 	const chamber = client.randomInt(1, 6);
-
 	if(bullet === chamber) {
 		return message.channel.send(`\:boom:\:gun: ***BANG!!*** <@${message.author.id}> has shot themselves... Press **F** to pay respects.`);
 	} else {
@@ -36,18 +35,18 @@ exports.conf = {
 	enabled: true,
 	cooldown: 1.5,
 	aliases: [
-		"rr",
-		"russianroulette"
+		'rr',
+		'russianroulette'
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "roulette",
-	category: "Random",
-	description: "Play a game of Russian Roulette. Spin the barrel and pull the trigger.",
-	usage: "roulette",
+	name: 'roulette',
+	category: 'Random',
+	description: 'Play a game of Russian Roulette. Spin the barrel and pull the trigger.',
+	usage: 'roulette',
 	examples: [
-		"roulette"
+		'roulette'
 	]
 };

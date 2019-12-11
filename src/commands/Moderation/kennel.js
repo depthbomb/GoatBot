@@ -24,7 +24,7 @@
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const mention = args[0];
-	const reason = args.length > 1 ? args.slice(1).join(' ') : 'No reason given';
+	const reason = args.slice(1).join(' ') || 'No reason given';
 	
 	let user;
 	if (mention.match(/<@!?\d{17,19}>/g)) {

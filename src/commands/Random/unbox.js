@@ -101,12 +101,12 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "unbox",
-	category: "Random",
-	description: "Open a loot box",
-	usage: "unbox",
+	name: 'unbox',
+	category: 'Random',
+	description: 'Open a loot box',
+	usage: 'unbox',
 	params: {},
 	examples: [
-		"unbox"
+		'unbox'
 	]
 };

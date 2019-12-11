@@ -46,12 +46,12 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "snap",
-	category: "Random",
-	description: "Bring balance to the guild",
-	usage: "snap",
+	name: 'snap',
+	category: 'Random',
+	description: 'Bring balance to the guild',
+	usage: 'snap',
 	examples: [
-		"snap",
-		"thanos"
+		'snap',
+		'thanos'
 	]
 };

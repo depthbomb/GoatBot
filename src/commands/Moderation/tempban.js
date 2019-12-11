@@ -43,13 +43,12 @@ exports.run = (client, message, args, level) => {
 			const expires = duration;	//	semantics
 			member.kick(reason).then(() => {
 				db.push({ userId, reason, expires }).write();
-				embed
-					.setColor(client.colors.red)
-					.setDescription(`${member.displayName} has been temporarily banned.`)
-					.addField('Reason', reason)
-					.addField('Expires', moment.unix(expires).format('dddd, MMMM Do YYYY, HH:mm:ss'));
+				const embed = new RichEmbed()
+					  .setColor(client.colors.red)
+					  .setDescription(`${member.displayName} has been temporarily banned.`)
+					  .addField('Reason', reason)
+					  .addField('Expires', moment.unix(expires).format('dddd, MMMM Do YYYY, HH:mm:ss'));
 			}).catch(() => client.msg(message, 'red', 'error', `Failed to kick ${member.displayName}, likely a permission error.`));
-
 		} else {
 			return message.reply('Could not find member.');
 		}

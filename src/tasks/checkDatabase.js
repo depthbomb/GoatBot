@@ -32,7 +32,7 @@ module.exports = async (client) => {
 		action: () => {
 			const backup          = path.join(client.storagePath, 'database', 'goat.db.bak');
 			const database        = client.dbPath;
-			const backupExists    = fs.existsSync(backupName);
+			const backupExists    = fs.existsSync(backup);
 			const databaseIsValid = () => {
 				try {
 					client.db.get().value();

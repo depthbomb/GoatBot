@@ -21,11 +21,10 @@
 |--------------------------------------------------------------------------
 */
 
+const moment = require('moment');
+const { RichEmbed } = require('discord.js');
 exports.run = (client, message, args, level) => {
-	const { RichEmbed } = require("discord.js");
-	const moment = require("moment");
 	const guild = message.member.guild;
-	
 	const embed = new RichEmbed()
 		.setColor(client.colors.default)
 		.setAuthor(`${guild.name} (${guild.nameAcronym})`, guild.iconURL)
@@ -53,11 +52,11 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "guildinfo",
-	category: "Info",
-	description: "Info about the current guild",
-	usage: "guildinfo",
+	name: 'guildinfo',
+	category: 'Info',
+	description: 'Info about the current guild',
+	usage: 'guildinfo',
 	examples: [
-		"guildinfo"
+		'guildinfo'
 	]
 };

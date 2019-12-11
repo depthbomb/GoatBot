@@ -18,11 +18,11 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "ping",
-	category: "Info",
-	description: "It... like... pings. Then Pongs. And it\'s not Ping Pong.",
-	usage: "ping",
+	name: 'ping',
+	category: 'Info',
+	description: 'Get my ping info',
+	usage: 'ping',
 	examples: [
-		"ping"
+		'ping'
 	]
 };

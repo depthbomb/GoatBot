@@ -21,14 +21,13 @@
 |--------------------------------------------------------------------------
 */
 
+const request = require('request');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const uri = 'http://aws.random.cat/meow';
-	const request = require('request');
-	const { RichEmbed } = require('discord.js');
-
 	request({
 		headers: {
-			"User-Agent": client.config.userAgent
+			'User-Agent': client.config.userAgent
 		},
 		uri: uri,
 		method: 'GET'
@@ -49,22 +48,22 @@ exports.conf = {
 	cooldown: 5,
 	globalCd: false,
 	aliases: [
-		"cat",
-		"kitty",
-		"kitten",
-		"kiki",
-		"gato",
+		'cat',
+		'kitty',
+		'kitten',
+		'kiki',
+		'gato',
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: "cat",
-	category: "Random",
-	description: "Get a random cat image",
-	usage: "cat",
+	name: 'cat',
+	category: 'Random',
+	description: 'Get a random cat image',
+	usage: 'cat',
 	params: {},
 	examples: [
-		"cat"
+		'cat'
 	]
 };

@@ -77,15 +77,15 @@ exports.conf = {
 };
 
 exports.help = {
-	name: "weather",
-	category: "Info",
-	description: "Gets weather conditions for the provided location",
-	usage: "weather [location]",
+	name: 'weather',
+	category: 'Info',
+	description: 'Gets weather conditions for the provided location',
+	usage: 'weather [location]',
 	params: {
-		"location": "Location to get weather info on, see examples"
+		'location': 'Location to get weather info on, see examples'
 	},
 	examples: [
-		"weather Chicago,Illinois",
-		"weather London,UK"
+		'weather Chicago,Illinois',
+		'weather London,UK'
 	]
 };
