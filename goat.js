@@ -26,13 +26,14 @@ if (
 	process.version.slice(1).split('.')[0] >= 10 && process.version.slice(1).split('.')[1] < 2
 ) throw new Error('GoatBot requires Node 10.2.0 or higher.');
 
-const Discord = require('discord.js');
-const { promisify } = require('util');
-const readdir = promisify(require('fs').readdir);
-const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
+const Listr = require('listr');
+const chalk = require('chalk');
+const Discord = require('discord.js');
+const { promisify } = require('util');
 const moment = require('moment-timezone');
+const readdir = promisify(require('fs').readdir);
 const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
 				"│                                                                         │",
 				"│                                                                         │",
@@ -165,86 +166,106 @@ const client = new GoatBot();
 
 require(`${client.appPath}/functions.js`)(client);
 
-const init = async () => {
-	const adapter = new FileSync(client.dbPath);
-	client.db = low(adapter);
-	client.db.defaults({ warnings: [], reminders: [], bans: { user: [], reaction: [] } }).write();
-
-
-	['Dev', 'Games', 'Info', 'Moderation', 'NSFW', 'Random', 'Reminders', 'Server', 'Useful'].forEach(folder => {
-		const commandFiles = fs.readdirSync(`${client.appPath}/commands/${folder}/`);
-		console.log(chalk.greenBright(`Loading ${commandFiles.length} commands in ${folder}...`));
-		commandFiles.forEach(f => {
-			try {
-				const props = require(`${client.appPath}/commands/${folder}/${f}`);
-				if (props.conf.enabled) {
-					if (f.split(".").slice(-1)[0] !== "js") return;
-					client.commands.set(props.help.name, props);
-					props.conf.aliases.forEach(alias => client.aliases.set(alias, props.help.name));
-				}
-			} catch (e) {
-				console.trace(e);
-				process.exit(1);
+const init = () => new Listr([
+	{
+		title: 'Cleaning up tmp files',
+		skip: () => {
+			if (fs.readdirSync(client.tmpPath).length < 1) {
+				return 'No temporary files to clean up';
 			}
-		});
-	});
-
-
-	/**
-	* Load events
-	*/
-	const eventFiles = await readdir(`${client.appPath}/events/`);
-	console.log(chalk.greenBright(`Loading ${eventFiles.length} events...`));
-	eventFiles.forEach(file => {
-		try {
-			const eventName = file.split(".")[0];
-			const event = require(`${client.appPath}/events/${file}`);
-			client.on(eventName, event.bind(null, client));
-			delete require.cache[require.resolve(`${client.appPath}/events/${file}`)];
-		} catch (e) {
-			console.trace(e);
-			process.exit(1);
-		}
-	});
-	/* ===================================================== */
-
-
-	/**
-	* Load tasks
-	*/
-	const taskFiles = await readdir(`${client.appPath}/tasks/`);
-	console.log(chalk.greenBright(`Loading ${taskFiles.length} tasks...`));
-	taskFiles.forEach(file => {
-		try {
-			const imported = require(`${client.appPath}/tasks/${file}`)(client);
-			const task = Promise.resolve(imported);
-			task.then((t) => {
-				if (t.enabled) {
-					client.tasks.push(t);
-					if (t.hasOwnProperty('start')) t.start();
-					const storedTask = client.tasks[client.tasks.indexOf(t)];
-					setInterval(() => {
-						t.action();
-						storedTask.lastRan = Math.floor(new Date() / 1000);
-					}, (t.interval * 1000));
-					storedTask.lastRan = 0;
+		},
+		task: () => {
+			fs.readdir(dir, (err, files) => {
+				if (err) throw new Error(err);
+				for (let file of files) {
+					file = path.join(dir, file);
+					fs.unlink(file, err => {
+						if (err) throw new Error(err);
+					});
 				}
 			});
-			delete require.cache[require.resolve(`${client.appPath}/tasks/${file}`)];
-		} catch (e) {
-			console.trace(e);
-			process.exit(1);
 		}
-	});
-	/* ===================================================== */
-
-
-	/**
-	* Log the bot into its account
-	*/
-	client.login(client.config.token);
-	/* ===================================================== */
-};
+	},
+	{
+		title: 'Initializing database',
+		task: () => {
+			const adapter = new FileSync(client.dbPath);
+			client.db = low(adapter);
+			client.db.defaults({ warnings: [], reminders: [], bans: { user: [], reaction: [] } }).write();
+		}
+	},
+	{
+		title: 'Loading commands',
+		task: () => {
+			const categories = ['Dev', 'Games', 'Info', 'Moderation', 'NSFW', 'Random', 'Reminders', 'Server', 'Useful'];
+			for (let folder of categories) {
+				const commandFiles = fs.readdirSync(`${client.appPath}/commands/${folder}/`);
+				for (let file of commandFiles) {
+					try {
+						const props = require(`${client.appPath}/commands/${folder}/${file}`);
+						if (props.conf.enabled) {
+							if (file.split('.').slice(-1)[0] !== 'js') return;
+							client.commands.set(props.help.name, props);
+							props.conf.aliases.forEach(alias => client.aliases.set(alias, props.help.name));
+						}
+					} catch (e) {
+						throw new Error(e);
+					}
+				}
+			}
+		}
+	},
+	{
+		title: 'Loading events',
+		task: async () => {
+			const eventFiles = await readdir(`${client.appPath}/events/`);
+			for (let file of eventFiles) {
+				try {
+					const eventName = file.split('.')[0];
+					const event = require(`${client.appPath}/events/${file}`);
+					client.on(eventName, event.bind(null, client));
+					delete require.cache[require.resolve(`${client.appPath}/events/${file}`)];
+				} catch (e) {
+					throw new Error(e);
+				}
+			}
+		}
+	},
+	{
+		title: 'Loading tasks',
+		task: async () => {
+			const taskFiles = await readdir(`${client.appPath}/tasks/`);
+			for (let file of taskFiles) {
+				try {
+					const imported = require(`${client.appPath}/tasks/${file}`)(client);
+					const task = Promise.resolve(imported);
+					task.then((t) => {
+						if (t.enabled) {
+							client.tasks.push(t);
+							if (t.hasOwnProperty('start')) t.start();
+							const storedTask = client.tasks[client.tasks.indexOf(t)];
+							setInterval(() => {
+								t.action();
+								storedTask.lastRan = Math.floor(new Date() / 1000);
+							}, (t.interval * 1000));
+							storedTask.lastRan = 0;
+						}
+					});
+					delete require.cache[require.resolve(`${client.appPath}/tasks/${file}`)];
+				} catch (e) {
+					throw new Error(e);
+				}
+			}
+		}
+	}
+])
+.run()
+.then(() => client.login(client.config.token))
+.catch(err => {
+	client.log('error', err);
+	client.destroy();
+	process.exit(1);
+});
 
 
 init();
@@ -283,6 +304,3 @@ process.on('unhandledRejection', err => {
 		process.exit(1);
 	});
 });
-/*
-* We exit after logging so that PM2 will restart the bot automatically
-**/
