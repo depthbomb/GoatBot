@@ -171,7 +171,7 @@ const init = async () => {
 	client.db.defaults({ warnings: [], reminders: [], bans: { user: [], reaction: [] } }).write();
 
 
-	['Dev', 'Games', 'Info', 'Moderation', 'NSFW', 'Random', 'Reminders', 'Useful'].forEach(folder => {
+	['Dev', 'Games', 'Info', 'Moderation', 'NSFW', 'Random', 'Reminders', 'Server', 'Useful'].forEach(folder => {
 		const commandFiles = fs.readdirSync(`${client.appPath}/commands/${folder}/`);
 		console.log(chalk.greenBright(`Loading ${commandFiles.length} commands in ${folder}...`));
 		commandFiles.forEach(f => {

@@ -23,7 +23,7 @@
 
 const chalk = require('chalk');
 module.exports = async client => {
-	await client.wait(1000);
+	await client.wait(100);
 	client.online = true;
 	client.disableEveryone = true;
 	client.disabledEvents = [
@@ -36,9 +36,8 @@ module.exports = async client => {
 		'RELATIONSHIP_ADD',
 		'RELATIONSHIP_REMOVE'
 	];
-
 	client.user.setPresence({
-		status: "online",
+		status: 'online',
 		afk: false,
 		game: {
 			name: client.localMode ? '<DEV MODE>' : client.config.initialGame,

@@ -29,8 +29,8 @@ exports.run = async (client, message, args, level) => {
 
 	let timeLeft = giveawayLimit;
 	let description = `"${giveawayItem}"`;
-	let entered = [];	//	Use our own collection since I've had trouble in the past with the library's
-	let displayEntered = [];	//	Array of mention strings for displaying, because I'm lazy
+	let entered = [];
+	let displayEntered = [];
 	let filter = (r, u) => r.emoji.name === '🎉' && !entered.includes(u.id) && u.id !== client.user.id;
 
 	let embed = new RichEmbed()
@@ -57,7 +57,7 @@ exports.run = async (client, message, args, level) => {
 			}
 			
 			if (timeLeft < 11) {
-				embed.setColor('#ff0000').addField('\u200b', '\n***Time's almost up!***');
+				embed.setColor('#ff0000').addField('\u200b', '\n***Time\'s almost up!***');
 			} else {
 				embed.setColor(client.colors.default);
 			}
@@ -109,8 +109,8 @@ exports.conf = {
 
 exports.help = {
 	name: 'giveaway',
-	category: 'Giveaway',
-	description: 'Starts a giveaway. Users can enter by reacting with the appropriate emoji.',
+	category: 'Server',
+	description: 'Starts a giveaway, users can enter by reacting with the appropriate emoji.',
 	usage: 'giveaway [time] [winners] [item]',
 	params: {
 		'time': 'Time in seconds the giveaway should last for',
