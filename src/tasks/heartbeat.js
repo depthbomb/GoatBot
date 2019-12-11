@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (client) => {
+module.exports = client => {
 	return task = {
 		name: 'heartbeat',
 		description: 'Manages the bot\'s heartbeat. Restarts the bot if there are abnormalities.',

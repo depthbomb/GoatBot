@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = async (client) => {
+module.exports = client => {
 	return task = {
 		name: 'clearTempBans',
 		description: 'Clears expired temporary user bans',

@@ -23,7 +23,7 @@
 
 const Chance = require('chance'),
 	  chance = new Chance();
-module.exports = async (client) => {
+module.exports = client => {
 	return task = {
 		name: 'changeGame',
 		description: 'Changes the bot\'s "playing" game.',
@@ -32,7 +32,7 @@ module.exports = async (client) => {
 		action: () => {
 			const quote = chance.weighted(client.config.status.statuses, client.config.status.weights);
 			client.user.setPresence({
-				status: "online",
+				status: 'online',
 				afk: false,
 				game: {
 					name: quote,

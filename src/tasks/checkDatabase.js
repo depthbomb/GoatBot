@@ -23,7 +23,7 @@
 
 const fs = require('fs');
 const path = require('path');
-module.exports = async (client) => {
+module.exports = client => {
 	return task = {
 		name: 'checkDatabase',
 		description: 'Checks the integrity of the local database, restoring from a backup if needed',

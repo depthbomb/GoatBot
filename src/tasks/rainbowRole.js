@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (client) => {
+module.exports = client => {
 	return task = {
 		enabled: false,
 		interval: 60,
