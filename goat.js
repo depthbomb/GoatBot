@@ -68,10 +68,6 @@ class GoatBot extends Discord.Client {
 		this.tasks       = [];
 		this.db          = {};
 
-		this.moderation  = {
-			messageBucket: []
-		};
-
 		this.disableLog  = false;
 		this.heartbeat   = 0;
 
