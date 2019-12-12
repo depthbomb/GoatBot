@@ -35,15 +35,15 @@ exports.run = (client, message, args, level) => {
 	message.delete().then(() => {
 		message.channel.fetchMessages({ limit: num }).then(messages => {
 			client.disableLog = true;
-			messages.forEach(m => {
-				m.delete().then(() => {
+			for (let msg of messages) {
+				msg.delete().then(() => {
 					n++;
 					if (n === num) {
 						console.log('Done hardpurging');
 						client.disableLog = false;
 					}
 				});
-			});
+			}
 		});
 	});
 };

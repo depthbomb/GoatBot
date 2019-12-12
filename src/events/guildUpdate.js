@@ -21,17 +21,17 @@
 |--------------------------------------------------------------------------
 */
 
+const Table = require('cli-table3');
 module.exports = (client, oldGuild, newGuild) => {
-	const Table = require('cli-table2');
-	const table = new Table({head: ['', 'Old', 'New'], style: {head:[]}});
+	const table = new Table({ head: ['', 'Old', 'New'], style: { head: [] } });
 
 	table.push(
-		{"Name": [oldGuild.name, newGuild.name]},
-		{"Acronym": [oldGuild.nameAcronym, newGuild.nameAcronym]},
-		{"Icon": [oldGuild.iconURL, newGuild.iconURL]},
-		{"Region": [oldGuild.region, newGuild.region]},
-		{"AFK Timeout": [oldGuild.afkTimeout, newGuild.afkTimeout]},
-		{"Security Level": [oldGuild.verificationLevel, newGuild.verificationLevel]}
+		{ 'Name': [oldGuild.name, newGuild.name] },
+		{ 'Acronym': [oldGuild.nameAcronym, newGuild.nameAcronym] },
+		{ 'Icon': [oldGuild.iconURL, newGuild.iconURL] },
+		{ 'Region': [oldGuild.region, newGuild.region] },
+		{ 'AFK Timeout': [oldGuild.afkTimeout, newGuild.afkTimeout] },
+		{ 'Security Level': [oldGuild.verificationLevel, newGuild.verificationLevel] }
 	);
 
 	client.log('event', `Guild [${oldGuild.name}] was updated:`);

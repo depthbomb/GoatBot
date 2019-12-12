@@ -21,24 +21,19 @@
 |--------------------------------------------------------------------------
 */
 
+const Table = require('cli-table3');
 module.exports = (client, oldMember, newMember) => {
-	const Table = require('cli-table2');
-	const table = new Table({head: ['', 'Old', 'New'], style: {head:[]}});
+	const table = new Table({ head: ['', 'Old', 'New'], style: { head: [] } });
+	const oldRolesArray = [];
+	const newRolesArray = [];
 
-	let oldRolesArray = [];
-	let newRolesArray = [];
-
-	oldMember.roles.forEach(role => {
-		oldRolesArray.push(role.name);
-	});
-	newMember.roles.forEach(role => {
-		newRolesArray.push(role.name);
-	});
+	oldMember.roles.forEach(role => oldRolesArray.push(role.name));
+	newMember.roles.forEach(role => newRolesArray.push(role.name));
 
 	table.push(
-		{"Name": [oldMember.displayName, newMember.displayName]},
-		{"Roles": [oldRolesArray.join(", "), newRolesArray.join(", ")]},
-		{"Color": [oldMember.displayHexColor, newMember.displayHexColor]}
+		{ 'Name': [oldMember.displayName, newMember.displayName] },
+		{ 'Roles': [oldRolesArray.join(','), newRolesArray.join(',')] },
+		{ 'Color': [oldMember.displayHexColor, newMember.displayHexColor] }
 	);
 
 	client.log('event', `${oldMember.displayName} was updated in ${oldMember.guild.name}:`);
