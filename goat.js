@@ -49,7 +49,7 @@ const ascii = ["┌────────────────────�
 				"├─────────────────────────────────────────────────────────────────────────┤",
 				"│            « Made by depthbomb#0163, powered by goat butts »            │",
 				"└─────────────────────────────────────────────────────────────────────────┘"];
-console.log(chalk.bgCyan.whiteBright(ascii.join("\n")));
+console.log(chalk.bgCyan.whiteBright(ascii.join('\n')));
 
 const low = require('lowdb'),
 	  FileSync = require('lowdb/adapters/FileSync');
@@ -57,19 +57,23 @@ const low = require('lowdb'),
 class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
-		this.online = false;
-		this.started = 0;
+		this.online      = false;
+		this.started     = 0;
 
-		this.localMode = process.platform === 'win32';
-		this.config    = require('./config.js').config;
+		this.localMode   = process.platform === 'win32';
+		this.config      = require('./config.js').config;
 
-		this.commands = new Discord.Collection();
-		this.aliases  = new Discord.Collection();
-		this.tasks    = [];
-		this.db       = {};
+		this.commands    = new Discord.Collection();
+		this.aliases     = new Discord.Collection();
+		this.tasks       = [];
+		this.db          = {};
 
-		this.disableLog = false;
-		this.heartbeat  = Math.floor(new Date() / 1000);
+		this.moderation  = {
+			messageBucket: []
+		};
+
+		this.disableLog  = false;
+		this.heartbeat   = 0;
 
 		this.rootPath    = __dirname;
 		this.appPath     = `${this.rootPath}/src`;
@@ -77,8 +81,7 @@ class GoatBot extends Discord.Client {
 		this.tmpPath     = `${this.storagePath}/tmp`;
 		this.dbPath      = `${this.storagePath}/database`;
 		this.cachePath   = `${this.storagePath}/cache`;
-		
-		this.colors = {
+		this.colors      = {
 			brand:		this.config.color,
 			yellow:		'#ffb901',
 			default:	'#99aab5',
@@ -89,17 +92,17 @@ class GoatBot extends Discord.Client {
 			black:		'#222222'
 		};
 
-		this.uuid = () => uuid();
-		this.timestamp = () => Math.floor(new Date() / 1000);
-		this.printCmd = (commandName) => this.config.prefix + commandName;
-		this.permLevel = (message) => {
+		this.uuid        = () => uuid();
+		this.timestamp   = () => Math.floor(new Date() / 1000);
+		this.printCmd    = (commandName) => this.config.prefix + commandName;
+		this.permLevel   = (message) => {
 			let permlvl = 0;
 	
 			//	Bot owner always has highest perm
 			if (message.author.id === client.config.ownerId) return 10;
 	
 			// Set perm to 0 if webhook or DM
-			if (!message.guild || !message.member || message.channel.type === "dm") return 0;
+			if (!message.guild || !message.member || message.channel.type === 'dm') return 0;
 	
 			try {
 				const moderatorRole = message.member.roles.find(r => r.id === client.config.roles.mod);
@@ -117,7 +120,7 @@ class GoatBot extends Discord.Client {
 	
 			return permlvl;
 		};
-		this.log = (type, message, writeFile = !client.localMode) => {
+		this.log         = (type, message, writeFile = !client.localMode) => {
 			let logName = type + '.log';
 			let logMsg = `[${moment().format('M/D/YY HH:mm:ss')}] [${type}] ${message}`;
 			let logEntry = "\n" + logMsg;
@@ -163,6 +166,7 @@ class GoatBot extends Discord.Client {
 }
 
 const client = new GoatBot();
+client.started = client.timestamp();
 
 require(`${client.appPath}/functions.js`)(client);
 
@@ -170,9 +174,7 @@ const init = () => new Listr([
 	{
 		title: 'Cleaning up tmp files',
 		skip: () => {
-			if (fs.readdirSync(client.tmpPath).length < 1) {
-				return 'No temporary files to clean up';
-			}
+			if (fs.readdirSync(client.tmpPath).length < 1) return 'No temporary files to clean up';
 		},
 		task: () => {
 			fs.readdir(dir, (err, files) => {
@@ -249,7 +251,6 @@ const init = () => new Listr([
 	{
 		title: 'Loading tasks',
 		task: async () => {
-			client.started = client.timestamp();
 			const taskFiles = await readdir(`${client.appPath}/tasks/`);
 			for (let file of taskFiles) {
 				try {

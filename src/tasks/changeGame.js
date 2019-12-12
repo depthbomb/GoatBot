@@ -28,6 +28,7 @@ module.exports = client => {
 		name: 'changeGame',
 		description: 'Changes the bot\'s "playing" game.',
 		enabled: !client.localMode,
+		hidden: true,
 		interval: 60*30,
 		action: () => {
 			const quote = chance.weighted(client.config.status.statuses, client.config.status.weights);

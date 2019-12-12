@@ -29,26 +29,22 @@ module.exports = (client, message) => {
 	*	Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
 	*/
 	if (message.channel.id === client.config.refugeeChannel || message.channel.id === '481201307257012262') {
-		setTimeout(() => {
-			message.delete().catch(e => {});
-		}, (600*1000));
+		setTimeout(() => message.delete().catch(e => {}), (600*1000));
 	}
 
-	if (message.author.bot || message.system) return;
+	if (message.author.bot || message.system || message.channel.type === 'dm') return;
 
-	const isDm			= message.channel.type === 'dm';
 	const isOwner		= (message.author.id === client.config.ownerId);
 	const level			= client.permLevel(message);
-	const isServerStaff = isDm ? false : (message.member.roles.find(r => r.name === client.config.roles.admin) || message.member.roles.find(r => r.name === client.config.roles.mod) || level > 2 || isOwner);
-	const isTF2Staff 	= isDm ? false : (message.member.roles.find(r => r.name === 'TF2 Server Staff'));
+	const isServerStaff = (message.member.roles.find(r => r.name === client.config.roles.admin) || message.member.roles.find(r => r.name === client.config.roles.mod) || level > 2 || isOwner);
+	const isTF2Staff 	= (message.member.roles.find(r => r.name === 'TF2 Server Staff'));
 
 	let logPrefix = [];
 	let username = message.member !== null ? message.member.displayName : message.author.tag;
 
-	if (!isDm && message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
+	if (message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
 
-	if (isDm) logPrefix.push("(DM)");
-	else logPrefix.push(`#${message.channel.name}`);
+	logPrefix.push(`#${message.channel.name}`);
 
 	if (message.tts) logPrefix.push('[TTS]');
 
@@ -58,17 +54,18 @@ module.exports = (client, message) => {
 	let logMessage;
 
 	if (typeof message.attachments.first() != 'undefined') isAttachment = true;
-	if (isAttachment && message.content !== "") attachmentWithMessage = true;
+	if (isAttachment && message.content !== '') attachmentWithMessage = true;
 
-	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url}`;
-	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
-	else logMessage = `${logPrefix.join(" ")} ${username}: ${message.cleanContent}`;
+	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(' ')} ${username} uploaded attachment ${message.attachments.first().url}`;
+	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(' ')} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
+	else logMessage = `${logPrefix.join(' ')} ${username}: ${message.cleanContent}`;
 
-	client.log("msg", logMessage);
+	client.log('msg', logMessage);
 
 	const args		= message.content.slice(client.config.prefix.length).trim().split(/ +/g);
 	const command	= args.shift().toLowerCase();
 	const cmd		= client.commands.get(command) || client.commands.get(client.aliases.get(command));
+
 
 	/**
 	*	Non-command messages
@@ -110,7 +107,7 @@ module.exports = (client, message) => {
 			if (message.channel.type === 'dm' || isTF2Staff) return;
 			if (!isOwner || level < 2) {
 				message.delete().then(msg => {
-					return client.kennelUser(msg, msg.member, '[Auto] Discriminatory language is not tolerated.');
+					return client.kennelUser(msg.member, '[Auto] Discriminatory language is not tolerated.');
 				}).catch(e => {});
 			}
 		}

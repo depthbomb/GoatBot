@@ -40,7 +40,7 @@ exports.run = (client, message, args, level) => {
 
 		if (warnings > 2) {
 			db.remove({ userId: user.id }).write();
-			return client.kennelUser(message, user, reason, user.displayName);
+			return client.kennelUser(user, reason, user.displayName);
 		}
 
 		db.push({ userId: user.id, reason: reason, expires: expiration }).write();

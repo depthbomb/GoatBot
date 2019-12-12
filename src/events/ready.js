@@ -25,6 +25,7 @@ const chalk = require('chalk');
 module.exports = async client => {
 	await client.wait(100);
 	client.online = true;
+	client.heartbeat = client.timestamp();
 	client.disableEveryone = true;
 	client.disabledEvents = [
 		'TYPING_START',

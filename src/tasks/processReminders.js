@@ -28,6 +28,7 @@ module.exports = client => {
 		name: 'processReminders',
 		description: 'Processes outstanding reminders',
 		enabled: true,
+		hidden: false,
 		interval: 5,
 		action: () => {
 			const now = client.timestamp();
