@@ -22,7 +22,7 @@
 */
 
 module.exports = (client, messageReaction, user) => {
-	const db = client.db.get('bans.reaction');
+	const db = client.db.core.get('bans.reaction');
 	const message = messageReaction.message;
 	const userId = message.author.id;
 	if (db.filter({ userId }).value().length > 0) {
