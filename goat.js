@@ -60,10 +60,8 @@ class GoatBot extends Discord.Client {
 		this.online = false;
 		this.started = 0;
 
-		//	Local mode (or dev mode) means that the bot is running locally on my development machine
-		//	rather than a server.
 		this.localMode = process.platform === 'win32';
-		this.config    = require("./config.js").config;
+		this.config    = require('./config.js').config;
 
 		this.commands = new Discord.Collection();
 		this.aliases  = new Discord.Collection();
@@ -94,75 +92,73 @@ class GoatBot extends Discord.Client {
 		this.uuid = () => uuid();
 		this.timestamp = () => Math.floor(new Date() / 1000);
 		this.printCmd = (commandName) => this.config.prefix + commandName;
-	}
-
-	permlevel (message) {
-		let permlvl = 0;
-
-		//	Bot owner always has highest perm
-		if (message.author.id === client.config.ownerId) return 10;
-
-		// Set perm to 0 if webhook or DM
-		if (!message.guild || !message.member || message.channel.type === "dm") return 0;
-
-		try {
-			const moderatorRole = message.member.roles.find(r => r.id === client.config.roles.mod);
-			if (moderatorRole && message.member.roles.has(moderatorRole.id)) permlvl = 2;
-		} catch (e) {
-			client.log('warn', 'Moderator role is not present. Skipping level 2 check.');
-		}
-
-		try {
-			const adminRole = message.member.roles.find(r => r.id === client.config.roles.admin);
-			if (adminRole && message.member.roles.has(adminRole.id)) permlvl = 3;
-		} catch (e) {
-			client.log('warn', 'Admin role is not present. Skipping level 3 check.');
-		}
-
-		return permlvl;
-	}
-
-	log (type, message, writeFile = !client.localMode) {
-		let logName = type + '.log';
-		let logMsg = `[${moment().format('M/D/YY HH:mm:ss')}] [${type}] ${message}`;
-		let logEntry = "\n" + logMsg;
-		let logAsFile = ['msg', 'event', 'bot', 'system', 'warn', 'error', 'task', 'debug'];
-
-		switch (type) {
-			case 'msg':
-				console.log(chalk.yellowBright(logMsg));
-				break;
-			case 'event':
-				console.log(chalk.magentaBright(logMsg));
-				break;
-			case 'system':
-				console.log(chalk.bgBlueBright.whiteBright(logMsg));
-				break;
-			case 'warn':
-				console.log(chalk.bgYellowBright.black(logMsg));
-				break;
-			case 'error':
-				console.log(chalk.bgRedBright.whiteBright(logMsg));
-				break;
-			case 'task':
-				console.log(chalk.bgMagentaBright.whiteBright(logMsg));
-				break;
-			case 'debug':
-				console.log(chalk.bgBlackBright.whiteBright(logMsg));
-				break;
-			case 'bot':
-			default:
-				console.log(chalk.cyanBright(logMsg));
-				break;
-		}
-
-		if (logAsFile.includes(type) && writeFile) {
-			const logFile = `${client.storagePath}/logs/${logName}`;
-			if (!fs.existsSync(logFile)) fs.writeFile(logFile, "", () => {});
-			fs.appendFile(logFile, logEntry, (err) => {
-				if (err) throw new Error(err);
-			});
-		}
+		this.permLevel = (message) => {
+			let permlvl = 0;
+	
+			//	Bot owner always has highest perm
+			if (message.author.id === client.config.ownerId) return 10;
+	
+			// Set perm to 0 if webhook or DM
+			if (!message.guild || !message.member || message.channel.type === "dm") return 0;
+	
+			try {
+				const moderatorRole = message.member.roles.find(r => r.id === client.config.roles.mod);
+				if (moderatorRole && message.member.roles.has(moderatorRole.id)) permlvl = 2;
+			} catch (e) {
+				client.log('warn', 'Moderator role is not present. Skipping level 2 check.');
+			}
+	
+			try {
+				const adminRole = message.member.roles.find(r => r.id === client.config.roles.admin);
+				if (adminRole && message.member.roles.has(adminRole.id)) permlvl = 3;
+			} catch (e) {
+				client.log('warn', 'Admin role is not present. Skipping level 3 check.');
+			}
+	
+			return permlvl;
+		};
+		this.log = (type, message, writeFile = !client.localMode) => {
+			let logName = type + '.log';
+			let logMsg = `[${moment().format('M/D/YY HH:mm:ss')}] [${type}] ${message}`;
+			let logEntry = "\n" + logMsg;
+			let logAsFile = ['msg', 'event', 'bot', 'system', 'warn', 'error', 'task', 'debug'];
+	
+			switch (type) {
+				case 'msg':
+					console.log(chalk.yellowBright(logMsg));
+					break;
+				case 'event':
+					console.log(chalk.magentaBright(logMsg));
+					break;
+				case 'system':
+					console.log(chalk.bgBlueBright.whiteBright(logMsg));
+					break;
+				case 'warn':
+					console.log(chalk.bgYellowBright.black(logMsg));
+					break;
+				case 'error':
+					console.log(chalk.bgRedBright.whiteBright(logMsg));
+					break;
+				case 'task':
+					console.log(chalk.bgMagentaBright.whiteBright(logMsg));
+					break;
+				case 'debug':
+					console.log(chalk.bgBlackBright.whiteBright(logMsg));
+					break;
+				case 'bot':
+				default:
+					console.log(chalk.cyanBright(logMsg));
+					break;
+			}
+	
+			if (logAsFile.includes(type) && writeFile) {
+				const logFile = `${client.storagePath}/logs/${logName}`;
+				if (!fs.existsSync(logFile)) fs.writeFile(logFile, "", () => {});
+				fs.appendFile(logFile, logEntry, (err) => {
+					if (err) throw new Error(err);
+				});
+			}
+		};
 	}
 }
 
@@ -276,6 +272,31 @@ const init = () => new Listr([
 					throw new Error(e);
 				}
 			}
+		}
+	},
+	{
+		title: 'Pre-ready Tasks',
+		task: () => {
+			return new Listr([
+				{
+					title: 'Dumping command info',
+					task: () => {
+						const commands = JSON.stringify(client.commands.array());
+						fs.writeFile('commands.json', commands, err => {
+							if (err) throw new Error(err);
+						});
+					}
+				},
+				{
+					title: 'Dumping task info',
+					task: () => {
+						const tasks = JSON.stringify(client.tasks);
+						fs.writeFile('tasks.json', tasks, err => {
+							if (err) throw new Error(err);
+						});
+					}
+				}
+			], { exitOnError: false });
 		}
 	}
 ])
