@@ -21,8 +21,8 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
 const moment = require('moment');
+const { RichEmbed } = require('discord.js');
 
 function formatInterval(interval) {
 	const hours   = Math.floor(interval / 3600);
@@ -45,11 +45,13 @@ exports.run = (client, message, args, level) => {
 		  .setColor(client.colors.brand)
 		  .setTimestamp();
 
-	tasks.forEach(task => {
+	for (let task of tasks) {
+		const taskLastRan = task.lastRan;
 		const interval = formatInterval(task.interval);
-		const lastRan = '\n* Last ran ' + (task.lastRan > 0 ? moment.unix(task.lastRan).fromNow() : 'Never')
-		embed.addField(task.name, `\`\`\`markdown\n* ${task.description}\n* Interval: ${interval}${lastRan}\`\`\``);
-	});
+		const lastRan = '\n* Last ran: ' + (taskLastRan > 0 ? moment.unix(taskLastRan).format('M/DD/YYYY, HH:mm:ss') : 'Never');
+		const nextRun = '\n* Next run: ' + moment.unix(taskLastRan > 0 ? (taskLastRan + task.interval) : (client.started + task.interval)).format('M/DD/YYYY, HH:mm:ss');
+		embed.addField(task.name, `\`\`\`markdown\n* ${task.description}\n* Interval: ${interval}${lastRan}${nextRun}\`\`\``);
+	}
 
 	return message.reply({ embed });
 };

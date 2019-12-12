@@ -58,6 +58,7 @@ class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
 		this.online = false;
+		this.started = 0;
 
 		//	Local mode (or dev mode) means that the bot is running locally on my development machine
 		//	rather than a server.
@@ -252,6 +253,7 @@ const init = () => new Listr([
 	{
 		title: 'Loading tasks',
 		task: async () => {
+			client.started = client.timestamp();
 			const taskFiles = await readdir(`${client.appPath}/tasks/`);
 			for (let file of taskFiles) {
 				try {
