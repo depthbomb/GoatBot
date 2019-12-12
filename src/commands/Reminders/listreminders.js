@@ -24,17 +24,17 @@
 const moment = require('moment');
 const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const db = client.db.get('reminders');
+	const db = client.db.reminders.get('reminders');
 	const userId = message.author.id;
 	const reminders = db.filter({ userId }).sortBy('createdAt').value();
 	if (reminders.length > 0) {
 		const embed = new RichEmbed()
 			  .setTitle(`${message.member.displayName}'s Reminders`)
 			  .setColor(client.colors.brand)
-			  .setDescription(`You can cancel a reminder by typing \`${client.config.prefix}rcancel [snowflake]\``);
+			  .setDescription(`You can cancel a reminder by typing \`${client.config.prefix}rcancel [uuid]\``);
 
 		for (let rem of reminders) {
-			embed.addField(`In about ${moment.unix(rem.arrival).fromNow(true)} (${rem.snowflake})`, rem.reminderMessage);
+			embed.addField(`In about ${moment.unix(rem.arrival).fromNow(true)} (${rem.uuid})`, rem.reminderMessage);
 		}
 		
 		return message.reply({ embed });

@@ -27,7 +27,7 @@ const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const color = args[0];
-	const imageName = `${client.tmpPath}/color_${client.snowflake()}.png`;
+	const imageName = `${client.tmpPath}/color_${client.uuid()}.png`;
 
 	if (!color.match(/#?[a-fA-F0-9]{6}/i))
 		return client.msg(message, 'red', 'error', 'The color code you provided is invalid.');

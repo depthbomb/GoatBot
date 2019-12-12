@@ -28,18 +28,18 @@ module.exports = client => {
 		name: 'processReminders',
 		description: 'Processes outstanding reminders',
 		enabled: true,
-		interval: 59,
+		interval: 5,
 		action: () => {
 			const now = client.timestamp();
-			const db = client.db.get('reminders');
+			const db = client.db.reminders.get('reminders');
 			const reminders = db.value();
 			for (let rem of reminders) {
-				const snowflake = rem.snowflake;
+				const uuid = rem.uuid;
 				const userId = rem.userId;
 				const channel = client.channels.find(c => c.id === rem.channelId);
 				if (rem.arrival === null) {
 					//	Remove invalid reminders if the arrival date is somehow broken
-					db.remove({ snowflake }).write();
+					db.remove({ uuid }).write();
 				} else {
 					if (rem.arrival <= now) {
 						const embed = new RichEmbed()
@@ -47,7 +47,7 @@ module.exports = client => {
 							  .setColor(client.colors.brand)
 							  .setDescription(rem.reminderMessage);
 	
-						db.remove({ snowflake }).write();
+						db.remove({ uuid }).write();
 						channel.send(`<@${userId}>`, { embed });
 					}
 				}

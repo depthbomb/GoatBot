@@ -33,8 +33,7 @@ const chalk = require('chalk');
 const Discord = require('discord.js');
 const { promisify } = require('util');
 const moment = require('moment');
-const Snowflake = require('snowflake-id'),
-	  snowflake = new Snowflake({ mid: 1, offset: (2019-1996)*31536000*1000 });
+const uuid = require('uuid/v4');
 const readdir = promisify(require('fs').readdir);
 const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
 				"│                                                                         │",
@@ -68,6 +67,7 @@ class GoatBot extends Discord.Client {
 		this.commands = new Discord.Collection();
 		this.aliases  = new Discord.Collection();
 		this.tasks    = [];
+		this.db       = {};
 
 		this.disableLog = false;
 		this.heartbeat  = Math.floor(new Date() / 1000);
@@ -76,7 +76,7 @@ class GoatBot extends Discord.Client {
 		this.appPath     = `${this.rootPath}/src`;
 		this.storagePath = `${this.rootPath}/storage`;
 		this.tmpPath     = `${this.storagePath}/tmp`;
-		this.dbPath      = `${this.storagePath}/database/db.goat`;
+		this.dbPath      = `${this.storagePath}/database`;
 		this.cachePath   = `${this.storagePath}/cache`;
 		
 		this.colors = {
@@ -90,7 +90,7 @@ class GoatBot extends Discord.Client {
 			black:		'#222222'
 		};
 
-		this.snowflake = () => snowflake.generate();
+		this.uuid = () => uuid();
 		this.timestamp = () => Math.floor(new Date() / 1000);
 		this.printCmd = (commandName) => this.config.prefix + commandName;
 	}
@@ -190,11 +190,26 @@ const init = () => new Listr([
 		}
 	},
 	{
-		title: 'Initializing database',
+		title: 'Initializing databases',
 		task: () => {
-			const adapter = new FileSync(client.dbPath);
-			client.db = low(adapter);
-			client.db.defaults({ warnings: [], reminders: [], bans: { user: [], reaction: [] } }).write();
+			/**
+			 * I am now using multiple databases to prevent the possibility of corruption due to multiple methods writing to one
+			 * at the same time.
+			 */
+			const databases = [
+				{ name: 'core', path: path.join(path.join(client.dbPath, 'db.goat')) },
+				{ name: 'reminders', path: path.join(path.join(client.dbPath, 'reminders.goat')) },
+				{ name: 'warnings', path: path.join(path.join(client.dbPath, 'warnings.goat')) },
+			];
+
+			for (let db of databases) {
+				const adapter = new FileSync(db.path);
+				client.db[db.name] = low(adapter);
+			}
+
+			client.db.core.defaults({ bans: { user: [], reaction: [] } }).write();
+			client.db.reminders.defaults({ reminders: [] }).write();
+			client.db.warnings.defaults({ warnings: [] }).write();
 		}
 	},
 	{

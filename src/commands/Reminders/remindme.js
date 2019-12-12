@@ -25,7 +25,7 @@ const moment = require('moment');
 const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length < 2) return;
-	const db = client.db.get('reminders');
+	const db = client.db.reminders.get('reminders');
 	const userId = message.author.id;
 	const channelId = message.channel.id;
 	const inputFormat     = args[0];
@@ -35,7 +35,7 @@ exports.run = async (client, message, args, level) => {
 
 	if (timeFormatRegex.test(inputFormat)) {
 		if (reminderMessage.length > 750) return client.msg(message, 'red', 'error', 'Your reminder message is too long.');
-		const snowflake = client.snowflake();
+		const uuid = client.uuid();
 		let matches = timeFormatRegex.exec(inputFormat);
 			matches.shift();					//	Remove first item from matches (full group match, useless in this case)
 			matches = matches.filter(Boolean);	//	Remove all undefined/blank/false values
@@ -51,12 +51,14 @@ exports.run = async (client, message, args, level) => {
 		}
 		arrival = (now + duration);
 
-		db.push({ snowflake, channelId, userId, arrival, reminderMessage, createdAt: now }).write();
+		if (duration < 60) return client.msg(message, 'red', 'error', 'Your reminder delay is too short. Minimum 1 minute (1m).');
+
+		db.push({ uuid, channelId, userId, arrival, reminderMessage, createdAt: now }).write();
 
 		const embed = new RichEmbed()
 			  .setTitle('Reminder Set')
 			  .setColor(client.colors.green)
-			  .setDescription(`Your reminder has been successfully set and it will be sent in this channel.\nTo cancel this reminder, type \`${client.config.prefix}rcancel ${snowflake}\`\nType \`${client.config.prefix}rlist\` to see all of your active reminders`)
+			  .setDescription(`Your reminder has been successfully set and it will be sent in this channel.\nTo cancel this reminder, type \`${client.config.prefix}rcancel ${uuid}\`\nType \`${client.config.prefix}rlist\` to see all of your active reminders`)
 			  .addField('Arrival', moment.unix(arrival).format('dddd, MMMM Do YYYY, HH:mm:ss'))
 			  .addField('Message', `\`\`\`${reminderMessage}\`\`\``);
 

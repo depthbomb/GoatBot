@@ -26,14 +26,14 @@ const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const text = encodeURIComponent(args.join(''));
-	const apiUrl = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${client.config.apiKeys.perspective}`;
+	const uri = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${client.config.apiKeys.perspective}`;
 
 	let msg = await message.channel.send('Analyzing...');
 	request({
 		headers: {
-			"User-Agent": client.config.userAgent
+			'User-Agent': client.config.userAgent
 		},
-		uri: apiUrl,
+		uri,
 		method: 'POST',
 		json: {
 			comment: { text },

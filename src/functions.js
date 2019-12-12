@@ -21,12 +21,14 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (client) => {
+const crypto = require('crypto');
+const { RichEmbed } = require('discord.js');
+module.exports = client => {
 	client.awaitReply = async (msg, question, limit = 60000) => {
 		const filter = m => m.author.id = msg.author.id;
 		await msg.channel.send(question);
 		try {
-			const collected = await msg.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
+			const collected = await msg.channel.awaitMessages(filter, { max: 1, time: limit, errors: ['time'] });
 			return collected.first().content;
 		} catch (e) {
 			return false;
@@ -34,12 +36,10 @@ module.exports = (client) => {
 	};
 
 	client.error = (msg, err) => {
-		const { RichEmbed } = require('discord.js');
-		const crypto = require('crypto');
 		const algorithm = 'aes-256-cbc';
 		const key = client.config.crypto.errorSalt;
 		const cipher = crypto.createCipher(algorithm, key);
-		const errorStack = `**UserID:** ${msg.author.id}\n**ChannelID:** ${msg.channel.id}\n**DM?:** ${msg.channel.type === "dm"}\n${msg.guild.available ? "**Guild:** " + msg.guild.name + "\n" : ""}\n\`\`\`JS\n${err}\n\`\`\``;
+		const errorStack = `**UserID:** ${msg.author.id}\n**ChannelID:** ${msg.channel.id}\n**DM?:** ${msg.channel.type === 'dm'}\n${msg.guild.available ? "**Guild:** " + msg.guild.name + '\n' : ''}\n\`\`\`JS\n${err}\n\`\`\``;
 
 		let encrypted = cipher.update(errorStack, "utf8", "base64");
 			encrypted += cipher.final('base64');
@@ -65,7 +65,6 @@ module.exports = (client) => {
 	 * @param {bool} autoDeleteDelay Delay in seconds when deleting the message
 	 */
 	client.msg = (messageObj, type, icon, message, reply = true, autoDelete = false, autoDeleteDelay = 10) => {
-		const { RichEmbed } = require('discord.js');
 		const colors = {
 			"black": "#212121",
 			"yellow": "#faa61a",
@@ -76,17 +75,17 @@ module.exports = (client) => {
 			"blue": "#3498db"
 		};
 		const emojis = {
-			"gold": client.emojis.find(e => e.name === "caprineGold"),
-			"ungag": client.emojis.find(e => e.name === "caprineCommentNormal"),
-			"gag": client.emojis.find(e => e.name === "caprineGag"),
-			"mute": client.emojis.find(e => e.name === "caprineMute"),
-			"search": client.emojis.find(e => e.name === "caprineSearch"),
-			"refresh": client.emojis.find(e => e.name === "caprineRefresh"),
-			"error": client.emojis.find(e => e.name === "caprineClose"),
-			"warning": client.emojis.find(e => e.name === "caprineWarning"),
-			"success": client.emojis.find(e => e.name === "caprineSuccess"),
-			"info": client.emojis.find(e => e.name === "caprineInfo"),
-			"close": client.emojis.find(e => e.name === "caprineClose")
+			"gold": client.emojis.find(e => e.name === 'caprineGold'),
+			"ungag": client.emojis.find(e => e.name === 'caprineCommentNormal'),
+			"gag": client.emojis.find(e => e.name === 'caprineGag'),
+			"mute": client.emojis.find(e => e.name === 'caprineMute'),
+			"search": client.emojis.find(e => e.name === 'caprineSearch'),
+			"refresh": client.emojis.find(e => e.name === 'caprineRefresh'),
+			"error": client.emojis.find(e => e.name === 'caprineClose'),
+			"warning": client.emojis.find(e => e.name === 'caprineWarning'),
+			"success": client.emojis.find(e => e.name === 'caprineSuccess'),
+			"info": client.emojis.find(e => e.name === 'caprineInfo'),
+			"close": client.emojis.find(e => e.name === 'caprineClose')
 		};
 		const color = colors[type];
 		const emoji = emojis[icon];
@@ -114,7 +113,6 @@ module.exports = (client) => {
 	 */
 	client.logAction = (title, logMessage, color = client.colors.default, authorName, authorImage = client.guilds.find(g => g.id === client.config.mainGuild).iconURL) => {
 		if (client.disableLog) return;
-		const { RichEmbed } = require('discord.js');
 		const logChannel = client.channels.find(c => c.id === client.config.logChannel);
 		const embed = new RichEmbed()
 			.setColor(color)
@@ -134,7 +132,6 @@ module.exports = (client) => {
 		const kennelChannel = member.guild.channels.find(c => c.id === '481201307257012262');
 
 		if (!user.roles.find(r => r.name === 'Kenneled')) {
-			const { RichEmbed } = require('discord.js');
 			let embed = new RichEmbed()
 				.setColor(client.colors.red)
 				.setTitle('User Kenneled')
@@ -291,5 +288,5 @@ module.exports = (client) => {
 
 
 	// `await client.wait(1000);` to "pause" for 1 second.
-	client.wait = require("util").promisify(setTimeout);
+	client.wait = require('util').promisify(setTimeout);
 };

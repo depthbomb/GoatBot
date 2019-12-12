@@ -21,43 +21,60 @@
 |--------------------------------------------------------------------------
 */
 
+/**
+ * I use the native https module because I can't figure out how to format the request with the "request" library
+ * as Hastebin requires you to send data without a field name.
+ */
+const https = require('https');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
-	const db = client.db.reminders.get('reminders');
-	const uuid = args.join(' ');
-	const userId = message.author.id;
-	const reminder = (userId === client.config.ownerId) ?
-					 db.find({ uuid }).value() :
-					 db.find({ uuid, userId }).value();
-	if (reminder) {
-		db.remove({ uuid }).write();
-		return client.msg(message, 'green', 'success', 'That reminder has been cancelled!');
+	const code = args.slice(0).join(' ') || null;
+	let msg = await message.channel.send('Processing...');
+	if (code) {
+		msg.edit('Uploading...');
+		const options = {
+			hostname: 'hastebin.com',
+			port: 443,
+			path: '/documents',
+			method: 'POST',
+			headers: {
+				'Content-Length': code.length
+			}
+		};
+		const req = https.request(options, res => {
+			res.on('data', d => {
+				const data = JSON.parse(d);
+				return msg.edit(`<@${message.author.id}>, https://hastebin.com/${data.key}`);
+			});
+			res.on('error', err => message.reply(`**Error**: ${err}`));
+		});
+
+		req.write(code);
+		req.end();
 	} else {
-		return client.msg(message, 'red', 'error', 'That reminder does not exist or you do not have access to cancelling it.');
+		return message.reply('You didn\'t supply any text to upload, silly.');
 	}
 };
 
 exports.conf = {
 	enabled: true,
-	cooldown: 1,
+	cooldown: 10,
+	globalCd: true,
 	aliases: [
-		'remindercancel',
-		'remindcancel',
-		'remindmecancel',
-		'rcancel'
+		'pastebin'
 	],
 	permLevel: 0
 };
 
 exports.help = {
-	name: 'cancelreminder',
-	category: 'Reminders',
-	description: 'Cancels a reminder',
-	usage: 'cancelreminder [uuid]',
+	name: 'hastebin',
+	category: 'Useful',
+	description: 'Uploads text to Hastebin (Pastebin alternative)',
+	usage: 'hastebin [text]',
 	params: {
-		'uuid': 'Cancels a reminder of yours by its UUID'
+		'text': 'Text to upload'
 	},
 	examples: [
-		'cancelreminder 421890328492034',
+		'hastebin console.log("hello world");',
 	]
 };

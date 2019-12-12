@@ -24,11 +24,18 @@
 module.exports = client => {
 	return task = {
 		name: 'clearWarnings',
-		description: 'Clears outstanding outdated user warnings.',
+		description: 'Clears outstanding outdated user warnings',
 		enabled: true,
 		interval: 60*60,
 		action: () => {
-			
+			const now = client.timestamp();
+			const db = client.db.warnings.get('warnings');
+			const warnings = db.value();
+			for (let warning of warnings) {
+				const userId = warning.userId;
+				const expires = warning.expires;
+				if (warning.expires <= now) db.remove({ userId, expires }).write();
+			}
 		}
 	};
 };

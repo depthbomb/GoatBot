@@ -21,12 +21,9 @@
 |--------------------------------------------------------------------------
 */
 
+const moment = require('moment');
 exports.run = (client, message, args, level) => {
-	const { version } = require("discord.js");
-	const moment = require("moment");
-	require("moment-duration-format");
-
-	const duration = moment.duration(client.uptime).format(" D [days], H [hrs], m [mins], s [secs]");
+	const duration = moment.duration(client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
 	return message.channel.send(`My Statistics
 -------------
 • Mem Usage  :: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB
@@ -36,7 +33,7 @@ exports.run = (client, message, args, level) => {
 • Channels   :: ${client.channels.size.toLocaleString()}
 • Node       :: ${process.version}`
 
-, {code: "asciidoc"});
+, { code: 'asciidoc' });
 };
 
 exports.conf = {

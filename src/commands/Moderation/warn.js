@@ -24,7 +24,7 @@
 const moment = require('moment');
 exports.run = (client, message, args, level) => {
 	if(args.length === 0) return;
-	const db = client.db.get('warnings');
+	const db = client.db.warnings.get('warnings');
 	const mention = args[0];
 	const reason = args.slice(1).join(' ') || 'No reason given';
 
@@ -61,6 +61,7 @@ exports.run = (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
+	cooldown: 5,
 	aliases: [],
 	permLevel: 4
 };
