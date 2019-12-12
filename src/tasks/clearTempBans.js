@@ -29,7 +29,7 @@ module.exports = client => {
 		interval: 60,
 		action: () => {
 			const now = client.timestamp();
-			const db = client.db.get('bans.user');
+			const db = client.db.core.get('bans.user');
 			const bans = db.value();
 			if (bans.length > 0) {
 				for (let ban of bans) {
