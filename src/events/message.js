@@ -25,6 +25,8 @@ const cooldowns = {};
 const ms = require('ms');
 const { RichEmbed } = require('discord.js');
 module.exports = (client, message) => {
+	const bucket = client.moderation.messageBucket;
+
 	/**
 	*	Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
 	*/
@@ -44,7 +46,12 @@ module.exports = (client, message) => {
 
 	if (message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
 
+<<<<<<< HEAD
 	logPrefix.push(`#${message.channel.name}`);
+=======
+	if (isDm) logPrefix.push('(DM)');
+	else logPrefix.push(`#${message.channel.name}`);
+>>>>>>> c0b06784134205310b447c9dfdd1847e33873a5e
 
 	if (message.tts) logPrefix.push('[TTS]');
 
@@ -66,6 +73,22 @@ module.exports = (client, message) => {
 	const command	= args.shift().toLowerCase();
 	const cmd		= client.commands.get(command) || client.commands.get(client.aliases.get(command));
 
+
+	/**
+	 * Rate limit messages
+	 */
+	let drops = 0;
+	for (let i = 0; i < bucket.length; i++) {
+		if (bucket[i].id === message.author.id) drops++;
+	}
+
+	if (drops > 7) {
+		return client.kennelUser(message.member, '[Auto] You are sending messages too often.');
+	} else {
+		bucket.push({ id: message.author.id, sent: client.timestamp() });
+	}
+	/**
+	 =============================================================================== */
 
 	/**
 	*	Non-command messages

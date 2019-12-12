@@ -121,6 +121,10 @@ module.exports = client => {
 	client.kennelUser = (member, reason, issuer = 'GoatBot!') => {
 		const kennelRole = member.guild.roles.find(r => r.name === 'Kenneled');
 		const nsfwRole = member.roles.find(r => r.name === 'NSFW');
+<<<<<<< HEAD
+=======
+		const djRole = member.roles.find(r => r.name === 'Deejay');
+>>>>>>> c0b06784134205310b447c9dfdd1847e33873a5e
 		const kennelChannel = member.guild.channels.find(c => c.id === '481201307257012262');
 
 		if (!member.roles.find(r => r.name === 'Kenneled')) {
@@ -130,7 +134,11 @@ module.exports = client => {
 				.setDescription(`User \`${member.displayName}\` has been kenneled by **${issuer}**`)
 				.addField('Reason', reason);
 
+<<<<<<< HEAD
 			member.removeRole(nsfwRole, 'Removed due to kenneling').catch(_ => {});
+=======
+			member.removeRoles([nsfwRole, djRole], 'Roles removed due to kenneling').catch(_ => {});
+>>>>>>> c0b06784134205310b447c9dfdd1847e33873a5e
 			member.addRole(kennelRole, reason).then(() => {
 				member.setDeaf(true, 'Deafened due to kenneling').catch(() => {});
 				member.setMute(true, 'Muted due to kenneling').catch(() => {});
