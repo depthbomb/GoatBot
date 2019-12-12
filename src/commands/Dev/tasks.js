@@ -45,13 +45,22 @@ exports.run = (client, message, args, level) => {
 		  .setColor(client.colors.brand)
 		  .setTimestamp();
 
+	let totalTasks = 0;
+	let hiddenTasks = 0;
 	for (let task of tasks) {
-		const taskLastRan = task.lastRan;
-		const interval = formatInterval(task.interval);
-		const lastRan = '\n* Last ran: ' + (taskLastRan > 0 ? moment.unix(taskLastRan).format('M/DD/YYYY, HH:mm:ss') : 'Never');
-		const nextRun = '\n* Next run: ' + moment.unix(taskLastRan > 0 ? (taskLastRan + task.interval) : (client.started + task.interval)).format('M/DD/YYYY, HH:mm:ss');
-		embed.addField(task.name, `\`\`\`markdown\n* ${task.description}\n* Interval: ${interval}${lastRan}${nextRun}\`\`\``);
+		totalTasks++;
+		if (!task.hidden) {
+			const taskLastRan = task.lastRan;
+			const interval = formatInterval(task.interval);
+			const lastRan = '\n* Last ran: ' + (taskLastRan > 0 ? moment.unix(taskLastRan).format('M/DD/YYYY, HH:mm:ss') : 'Never');
+			const nextRun = '\n* Next run: ' + moment.unix(taskLastRan > 0 ? (taskLastRan + task.interval) : (client.started + task.interval)).format('M/DD/YYYY, HH:mm:ss');
+			embed.addField(task.name, `\`\`\`markdown\n* ${task.description}\n* Interval: ${interval}${lastRan}${nextRun}\`\`\``);
+		} else {
+			hiddenTasks++;
+		}
 	}
+
+	embed.setTitle(`${totalTasks} tasks | ${hiddenTasks} are hidden from this command`);
 
 	return message.reply({ embed });
 };

@@ -25,6 +25,8 @@ const cooldowns = {};
 const ms = require('ms');
 const { RichEmbed } = require('discord.js');
 module.exports = (client, message) => {
+	const bucket = client.moderation.messageBucket;
+
 	/**
 	*	Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
 	*/
@@ -47,7 +49,7 @@ module.exports = (client, message) => {
 
 	if (!isDm && message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
 
-	if (isDm) logPrefix.push("(DM)");
+	if (isDm) logPrefix.push('(DM)');
 	else logPrefix.push(`#${message.channel.name}`);
 
 	if (message.tts) logPrefix.push('[TTS]');
@@ -58,17 +60,33 @@ module.exports = (client, message) => {
 	let logMessage;
 
 	if (typeof message.attachments.first() != 'undefined') isAttachment = true;
-	if (isAttachment && message.content !== "") attachmentWithMessage = true;
+	if (isAttachment && message.content !== '') attachmentWithMessage = true;
 
-	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url}`;
-	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(" ")} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
-	else logMessage = `${logPrefix.join(" ")} ${username}: ${message.cleanContent}`;
+	if (isAttachment && !attachmentWithMessage)	logMessage = `${logPrefix.join(' ')} ${username} uploaded attachment ${message.attachments.first().url}`;
+	else if (isAttachment && attachmentWithMessage)	logMessage = `${logPrefix.join(' ')} ${username} uploaded attachment ${message.attachments.first().url} with message [${message.cleanContent}]`;
+	else logMessage = `${logPrefix.join(' ')} ${username}: ${message.cleanContent}`;
 
-	client.log("msg", logMessage);
+	client.log('msg', logMessage);
 
 	const args		= message.content.slice(client.config.prefix.length).trim().split(/ +/g);
 	const command	= args.shift().toLowerCase();
 	const cmd		= client.commands.get(command) || client.commands.get(client.aliases.get(command));
+
+	/**
+	 * Rate limit messages
+	 */
+	let drops = 0;
+	for (let i = 0; i < bucket.length; i++) {
+		if (bucket[i].id === message.author.id) drops++;
+	}
+
+	if (drops > 7) {
+		return client.kennelUser(message.member, '[Auto] You are sending messages too often.');
+	} else {
+		bucket.push({ id: message.author.id, sent: client.timestamp() });
+	}
+	/**
+	 =============================================================================== */
 
 	/**
 	*	Non-command messages
@@ -110,7 +128,7 @@ module.exports = (client, message) => {
 			if (message.channel.type === 'dm' || isTF2Staff) return;
 			if (!isOwner || level < 2) {
 				message.delete().then(msg => {
-					return client.kennelUser(msg, msg.member, '[Auto] Discriminatory language is not tolerated.');
+					return client.kennelUser(msg.member, '[Auto] Discriminatory language is not tolerated.');
 				}).catch(e => {});
 			}
 		}

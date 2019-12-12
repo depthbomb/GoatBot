@@ -23,22 +23,18 @@
 
 module.exports = client => {
 	return task = {
-		name: 'heartbeat',
-		description: 'Manages the bot\'s heartbeat. Restarts the bot if there are abnormalities.',
+		name: 'dripMessages',
+		description: 'Drips messages from the message limit bucket.',
 		enabled: true,
 		hidden: true,
-		interval: 30,
+		interval: 1,
 		action: () => {
-			const heartbeat = client.heartbeat;
-			const time = Math.floor(new Date() / 1000);
-			if ((heartbeat + 35) < time) {
-				client.log('error', `Last heartbeat is behind by ${time - heartbeat} seconds. Restarting bot...`);
-				client.destroy();
-				process.exit(1);
-			} else {
-				if (client.online) {
-					client.heartbeat = time;
-				}
+			const dripInterval = 5;
+			const now = client.timestamp();
+			const bucket = client.moderation.messageBucket;
+			for (let entry of bucket) {
+				const index = bucket.indexOf(entry);
+				if ((entry.sent + dripInterval) <= now) client.moderation.messageBucket.splice(index, 1);
 			}
 		}
 	};

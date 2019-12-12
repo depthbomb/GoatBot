@@ -39,17 +39,17 @@ module.exports = client => {
 		const algorithm = 'aes-256-cbc';
 		const key = client.config.crypto.errorSalt;
 		const cipher = crypto.createCipher(algorithm, key);
-		const errorStack = `**UserID:** ${msg.author.id}\n**ChannelID:** ${msg.channel.id}\n**DM?:** ${msg.channel.type === 'dm'}\n${msg.guild.available ? "**Guild:** " + msg.guild.name + '\n' : ''}\n\`\`\`JS\n${err}\n\`\`\``;
+		const errorStack = `**UserID:** ${msg.author.id}\n**ChannelID:** ${msg.channel.id}\n**DM?:** ${msg.channel.type === 'dm'}\n${msg.guild.available ? '**Guild:** ' + msg.guild.name + '\n' : ''}\n\`\`\`js\n${err}\n\`\`\``;
 
-		let encrypted = cipher.update(errorStack, "utf8", "base64");
+		let encrypted = cipher.update(errorStack, 'utf8', 'base64');
 			encrypted += cipher.final('base64');
 
 		let embed = new RichEmbed()
-			.setAuthor("OOPSIE WOOPSIE!!", client.user.avatarURL)
+			.setAuthor('OOPSIE WOOPSIE!!', client.user.avatarURL)
 			.setColor(client.colors.red)
-			.setDescription("OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this code belowo if you see him!")
-			.addField("\u200B", `\`\`\`\n${encrypted}\n\`\`\``, true)
-			.setThumbnail(client.emojis.find("name", "caprineError").url);
+			.setDescription('OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this code belowo if you see him!')
+			.addField('\u200B', `\`\`\`\n${encrypted}\n\`\`\``, true)
+			.setThumbnail(client.emojis.find('name', 'caprineError').url);
 
 		return msg.reply({ embed });
 	};
@@ -61,45 +61,37 @@ module.exports = client => {
 	 * @param {string} icon Emoji
 	 * @param {string} message Message
 	 * @param {bool} reply Whether to ping the invoking user
-	 * @param {bool} autoDelete Whether to auto-delete sent message
-	 * @param {bool} autoDeleteDelay Delay in seconds when deleting the message
 	 */
-	client.msg = (messageObj, type, icon, message, reply = true, autoDelete = false, autoDeleteDelay = 10) => {
+	client.msg = (messageObj, type, icon, message, reply = true) => {
 		const colors = {
-			"black": "#212121",
-			"yellow": "#faa61a",
-			"default": "#99aab5",
-			"red": "#f04747",
-			"orange": "#f57731",
-			"green": "#43b581",
-			"blue": "#3498db"
+			'black': '#212121',
+			'yellow': '#faa61a',
+			'default': '#99aab5',
+			'red': '#f04747',
+			'orange': '#f57731',
+			'green': '#43b581',
+			'blue': '#3498db'
 		};
 		const emojis = {
-			"gold": client.emojis.find(e => e.name === 'caprineGold'),
-			"ungag": client.emojis.find(e => e.name === 'caprineCommentNormal'),
-			"gag": client.emojis.find(e => e.name === 'caprineGag'),
-			"mute": client.emojis.find(e => e.name === 'caprineMute'),
-			"search": client.emojis.find(e => e.name === 'caprineSearch'),
-			"refresh": client.emojis.find(e => e.name === 'caprineRefresh'),
-			"error": client.emojis.find(e => e.name === 'caprineClose'),
-			"warning": client.emojis.find(e => e.name === 'caprineWarning'),
-			"success": client.emojis.find(e => e.name === 'caprineSuccess'),
-			"info": client.emojis.find(e => e.name === 'caprineInfo'),
-			"close": client.emojis.find(e => e.name === 'caprineClose')
+			'gold': client.emojis.find(e => e.name === 'caprineGold'),
+			'ungag': client.emojis.find(e => e.name === 'caprineCommentNormal'),
+			'gag': client.emojis.find(e => e.name === 'caprineGag'),
+			'mute': client.emojis.find(e => e.name === 'caprineMute'),
+			'search': client.emojis.find(e => e.name === 'caprineSearch'),
+			'refresh': client.emojis.find(e => e.name === 'caprineRefresh'),
+			'error': client.emojis.find(e => e.name === 'caprineClose'),
+			'warning': client.emojis.find(e => e.name === 'caprineWarning'),
+			'success': client.emojis.find(e => e.name === 'caprineSuccess'),
+			'info': client.emojis.find(e => e.name === 'caprineInfo'),
+			'close': client.emojis.find(e => e.name === 'caprineClose')
 		};
 		const color = colors[type];
 		const emoji = emojis[icon];
 		const embed = new RichEmbed()
-					.setColor(color)
-					.setDescription(`${emoji} ${reply ? "<@" + messageObj.author.id + ">, " : ""}${message}`);
+			  .setColor(color)
+			  .setDescription(`${emoji} ${reply ? '<@' + messageObj.author.id + '>, ' : ''}${message}`);
 
-		return messageObj.channel.send({ embed }).then(m => {
-			if (autoDelete) {
-				setTimeout(() => {
-					m.delete();
-				}, autoDeleteDelay * 1000);
-			}
-		});
+		return messageObj.channel.send({ embed });
 	};
 
 
@@ -126,29 +118,27 @@ module.exports = client => {
 	};
 
 
-	client.kennelUser = (message, user, reason, issuer = 'GoatBot!') => {
-		const member = message.member;
-		const kennelRole = member.guild.roles.find(r => r.name === 'Kenneled').id;
+	client.kennelUser = (member, reason, issuer = 'GoatBot!') => {
+		const kennelRole = member.guild.roles.find(r => r.name === 'Kenneled');
+		const nsfwRole = member.roles.find(r => r.name === 'NSFW');
+		const djRole = member.roles.find(r => r.name === 'Deejay');
 		const kennelChannel = member.guild.channels.find(c => c.id === '481201307257012262');
 
-		if (!user.roles.find(r => r.name === 'Kenneled')) {
+		if (!member.roles.find(r => r.name === 'Kenneled')) {
 			let embed = new RichEmbed()
 				.setColor(client.colors.red)
 				.setTitle('User Kenneled')
-				.setDescription(`User \`${user.displayName}\` has been kenneled by **${issuer}**`)
-				.addField('Reason', reason)
-			;
+				.setDescription(`User \`${member.displayName}\` has been kenneled by **${issuer}**`)
+				.addField('Reason', reason);
 
-			if (user.roles.find(r => r.name === 'NSFW')) user.removeRole(user.roles.find(r => r.name === 'NSFW'));
-			if (user.roles.find(r => r.name === 'Deejay')) user.removeRole(user.roles.find(r => r.name === 'Deejay'));
-
-			user.addRole(kennelRole, reason).then(() => {
+			member.removeRoles([nsfwRole, djRole], 'Roles removed due to kenneling').catch(_ => {});
+			member.addRole(kennelRole, reason).then(() => {
 				member.setDeaf(true, 'Deafened due to kenneling').catch(() => {});
 				member.setMute(true, 'Muted due to kenneling').catch(() => {});
 				message.channel.send({ embed }).then(m => {
 					embed = new RichEmbed()
 						.setColor(client.colors.red)
-						.setDescription(`<@${user.id}>, you have been placed in the kennel by ${issuer}. You will be here indefinitely until you can \`${client.printCmd('escape')}\`. Some of your roles have been stripped and will need to be reacquired once you escape.`)
+						.setDescription(`<@${member.user.id}>, you have been placed in the kennel by ${issuer}. You will be here indefinitely until you can \`${client.printCmd('escape')}\`. Some of your roles have been stripped and will need to be reacquired once you escape.`)
 						.addField('Reason', reason)
 					;
 					kennelChannel.send({ embed });
