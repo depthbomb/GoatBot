@@ -228,7 +228,7 @@ const init = () => new Listr([
 							props.conf.aliases.forEach(alias => client.aliases.set(alias, props.help.name));
 						}
 					} catch (e) {
-						throw e;
+						throw new Error(e);
 					}
 				}
 			}

@@ -23,7 +23,7 @@
 
 const request = require('request');
 exports.run = async (client, message, args, level) => {
-	const number = args[0];
+	const number = args[0] || 'random';
 	const type   = args.slice(1).join(' ').toLowerCase() || 'trivia';
 	const uri    = `http://numbersapi.com/${number}/${type}`;
 
@@ -52,7 +52,7 @@ exports.conf = {
 };
 
 exports.help = {
-	name: 'numberfact',
+	name: 'numberfacts',
 	category: 'Info',
 	description: 'Get facts about a number or date',
 	usage: 'numberfact [number?] [type?]',
@@ -61,10 +61,10 @@ exports.help = {
 		'type': '(Optional) trivia, math, date, or year. Defaults to "trivia"'
 	},
 	examples: [
-		'numberfact',
-		'numberfact 42',
-		'numberfact 69 trivia',
-		'numberfact 2/29 date',
-		'numberfact random year'
+		'numberfacts',
+		'numberfacts 42',
+		'numberfacts 69 trivia',
+		'numberfacts 2/29 date',
+		'numberfacts random year'
 	]
 };

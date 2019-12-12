@@ -33,7 +33,7 @@ exports.run = async (client, message, args, level) => {
 	if (code) {
 		msg.edit('Uploading...');
 		const options = {
-			hostname: 'hastebin.com',
+			hostname: 'pastie.io',
 			port: 443,
 			path: '/documents',
 			method: 'POST',
@@ -43,8 +43,14 @@ exports.run = async (client, message, args, level) => {
 		};
 		const req = https.request(options, res => {
 			res.on('data', d => {
-				const data = JSON.parse(d);
-				return msg.edit(`<@${message.author.id}>, https://hastebin.com/${data.key}`);
+				let data;
+				try {
+					data = JSON.parse(d);
+				} catch (e) {
+					return msg.edit('There was an error uploading to Pastie. This is likely a problem on their end.');
+				}
+				
+				return msg.edit(`<@${message.author.id}>, https://pastie.io/${data.key}`);
 			});
 			res.on('error', err => message.reply(`**Error**: ${err}`));
 		});
@@ -61,20 +67,22 @@ exports.conf = {
 	cooldown: 10,
 	globalCd: true,
 	aliases: [
+		'paste',
+		'hastebin',
 		'pastebin'
 	],
 	permLevel: 0
 };
 
 exports.help = {
-	name: 'hastebin',
+	name: 'pastie',
 	category: 'Useful',
-	description: 'Uploads text to Hastebin (Pastebin alternative)',
-	usage: 'hastebin [text]',
+	description: 'Uploads text to Pastie (Pastebin alternative)',
+	usage: 'pastie [text]',
 	params: {
 		'text': 'Text to upload'
 	},
 	examples: [
-		'hastebin console.log("hello world");',
+		'pastie console.log("hello world");',
 	]
 };
