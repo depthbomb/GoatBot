@@ -21,21 +21,17 @@
 |--------------------------------------------------------------------------
 */
 
+const request = require('request');
+const moment = require('moment');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
-	const request = require('request');
-	const moment = require('moment');
-	const { RichEmbed } = require('discord.js');
-
 	const appId = client.config.openweathermap_api_key;
 	const query = args.join(' ');
 	const uri = `http://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${appId}&units=imperial`;
 
 	let msg = await message.reply("Sending request...");
 	request({
-		headers: {
-			"User-Agent": client.config.userAgent
-		},
 		uri: uri,
 		method: 'GET'
 	}, (err, res, body) => {

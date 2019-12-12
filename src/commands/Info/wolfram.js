@@ -21,19 +21,15 @@
 |--------------------------------------------------------------------------
 */
 
+const request = require('request');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
-	const request = require('request');
-	const { RichEmbed } = require('discord.js');
-
 	const query = encodeURIComponent(args.join(' '));
 	const uri = `http://api.wolframalpha.com/v2/query?appid=${client.config.wolfram_alpha_api_key}&input=${query}&format=plaintext&output=json&units=nonmetric`;
 
 	let msg = await message.reply("Sending request...");
 	request({
-		headers: {
-			"User-Agent": client.config.userAgent
-		},
 		uri: uri,
 		method: 'GET'
 	}, (err, res, body) => {

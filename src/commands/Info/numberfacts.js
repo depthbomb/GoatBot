@@ -21,58 +21,50 @@
 |--------------------------------------------------------------------------
 */
 
-const trunc = require('truncate');
 const request = require('request');
-const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
-	const term = encodeURIComponent(args.join(" "));
-	const apiUrl = `http://api.urbandictionary.com/v0/define?term=${term}`;
-
-	let msg = await message.channel.send("Searching...");
+	const number = args[0];
+	const type   = args.slice(1).join(' ').toLowerCase() || 'trivia';
+	const uri    = `http://numbersapi.com/${number}/${type}`;
 
 	request({
-		uri: apiUrl,
+		uri,
 		method: 'GET'
 	}, (err, res, body) => {
-		if (err) return client.error(message, err);
-		const data = JSON.parse(body);
-		if (data.result_type === 'no_results') {
-			return msg.edit(`<@${message.author.id}>, I didn't find any results using your search term :(`);
+		if (err) return client.msg(message, 'red', 'error', err);
+		if (body.startsWith('Cannot')) {
+			return message.reply('Invalid format');
 		} else {
-			const result = data.list[0];
-			const embed = new RichEmbed()
-				.setTitle(`Results for \`${decodeURIComponent(term)}\``)
-				.setDescription(result.permalink)
-				.addField('Definition', trunc(result.definition, 1023))
-				.setColor('#134FE6');
-
-			if (result.example) embed.addBlankField(1).addField('Example(s)', trunc(result.example, 500));
-			
-			return msg.edit(`<@${message.author.id}>`, { embed });
+			return message.reply(`\`\`\`${body}\`\`\``);
 		}
 	});
 };
 
 exports.conf = {
 	enabled: true,
-	cooldown: 5.5,
+	cooldown: 5,
 	aliases: [
-		'ud',
-		'urbandictionary'
+		'numberfact',
+		'numbersfact',
+		'numbersfacts'
 	],
 	permLevel: 0,
 };
 
 exports.help = {
-	name: 'urban',
+	name: 'numberfact',
 	category: 'Info',
-	description: 'Find a definition on Urban Dictionary',
-	usage: 'urban [term]',
+	description: 'Get facts about a number or date',
+	usage: 'numberfact [number?] [type?]',
 	params: {
-		'term': 'Term to search for'
+		'number?': 'Number or month/day if [type] is "date". Can also be "random", which it will default to',
+		'type': '(Optional) trivia, math, date, or year. Defaults to "trivia"'
 	},
 	examples: [
-		'urban fuzzy logic'
+		'numberfact',
+		'numberfact 42',
+		'numberfact 69 trivia',
+		'numberfact 2/29 date',
+		'numberfact random year'
 	]
 };

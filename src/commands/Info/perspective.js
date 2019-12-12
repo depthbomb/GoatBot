@@ -30,9 +30,6 @@ exports.run = async (client, message, args, level) => {
 
 	let msg = await message.channel.send('Analyzing...');
 	request({
-		headers: {
-			'User-Agent': client.config.userAgent
-		},
 		uri,
 		method: 'POST',
 		json: {

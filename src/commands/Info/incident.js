@@ -67,9 +67,6 @@ exports.run = async (client, message, args, level) => {
 			const incidentUrl = `https://status.discordapp.com/incidents/${latestIncident.code}.json`;
 
 			request({
-				headers: {
-					"User-Agent": client.config.userAgent
-				},
 				uri: incidentUrl,
 				method: 'GET'
 			}, (err, res, body) => {

@@ -21,8 +21,8 @@
 |--------------------------------------------------------------------------
 */
 
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const { RichEmbed } = require('discord.js');
 	let mention,
 		member;
 	if (args.length > 0) {
