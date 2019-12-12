@@ -32,7 +32,9 @@ const Listr = require('listr');
 const chalk = require('chalk');
 const Discord = require('discord.js');
 const { promisify } = require('util');
-const moment = require('moment-timezone');
+const moment = require('moment');
+const Snowflake = require('snowflake-id'),
+	  snowflake = new Snowflake({ mid: 1, offset: (2019-1996)*31536000*1000 });
 const readdir = promisify(require('fs').readdir);
 const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
 				"│                                                                         │",
@@ -88,6 +90,7 @@ class GoatBot extends Discord.Client {
 			black:		'#222222'
 		};
 
+		this.snowflake = () => snowflake.generate();
 		this.timestamp = () => Math.floor(new Date() / 1000);
 		this.printCmd = (commandName) => this.config.prefix + commandName;
 	}
@@ -120,7 +123,7 @@ class GoatBot extends Discord.Client {
 
 	log (type, message, writeFile = !client.localMode) {
 		let logName = type + '.log';
-		let logMsg = `[${moment().tz(client.config.logTimezone).format('M/D/YY HH:mm:ss')}] [${type}] ${message}`;
+		let logMsg = `[${moment().format('M/D/YY HH:mm:ss')}] [${type}] ${message}`;
 		let logEntry = "\n" + logMsg;
 		let logAsFile = ['msg', 'event', 'bot', 'system', 'warn', 'error', 'task', 'debug'];
 
@@ -209,7 +212,7 @@ const init = () => new Listr([
 							props.conf.aliases.forEach(alias => client.aliases.set(alias, props.help.name));
 						}
 					} catch (e) {
-						throw new Error(e);
+						throw e;
 					}
 				}
 			}
@@ -262,7 +265,7 @@ const init = () => new Listr([
 .run()
 .then(() => client.login(client.config.token))
 .catch(err => {
-	client.log('error', err);
+	console.error(err);
 	client.destroy();
 	process.exit(1);
 });

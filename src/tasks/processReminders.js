@@ -21,6 +21,8 @@
 |--------------------------------------------------------------------------
 */
 
+const moment = require('moment');
+const { RichEmbed } = require('discord.js');
 module.exports = client => {
 	return task = {
 		name: 'processReminders',
@@ -28,18 +30,16 @@ module.exports = client => {
 		enabled: true,
 		interval: 59,
 		action: () => {
-			const moment = require('moment');
-			const { RichEmbed } = require('discord.js');
 			const now = client.timestamp();
 			const db = client.db.get('reminders');
 			const reminders = db.value();
 			for (let rem of reminders) {
-				const uuid = rem.uuid;
+				const snowflake = rem.snowflake;
 				const userId = rem.userId;
 				const channel = client.channels.find(c => c.id === rem.channelId);
 				if (rem.arrival === null) {
 					//	Remove invalid reminders if the arrival date is somehow broken
-					db.remove({ uuid }).write();
+					db.remove({ snowflake }).write();
 				} else {
 					if (rem.arrival <= now) {
 						const embed = new RichEmbed()
@@ -47,7 +47,7 @@ module.exports = client => {
 							  .setColor(client.colors.brand)
 							  .setDescription(rem.reminderMessage);
 	
-						db.remove({ uuid }).write();
+						db.remove({ snowflake }).write();
 						channel.send(`<@${userId}>`, { embed });
 					}
 				}

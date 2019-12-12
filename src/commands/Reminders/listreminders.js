@@ -31,10 +31,10 @@ exports.run = async (client, message, args, level) => {
 		const embed = new RichEmbed()
 			  .setTitle(`${message.member.displayName}'s Reminders`)
 			  .setColor(client.colors.brand)
-			  .setDescription(`You can cancel a reminder by typing \`${client.config.prefix}rcancel [uuid]\``);
+			  .setDescription(`You can cancel a reminder by typing \`${client.config.prefix}rcancel [snowflake]\``);
 
 		for (let rem of reminders) {
-			embed.addField(`In about ${moment.unix(rem.arrival).fromNow(true)} (${rem.uuid})`, rem.reminderMessage);
+			embed.addField(`In about ${moment.unix(rem.arrival).fromNow(true)} (${rem.snowflake})`, rem.reminderMessage);
 		}
 		
 		return message.reply({ embed });

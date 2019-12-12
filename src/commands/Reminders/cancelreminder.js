@@ -24,13 +24,13 @@
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const db = client.db.get('reminders');
-	const uuid = args.join(' ');
+	const snowflake = args.join(' ');
 	const userId = message.author.id;
 	const reminder = (userId === client.config.ownerId) ?
-					 db.find({ uuid }).value() :
-					 db.find({ uuid, userId }).value();
+					 db.find({ snowflake }).value() :
+					 db.find({ snowflake, userId }).value();
 	if (reminder) {
-		db.remove({ uuid }).write();
+		db.remove({ snowflake }).write();
 		return client.msg(message, 'green', 'success', 'That reminder has been cancelled!');
 	} else {
 		return client.msg(message, 'red', 'error', 'That reminder does not exist or you do not have access to cancelling it.');
@@ -53,11 +53,11 @@ exports.help = {
 	name: 'cancelreminder',
 	category: 'Reminders',
 	description: 'Cancels a reminder',
-	usage: 'cancelreminder [uuid]',
+	usage: 'cancelreminder [snowflake]',
 	params: {
-		'uuid': 'Cancels a reminder of yours by its UUID'
+		'snowflake': 'Cancels a reminder of yours by its Snowflake'
 	},
 	examples: [
-		'cancelreminder 13055e07-0d33-4568-9e7e-909cc9e1e17d',
+		'cancelreminder 421890328492034',
 	]
 };
