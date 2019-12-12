@@ -80,7 +80,7 @@ exports.help = {
 	description: 'Uploads text to Pastie (Pastebin alternative)',
 	usage: 'pastie [text]',
 	params: {
-		'text': 'Text to upload'
+		'text': 'Text to upload. For the best result, do not send the code in a code block.'
 	},
 	examples: [
 		'pastie console.log("hello world");',

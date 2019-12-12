@@ -25,8 +25,6 @@ const cooldowns = {};
 const ms = require('ms');
 const { RichEmbed } = require('discord.js');
 module.exports = (client, message) => {
-	const bucket = client.moderation.messageBucket;
-
 	/**
 	*	Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
 	*/
@@ -46,12 +44,7 @@ module.exports = (client, message) => {
 
 	if (message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
 
-<<<<<<< HEAD
 	logPrefix.push(`#${message.channel.name}`);
-=======
-	if (isDm) logPrefix.push('(DM)');
-	else logPrefix.push(`#${message.channel.name}`);
->>>>>>> c0b06784134205310b447c9dfdd1847e33873a5e
 
 	if (message.tts) logPrefix.push('[TTS]');
 
@@ -75,22 +68,6 @@ module.exports = (client, message) => {
 
 
 	/**
-	 * Rate limit messages
-	 */
-	let drops = 0;
-	for (let i = 0; i < bucket.length; i++) {
-		if (bucket[i].id === message.author.id) drops++;
-	}
-
-	if (drops > 7) {
-		return client.kennelUser(message.member, '[Auto] You are sending messages too often.');
-	} else {
-		bucket.push({ id: message.author.id, sent: client.timestamp() });
-	}
-	/**
-	 =============================================================================== */
-
-	/**
 	*	Non-command messages
 	*/
 	if(message.content.indexOf(client.config.prefix) !== 0) {
@@ -103,9 +80,7 @@ module.exports = (client, message) => {
 			return message.react(randomEmoji);
 		}
 
-		/**
-		*	Lit
-		*/
+
 		if (null !== message.content.match(/\blit\b/i)) message.react("🔥");
 
 		if (
@@ -113,9 +88,7 @@ module.exports = (client, message) => {
 			null !== message.content.match(/^(https?:\/\/)?discord\.gg\/invite\/(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig) ||
 			null !== message.content.match(/^(https?:\/\/)?discordapp\.com\/invite\/(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig)
 		) {
-			if (message.channel.type === 'dm') return;
 			if (isServerStaff) return;
-
 			if (!message.content.includes('discord.gg/xw624a8') || !message.content.includes('discord.gg/invite/xw624a8') || !message.content.includes('discordapp.com/invite/xw624a8')) {
 				message.delete().then(m => {
 					return m.reply('Discord invite links are not allowed. Please keep those links to DMs.');
