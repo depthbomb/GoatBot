@@ -47,20 +47,20 @@ exports.run = async (client, message, args, level) => {
 		{ name: zalgo, suffix: zalgo2, color: '#2d193b', file: 'old_god' },
 	];
 	const weights = [
-		33,		//	poor
-		190,	//	common
+		24,		//	poor
+		175,	//	common
 		150,	//	uncommon
 		125,	//	rare
-		75,		//	epic
-		66,		//	legendary
+		72,		//	epic
+		60,		//	legendary
 		52,		//	snow
 		51,		//	aqua
 		50,		//	fire
-		25,		//	void
+		20,		//	void
 		15,		//	solar
 		10,		//	nebular
 		7,		//	omniscient
-		5,		//	gay
+		4,		//	gay
 		2,		//	old god
 	];
 
