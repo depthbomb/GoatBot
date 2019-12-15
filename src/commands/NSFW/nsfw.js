@@ -22,7 +22,7 @@
 */
 
 exports.run = (client, message, args, level) => {
-	const nsfwRole = message.member.guild.roles.find(r => r.name === 'NSFW').id;
+	const nsfwRole = message.member.guild.roles.find(r => r.name === 'NSFW');
 	const lenny = '( ͡° ͜ʖ ͡°)';
 	if (message.member.roles.find(r => r.name === 'NSFW')) {
 		message.member.removeRole(nsfwRole, 'Via GoatBot!').then(() => {

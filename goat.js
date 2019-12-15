@@ -77,6 +77,7 @@ class GoatBot extends Discord.Client {
 		this.tmpPath     = `${this.storagePath}/tmp`;
 		this.dbPath      = `${this.storagePath}/database`;
 		this.cachePath   = `${this.storagePath}/cache`;
+		this.dlPath      = `${this.storagePath}/downloads`;
 		this.colors      = {
 			brand:		this.config.color,
 			yellow:		'#ffb901',
@@ -173,10 +174,10 @@ const init = () => new Listr([
 			if (fs.readdirSync(client.tmpPath).length < 1) return 'No temporary files to clean up';
 		},
 		task: () => {
-			fs.readdir(dir, (err, files) => {
+			fs.readdir(client.tmpPath, (err, files) => {
 				if (err) throw new Error(err);
 				for (let file of files) {
-					file = path.join(dir, file);
+					file = path.join(client.tmpPath, file);
 					fs.unlink(file, err => {
 						if (err) throw new Error(err);
 					});
