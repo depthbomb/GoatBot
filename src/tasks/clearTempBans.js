@@ -21,6 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
+const TempBan = require('@models/TempBan');
 module.exports = client => {
 	return task = {
 		name: 'clearTempBans',
@@ -30,15 +31,9 @@ module.exports = client => {
 		interval: 60,
 		action: () => {
 			const now = client.timestamp();
-			const db = client.db.core.get('bans.user');
-			const bans = db.value();
-			if (bans.length > 0) {
-				for (let ban of bans) {
-					const userId = ban.userId;
-					const expires = ban.expires;
-					if (expires <= now) db.remove({ userId }).write();
-				}
-			}
+			TempBan.deleteMany({ expires: { $lte: now } }, err => {
+				if (err) throw new Error(err);
+			});
 		}
 	};
 };

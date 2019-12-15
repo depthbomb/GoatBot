@@ -21,36 +21,41 @@
 |--------------------------------------------------------------------------
 */
 
+const TempBan = require('@models/TempBan');
 const { RichEmbed } = require('discord.js');
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const userId = args[0];
 	const guild = message.guild;
-	const ban = guild.fetchBan(userId);
-	const embed = new RichEmbed().setTimestamp();
-	if (ban) {
-		const bannedUser = ban.user;
-		guild.unban(userId, `Requested by ${message.member.displayName}`).then(() => {
-			embed
-				.setAuthor(user.username, user.avatarURL)
-				.setColor(client.colors.green)
-				.setDescription(`${user.username} has been unbanned by ${message.member.displayName}.`);
-		}).catch(err => client.msg(message, 'red', 'error', `Unable to lift ban: ${err}`));
-	} else {
-		const db = client.db.get('bans.user');
-		if (db.filter({ userId }).value().length > 0) {
-			db.remove({ userId }).write();
-			embed
-				.setColor(client.colors.green)
-				.setDescription(`Temp ban on ${member.displayName} has been lifted by ${message.member.displayName}`);
-		} else {
-			embed
-				.setColor(client.colors.red)
-				.setDescription(`No user with ID \`${userId}\` has any active bans.`);
-		}
-	}
+	await guild.fetchBan(userId)
+	.then(({ user, reason }) => {
+		guild.unban(user, `Requested by ${message.member.displayName}`)
+		.then(() => {
+			const embed = new RichEmbed().setTimestamp();
+			embed.setAuthor(user.username, user.avatarURL)
+				 .setColor(client.colors.green)
+				 .setDescription(`${user.username} has been unbanned by ${message.member.displayName}.`);
 
-	return message.channel.send({ embed });
+			return message.channel.send({ embed });
+		})
+		.catch(err => client.msg(message, 'red', 'error', `Unable to lift ban: ${err}`));
+	})
+	.catch(async err => {
+		TempBan.findOneAndRemove({ userId })
+		.then(ban => {
+			const embed = new RichEmbed().setTimestamp();
+			if (ban) {
+				embed.setColor(client.colors.green)
+					 .setDescription(`Temp ban on user #${userId} has been lifted by ${message.member.displayName}.`);
+			} else {
+				embed.setColor(client.colors.red)
+					 .setDescription(`User #${userId} has no temp bans.`);
+			}
+
+			return message.channel.send({ embed });
+		})
+		.catch(err => message.reply(err.message));
+	});
 };
 
 exports.conf = {
@@ -65,7 +70,7 @@ exports.help = {
 	description: 'Removes server ban for user or removes their temp ban',
 	usage: 'unban [user ID]',
 	params: {
-		'user ID': 'ID of user to ban'
+		'user ID': 'ID of user to unban'
 	},
 	examples: [
 		'unban 12345678910'

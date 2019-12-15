@@ -26,14 +26,14 @@ exports.run = async (client, message, args, level) => {
 	const mention = args[0];
 	const reason = args.slice(1).join(' ') || 'No reason given';
 	
-	let user;
+	let member;
 	if (mention.match(/<@!?\d{17,19}>/g)) {
-		user = message.mentions.members.first();
+		member = message.mentions.members.first();
 	} else {
-		return message.reply('Could not find user.');
+		member = message.guild.members.find(m => m.id === mention);
 	}
 
-	return client.kennelUser(user, reason, message.member.displayName);
+	return client.kennelUser(member, reason, message.member.displayName);
 };
 
 exports.conf = {

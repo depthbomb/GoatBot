@@ -21,50 +21,49 @@
 |--------------------------------------------------------------------------
 */
 
-const Reminder = require('@models/Reminder');
+const Warning = require('@models/Warning');
+const pluralize = require('pluralize');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
-	const uuid = args.join(' ');
-	const userId = message.author.id;
+	if(args.length === 0) return;
+	const mention = args.join(' ');
 
-	Reminder.findById(uuid, 'userId', (err, reminder) => {
-		if (err) return message.reply(err.message);
-		if (reminder) {
-			if (reminder.userId === userId || userId === client.config.ownerId) {
-				Reminder.deleteOne({ _id: uuid }, (err, doc) => {
-					if (err) throw new Error(err);
-					return client.msg(message, 'green', 'success', 'Reminder has been cancelled!');
-				});
-			} else {
-				return client.msg(message, 'red', 'error', 'You do not have permission to cancel this reminder.');
-			}
-		} else {
-			return client.msg(message, 'red', 'error', 'That reminder does not exist.');
-		}
-	});
+	let member;
+	if (mention.match(/<@!?\d{17,19}>/g)) {
+		member = message.mentions.members.first();
+	} else {
+		member = message.guild.members.find(m => m.id === mention);
+	}
+
+	if (member) {
+		const userId =  member.id;
+		Warning.deleteMany({ userId })
+		.then(warnings => message.reply(`Cleared ${pluralize('warning', warnings.n, true)} for <@${userId}>.`))
+		.catch(err => message.reply(err));
+	} else {
+		return message.reply('Could not find member.');
+	}
 };
 
 exports.conf = {
 	enabled: true,
-	cooldown: 1,
+	cooldown: 5,
 	aliases: [
-		'remindercancel',
-		'remindcancel',
-		'remindmecancel',
-		'rcancel'
+		'clearwarn',
+		'warningsclear',
+		'wipewarnings'
 	],
-	permLevel: 0
+	permLevel: 4
 };
 
 exports.help = {
-	name: 'cancelreminder',
-	category: 'Reminders',
-	description: 'Cancels a reminder',
-	usage: 'cancelreminder [uuid]',
+	name: 'clearwarnings',
+	category: 'Moderation',
+	description: 'Clears a user\'s outstand warnings',
+	usage: 'warn [@mention|user ID]',
 	params: {
-		'uuid': 'Cancels a reminder of yours by its UUID'
+		'@mention|user ID': 'Mention or ID of user to warn'
 	},
 	examples: [
-		'cancelreminder 421890328492034',
+		'warn @Username#0000'
 	]
 };

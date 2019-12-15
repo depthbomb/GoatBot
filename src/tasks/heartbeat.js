@@ -36,9 +36,7 @@ module.exports = client => {
 				client.destroy();
 				process.exit(1);
 			} else {
-				if (client.online) {
-					client.heartbeat = time;
-				}
+				if (client.online) client.heartbeat = time;
 			}
 		}
 	};

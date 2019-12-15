@@ -29,8 +29,16 @@ exports.run = async (client, message, args, level) => {
 	const text = args.slice(0).join(' ') || (() => { return });
 	const imageName = `${client.uuid()}.png`;
 	const imagePath = path.join(client.tmpPath, imageName);
+	const options = {
+		margin: 2,
+		scale: 32,
+		color: {
+			dark: client.colors.brand,
+			light: '#ffffffff'
+		}
+	};
 	let msg = await message.channel.send('Generating...');
-	qr.toFile(imagePath, text, { margin: 2, scale: 32, color: { dark: client.colors.brand, light: '#ffffffff' } }, err => {
+	qr.toFile(imagePath, text, options, err => {
 		if (err) return msg.edit(err.message);
 		msg.delete().then(msg => {
 			msg.channel.send({ files: [{ attachment: imagePath, name: imageName }] });

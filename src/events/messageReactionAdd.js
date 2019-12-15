@@ -21,11 +21,12 @@
 |--------------------------------------------------------------------------
 */
 
+const ReactionBan = require('@models/ReactionBan');
 module.exports = (client, messageReaction, user) => {
-	const db = client.db.core.get('bans.reaction');
 	const message = messageReaction.message;
 	const userId = message.author.id;
-	if (db.filter({ userId }).value().length > 0) {
-		messageReaction.remove(user);
-	}
+	ReactionBan.countDocuments({ userId }, (err, count) => {
+		//	Technically count shouldn't be more than 1, but just in case...
+		if (count > 0) messageReaction.remove(user);
+	});
 };

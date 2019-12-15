@@ -21,26 +21,33 @@
 |--------------------------------------------------------------------------
 */
 
+const Reminder = require('@models/Reminder');
 const moment = require('moment');
 const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const db = client.db.reminders.get('reminders');
 	const userId = message.author.id;
-	const reminders = db.filter({ userId }).sortBy('createdAt').value();
-	if (reminders.length > 0) {
-		const embed = new RichEmbed()
-			  .setTitle(`${message.member.displayName}'s Reminders`)
-			  .setColor(client.colors.brand)
-			  .setDescription(`You can cancel a reminder by typing \`${client.config.prefix}rcancel [uuid]\``);
-
-		for (let rem of reminders) {
-			embed.addField(`In about ${moment.unix(rem.arrival).fromNow(true)} (${rem.uuid})`, rem.reminderMessage);
+	Reminder.find({ userId }, '_id arrival reminderMessage', (err, reminders) => {
+		if (err) return message.reply(err.message);
+		if (reminders.length > 0) {
+			const embed = new RichEmbed()
+				  .setTitle(`${message.member.displayName}'s Reminders`)
+				  .setColor(client.colors.brand)
+				  .setDescription(`You can cancel a reminder by typing \`${client.config.prefix}rcancel [uuid]\``);
+	
+			for (let rem of reminders) {
+				//	If the bot has been running without problem a reminder would never be overdue, but just in case...
+				const title = rem.arrival <= client.timestamp() ?
+					'Overdue!' :
+					`In about ${moment.unix(rem.arrival).fromNow(true)}`;
+				embed.addField(`${title} (${rem._id})`, rem.reminderMessage);
+			}
+			
+			return message.reply({ embed });
+		} else {
+			return client.msg(message, 'orange', 'warning', 'You do not have any reminders to list.');
 		}
-		
-		return message.reply({ embed });
-	} else {
-		return client.msg(message, 'red', 'error', 'You do not have any reminders to list.');
-	}
+	});
+	
 };
 
 exports.conf = {

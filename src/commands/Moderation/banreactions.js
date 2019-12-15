@@ -21,13 +21,13 @@
 |--------------------------------------------------------------------------
 */
 
+const ReactionBan = require('@models/ReactionBan');
 const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
-	const db      = client.db.get('bans.reaction');
 	const mention = args[0];
-	const reason  = args.slice(1).join(' ') || 'No reason given';
-	
+	const reason = args.slice(1).join(' ') || 'No reason given';
+
 	let member;
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		member = message.mentions.members.first();
@@ -40,21 +40,30 @@ exports.run = async (client, message, args, level) => {
 		const embed = new RichEmbed()
 			  .setAuthor(message.member.displayName, message.author.avatarURL)
 			  .setTimestamp();
-		if (db.filter({ userId }).value().length > 0) {
-			db.remove({ userId }).write();
-			embed
-				.setColor(client.colors.orange)
-				.setDescription(`Reaction ban on ${member.displayName} has been lifted.`);
+
+		const ban = await ReactionBan.findOne({ userId }).exec();
+
+		if (ban) {
+			await ban.deleteOne().then(() => {
+				embed.setColor(client.colors.orange)
+					 .setDescription(`Reaction ban on ${member.displayName} has been lifted.`);
+			})
+			.catch(err => {
+				embed.setColor(client.colors.red)
+					 .setDescription(`**Error**: ${err.message}`);
+			});
 		} else {
-			db.push({ userId, reason }).write();
-			embed
-				.setColor(client.colors.red)
-				.setDescription(`${member.displayName} has been banned from adding reactions.`);
+			await ReactionBan.create({ userId, reason })
+			.then(ban => {
+				embed.setColor(client.colors.red)
+					 .setDescription(`${member.displayName} has been banned from adding reactions.`)
+					 .addField('Reason', ban.reason);
+			});
 		}
 
 		return message.channel.send({ embed });
 	} else {
-		return message.reply(`Could not find member.`);
+		return message.reply('Could not find member.');
 	}
 };
 

@@ -21,7 +21,19 @@
 |--------------------------------------------------------------------------
 */
 
+const TempBan = require('@models/TempBan');
 module.exports = (client, member) => {
+	TempBan.findOne({ userId: member.id })
+	.then(ban => {
+		if (ban) {
+			return member.kick('Member has an active tempban.').catch(err => {
+				throw new Error(err);
+			});
+		}
+	})
+	.catch(err => {
+		throw new Error(err);
+	});
 	const refugeeRole = member.guild.roles.find(r => r.name === 'Refugee');
 	const greetingChannel = member.guild.channels.find(c => c.id === client.config.greetingChannel);
 	const refugeeChannel = member.guild.channels.find(c => c.id === '431266723736322048');

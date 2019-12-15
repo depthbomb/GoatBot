@@ -22,26 +22,25 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	if (args.length < 1) return;
+	if (args.length === 0) return;
 	const mention = args[0];
 	
-	let user;
-
+	let member;
 	if (mention.match(/<@!?\d{17,19}>/g)) {
-		user = message.mentions.members.first();
+		member = message.mentions.members.first();
 	} else {
-		user = message.guild.members.find(m => m.id === mention);
+		member = message.guild.members.find(m => m.id === mention);
 	}
 
-	if (user) {
-		if (user.roles.find(r => r.name === 'Refugee')) {
+	if (member) {
+		if (member.roles.find(r => r.name === 'Refugee')) {
 			const memberRole = message.member.guild.roles.find(r => r.name === 'Member');
 	
-			user.removeRoles(user.roles).then(u => {
-				u.addRole(memberRole).then(u => client.msg(message, 'green', 'success', `${u.displayName} has been approved!`));
+			member.removeRoles(member.roles).then(mem => {
+				u.addRole(memberRole).then(mem => client.msg(message, 'green', 'success', `${member.displayName} has been approved!`));
 			});
 		} else {
-			client.msg(message, 'red', 'error', `${user.displayName} is not a refugee, cannot approve!`)
+			client.msg(message, 'red', 'error', `${member.displayName} is not a refugee, cannot approve!`)
 		}
 	} else {
 		return message.reply(`Could not find member.`);

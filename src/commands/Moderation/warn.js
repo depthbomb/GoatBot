@@ -21,39 +21,47 @@
 |--------------------------------------------------------------------------
 */
 
+const Warning = require('@models/Warning');
 const moment = require('moment');
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	if(args.length === 0) return;
-	const db = client.db.warnings.get('warnings');
 	const mention = args[0];
 	const reason = args.slice(1).join(' ') || 'No reason given';
 
+	let member;
 	if (mention.match(/<@!?\d{17,19}>/g)) {
-		user = message.mentions.members.first();
+		member = message.mentions.members.first();
 	} else {
-		user = message.guild.members.find(m => m.id === mention);
+		member = message.guild.members.find(m => m.id === mention);
 	}
 
-	if (user) {
-		const expiration = moment().add(3, 'days').unix();
-		let warnings = db.filter({ userId: user.id }).value().length;
+	if (member) {
+		const userId = member.id;
+		const now = client.timestamp();
+		const expires = moment().add(3, 'days').unix();
 
-		if (warnings > 2) {
-			db.remove({ userId: user.id }).write();
-			return client.kennelUser(user, reason, user.displayName);
+		const warnings = await Warning.find({ userId, expires: { $gt: now } });
+		let warningCount = warnings.length;
+
+		if (warningCount > 2) {
+			Warning.deleteMany({ userId, expires: { $lte: now } }, err => {
+				if (err) throw new Error(err);
+			});
+			return client.kennelUser(member, reason, user.displayName);
 		}
 
-		db.push({ userId: user.id, reason: reason, expires: expiration }).write();
-		//	Get updated number of warnings
-		warnings = db.filter({ userId: user.id }).value().length;
-
-		const warningMessage = [
-			`<@${user.id}>, you have recieved warning \`${warnings} / 3\`.`,
-			`Reason: \`${reason}\``,
-		].join('\n');
-		if (warnings === 3) warningMessage.push('Your next warning will result in punishment.');
-
-		return message.channel.send(warningMessage);
+		Warning.create({ userId, reason, expires })
+		.then(doc => {
+			warningCount++;
+			const warningMessage = [
+				`<@${userId}>, you have recieved warning \`${warningCount} / 3\`.`,
+				`Reason: \`${reason}\``,
+			].join('\n');
+			if (warningCount === 3) warningMessage.push('Your next warning will result in punishment.');
+	
+			return message.channel.send(warningMessage);
+		})
+		.catch(err => message.reply(err.message));
 	} else {
 		return message.reply('Could not find member.');
 	}

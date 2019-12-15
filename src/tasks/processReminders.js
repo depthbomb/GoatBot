@@ -21,38 +21,37 @@
 |--------------------------------------------------------------------------
 */
 
+const Reminder = require('@models/Reminder');
 const moment = require('moment');
 const { RichEmbed } = require('discord.js');
 module.exports = client => {
 	return task = {
 		name: 'processReminders',
-		description: 'Processes outstanding reminders',
+		description: 'Processes due reminders',
 		enabled: true,
 		hidden: false,
 		interval: 5,
 		action: () => {
 			const now = client.timestamp();
-			const db = client.db.reminders.get('reminders');
-			const reminders = db.value();
-			for (let rem of reminders) {
-				const uuid = rem.uuid;
-				const userId = rem.userId;
-				const channel = client.channels.find(c => c.id === rem.channelId);
-				if (rem.arrival === null) {
-					//	Remove invalid reminders if the arrival date is somehow broken
-					db.remove({ uuid }).write();
-				} else {
-					if (rem.arrival <= now) {
-						const embed = new RichEmbed()
-							  .setTitle(`Reminder (from ${moment.unix(rem.createdAt).format('dddd, MMMM Do YYYY, HH:mm:ss')})`)
-							  .setColor(client.colors.brand)
-							  .setDescription(rem.reminderMessage);
-	
-						db.remove({ uuid }).write();
-						channel.send(`<@${userId}>`, { embed });
-					}
+			const query = { arrival: { $lte: now } };
+			const indices = '_id userId channelId arrival reminderMessage';
+			Reminder.find(query, indices, (err, reminders) => {
+				for (let rem of reminders) {
+					const uuid = rem._id;
+					const userId = rem.userId;
+					const user   = client.users.find(u => u.id == userId);
+					const embed = new RichEmbed()
+						  .setTitle(`Your reminder`)
+						  .setColor(client.colors.brand)
+						  .setDescription(rem.reminderMessage);
+
+					Reminder.findOneAndRemove({ _id: uuid }, (err, doc) => {
+						if (err) throw new Error(err);
+					});
+
+					return user.send({ embed });
 				}
-			}
+			});
 		}
 	};
 };

@@ -26,6 +26,7 @@ if (
 	process.version.slice(1).split('.')[0] >= 10 && process.version.slice(1).split('.')[1] < 2
 ) throw new Error('GoatBot requires Node 10.2.0 or higher.');
 
+require('module-alias/register');
 const fs = require('fs');
 const path = require('path');
 const Listr = require('listr');
@@ -33,6 +34,7 @@ const chalk = require('chalk');
 const Discord = require('discord.js');
 const { promisify } = require('util');
 const moment = require('moment');
+const mongoose = require('mongoose');
 const uuid = require('uuid/v4');
 const readdir = promisify(require('fs').readdir);
 const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
@@ -66,7 +68,7 @@ class GoatBot extends Discord.Client {
 		this.commands    = new Discord.Collection();
 		this.aliases     = new Discord.Collection();
 		this.tasks       = [];
-		this.db          = {};
+		this.db =          {};
 
 		this.disableLog  = false;
 		this.heartbeat   = 0;
@@ -186,26 +188,17 @@ const init = () => new Listr([
 		}
 	},
 	{
-		title: 'Initializing databases',
+		title: 'Initializing database',
 		task: () => {
-			/**
-			 * I am now using multiple databases to prevent the possibility of corruption due to multiple methods writing to one
-			 * at the same time.
-			 */
-			const databases = [
-				{ name: 'core', path: path.join(path.join(client.dbPath, 'db.goat')) },
-				{ name: 'reminders', path: path.join(path.join(client.dbPath, 'reminders.goat')) },
-				{ name: 'warnings', path: path.join(path.join(client.dbPath, 'warnings.goat')) },
-			];
-
-			for (let db of databases) {
-				const adapter = new FileSync(db.path);
-				client.db[db.name] = low(adapter);
-			}
-
-			client.db.core.defaults({ bans: { user: [], reaction: [] } }).write();
-			client.db.reminders.defaults({ reminders: [] }).write();
-			client.db.warnings.defaults({ warnings: [] }).write();
+			const options = { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false };
+			mongoose.connect('mongodb://localhost/GOATBOT', options);
+			client.db = mongoose.connection;
+			client.db.on('error', err => {
+				throw new Error(err);
+			});
+			client.db.once('open', () => {
+				return 'Connected!';
+			});
 		}
 	},
 	{

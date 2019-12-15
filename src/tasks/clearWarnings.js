@@ -21,6 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
+const Warning = require('@models/Warning');
 module.exports = client => {
 	return task = {
 		name: 'clearWarnings',
@@ -30,13 +31,9 @@ module.exports = client => {
 		interval: 60*60,
 		action: () => {
 			const now = client.timestamp();
-			const db = client.db.warnings.get('warnings');
-			const warnings = db.value();
-			for (let warning of warnings) {
-				const userId = warning.userId;
-				const expires = warning.expires;
-				if (warning.expires <= now) db.remove({ userId, expires }).write();
-			}
+			Warning.deleteMany({ expires: { $lte: now } }, err => {
+				if (err) throw new Error(err);
+			});
 		}
 	};
 };

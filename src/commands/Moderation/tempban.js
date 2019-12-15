@@ -21,11 +21,11 @@
 |--------------------------------------------------------------------------
 */
 
+const TempBan = require('@models/TempBan');
 const moment = require('moment');
 const { RichEmbed } = require('discord.js');
 exports.run = (client, message, args, level) => {
 	if (args.length === 0) return;
-	const db       = client.db.get('bans.user');
 	const mention  = args[0];
 	const duration = args[1].parseTimeFormat();
 	const reason   = args.slice(2).join(' ') || 'No reason given';
@@ -37,18 +37,29 @@ exports.run = (client, message, args, level) => {
 		} else {
 			member = message.guild.members.find(m => m.id === mention);
 		}
-	
+
 		if (member) {
 			const userId = member.id;
 			const expires = duration;	//	semantics
 			member.kick(reason).then(() => {
-				db.push({ userId, reason, expires }).write();
-				const embed = new RichEmbed()
-					  .setColor(client.colors.red)
-					  .setDescription(`${member.displayName} has been temporarily banned.`)
-					  .addField('Reason', reason)
-					  .addField('Expires', moment.unix(expires).format('dddd, MMMM Do YYYY, HH:mm:ss'));
-			}).catch(() => client.msg(message, 'red', 'error', `Failed to kick ${member.displayName}, likely a permission error.`));
+				TempBan.create({ userId, reason, expires }, (err, ban) => {
+					const expiresFormat = moment.unix(expires).format('dddd, MMMM Do YYYY, HH:mm:ss');
+					const embed = new RichEmbed()
+						  .setColor(client.colors.red)
+						  .setDescription(`${member.displayName} has been temporarily banned.`)
+						  .addField('Reason', reason)
+						  .addField('Expires', expiresFormat);
+					
+					const memberMessage = [
+						`You have been temporarily banned by ${message.member.displayName} until ${expiresFormat}.`,
+						`Reason:`,
+						`\`\`\`md\n* ${reason}\`\`\``,
+						'You will not be allowed back into the server until the ban expires or is lifted by staff.'
+					];
+					member.user.send(memberMessage.join('\n')).catch(() => {});
+				});
+			})
+			.catch(() => client.msg(message, 'red', 'error', `Failed to kick ${member.displayName}, likely a permission error.`));
 		} else {
 			return message.reply('Could not find member.');
 		}
@@ -67,7 +78,7 @@ exports.conf = {
 };
 
 exports.help = {
-	name: 'tepban',
+	name: 'tempban',
 	category: 'Moderation',
 	description: 'Temporarily bans a user, rejoining will result in them being kicked until the ban expires',
 	usage: 'tempban [time] [@mention|user ID] [reason?]',

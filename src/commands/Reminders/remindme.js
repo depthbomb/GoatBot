@@ -21,21 +21,21 @@
 |--------------------------------------------------------------------------
 */
 
+const Reminder = require('@models/Reminder');
 const moment = require('moment');
 const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length < 2) return;
-	const db = client.db.reminders.get('reminders');
-	const userId = message.author.id;
-	const channelId = message.channel.id;
+	const userId          = message.author.id;
 	const inputFormat     = args[0];
 	const reminderMessage = args.slice(1).join(' ');
 	const timeFormatRegex = /(\d+w)?(\d+d)?(\d+h)?(\d+m)?/i;
 	const converter       = { m: 60, h: 60*60, d: 60*60*24, w: 60*60*24*7 };
 
 	if (timeFormatRegex.test(inputFormat)) {
-		if (reminderMessage.length > 750) return client.msg(message, 'red', 'error', 'Your reminder message is too long.');
-		const uuid = client.uuid();
+		if (reminderMessage.length > 750)
+			return client.msg(message, 'red', 'error', 'Your reminder message is too long.');
+
 		let matches = timeFormatRegex.exec(inputFormat);
 			matches.shift();					//	Remove first item from matches (full group match, useless in this case)
 			matches = matches.filter(Boolean);	//	Remove all undefined/blank/false values
@@ -53,16 +53,17 @@ exports.run = async (client, message, args, level) => {
 
 		if (duration < 60) return client.msg(message, 'red', 'error', 'Your reminder delay is too short. Minimum 1 minute (1m).');
 
-		db.push({ uuid, channelId, userId, arrival, reminderMessage, createdAt: now }).write();
+		Reminder.create({ userId, arrival, reminderMessage }, (err, reminder) => {
+			if (err) return message.reply(err.message);
+			const embed = new RichEmbed()
+				  .setTitle('Reminder Set')
+				  .setColor(client.colors.green)
+				  .setDescription(`Your reminder has been successfully set!\n\nTo cancel this reminder, type \`${client.config.prefix}rcancel ${reminder._id}\`\n\nType \`${client.config.prefix}rlist\` to see all of your active reminders.`)
+				  .addField('Arrival', moment.unix(arrival).format('dddd, MMMM Do YYYY, HH:mm:ss'))
+				  .addField('Message', `\`\`\`${reminderMessage}\`\`\``);
 
-		const embed = new RichEmbed()
-			  .setTitle('Reminder Set')
-			  .setColor(client.colors.green)
-			  .setDescription(`Your reminder has been successfully set and it will be sent in this channel.\nTo cancel this reminder, type \`${client.config.prefix}rcancel ${uuid}\`\nType \`${client.config.prefix}rlist\` to see all of your active reminders`)
-			  .addField('Arrival', moment.unix(arrival).format('dddd, MMMM Do YYYY, HH:mm:ss'))
-			  .addField('Message', `\`\`\`${reminderMessage}\`\`\``);
-
-		return message.channel.send({ embed });
+			return message.channel.send({ embed });
+		});
 	} else {
 		return client.msg(message, 'red', 'error', 'The time format you supplied is invalid. See command examples for correct usage.');
 	}

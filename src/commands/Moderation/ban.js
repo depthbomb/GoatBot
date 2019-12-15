@@ -49,7 +49,7 @@ exports.run = (client, message, args, level) => {
 					  .setDescription(`You have been banned permanently from the server by ${message.member.displayName}.\nAs this is a permanent ban (which are rare) it is unlikely that you will be able to appeal it. This is not to say that you _will_ remain banned permanently.`)
 					  .addField('Reason', reason)
 					  .setTimestamp();
-				member.send({ embed }).catch(_ => {});
+				member.send({ embed }).catch(() => {});
 			});
 		}).catch(err => client.msg(message, 'red', 'error', `Failed to ban ${member.displayName}, likely a permission error.`));
 	} else {
