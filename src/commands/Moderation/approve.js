@@ -37,7 +37,7 @@ exports.run = async (client, message, args, level) => {
 			const memberRole = message.member.guild.roles.find(r => r.name === 'Member');
 	
 			member.removeRoles(member.roles).then(mem => {
-				u.addRole(memberRole).then(mem => client.msg(message, 'green', 'success', `${member.displayName} has been approved!`));
+				mem.addRole(memberRole).then(mem => client.msg(message, 'green', 'success', `${member.displayName} has been approved!`));
 			});
 		} else {
 			client.msg(message, 'red', 'error', `${member.displayName} is not a refugee, cannot approve!`)
