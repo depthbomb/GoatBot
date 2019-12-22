@@ -27,12 +27,12 @@ const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const color = args[0];
-	const imageName = `${client.tmpPath}/color_${client.uuid()}.png`;
+	const imageName = `${client.tmpPath}/${client.uuid()}.png`;
 
 	if (!color.match(/#?[a-fA-F0-9]{6}/i))
 		return client.msg(message, 'red', 'error', 'The color code you provided is invalid.');
 
-	let msg = await message.channel.send("Generating image, please wait...");
+	let msg = await message.channel.send('Generating image, please wait...');
 
 	const colorCode = color.replace(/^#/, '').toUpperCase();
 
@@ -62,7 +62,7 @@ exports.conf = {
 
 exports.help = {
 	name: 'color',
-	category: 'Info',
+	category: 'Images',
 	description: 'Input a color code and see a preview',
 	usage: 'color [code]',
 	params: {
