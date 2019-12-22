@@ -53,9 +53,6 @@ const ascii = ["┌────────────────────�
 				"└─────────────────────────────────────────────────────────────────────────┘"];
 console.log(chalk.bgCyan.whiteBright(ascii.join('\n')));
 
-const low = require('lowdb'),
-	  FileSync = require('lowdb/adapters/FileSync');
-
 class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
@@ -68,7 +65,8 @@ class GoatBot extends Discord.Client {
 		this.commands    = new Discord.Collection();
 		this.aliases     = new Discord.Collection();
 		this.tasks       = [];
-		this.db =          {};
+		this.store       = { lockdowns: { } };
+		this.db;
 
 		this.disableLog  = false;
 		this.heartbeat   = 0;
@@ -81,14 +79,14 @@ class GoatBot extends Discord.Client {
 		this.cachePath   = `${this.storagePath}/cache`;
 		this.dlPath      = `${this.storagePath}/downloads`;
 		this.colors      = {
-			brand:		this.config.color,
-			yellow:		'#ffb901',
-			default:	'#99aab5',
-			red:		'#e81123',
-			orange:		'#f7630d',
-			green:		'#10883e',
-			blue:		'#0078d7',
-			black:		'#222222'
+			brand:       this.config.color,
+			yellow:      '#ffb901',
+			default:     '#99aab5',
+			red:         '#e81123',
+			orange:      '#f7630d',
+			green:       '#10883e',
+			blue:        '#0078d7',
+			black:       '#222222'
 		};
 
 		this.uuid        = () => uuid();
@@ -123,7 +121,7 @@ class GoatBot extends Discord.Client {
 			let logName = type + '.log';
 			let logMsg = `[${moment().format('M/D/YY HH:mm:ss')}] [${type}] ${message}`;
 			let logEntry = "\n" + logMsg;
-			let logAsFile = ['msg', 'event', 'bot', 'system', 'warn', 'error', 'task', 'debug'];
+			let logAsFile = ['msg', 'event', 'bot', 'system', 'warn', 'error', 'task'];
 	
 			switch (type) {
 				case 'msg':
@@ -204,7 +202,9 @@ const init = () => new Listr([
 	{
 		title: 'Loading commands',
 		task: () => {
-			const categories = ['Dev', 'Games', 'Info', 'Moderation', 'NSFW', 'Random', 'Reminders', 'Server', 'Useful'];
+			const commandsRoot = path.join(client.appPath, 'commands');
+			const categories = fs.readdirSync(commandsRoot)
+				  .filter(file => fs.statSync(path.join(commandsRoot, file)).isDirectory());
 			for (let folder of categories) {
 				const commandFiles = fs.readdirSync(`${client.appPath}/commands/${folder}/`);
 				for (let file of commandFiles) {
@@ -266,7 +266,7 @@ const init = () => new Listr([
 		}
 	},
 	{
-		title: 'Pre-ready Tasks',
+		title: 'Pre-ready tasks',
 		task: () => {
 			return new Listr([
 				{
@@ -314,7 +314,7 @@ process.on('uncaughtException', err => {
 	const crashFile = path.join(client.storagePath, 'logs', 'crash', `EXCEPTION_${moment().format('M-D-YY')}.log`);
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), "./");
 	console.error('Uncaught Exception: ', errorMsg);
-	fs.appendFile(crashFile, 'Uncaught Exception: ' + errorMsg + '\n', (err) => {
+	fs.appendFile(crashFile, 'Uncaught Exception: ' + errorMsg + '\n', () => {
 		client.destroy();
 		process.exit(1);
 	});
@@ -324,7 +324,7 @@ process.on('unhandledRejection', err => {
 	const crashFile = path.join(client.storagePath, 'logs', 'crash', `REJECTION_${moment().format('M-D-YY')}.log`);
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), "./");
 	console.error('Uncaught Promise Error: ', errorMsg);
-	fs.appendFile(crashFile, 'Uncaught Promise Error: ' + errorMsg + '\n', (err) => {
+	fs.appendFile(crashFile, 'Uncaught Promise Error: ' + errorMsg + '\n', () => {
 		client.destroy();
 		process.exit(1);
 	});
