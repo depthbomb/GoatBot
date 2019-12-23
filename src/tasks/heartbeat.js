@@ -26,7 +26,6 @@ module.exports = client => {
 		name: 'heartbeat',
 		description: 'Manages the bot\'s heartbeat. Restarts the bot if there are abnormalities.',
 		enabled: true,
-		hidden: true,
 		interval: 30,
 		action: () => {
 			const heartbeat = client.heartbeat;

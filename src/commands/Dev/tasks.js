@@ -21,6 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
+const ms = require('ms');
 const moment = require('moment');
 const { RichEmbed } = require('discord.js');
 
@@ -36,44 +37,61 @@ function formatInterval(interval) {
 	if (seconds > 0)
 		durations.push(seconds + 's');
 
-	return durations.join(' ');
+	return durations.join(', ');
 };
 
 exports.run = (client, message, args, level) => {
-	const tasks = client.tasks;
-	const embed = new RichEmbed()
-		  .setColor(client.colors.brand)
-		  .setTimestamp();
+	const requestedTask = args.join(' ') || null;
+	const tasks = client.tasks.filter(t => t.enabled === true);
+	const embed = new RichEmbed().setColor(client.colors.brand);
 
-	let totalTasks = 0;
-	let hiddenTasks = 0;
-	for (let task of tasks) {
-		totalTasks++;
-		if (!task.hidden) {
+	console.log(tasks);
+
+	if (requestedTask) {
+		const task = tasks.find(t => t.name == requestedTask);
+		if (task) {
+			console.log(task);
+			embed.setTitle(requestedTask);
 			const taskLastRan = task.lastRan;
-			const interval = formatInterval(task.interval);
-			const lastRan = '\n* Last ran: ' + (taskLastRan > 0 ? moment.unix(taskLastRan).format('M/DD/YYYY, HH:mm:ss') : 'Never');
-			const nextRun = '\n* Next run: ' + moment.unix(taskLastRan > 0 ? (taskLastRan + task.interval) : (client.started + task.interval)).format('M/DD/YYYY, HH:mm:ss');
-			embed.addField(task.name, `\`\`\`markdown\n* ${task.description}\n* Interval: ${interval}${lastRan}${nextRun}\`\`\``);
-		} else {
-			hiddenTasks++;
-		}
-	}
+			const interval = ms(task.interval*1000, false);
+			const lastRan = (taskLastRan > 0 ? moment.unix(taskLastRan).format('M/DD/YYYY, HH:mm:ss') : 'Never');
+			const nextRun = moment.unix(taskLastRan > 0 ? (taskLastRan + task.interval) : (client.started + task.interval)).format('M/DD/YYYY, HH:mm:ss');
 
-	embed.setTitle(`${totalTasks} tasks | ${hiddenTasks} are hidden from this command`);
+			embed.addField('Interval', interval)
+				 .addField('Last ran', lastRan)
+				 .addField('Next run', nextRun);
+		} else {
+			return message.reply(`No such task \`${requestedTask}\`.`);
+		}
+	} else {
+		embed.setTitle('Running tasks');
+		
+		const taskList = [];
+		for (let i = 0; i < tasks.length; i++) taskList.push(`${i+1}. ${tasks[i].name}`);
+
+		embed.setDescription(`There are currently ${tasks.length} tasks running.\nYou can view additional info about a task by typing \`${client.printCmd('task')} [task name]\`\n\`\`\`markdown\n${taskList.join('\n')}\`\`\``);
+	}
 
 	return message.reply({ embed });
 };
 
 exports.conf = {
 	enabled: true,
-	aliases: [],
+	aliases: [
+		'task'
+	],
 	permLevel: 0,
 };
 
 exports.help = {
 	name: 'tasks',
 	category: 'Dev',
-	description: 'Shows the bot\'s enable automated tasks',
-	usage: 'tasks'
+	description: 'Shows the bot\'s enable, automated tasks',
+	usage: 'tasks [task?]',
+	params: {
+		'task': 'Task to view info on'
+	},
+	examples: [
+		'tasks heartbeat'
+	]
 };

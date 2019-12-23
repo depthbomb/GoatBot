@@ -27,7 +27,6 @@ module.exports = client => {
 		name: 'clearWarnings',
 		description: 'Clears outstanding outdated user warnings',
 		enabled: true,
-		hidden: false,
 		interval: 60*60,
 		action: () => {
 			const now = client.timestamp();

@@ -28,7 +28,6 @@ module.exports = client => {
 		name: 'clearTmp',
 		description: 'Deletes temporary files',
 		enabled: true,
-		hidden: true,
 		interval: 60*60*3,
 		action: () => {
 			const dir = client.tmpPath;

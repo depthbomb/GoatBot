@@ -27,7 +27,6 @@ module.exports = client => {
 		name: 'clearLockdowns',
 		description: 'Clears expired channel lockdowns',
 		enabled: true,
-		hidden: false,
 		interval: 1,
 		action: () => {
 			if (client.online) {

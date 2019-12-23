@@ -27,7 +27,6 @@ module.exports = client => {
 		name: 'clearTempBans',
 		description: 'Clears expired temporary user bans',
 		enabled: true,
-		hidden: false,
 		interval: 60,
 		action: () => {
 			const now = client.timestamp();
