@@ -26,6 +26,7 @@ exports.run = async (client, message, args, level) => {
 	const moment = require('moment');
 	let mention,
 		member;
+
 	if (args.length > 0) {
 		mention = args.join(' ');
 		if (mention.match(/<@!?\d{17,19}>/g)) {
@@ -48,7 +49,7 @@ exports.run = async (client, message, args, level) => {
 			  .addField('Guild owner?', user.id === message.guild.ownerID, true)
 			  .addField('Status', user.presence.status, true);
 
-			if (member.lastMessage) {
+			if (member.lastMessage && user !== message.author) {
 				const lastMessage = member.lastMessage;
 				const msgCreatedAt = lastMessage.createdAt;
 				const msgContent = lastMessage.cleanContent;
