@@ -45,12 +45,9 @@ exports.run = (client, message, args, level) => {
 	const tasks = client.tasks.filter(t => t.enabled === true);
 	const embed = new RichEmbed().setColor(client.colors.brand);
 
-	console.log(tasks);
-
 	if (requestedTask) {
 		const task = tasks.find(t => t.name == requestedTask);
 		if (task) {
-			console.log(task);
 			embed.setTitle(requestedTask);
 			const taskLastRan = task.lastRan;
 			const interval = ms(task.interval*1000, false);
