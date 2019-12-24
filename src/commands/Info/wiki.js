@@ -48,7 +48,6 @@ exports.run = async (client, message, args, level) => {
 	}, (err, res, body) => {
 		if (err) return client.error(message, err);
 		const data = JSON.parse(body).query.pages[0];
-		console.log(body);
 		if (data.missing) {
 			return msg.edit('No results!');
 		} else {
@@ -61,7 +60,9 @@ exports.run = async (client, message, args, level) => {
 				  .setAuthor('Wikipedia', image, articleUrl)
 				  .setURL(articleUrl)
 				  .setThumbnail(data.thumbnail ? data.thumbnail.source : null)
-				  .setDescription(extract.limit())
+				  .setDescription(extract.limit());
+
+			if (extract.length > 2000) embed.addField('Continue reading ', `[${data.title}](${articleUrl})`, true);
 	
 			return msg.edit({ embed });
 		}
