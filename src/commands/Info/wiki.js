@@ -51,7 +51,7 @@ exports.run = async (client, message, args, level) => {
 		if (data.missing) {
 			return msg.edit('No results!');
 		} else {
-			const articleUrl = 'https://en.wikipedia.org/?curid=' + data.pageid;
+			const articleUrl = 'https://en.wikipedia.org/wiki/' + encodeURIComponent(data.title);
 			const extract = data.extract
 				  .replace('\n', '\n\n')
 				  .replace(/\s*\(\)\s*/, '');
@@ -60,9 +60,8 @@ exports.run = async (client, message, args, level) => {
 				  .setAuthor('Wikipedia', image, articleUrl)
 				  .setURL(articleUrl)
 				  .setThumbnail(data.thumbnail ? data.thumbnail.source : null)
-				  .setDescription(extract.limit());
-
-			if (extract.length > 2000) embed.addField('Continue reading ', `[${data.title}](${articleUrl})`, true);
+				  .setDescription(extract.limit())
+				  .addField((extract.length > 2000 ? 'Continue reading' : 'Full article'), `[${data.title}](${articleUrl})`, true);
 	
 			return msg.edit({ embed });
 		}
