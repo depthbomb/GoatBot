@@ -30,7 +30,7 @@ exports.run = async (client, message, args, level) => {
 	const query = args.join(' ');
 	const uri = `http://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${appId}&units=imperial`;
 
-	let msg = await message.reply("Sending request...");
+	let msg = await message.reply('Sending request...');
 	request({
 		uri: uri,
 		method: 'GET'
@@ -65,6 +65,7 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
+	cooldown: 5,
 	aliases: [
 		'temperature',
 		'temp',

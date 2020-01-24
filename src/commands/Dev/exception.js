@@ -31,7 +31,7 @@ exports.conf = {
 		'crash',
 		'fuckingdie'
 	],
-	permLevel: 10,
+	permLevel: 5,
 };
 
 exports.help = {

@@ -32,8 +32,8 @@ exports.run = async (client, message, args, level) => {
 		let evaled = eval(code);
 		let clean = await client.clean(client, evaled);
 
-		if (typeof evaled !== "string")
-			evaled = require("util").inspect(evaled);
+		if (typeof evaled !== 'string')
+			evaled = require('util').inspect(evaled);
 
 		if (clean.length > 1999)
 			clean = trunc(clean, 1800);
@@ -48,20 +48,20 @@ exports.conf = {
 	enabled: true,
 	cooldown: 2,
 	aliases: [
-		"ev"
+		'ev'
 	],
-	permLevel: 10
+	permLevel: 5
 };
 
 exports.help = {
-	name: "eval",
-	category: "Dev",
-	description: "Evaluates arbitrary JavaScript code.",
-	usage: "eval [code]",
+	name: 'eval',
+	category: 'Dev',
+	description: 'Evaluates arbitrary JavaScript code.',
+	usage: 'eval [code]',
 	params: {
-		"code": "JavaScript code to evaluate"
+		'code': 'JavaScript code to evaluate'
 	},
 	examples: [
-		"eval ['test', 'test2'].join(', ')"
+		'eval [\'test\', \'test2\'].join(\', \')'
 	]
 };

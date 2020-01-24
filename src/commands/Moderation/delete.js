@@ -35,7 +35,7 @@ exports.conf = {
 		'del',
 		'delet'
 	],
-	permLevel: 3,
+	permLevel: 2,
 };
 
 exports.help = {

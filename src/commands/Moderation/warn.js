@@ -71,7 +71,7 @@ exports.conf = {
 	enabled: true,
 	cooldown: 5,
 	aliases: [],
-	permLevel: 4
+	permLevel: 2
 };
 
 exports.help = {

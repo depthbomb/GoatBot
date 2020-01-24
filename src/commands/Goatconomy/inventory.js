@@ -21,39 +21,40 @@
 |--------------------------------------------------------------------------
 */
 
+const Patron = require('@models/Patron');
 const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const lockdowns = client.store.lockdowns;
-	const channelId = message.channel.id;
-
-	if (lockdowns.hasOwnProperty(channelId)) {
-		delete lockdowns[channelId];
-		const embed = new RichEmbed()
-			  .setTimestamp()
-			  .setColor(client.colors.green)
-			  .setTitle('Lockdown lifted')
-			  .setDescription(`This channel has had its lockdown lifted by ${message.member.displayName}.`);
-	
-		return message.channel.send({ embed });
-	} else {
-		return message.reply('This channel has no active lockdown.');
-	}
+	const userId = message.author.id;
+	const emoji  = client.emojis.find(e => e.name === 'caprineGold');
+	Patron.findOne({ userId }, 'gold inventory')
+	.populate('inventory')
+	.then(patron => {
+		if (patron) {
+			const embed = new RichEmbed()
+				  .setAuthor(`${message.member.displayName}'s Inventory`, message.author.avatarURL)
+				  .addField('Goat Gold', emoji + ' ' + patron.gold);
+			return message.channel.send({ embed });
+		} else {
+			return message.reply('You currently do not have an inventory.')
+		}
+	})
+	.catch(err => message.reply(err.message));
 };
 
 exports.conf = {
-	enabled: true,
+	enabled: false,
 	cooldown: 5,
 	aliases: [],
-	permLevel: 3,
+	permLevel: 0,
 };
 
 exports.help = {
-	name: 'clearlockdown',
-	category: 'Moderation',
-	description: 'Removes an active lockdown on the current channel',
-	usage: 'clearlockdown',
+	name: 'inventory',
+	category: 'Goatconomy',
+	description: 'View your inventory',
+	usage: 'inventory',
 	params: {},
 	examples: [
-		'clearlockdown'
+		'inventory'
 	]
 };

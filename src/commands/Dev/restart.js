@@ -29,7 +29,7 @@ exports.conf = {
 	aliases: [
 		'reboot'
 	],
-	permLevel: 10,
+	permLevel: 5,
 };
 
 exports.help = {

@@ -1,0 +1,80 @@
+<style scoped>
+	.r-level-5,
+	.r-level-3,
+	.r-level-2,
+	.r-level-1,
+	.r-level-0 {
+		display: none;
+	}
+
+	.level-5 .r-level-5 { display: block!important; }
+	.level-3 .r-level-3 { display: block!important; }
+	.level-2 .r-level-2 { display: block!important; }
+	.level-1 .r-level-1 { display: block!important; }
+	.level-0 .r-level-0 { display: block!important; }
+</style>
+{{#each categories as |commands category|}}
+<h2 class="ui top attached inverted header">{{category}}</h2>
+<div class="ui bottom attached segment">
+	<div class="ui very relaxed divided list">
+	{{#each commands}}
+	<div class="item">
+		<div class="content">
+			<a class="ui medium header" href="javascript:;" onclick="$('#cmd-{{help.name}}').modal('show');">
+				{{../../prefix}}{{help.name}}
+			</a>
+			<div class="description">{{help.description}}</div>
+		</div>
+	</div>
+	{{/each}}
+	</div>
+</div>
+{{#each commands}}
+<div id="cmd-{{help.name}}" class="ui tiny modal level-{{conf.permLevel}}">
+	<i class="close icon"></i>
+	<div class="header">
+		{{../../prefix}}{{help.name}}
+	</div>
+	<div class="content">
+		<div class="description">
+			<p>{{help.description}}</p>
+			<p class="r-level-5">This command has a permission level of <strong>{{conf.permLevel}}</strong> and thus may only be invoked by a bot developer.</p>
+			<p class="r-level-3">This command has a permission level of <strong>{{conf.permLevel}}</strong> and thus may only be invoked by a user with server administrator permissions.</p>
+			<p class="r-level-2">This command has a permission level of <strong>{{conf.permLevel}}</strong> and thus may only be invoked by a user with server moderator permissions.</p>
+			<p class="r-level-1">This command has a permission level of <strong>{{conf.permLevel}}</strong> and thus may only be invoked by a donor.</p>
+			<p class="r-level-0">This command may be used by any user so long as they are not restricted.</p>
+		</div>
+		<h3>Cooldown</h3>
+		{{#if conf.cooldown}}
+		<p>{{conf.cooldown}}s</p>
+		{{else}}
+		<p>1.5s</p>
+		{{/if}}
+		<h3>Usage</h3>
+		<p>{{help.usage}}</p>
+		<h3>Params</h3>
+		<ol class="ui list">
+			{{#each help.params as |desc param|}}
+			<li value=""><code>[{{param}}]</code>: {{desc}}</li>
+			{{else}}
+			<li value="">None</li>
+			{{/each}}
+		</ol>
+		<h3>Examples</h3>
+		<ol class="ui list">
+			{{#each help.examples}}
+			<li value=""><kbd>{{../../../prefix}}{{this}}</kbd></li>
+			{{/each}}
+		</ol>
+		<h3>Aliases</h3>
+		<ol class="ui list">
+			{{#each conf.aliases}}
+			<li value="">{{../../../prefix}}{{this}}</li>
+			{{else}}
+			<li value="">None</li>
+			{{/each}}
+		</ol>
+	</div>
+</div>
+{{/each}}
+{{/each}}

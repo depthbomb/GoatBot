@@ -30,7 +30,7 @@ exports.run = async (client, message, args, level) => {
 	Reminder.findById(uuid, 'userId', (err, reminder) => {
 		if (err) return message.reply(err.message);
 		if (reminder) {
-			if (reminder.userId === userId || userId === client.config.ownerId) {
+			if (reminder.userId === userId || level >= 2) {
 				Reminder.deleteOne({ _id: uuid }, (err, doc) => {
 					if (err) throw new Error(err);
 					return client.msg(message, 'green', 'success', 'Reminder has been cancelled!');
@@ -65,6 +65,6 @@ exports.help = {
 		'uuid': 'Cancels a reminder of yours by its UUID'
 	},
 	examples: [
-		'cancelreminder 421890328492034',
+		'cancelreminder 95a38c8a-a4cd-486b-ba42-79df1309ec1d',
 	]
 };

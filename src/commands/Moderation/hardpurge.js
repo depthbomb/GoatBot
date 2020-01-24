@@ -51,7 +51,7 @@ exports.run = (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	aliases: [],
-	permLevel: 10
+	permLevel: 3
 };
 
 exports.help = {

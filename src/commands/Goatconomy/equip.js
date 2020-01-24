@@ -21,46 +21,40 @@
 |--------------------------------------------------------------------------
 */
 
+const Patron = require('@models/Patron');
+const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	let duration;
-	if (args.length !== 1 || isNaN(args[0])) {
-		duration = client.config.strictMode.default_expiration;
+	if (args.length === 0) return;
+	const itemId = args.join(' ');
+	const userId = message.author.id;
+	const p = await Patron.findOne({ userId }, 'inventory')
+			  .populate('inventory')
+			  .exec();
+	const userInventory = p.inventory;
+	const item = userInventory.find(i => i.itemId == itemId && i.canEquip === true);
+	if (item) {
+		return message.reply(`You have equipped **${item.name}**!`);
 	} else {
-		duration = parseInt(args[0]);
-	}
-
-	if (client.strictMode.enabled) {
-		client.strictMode.enabled = false;
-		return client.msg(message, 'green', 'success', 'Strict mode has been disabled.', false);
-	} else {
-		client.strictMode.enabled = true;
-		client.msg(message, 'green', 'success', `Strict mode has been enabled. Commands may only be used within the <#420816699626094592> channel. This expires in ${duration} minutes.`, false);
-		setTimeout(() => {
-			client.strictMode.enabled = false;
-			return client.msg(message, 'green', 'success', 'Strict mode has expired.', false);
-		}, (duration*60*1000));
+		return message.reply('The item you requested does not exist or it cannot be equipped.');
 	}
 };
 
 exports.conf = {
-	enabled: true,
-	cooldown: 1.5,
-	aliases: [
-		'strictmode'
-	],
-	permLevel: 2,
+	enabled: false,
+	cooldown: 5,
+	aliases: [],
+	permLevel: 0,
 };
 
 exports.help = {
-	name: 'strict',
-	category: 'Moderation',
-	description: 'Toggles strict mode for 5 minutes, requiring commands to be used in the commands channel',
-	usage: 'strict [duration?]',
+	name: 'equip',
+	category: 'Goatconomy',
+	description: 'Equips a purchased equippable item in your inventory',
+	usage: 'equip [itemId]',
 	params: {
-		'duration': '(Optional) Time strict mode should last in minutes'
+		'itemId': 'ID of item to equip'
 	},
 	examples: [
-		'strict',
-		'strictmode 5'
+		'equip 1'
 	]
 };

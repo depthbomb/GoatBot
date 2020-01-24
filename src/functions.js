@@ -147,15 +147,15 @@ module.exports = client => {
 
 
 	client.clean = async (client, text) => {
-		if (text && text.constructor.name == "Promise")
+		if (text && text.constructor.name == 'Promise')
 		text = await text;
-		if (typeof evaled !== "string")
-		text = require("util").inspect(text, { depth: 0 });
+		if (typeof evaled !== 'string')
+		text = require('util').inspect(text, { depth: 0 });
 
 		text = text
-			.replace(/`/g, "`" + String.fromCharCode(8203))
-			.replace(/@/g, "@" + String.fromCharCode(8203))
-			.replace(client.token, "{null}");
+			.replace(/`/g, '`' + String.fromCharCode(8203))
+			.replace(/@/g, '@' + String.fromCharCode(8203))
+			.replace(client.token, '{null}');
 
 		return text;
 	};
@@ -174,6 +174,12 @@ module.exports = client => {
 		}
 
 		return results;
+	};
+
+
+	String.prototype.limit = function(maxLength = 2000) {
+		const string = this;
+		return string.length > maxLength ? `${string.substr(0, maxLength - 3)}...` : string;
 	};
 
 
@@ -204,7 +210,7 @@ module.exports = client => {
 
 
 	String.prototype.toProperCase = function () {
-		return this.replace(/([^\W_]+[^\s-]*) */g, function(txt) {return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+		return this.replace(/([^\W_]+[^\s-]*) */g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 	};
 
 
@@ -214,7 +220,7 @@ module.exports = client => {
 
 
 	String.prototype.scramble = function () {
-		let a = this.split(""),
+		let a = this.split(''),
 		n = a.length;
 
 		for (let i = n - 1; i > 0; i--) {
@@ -223,7 +229,7 @@ module.exports = client => {
 			a[i] = a[j];
 			a[j] = tmp;
 		}
-		return a.join("");
+		return a.join('');
 	};
 
 

@@ -66,14 +66,14 @@ exports.conf = {
 		'boot',
 		'yeet'
 	],
-	permLevel: 5
+	permLevel: 2
 };
 
 exports.help = {
-	name: 'ban',
+	name: 'kick',
 	category: 'Moderation',
 	description: 'Kicks a user from the guild',
-	usage: 'ban [@mention|user ID] [reason?]',
+	usage: 'kick [@mention|user ID] [reason?]',
 	params: {
 		'@mention|user ID': 'Mention or ID of user to kick',
 		'reason': 'Reason for kicking the user'

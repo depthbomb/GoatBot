@@ -44,7 +44,7 @@ exports.conf = {
 	aliases: [
 		'execute'
 	],
-	permLevel: 10,
+	permLevel: 5,
 };
 
 exports.help = {

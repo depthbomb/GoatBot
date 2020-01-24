@@ -21,39 +21,34 @@
 |--------------------------------------------------------------------------
 */
 
+const StoreItem = require('@models/StoreItem');
+const Patron = require('@models/Patron');
 const { RichEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const lockdowns = client.store.lockdowns;
-	const channelId = message.channel.id;
+	const userId = message.author.id;
+	const p = await Patron.findOne({ userId }, 'gold inventory').exec();
 
-	if (lockdowns.hasOwnProperty(channelId)) {
-		delete lockdowns[channelId];
-		const embed = new RichEmbed()
-			  .setTimestamp()
-			  .setColor(client.colors.green)
-			  .setTitle('Lockdown lifted')
-			  .setDescription(`This channel has had its lockdown lifted by ${message.member.displayName}.`);
-	
-		return message.channel.send({ embed });
-	} else {
-		return message.reply('This channel has no active lockdown.');
-	}
+	const userGold = p.gold;
+	const userInventory = p.inventory;
+
+	StoreItem.find({ cost: { $lte: userGold }, _id: { $nin: userInventory } })
+	.then(docs => {
+		
+	});
 };
 
 exports.conf = {
-	enabled: true,
+	enabled: false,
 	cooldown: 5,
 	aliases: [],
-	permLevel: 3,
+	permLevel: 0,
 };
 
 exports.help = {
-	name: 'clearlockdown',
-	category: 'Moderation',
-	description: 'Removes an active lockdown on the current channel',
-	usage: 'clearlockdown',
+	name: 'store',
+	category: 'Goatconomy',
+	description: 'Displays items for purchase in the store',
+	usage: 'store',
 	params: {},
-	examples: [
-		'clearlockdown'
-	]
+	examples: []
 };

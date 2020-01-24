@@ -22,45 +22,39 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	let duration;
-	if (args.length !== 1 || isNaN(args[0])) {
-		duration = client.config.strictMode.default_expiration;
-	} else {
-		duration = parseInt(args[0]);
-	}
+	if (args.length === 0) return;
+	const input = args.join(' ');
+	const faces = ['(・`ω´・)', ';;w;;', 'owo', 'UwU', '>w<', '^w^'];
+	let output = input
+				 .replace(/(?:r|l)/g, 'w')
+				 .replace(/(?:R|L)/g, 'W')
+				 .replace(/n([aeiou])/g, 'ny$1')
+				 .replace(/N([aeiou])/g, 'Ny$1')
+				 .replace(/N([AEIOU])/g, 'Ny$1')
+				 .replace(/ove/g, 'uv')
+				 .replace(/\!+/g, ' ' + faces[Math.floor(Math.random() * faces.length)] + ' ');
 
-	if (client.strictMode.enabled) {
-		client.strictMode.enabled = false;
-		return client.msg(message, 'green', 'success', 'Strict mode has been disabled.', false);
-	} else {
-		client.strictMode.enabled = true;
-		client.msg(message, 'green', 'success', `Strict mode has been enabled. Commands may only be used within the <#420816699626094592> channel. This expires in ${duration} minutes.`, false);
-		setTimeout(() => {
-			client.strictMode.enabled = false;
-			return client.msg(message, 'green', 'success', 'Strict mode has expired.', false);
-		}, (duration*60*1000));
-	}
+	return message.reply(`\`\`\`${output}\`\`\``);
 };
 
 exports.conf = {
 	enabled: true,
 	cooldown: 1.5,
 	aliases: [
-		'strictmode'
+		'owo',
 	],
-	permLevel: 2,
+	permLevel: 0,
 };
 
 exports.help = {
-	name: 'strict',
-	category: 'Moderation',
-	description: 'Toggles strict mode for 5 minutes, requiring commands to be used in the commands channel',
-	usage: 'strict [duration?]',
+	name: 'uwu',
+	category: 'Fun',
+	description: 'UwU-ify your text',
+	usage: 'uwu [input]',
 	params: {
-		'duration': '(Optional) Time strict mode should last in minutes'
+		'input': 'Input to UwU-ify'
 	},
 	examples: [
-		'strict',
-		'strictmode 5'
+		'uwu Hello',
 	]
 };

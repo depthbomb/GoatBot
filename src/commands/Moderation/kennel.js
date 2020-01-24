@@ -43,7 +43,7 @@ exports.conf = {
 		'ken',
 		'lock'
 	],
-	permLevel: 5,
+	permLevel: 2,
 };
 
 exports.help = {

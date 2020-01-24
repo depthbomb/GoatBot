@@ -21,39 +21,49 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
+const StoreItem = require('@models/StoreItem');
 exports.run = async (client, message, args, level) => {
-	const lockdowns = client.store.lockdowns;
-	const channelId = message.channel.id;
+	const stock = client.config.store.stock;
+	const stockIds = stock.map(s => s.itemId);
+	let storeIds = await StoreItem.find({ itemId: { $in: stockIds } }, '-_id itemId').exec();
+		storeIds = storeIds.map(s => s.itemId);
 
-	if (lockdowns.hasOwnProperty(channelId)) {
-		delete lockdowns[channelId];
-		const embed = new RichEmbed()
-			  .setTimestamp()
-			  .setColor(client.colors.green)
-			  .setTitle('Lockdown lifted')
-			  .setDescription(`This channel has had its lockdown lifted by ${message.member.displayName}.`);
+	const missing = stockIds.filter(i => !storeIds.includes(i));
+
+	if (missing.length > 0) {
+		let msg = await message.channel.send(`Found ${missing.length} missing item(s), restocking...`);
+
+		for (let item of missing) {
+			const itemToStock = stock.filter(s => s.itemId === item);
+			StoreItem.create(itemToStock).then(doc => {
+				console.log('Added item', itemToStock, 'to store');
+				
+			}).catch(err => {
+				throw new Error(err);
+			});
+			await client.wait(250);
+		}
 	
-		return message.channel.send({ embed });
+		return msg.edit(`Added ${missing.length} missing item(s)!`);
 	} else {
-		return message.reply('This channel has no active lockdown.');
+		return message.reply('All store items are up to date!');
 	}
 };
 
 exports.conf = {
-	enabled: true,
+	enabled: false,
 	cooldown: 5,
 	aliases: [],
-	permLevel: 3,
+	permLevel: 10,
 };
 
 exports.help = {
-	name: 'clearlockdown',
-	category: 'Moderation',
-	description: 'Removes an active lockdown on the current channel',
-	usage: 'clearlockdown',
+	name: 'stockstore',
+	category: 'Goatconomy',
+	description: 'Stocks the store with items from the config (if they aren\'t already stocked)',
+	usage: 'stockstore',
 	params: {},
 	examples: [
-		'clearlockdown'
+		'stockstore'
 	]
 };

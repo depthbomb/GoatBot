@@ -22,6 +22,7 @@
 */
 
 exports.run = (client, message, args, level) => {
+	// return message.reply('You can find a list of my commands on my website: **http://18.236.65.76/commands**');
 	const settings = client.config;
 	if (!args[0]) {
 		const myCommands = message.guild ? client.commands.filter(cmd => cmd.conf.permLevel <= level) : client.commands.filter(cmd => cmd.conf.permLevel <= level);

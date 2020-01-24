@@ -72,12 +72,13 @@ class GoatBot extends Discord.Client {
 		this.heartbeat   = 0;
 
 		this.rootPath    = __dirname;
-		this.appPath     = `${this.rootPath}/src`;
-		this.storagePath = `${this.rootPath}/storage`;
-		this.tmpPath     = `${this.storagePath}/tmp`;
-		this.dbPath      = `${this.storagePath}/database`;
-		this.cachePath   = `${this.storagePath}/cache`;
-		this.dlPath      = `${this.storagePath}/downloads`;
+		this.appPath     = path.join(this.rootPath, 'src');
+		this.webPath     = path.join(this.appPath, 'web');
+		this.storagePath = path.join(this.rootPath, 'storage');
+		this.tmpPath     = path.join(this.storagePath, 'tmp');
+		this.dbPath      = path.join(this.storagePath, 'database');
+		this.cachePath   = path.join(this.storagePath, 'cache');
+		this.dlPath      = path.join(this.storagePath, 'downloads');
 		this.colors      = {
 			brand:       this.config.color,
 			yellow:      '#ffb901',
@@ -93,29 +94,21 @@ class GoatBot extends Discord.Client {
 		this.timestamp   = () => Math.floor(new Date() / 1000);
 		this.printCmd    = (commandName) => this.config.prefix + commandName;
 		this.permLevel   = (message) => {
-			let permlvl = 0;
-	
-			//	Bot owner always has highest perm
-			if (message.author.id === client.config.ownerId) return 10;
-	
-			// Set perm to 0 if webhook or DM
-			if (!message.guild || !message.member || message.channel.type === 'dm') return 0;
-	
-			try {
-				const moderatorRole = message.member.roles.find(r => r.id === client.config.roles.mod);
-				if (moderatorRole && message.member.roles.has(moderatorRole.id)) permlvl = 2;
-			} catch (e) {
-				client.log('warn', 'Moderator role is not present. Skipping level 2 check.');
-			}
-	
-			try {
-				const adminRole = message.member.roles.find(r => r.id === client.config.roles.admin);
-				if (adminRole && message.member.roles.has(adminRole.id)) permlvl = 3;
-			} catch (e) {
-				client.log('warn', 'Admin role is not present. Skipping level 3 check.');
-			}
-	
-			return permlvl;
+			if (message.author.id === client.config.ownerId)
+				return 5;
+
+			const adminRole = message.member.roles.find(r => r.id === client.config.roles.admin);
+			const moderatorRole = message.member.roles.find(r => r.id === client.config.roles.mod);
+			const donorRole = message.member.roles.find(r => r.id === client.config.roles.donor);
+			
+			if (donorRole && message.member.roles.has(donorRole.id))
+				return 1;
+			if (moderatorRole && message.member.roles.has(moderatorRole.id))
+				return 2;
+			if (adminRole && message.member.roles.has(adminRole.id))
+				return 3;
+
+			return 0;
 		};
 		this.log         = (type, message, writeFile = !client.localMode) => {
 			let logName = type + '.log';
@@ -162,7 +155,23 @@ class GoatBot extends Discord.Client {
 	}
 }
 
-const client = new GoatBot();
+const client = new GoatBot({
+	messageCacheLifetime: 604800,
+	disableEveryone: true,
+	disabledEvents: [
+		'GUILD_MEMBER_SPEAKING',
+		'TYPING_START',
+		'TYPING_STOP',
+		'VOICE_SERVER_UPDATE',
+		'MESSAGE_REACTION_REMOVE',
+		'MESSAGE_REACTION_REMOVE_ALL',
+		'CHANNEL_PINS_UPDATE',
+		'USER_NOTE_UPDATE',
+		'RELATIONSHIP_ADD',
+		'RELATIONSHIP_REMOVE',
+		'WEBHOOKS_UPDATE'
+	],
+});
 client.started = client.timestamp();
 
 require(`${client.appPath}/functions.js`)(client);
@@ -289,10 +298,13 @@ const init = () => new Listr([
 				}
 			], { exitOnError: false });
 		}
-	}
+	},
 ])
 .run()
-.then(() => client.login(client.config.token))
+.then(() => {
+	client.login(client.config.token)
+	// .then(() => require('./src/web/website')(client).boot());
+})
 .catch(err => {
 	console.error(err);
 	client.destroy();
@@ -312,7 +324,7 @@ process.on('SIGINT', () => {
 
 process.on('uncaughtException', err => {
 	const crashFile = path.join(client.storagePath, 'logs', 'crash', `EXCEPTION_${moment().format('M-D-YY')}.log`);
-	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), "./");
+	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
 	console.error('Uncaught Exception: ', errorMsg);
 	fs.appendFile(crashFile, 'Uncaught Exception: ' + errorMsg + '\n', () => {
 		client.destroy();
@@ -322,7 +334,7 @@ process.on('uncaughtException', err => {
 
 process.on('unhandledRejection', err => {
 	const crashFile = path.join(client.storagePath, 'logs', 'crash', `REJECTION_${moment().format('M-D-YY')}.log`);
-	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), "./");
+	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
 	console.error('Uncaught Promise Error: ', errorMsg);
 	fs.appendFile(crashFile, 'Uncaught Promise Error: ' + errorMsg + '\n', () => {
 		client.destroy();

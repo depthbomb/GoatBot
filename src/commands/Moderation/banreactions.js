@@ -75,7 +75,7 @@ exports.conf = {
 		'reactban',
 		'reactionban',
 	],
-	permLevel: 5,
+	permLevel: 2,
 };
 
 exports.help = {

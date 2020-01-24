@@ -74,7 +74,7 @@ exports.conf = {
 		'tban',
 		'bantemp'
 	],
-	permLevel: 5
+	permLevel: 3
 };
 
 exports.help = {

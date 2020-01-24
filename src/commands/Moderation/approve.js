@@ -53,7 +53,7 @@ exports.conf = {
 	aliases: [
 		'app',
 	],
-	permLevel: 5,
+	permLevel: 2,
 };
 
 exports.help = {

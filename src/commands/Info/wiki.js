@@ -33,7 +33,7 @@ exports.run = async (client, message, args, level) => {
 		titles: query,
 		exintro: '',
 		explaintext: '',
-		pithumbsize: 500,
+		pithumbsize: 200,
 		redirects: '',
 		formatversion: 2
 	}).map(p => p.map(encodeURIComponent).join('='))
@@ -70,6 +70,7 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
+	cooldown: 5,
 	aliases: [
 		'wikipedia',
 	],

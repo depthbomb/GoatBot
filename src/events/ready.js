@@ -26,17 +26,6 @@ module.exports = async client => {
 	await client.wait(250);
 	client.online = true;
 	client.heartbeat = client.timestamp();
-	client.disableEveryone = true;
-	client.disabledEvents = [
-		'TYPING_START',
-		'VOICE_SERVER_UPDATE',
-		'MESSAGE_REACTION_REMOVE',
-		'MESSAGE_REACTION_REMOVE_ALL',
-		'CHANNEL_PINS_UPDATE',
-		'USER_NOTE_UPDATE',
-		'RELATIONSHIP_ADD',
-		'RELATIONSHIP_REMOVE'
-	];
 	client.user.setPresence({
 		status: 'online',
 		afk: false,

@@ -21,46 +21,44 @@
 |--------------------------------------------------------------------------
 */
 
+const Patron = require('@models/Patron');
 exports.run = async (client, message, args, level) => {
-	let duration;
-	if (args.length !== 1 || isNaN(args[0])) {
-		duration = client.config.strictMode.default_expiration;
+	const mention = args[0];
+
+	let member;
+	if (mention.match(/<@!?\d{17,19}>/g)) {
+		member = message.mentions.members.first();
 	} else {
-		duration = parseInt(args[0]);
+		member = message.guild.members.find(m => m.id === mention);
 	}
 
-	if (client.strictMode.enabled) {
-		client.strictMode.enabled = false;
-		return client.msg(message, 'green', 'success', 'Strict mode has been disabled.', false);
+	if (member) {
+		const userId = member.id;
+		Patron.findOne({ userId }, (err, patron) => {
+			if (err) return message.reply(err);
+			if (!patron) return message.reply('That user does not have an inventory yet.');
+			
+		});
+		
 	} else {
-		client.strictMode.enabled = true;
-		client.msg(message, 'green', 'success', `Strict mode has been enabled. Commands may only be used within the <#420816699626094592> channel. This expires in ${duration} minutes.`, false);
-		setTimeout(() => {
-			client.strictMode.enabled = false;
-			return client.msg(message, 'green', 'success', 'Strict mode has expired.', false);
-		}, (duration*60*1000));
+		return message.reply('Could not find member.');
 	}
 };
 
 exports.conf = {
-	enabled: true,
-	cooldown: 1.5,
-	aliases: [
-		'strictmode'
-	],
-	permLevel: 2,
+	enabled: false,
+	cooldown: 5,
+	aliases: [],
+	permLevel: 10,
 };
 
 exports.help = {
-	name: 'strict',
-	category: 'Moderation',
-	description: 'Toggles strict mode for 5 minutes, requiring commands to be used in the commands channel',
-	usage: 'strict [duration?]',
-	params: {
-		'duration': '(Optional) Time strict mode should last in minutes'
-	},
+	name: 'rob',
+	category: 'Goatconomy',
+	description: 'Attempt to rob another user of some of their gold',
+	usage: 'rob [user ID]',
+	params: {},
 	examples: [
-		'strict',
-		'strictmode 5'
+		'rob 1234567890 disable'
 	]
 };

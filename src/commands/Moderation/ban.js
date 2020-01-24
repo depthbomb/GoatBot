@@ -62,7 +62,7 @@ exports.conf = {
 	aliases: [
 		'permban'
 	],
-	permLevel: 5
+	permLevel: 3
 };
 
 exports.help = {
