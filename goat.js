@@ -197,8 +197,9 @@ const init = () => new Listr([
 	{
 		title: 'Initializing database',
 		task: () => {
+			const database = client.config.database.database;
 			const options = { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false };
-			mongoose.connect('mongodb://localhost/GOATBOT', options);
+			mongoose.connect(`mongodb://localhost/${database}`, options);
 			client.db = mongoose.connection;
 			client.db.on('error', err => {
 				throw new Error(err);

@@ -46,8 +46,8 @@ const rarities = [
 	{ name: zalgo, suffix: zalgo2, color: '#2d193b', file: 'old_god' },
 ];
 let weights = [
-	200,	//	poor
-	1700,	//	common
+	250,	//	poor
+	1500,	//	common
 	1200,	//	uncommon
 	1000,	//	rare
 	700,	//	epic
@@ -60,7 +60,7 @@ let weights = [
 	100,	//	nebular
 	50,		//	omniscient
 	20,		//	gay
-	15,		//	old god
+	14,		//	old god
 ];
 const weightsBackup = weights.slice();
 exports.run = async (client, message, args, level) => {
