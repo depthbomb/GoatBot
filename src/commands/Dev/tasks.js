@@ -48,7 +48,8 @@ exports.run = (client, message, args, level) => {
 	if (requestedTask) {
 		const task = tasks.find(t => t.name == requestedTask);
 		if (task) {
-			embed.setTitle(requestedTask);
+			embed.setTitle(requestedTask)
+				 .setDescription(task.description);
 			const taskLastRan = task.lastRan;
 			const interval = ms(task.interval*1000, false);
 			const lastRan = (taskLastRan > 0 ? moment.unix(taskLastRan).format('M/DD/YYYY, HH:mm:ss') : 'Never');
