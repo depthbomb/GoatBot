@@ -8,4 +8,4 @@ This bot was made specifically for use in the Caprine.net Discord server so some
 
 ## Disclaimer
 
-_GoatBot!_ is intended to have **Administrator** permission in the server it operates in. This is potentially very dangerous if someone were to gain access to the bot's token. You have been warned!
+_GoatBot!_ is intended to have **Administrator** permission in the server it operates in. This is potentially very dangerous if someone were to gain access to the bot's token, so make sure that doesn't happen.
