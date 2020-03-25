@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const question = args.join(' ');
 	if(question.endsWith("?")) {
@@ -54,7 +54,7 @@ exports.run = async (client, message, args, level) => {
 			"Outlook not so good",
 			"Very doubtful"
 		];
-		const embed = new RichEmbed()
+		const embed = new MessageEmbed()
 			  .setColor('#232323')
 			  .setDescription(`\:8ball: <@${message.author.id}>, ${responses.shuffle()[0]}`);
 		return message.channel.send({ embed });

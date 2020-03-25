@@ -21,11 +21,11 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const section = args.join(' ').toLowerCase() || 'main';
-	const embed = new RichEmbed()
-		  .setAuthor('About GoatBot!', client.user.avatarURL)
+	const embed = new MessageEmbed()
+		  .setAuthor('About GoatBot!', client.user.avatarURL({ dynamic: true }))
 		  .setColor(client.colors.brand)
 		  .setFooter(`By depthbomb#0163`);
 	switch (section) {

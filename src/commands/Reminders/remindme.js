@@ -23,7 +23,7 @@
 
 const Reminder = require('@models/Reminder');
 const moment = require('moment');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length < 2) return;
 	const userId          = message.author.id;
@@ -55,7 +55,7 @@ exports.run = async (client, message, args, level) => {
 
 		Reminder.create({ userId, arrival, reminderMessage }, (err, reminder) => {
 			if (err) return message.reply(err.message);
-			const embed = new RichEmbed()
+			const embed = new MessageEmbed()
 				  .setTitle('Reminder Set')
 				  .setColor(client.colors.green)
 				  .setDescription(`Your reminder has been successfully set!\n\nTo cancel this reminder, type \`${client.config.prefix}rcancel ${reminder._id}\`\n\nType \`${client.config.prefix}rlist\` to see all of your active reminders.`)

@@ -23,7 +23,7 @@
 
 const trunc = require('truncate');
 const request = require('request');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	if (!message.channel.nsfw)
@@ -107,7 +107,7 @@ exports.run = async (client, message, args, level) => {
 						}, 1000);
 						return;
 					} else {
-						let postEmbed = new RichEmbed()
+						let postEmbed = new MessageEmbed()
 							.setAuthor('E621', 'https://e621.net/apple-touch-icon.png', 'https://e621.net/')
 							.setImage(selected.file_url)
 							.setDescription(`https://e621.net/post/show/${selected.id}/`)

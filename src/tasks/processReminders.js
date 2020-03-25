@@ -23,7 +23,7 @@
 
 const Reminder = require('@models/Reminder');
 const moment = require('moment');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 module.exports = client => {
 	return task = {
 		name: 'processReminders',
@@ -39,7 +39,7 @@ module.exports = client => {
 					const uuid = rem._id;
 					const userId = rem.userId;
 					const user   = client.users.find(u => u.id == userId);
-					const embed = new RichEmbed()
+					const embed = new MessageEmbed()
 						  .setTitle(`Your reminder`)
 						  .setColor(client.colors.brand)
 						  .setDescription(rem.reminderMessage);

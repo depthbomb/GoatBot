@@ -29,12 +29,12 @@ exports.run = async (client, message, args, level) => {
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		member = message.mentions.members.first();
 	} else {
-		member = message.guild.members.find(m => m.id === mention);
+		member = message.guild.members.cache.find(m => m.id === mention);
 	}
 
 	if (member) {
-		if (member.roles.find(r => r.name === 'Refugee')) {
-			const memberRole = message.member.guild.roles.find(r => r.name === 'Member');
+		if (member.roles.cache.find(r => r.name === 'Refugee')) {
+			const memberRole = message.member.guild.roles.cache.find(r => r.name === 'Member');
 	
 			member.removeRoles(member.roles).then(mem => {
 				mem.addRole(memberRole).then(mem => client.msg(message, 'green', 'success', `${member.displayName} has been approved!`));

@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = client => {
+module.exports = (client, id) => {
 	client.online = false;
-	client.log('system', `Bot disconnected`);
+	client.log('system', `Bot disconnected from shard ${id}`);
 };

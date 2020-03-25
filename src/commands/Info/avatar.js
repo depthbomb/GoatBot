@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	let mention,
 		member;
@@ -30,7 +30,7 @@ exports.run = async (client, message, args, level) => {
 		if (mention.match(/<@!?\d{17,19}>/g)) {
 			member = message.mentions.members.first();
 		} else {
-			member = message.guild.members.find(m => m.id === mention);
+			member = message.guild.members.cache.find(m => m.id === mention);
 		}
 	} else {
 		member = message.member;
@@ -38,8 +38,8 @@ exports.run = async (client, message, args, level) => {
 
 	if (member) {
 		const defaultAvatarUrl = member.user.defaultAvatarURL;
-		const displayAvatarUrl = member.user.displayAvatarURL;
-		const avatarURL        = member.user.avatarURL;
+		const displayAvatarUrl = member.user.displayAvatarURL({ dynamic: true });
+		const avatarURL        = member.user.avatarURL({ dynamic: true });
 		const avatar           = member.user.avatar;
 
 		const urls = [
@@ -47,7 +47,7 @@ exports.run = async (client, message, args, level) => {
 			`[Default Avatar](${defaultAvatarUrl})`
 		].join('\n');
 
-		const embed = new RichEmbed()
+		const embed = new MessageEmbed()
 			  .setTitle(`${member.displayName}'s avatars`)
 			  .setDescription(`Avatar ID: \`${avatar}\``)
 			  .setColor(client.colors.blue)

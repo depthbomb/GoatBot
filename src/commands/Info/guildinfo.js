@@ -22,19 +22,19 @@
 */
 
 const moment = require('moment');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = (client, message, args, level) => {
 	const guild = message.member.guild;
-	const embed = new RichEmbed()
+	const embed = new MessageEmbed()
 		.setColor(client.colors.default)
-		.setAuthor(`${guild.name} (${guild.nameAcronym})`, guild.iconURL)
+		.setAuthor(`${guild.name} (${guild.nameAcronym})`, guild.iconURL({ dynamic: true }))
 		.setDescription(`\`\`\`asciidoc\n
 * Owner: ${guild.owner.displayName}
 * Created: ${moment(guild.createdTimestamp).fromNow()}
 ** Creation: ${guild.createdAt}
 * Members: ${guild.memberCount}
-* Channels: ${guild.channels.size}
-* Emoji: ${guild.emojis.size}
+* Channels: ${guild.channels.cache.size}
+* Emoji: ${guild.emojis.cache.size}
 * Region: ${guild.region}
 \`\`\``)
 		.setTimestamp();

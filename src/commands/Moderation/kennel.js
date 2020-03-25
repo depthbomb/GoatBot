@@ -30,7 +30,7 @@ exports.run = async (client, message, args, level) => {
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		member = message.mentions.members.first();
 	} else {
-		member = message.guild.members.find(m => m.id === mention);
+		member = message.guild.members.cache.find(m => m.id === mention);
 	}
 
 	return client.kennelUser(member, reason, message.member.displayName);

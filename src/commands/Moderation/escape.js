@@ -26,7 +26,7 @@ const Chance = require('chance'),
 exports.run = async (client, message, args, level) => {
 	if (message.channel.id !== '481201307257012262') return;
 	if (args.length > 0) return;
-	const kenneled = message.member.guild.roles.find(r => r.name === 'Kenneled');
+	const kenneled = message.member.guild.roles.cache.find(r => r.name === 'Kenneled');
 
 	if (kenneled) {
 		const hasEscaped = chance.weighted([1, 0], [1, 7]);

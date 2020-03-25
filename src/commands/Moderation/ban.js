@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = (client, message, args, level) => {
 	if (args.length === 0) return;
 	const mention = args[0];
@@ -31,20 +31,20 @@ exports.run = (client, message, args, level) => {
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		member = message.mentions.members.first();
 	} else {
-		member = message.guild.members.find(m => m.id === mention);
+		member = message.guild.members.cache.find(m => m.id === mention);
 	}
 
 	if (member) {
 		member.ban({ days: 7, reason }).then(() => {
-			let embed = new RichEmbed()
-				.setAuthor(member.displayName, member.user.avatarURL)
+			let embed = new MessageEmbed()
+				.setAuthor(member.displayName, member.user.avatarURL({ dynamic: true }))
 				.setColor(client.colors.red)
 				.setDescription(`${member.displayName} has been banned.`)
 				.addField('Reason', reason)
 				.setTimestamp();
 
 			message.channel.send({ embed }).then(() => {
-				embed = new RichEmbed()
+				embed = new MessageEmbed()
 					  .setColor(client.colors.red)
 					  .setDescription(`You have been banned permanently from the server by ${message.member.displayName}.\nAs this is a permanent ban (which are rare) it is unlikely that you will be able to appeal it. This is not to say that you _will_ remain banned permanently.`)
 					  .addField('Reason', reason)

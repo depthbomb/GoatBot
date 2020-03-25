@@ -23,7 +23,7 @@
 
 const jimp = require('jimp');
 const imgur = require('imgur');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const color = args[0];
@@ -43,7 +43,7 @@ exports.run = async (client, message, args, level) => {
 			msg.edit('Almost done...');
 			imgur.uploadFile(imageName, 'yalU7').then((json) => {
 				const imageURL = json.data.link;
-				const embed = new RichEmbed()
+				const embed = new MessageEmbed()
 					  .setDescription(`Color preview for \`#${colorCode} (0x${colorCode}FF)\``)
 					  .setColor(`#${colorCode}`)
 					  .setImage(imageURL);

@@ -23,7 +23,7 @@
 
 const trunc = require('truncate');
 const request = require('request');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const term = encodeURIComponent(args.join(" "));
@@ -41,13 +41,13 @@ exports.run = async (client, message, args, level) => {
 			return msg.edit(`<@${message.author.id}>, I didn't find any results using your search term :(`);
 		} else {
 			const result = data.list[0];
-			const embed = new RichEmbed()
+			const embed = new MessageEmbed()
 				.setTitle(`Results for \`${decodeURIComponent(term)}\``)
 				.setDescription(result.permalink)
 				.addField('Definition', trunc(result.definition, 1023))
 				.setColor('#134FE6');
 
-			if (result.example) embed.addBlankField(1).addField('Example(s)', trunc(result.example, 500));
+			if (result.example) embed.addField('\u200b', '\u200b').addField('Example(s)', trunc(result.example, 500));
 			
 			return msg.edit(`<@${message.author.id}>`, { embed });
 		}

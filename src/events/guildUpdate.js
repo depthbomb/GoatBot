@@ -28,7 +28,7 @@ module.exports = (client, oldGuild, newGuild) => {
 	table.push(
 		{ 'Name': [oldGuild.name, newGuild.name] },
 		{ 'Acronym': [oldGuild.nameAcronym, newGuild.nameAcronym] },
-		{ 'Icon': [oldGuild.iconURL, newGuild.iconURL] },
+		{ 'Icon': [oldGuild.iconURL({ dynamic: true }), newGuild.iconURL({ dynamic: true })] },
 		{ 'Region': [oldGuild.region, newGuild.region] },
 		{ 'AFK Timeout': [oldGuild.afkTimeout, newGuild.afkTimeout] },
 		{ 'Security Level': [oldGuild.verificationLevel, newGuild.verificationLevel] }

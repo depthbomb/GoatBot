@@ -22,7 +22,7 @@
 */
 
 const TempBan = require('@models/TempBan');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const userId = args[0];
@@ -31,8 +31,8 @@ exports.run = async (client, message, args, level) => {
 	.then(({ user, reason }) => {
 		guild.unban(user, `Requested by ${message.member.displayName}`)
 		.then(() => {
-			const embed = new RichEmbed().setTimestamp();
-			embed.setAuthor(user.username, user.avatarURL)
+			const embed = new MessageEmbed().setTimestamp();
+			embed.setAuthor(user.username, user.avatarURL({ dynamic: true }))
 				 .setColor(client.colors.green)
 				 .setDescription(`${user.username} has been unbanned by ${message.member.displayName}.`);
 
@@ -43,7 +43,7 @@ exports.run = async (client, message, args, level) => {
 	.catch(async err => {
 		TempBan.findOneAndRemove({ userId })
 		.then(ban => {
-			const embed = new RichEmbed().setTimestamp();
+			const embed = new MessageEmbed().setTimestamp();
 			if (ban) {
 				embed.setColor(client.colors.green)
 					 .setDescription(`Temp ban on user #${userId} has been lifted by ${message.member.displayName}.`);

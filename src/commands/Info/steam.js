@@ -25,7 +25,7 @@ const SteamID = require('steamid');
 const request = require('request');
 const cheerio = require('cheerio');
 const moment = require('moment');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const action = args[0];
@@ -114,7 +114,7 @@ exports.run = async (client, message, args, level) => {
 				const data = JSON.parse(body).response.players[0];
 				if (data.length < 1) return msg.edit("The response was empty, this is likely due to the wrong type of Steam ID being provided. Make sure the Steam ID you provide is a user ID.");
 
-				let embed = new RichEmbed()
+				let embed = new MessageEmbed()
 							.setTitle(data.personaname)
 							.setURL(data.profileurl)
 							.setThumbnail(data.avatarfull)

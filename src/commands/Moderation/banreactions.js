@@ -22,7 +22,7 @@
 */
 
 const ReactionBan = require('@models/ReactionBan');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const mention = args[0];
@@ -37,8 +37,8 @@ exports.run = async (client, message, args, level) => {
 
 	if (member) {
 		const userId = member.id;
-		const embed = new RichEmbed()
-			  .setAuthor(message.member.displayName, message.author.avatarURL)
+		const embed = new MessageEmbed()
+			  .setAuthor(message.member.displayName, message.author.avatarURL({ dynamic: true }))
 			  .setTimestamp();
 
 		const ban = await ReactionBan.findOne({ userId }).exec();

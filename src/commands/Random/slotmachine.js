@@ -21,12 +21,12 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = (client, message, args, level) => {
 	const emoji = {
-		furdesire: client.emojis.find(e => e.name === 'furdesire'),
-		pandasurprise: client.emojis.find(e => e.name === 'pandasurprise'),
-		dab: client.emojis.find(e => e.name === 'dab'),
+		furdesire: client.emojis.cache.find(e => e.name === 'furdesire'),
+		pandasurprise: client.emojis.cache.find(e => e.name === 'pandasurprise'),
+		dab: client.emojis.cache.find(e => e.name === 'dab'),
 	};
 	const choices = [emoji.furdesire, '\:b:', emoji.pandasurprise, '\:eggplant:'];
 	const choice1 = choices.shuffle()[0];

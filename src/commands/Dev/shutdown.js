@@ -22,9 +22,9 @@
 */
 
 const exec = require('execa');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const embed = new RichEmbed()
+	const embed = new MessageEmbed()
 		  .setColor(client.colors.red)
 		  .setTitle('Pending shutdown')
 		  .setDescription('**Warning!** This will stop the bot process via PM2 and it will not be restarted automatically.\n\nClick 🛑 within **10 seconds** to confirm.')

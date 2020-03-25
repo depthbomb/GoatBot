@@ -22,7 +22,7 @@
 */
 
 const request = require('request');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const query = encodeURIComponent(args.join(' '));
@@ -36,7 +36,7 @@ exports.run = async (client, message, args, level) => {
 		if (err) return client.error(message, err);
 		const data = JSON.parse(body).queryresult;
 
-		let embed = new RichEmbed()
+		let embed = new MessageEmbed()
 			.setTitle('Wolfram Alpha')
 			.setColor('#ff7e00');
 

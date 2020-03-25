@@ -22,7 +22,7 @@
 */
 
 const request = require('request');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const uri = 'https://randomfox.ca/floof';
 	request({
@@ -35,7 +35,7 @@ exports.run = async (client, message, args, level) => {
 		if (err) return client.error(message, err);
 		const data = JSON.parse(body);
 		const image = data.image;
-		const embed = new RichEmbed()
+		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setImage(image)
 			.setTitle('Random Fox');

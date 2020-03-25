@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = (client, message, args, level) => {
 	if (args.length === 0) return;
 	const mention = args[0];
@@ -31,21 +31,21 @@ exports.run = (client, message, args, level) => {
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		member = message.mentions.members.first();
 	} else {
-		member = message.guild.members.find(m => m.id === mention);
+		member = message.guild.members.cache.find(m => m.id === mention);
 	}
 
 	if (member) {
 		const executor = message.member;
 		member.kick(reason).then(() => {
-			let embed = new RichEmbed()
-				.setAuthor(member.displayName, member.user.avatarURL)
+			let embed = new MessageEmbed()
+				.setAuthor(member.displayName, member.user.avatarURL({ dynamic: true }))
 				.setColor(client.colors.red)
 				.setDescription(`Kicked from the server by ${executor.displayName}.`)
 				.addField('Reason', reason)
 				.setTimestamp();
 
 			message.channel.send({ embed }).then(() => {
-				embed = new RichEmbed()
+				embed = new MessageEmbed()
 					  .setColor(client.colors.red)
 					  .setDescription(`You have been kicked from the server by ${executor.displayName}.\nYou may rejoin the server but you should behave so you don't find yourself kicked again.`)
 					  .addField('Reason', reason)

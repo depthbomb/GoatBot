@@ -1,10 +1,10 @@
 exports.run = async (client, message, args, level) => {
-	const { RichEmbed } = require('discord.js');
-	let embed = new RichEmbed().setDescription('Testing...');
+	const { MessageEmbed } = require('discord.js');
+	let embed = new MessageEmbed().setDescription('Testing...');
 	const msg = await message.channel.send({ embed });
-	embed = new RichEmbed()
+	embed = new MessageEmbed()
 		.setColor('RANDOM')
-		.setDescription(`Pong! Latency is ${msg.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`)
+		.setDescription(`Pong! Latency is ${msg.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`)
 	;
 
 	return msg.edit({ embed });

@@ -22,7 +22,7 @@
 */
 
 const moment = require('moment');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const lockdowns = client.store.lockdowns;
 	const expires  = args[0].parseTimeFormat() || null;
@@ -32,7 +32,7 @@ exports.run = async (client, message, args, level) => {
 	if (lockdowns.hasOwnProperty(channelId)) return message.reply('This channel is already under a lockdown.');
 	if (!expires) return message.reply('Invalid time format');
 	lockdowns[channelId] = expires;
-	const embed = new RichEmbed()
+	const embed = new MessageEmbed()
 		  .setTimestamp()
 		  .setColor(client.colors.red)
 		  .setTitle('Channel on lockdown')

@@ -23,7 +23,7 @@
 
 const Chance = require('chance'),
 	  chance = new Chance();
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 /* #region zalgo */
 const zalgo = "C̡͓̩̞̬̞͇̱̫̿͌̽̓͗̎̚ọ̧̗̮̰̟͙̠̫ͧ͡r̵̬̟̼̟̪̾͛͝r̰̈̀͗͆̏͘͝͡ṳ̡̫̥̹̟͓̯̟ͨͫ̐̅̀p̍ͩ̿ͯ̎͗ͣ̕͏̧̦̳t̠̲̤̣̼͈̄̑͜e̡̮̥̝̗̱͐̓̿͑͆̚ͅd͎̫̏̈́͋ͪ̓̓́";
 const zalgo2 = "ǫ̹̜̖͉͇́ͤͯf̰͙̤̆̈̈́͜ ̹̗̯̩̺̂͛̅͋ͦͦ͌̎t͐͗̚҉̡̤͕̬̗̩͡h̘͍͍̱̉ͤ͑͛͋͜ě̙̞̖̬͔̩̥̱͍̐ͯ̄̆̈͜ ̸̰̺̬̹̤̙̬̐ͭ́ͅͅB̛̛̹̪ͯ̇͐̍̈́̆̂l̥͓̮ͪ͊ͮ̍ͬͥ̎̽͢a̤̟̘̻̒̓c̵̡̖̦ͯ̓͟k̵̖̼̳̫̊ͤ͐̓̇̓̀ͨ ̷̸̮̼͔ͨ̓͐̆ͨ̈́͞E͛̽͏̢͏͇͉͕̞̬̩͓m͓͖̦͋̿̍͡͝p̛̦͎̻̯̟̫̺ͤ͛͑́ͣ̊ͮ͘i̝͛̿ͧͪ̄̔̅̀r͕͇̹̬̥̘̗̍ͪ̿͆͐̊̀͢ͅě̘̬͚͜͢͝";
@@ -80,7 +80,7 @@ exports.run = async (client, message, args, level) => {
 	
 	weights[weights.indexOf(weight)] = (weight - 1);
 
-	const embed = new RichEmbed()
+	const embed = new MessageEmbed()
 		.setColor(color)
 		.setTitle(`Unbox a Goat`)
 		.setDescription(`<@${message.author.id}> has unboxed: **${name}!**`)

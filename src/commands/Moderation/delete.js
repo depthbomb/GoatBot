@@ -24,7 +24,7 @@
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const messageID = args.join(' ');
-	message.channel.fetchMessage(messageID)
+	message.channel.message.fetch(messageID)
 	.then(msg => msg.delete().then(() => message.delete()))
 	.catch(console.error);
 };

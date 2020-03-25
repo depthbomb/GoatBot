@@ -22,7 +22,7 @@
 */
 
 const Chance = require('chance');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = (client, message, args, level) => {
 	if (args.length < 1) return;
 	let subject = args.join(' ');
@@ -44,7 +44,7 @@ exports.run = (client, message, args, level) => {
 		{ color: '#e75a70', emoji: '\:sparkling_heart:' },	//	9
 		{ color: '#e75a70', emoji: '\:two_hearts:' },		//	10
 	];
-	const embed = new RichEmbed()
+	const embed = new MessageEmbed()
 		  .setColor(ratings[rating].color)
 		  .setDescription(`Hmm... I rate \`${subject}\` **${rating}/10!** ${ratings[rating].emoji}`);
 	return message.reply({ embed });

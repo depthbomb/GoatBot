@@ -23,5 +23,5 @@
 
 module.exports = (client, member) => {
 	client.log('event', `${member.user.tag} has left ${member.guild.name}`);
-	client.logAction('User left', `${member.user.tag} has left ${member.guild.name}`, client.colors.red, member.user.tag, member.user.avatarURL);
+	client.logAction('User left', `${member.user.tag} has left ${member.guild.name}`, client.colors.red, member.user.tag, member.user.avatarURL({ dynamic: true }));
 };

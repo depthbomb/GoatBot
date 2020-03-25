@@ -23,12 +23,12 @@
 
 const StoreItem = require('@models/StoreItem');
 const Patron = require('@models/Patron');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const itemId = args.join(' ');
 	const userId = message.author.id;
-	const emoji  = client.emojis.find(e => e.name === 'caprineGold');
+	const emoji  = client.emojis.cache.find(e => e.name === 'caprineGold');
 	const p = await Patron.findOne({ userId }, 'gold inventory').exec();
 
 	const gold = p.gold;
@@ -42,9 +42,9 @@ exports.run = async (client, message, args, level) => {
 
 		Patron.updateOne({ userId }, { $push: { inventory: item._id } })
 		.then(res => {
-			const embed = new RichEmbed()
+			const embed = new MessageEmbed()
 				  .setColor(client.colors.green)
-				  .setAuthor(message.member.displayName, message.author.avatarURL)
+				  .setAuthor(message.member.displayName, message.author.avatarURL({ dynamic: true }))
 				  .setTitle('Purchase complete!')
 				  .setDescription(`You have successfully purchased **${item.name}**!`);
 			

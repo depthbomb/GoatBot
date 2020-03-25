@@ -23,7 +23,7 @@
 
 const Chance = require('chance');
 const crypto = require('crypto');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length < 2) return;
 	let thing = args[0].usToSp().trim();
@@ -65,7 +65,7 @@ exports.run = async (client, message, args, level) => {
 	else if(output >= 100) response = 'A perfect match! \:heart_eyes:';
 	else response = 'You should not see this';
 
-	let embed = new RichEmbed()
+	let embed = new MessageEmbed()
 		.setColor('#be1931')
 		.setTitle('\:heart: Ship Calculator')
 		.setDescription(`\:small_red_triangle_down: \`${thing}\`\n\:small_red_triangle: \`${thing2}\`\n\n${output}% [\`${bar}${barFill}\`](https://paypal.me/depthbomb) ${response}`)

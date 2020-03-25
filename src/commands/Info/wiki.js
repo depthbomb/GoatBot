@@ -22,7 +22,7 @@
 */
 
 const request = require('request');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const query = args.join(' ') || 'random';
@@ -55,7 +55,7 @@ exports.run = async (client, message, args, level) => {
 			const extract = data.extract
 				  .replace('\n', '\n\n')
 				  .replace(/\s*\(\)\s*/, '');
-			const embed = new RichEmbed()
+			const embed = new MessageEmbed()
 				  .setColor(0xFFFFFF)
 				  .setAuthor('Wikipedia', image, articleUrl)
 				  .setURL(articleUrl)

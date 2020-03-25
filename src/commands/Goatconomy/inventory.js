@@ -22,16 +22,16 @@
 */
 
 const Patron = require('@models/Patron');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const userId = message.author.id;
-	const emoji  = client.emojis.find(e => e.name === 'caprineGold');
+	const emoji  = client.emojis.cache.find(e => e.name === 'caprineGold');
 	Patron.findOne({ userId }, 'gold inventory')
 	.populate('inventory')
 	.then(patron => {
 		if (patron) {
-			const embed = new RichEmbed()
-				  .setAuthor(`${message.member.displayName}'s Inventory`, message.author.avatarURL)
+			const embed = new MessageEmbed()
+				  .setAuthor(`${message.member.displayName}'s Inventory`, message.author.avatarURL({ dynamic: true }))
 				  .addField('Goat Gold', emoji + ' ' + patron.gold);
 			return message.channel.send({ embed });
 		} else {

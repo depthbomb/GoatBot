@@ -24,7 +24,7 @@
 const cooldowns = {};
 const Patron = require('@models/Patron');
 const ms = require('ms');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 module.exports = (client, message) => {
 	const userId         = message.author.id;
 	const channelId      = message.channel.id;
@@ -41,7 +41,7 @@ module.exports = (client, message) => {
 
 	const isOwner       = (userId === client.config.ownerId);
 	const level         = client.permLevel(message);
-	const isServerStaff = (message.member.roles.find(r => r.name === client.config.roles.admin) || message.member.roles.find(r => r.name === client.config.roles.mod) || level > 1 || isOwner);
+	const isServerStaff = (message.member.roles.cache.find(r => r.name === client.config.roles.admin) || message.member.roles.cache.find(r => r.name === client.config.roles.mod) || level > 1 || isOwner);
 
 	let logPrefix = [];
 	let username = message.member !== null ? message.member.displayName : message.author.tag;
@@ -151,7 +151,7 @@ module.exports = (client, message) => {
 				const expiration = cooldowns[cooldownName].ex;
 				const timeLeft   = (expiration - messageTime);
 				const response   = timeLeft <= 1000 ? 'Please try again.' : `Please try again in about ${ms(timeLeft, { long: true })}.`;
-				const embed = new RichEmbed()
+				const embed = new MessageEmbed()
 					  .setColor('#aab8c2')
 					  .setDescription(`\:timer: <@${userId}>, ${response}`);
 

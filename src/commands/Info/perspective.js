@@ -22,7 +22,7 @@
 */
 
 const request = require('request');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const text = encodeURIComponent(args.join(''));
@@ -65,7 +65,7 @@ exports.run = async (client, message, args, level) => {
 		const INFLAMMATORY = Math.round(data.attributeScores.INFLAMMATORY.summaryScore.value*100);
 		const OBSCENE = Math.round(data.attributeScores.OBSCENE.summaryScore.value*100);
 		const SPAM = Math.round(data.attributeScores.SPAM.summaryScore.value*100);
-		const embed = new RichEmbed()
+		const embed = new MessageEmbed()
 			  .setTitle('Analysis')
 			  .setColor(client.colors.brand)
 			  .setDescription('Values of >=70% are likely intent.\nFields marked with a **\*** are experimental and may not be accurate.')

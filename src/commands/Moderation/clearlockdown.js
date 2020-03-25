@@ -21,14 +21,14 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const lockdowns = client.store.lockdowns;
 	const channelId = message.channel.id;
 
 	if (lockdowns.hasOwnProperty(channelId)) {
 		delete lockdowns[channelId];
-		const embed = new RichEmbed()
+		const embed = new MessageEmbed()
 			  .setTimestamp()
 			  .setColor(client.colors.green)
 			  .setTitle('Lockdown lifted')

@@ -22,7 +22,7 @@
 */
 
 const crypto = require('crypto');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 module.exports = client => {
 	client.awaitReply = async (msg, question, limit = 60000) => {
 		const filter = m => m.author.id = msg.author.id;
@@ -44,12 +44,12 @@ module.exports = client => {
 		let encrypted = cipher.update(errorStack, 'utf8', 'base64');
 			encrypted += cipher.final('base64');
 
-		let embed = new RichEmbed()
-			.setAuthor('OOPSIE WOOPSIE!!', client.user.avatarURL)
+		let embed = new MessageEmbed()
+			.setAuthor('OOPSIE WOOPSIE!!', client.user.avatarURL({ dynamic: true }))
 			.setColor(client.colors.red)
 			.setDescription('OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this code belowo if you see him!')
 			.addField('\u200B', `\`\`\`\n${encrypted}\n\`\`\``, true)
-			.setThumbnail(client.emojis.find('name', 'caprineError').url);
+			.setThumbnail(client.emojis.cache.find('name', 'caprineError').url);
 
 		return msg.reply({ embed });
 	};
@@ -73,21 +73,21 @@ module.exports = client => {
 			'blue': '#3498db'
 		};
 		const emojis = {
-			'gold': client.emojis.find(e => e.name === 'caprineGold'),
-			'ungag': client.emojis.find(e => e.name === 'caprineCommentNormal'),
-			'gag': client.emojis.find(e => e.name === 'caprineGag'),
-			'mute': client.emojis.find(e => e.name === 'caprineMute'),
-			'search': client.emojis.find(e => e.name === 'caprineSearch'),
-			'refresh': client.emojis.find(e => e.name === 'caprineRefresh'),
-			'error': client.emojis.find(e => e.name === 'caprineClose'),
-			'warning': client.emojis.find(e => e.name === 'caprineWarning'),
-			'success': client.emojis.find(e => e.name === 'caprineSuccess'),
-			'info': client.emojis.find(e => e.name === 'caprineInfo'),
-			'close': client.emojis.find(e => e.name === 'caprineClose')
+			'gold': client.emojis.cache.find(e => e.name === 'caprineGold'),
+			'ungag': client.emojis.cache.find(e => e.name === 'caprineCommentNormal'),
+			'gag': client.emojis.cache.find(e => e.name === 'caprineGag'),
+			'mute': client.emojis.cache.find(e => e.name === 'caprineMute'),
+			'search': client.emojis.cache.find(e => e.name === 'caprineSearch'),
+			'refresh': client.emojis.cache.find(e => e.name === 'caprineRefresh'),
+			'error': client.emojis.cache.find(e => e.name === 'caprineClose'),
+			'warning': client.emojis.cache.find(e => e.name === 'caprineWarning'),
+			'success': client.emojis.cache.find(e => e.name === 'caprineSuccess'),
+			'info': client.emojis.fcache.ind(e => e.name === 'caprineInfo'),
+			'close': client.emojis.cache.find(e => e.name === 'caprineClose')
 		};
 		const color = colors[type];
 		const emoji = emojis[icon];
-		const embed = new RichEmbed()
+		const embed = new MessageEmbed()
 			  .setColor(color)
 			  .setDescription(`${emoji} ${reply ? '<@' + messageObj.author.id + '>, ' : ''}${message}`);
 
@@ -103,10 +103,10 @@ module.exports = client => {
 	 * @param {string} authorName "Author" name
 	 * @param {string} authorImage "Author" image
 	 */
-	client.logAction = (title, logMessage, color = client.colors.default, authorName, authorImage = client.guilds.find(g => g.id === client.config.mainGuild).iconURL) => {
+	client.logAction = (title, logMessage, color = client.colors.default, authorName, authorImage = client.guilds.find(g => g.id === client.config.mainGuild).iconURL({ dynamic: true })) => {
 		if (client.disableLog) return;
-		const logChannel = client.channels.find(c => c.id === client.config.logChannel);
-		const embed = new RichEmbed()
+		const logChannel = client.channels.cache.find(c => c.id === client.config.logChannel);
+		const embed = new MessageEmbed()
 			.setColor(color)
 			.setTimestamp()
 			.setTitle(title)
@@ -119,12 +119,12 @@ module.exports = client => {
 
 
 	client.kennelUser = (member, reason, issuer = 'GoatBot!') => {
-		const kennelRole = member.guild.roles.find(r => r.name === 'Kenneled');
-		const nsfwRole = member.roles.find(r => r.name === 'NSFW');
-		const kennelChannel = member.guild.channels.find(c => c.id === '481201307257012262');
+		const kennelRole = member.guild.roles.cache.find(r => r.name === 'Kenneled');
+		const nsfwRole = member.roles.cache.find(r => r.name === 'NSFW');
+		const kennelChannel = member.guild.channels.cache.find(c => c.id === '481201307257012262');
 
-		if (!member.roles.find(r => r.name === 'Kenneled')) {
-			let embed = new RichEmbed()
+		if (!member.roles.cache.find(r => r.name === 'Kenneled')) {
+			let embed = new MessageEmbed()
 				.setColor(client.colors.red)
 				.setTitle('User Kenneled')
 				.setDescription(`User \`${member.displayName}\` has been kenneled by **${issuer}**`)
@@ -135,7 +135,7 @@ module.exports = client => {
 				member.setDeaf(true, 'Deafened due to kenneling').catch(() => {});
 				member.setMute(true, 'Muted due to kenneling').catch(() => {});
 				kennelChannel.send({ embed }).then(m => {
-					embed = new RichEmbed()
+					embed = new MessageEmbed()
 						.setColor(client.colors.red)
 						.setDescription(`<@${member.user.id}>, you have been placed in the kennel by ${issuer}. You will be here indefinitely until you can \`${client.printCmd('escape')}\`. Some of your roles have been stripped and will need to be reacquired once you escape.`)
 						.addField('Reason', reason);

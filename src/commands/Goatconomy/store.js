@@ -23,7 +23,7 @@
 
 const StoreItem = require('@models/StoreItem');
 const Patron = require('@models/Patron');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const userId = message.author.id;
 	const p = await Patron.findOne({ userId }, 'gold inventory').exec();

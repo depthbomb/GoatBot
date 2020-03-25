@@ -33,7 +33,7 @@ exports.run = (client, message, args, level) => {
 
 	let n = 0;
 	message.delete().then(() => {
-		message.channel.fetchMessages({ limit: num }).then(messages => {
+		message.channel.message.fetch({ limit: num }).then(messages => {
 			client.disableLog = true;
 			for (let msg of messages) {
 				msg.delete().then(() => {

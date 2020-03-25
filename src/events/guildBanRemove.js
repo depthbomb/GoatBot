@@ -23,5 +23,5 @@
 
 module.exports = (client, guild, user) => {
 	client.log('event', `${user.tag} has been unbanned.`);
-	client.logAction('User banned', `${user.tag} has been unbanned.`, client.colors.orange, user.tag, user.avatarURL);
+	client.logAction('User banned', `${user.tag} has been unbanned.`, client.colors.orange, user.tag, user.avatarURL({ dynamic: true }));
 };

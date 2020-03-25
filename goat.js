@@ -35,7 +35,7 @@ const Discord = require('discord.js');
 const { promisify } = require('util');
 const moment = require('moment');
 const mongoose = require('mongoose');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 const readdir = promisify(require('fs').readdir);
 const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
 				"│                                                                         │",
@@ -97,9 +97,9 @@ class GoatBot extends Discord.Client {
 			if (message.author.id === client.config.ownerId)
 				return 5;
 
-			const adminRole = message.member.roles.find(r => r.id === client.config.roles.admin);
-			const moderatorRole = message.member.roles.find(r => r.id === client.config.roles.mod);
-			const donorRole = message.member.roles.find(r => r.id === client.config.roles.donor);
+			const adminRole = message.member.roles.cache.find(r => r.id === client.config.roles.admin);
+			const moderatorRole = message.member.roles.cache.find(r => r.id === client.config.roles.mod);
+			const donorRole = message.member.roles.cache.find(r => r.id === client.config.roles.donor);
 			
 			if (donorRole && message.member.roles.has(donorRole.id))
 				return 1;
@@ -318,7 +318,8 @@ init();
 */
 process.on('SIGINT', () => {
 	console.log(`\n${chalk.bgRedBright.whiteBright('Caught shutdown signal')}`);
-	client.destroy().then(() => console.log(`${chalk.bgYellowBright.whiteBright('Client destroyed, exiting...')}`));
+	client.destroy();
+	console.log(`${chalk.bgYellowBright.whiteBright('Client destroyed, exiting...')}`)
 	process.exit(1);
 });
 

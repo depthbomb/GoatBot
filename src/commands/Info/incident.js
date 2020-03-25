@@ -24,7 +24,7 @@
 exports.run = async (client, message, args, level) => {
 	if (args.length > 0) return;
 
-	const { RichEmbed } = require('discord.js');
+	const { MessageEmbed } = require('discord.js');
 	const request = require('request');
 	const apiUrl = "https://discord.statuspage.io/history.json";
 
@@ -83,7 +83,7 @@ exports.run = async (client, message, args, level) => {
 
 				statusMessage.edit('Processing incident data...');
 
-				let statusEmbed = new RichEmbed()
+				let statusEmbed = new MessageEmbed()
 					.setTitle(incidentName)
 					.setURL(incident.shortlink)
 					.setColor(colors[incident.impact])
@@ -93,7 +93,7 @@ exports.run = async (client, message, args, level) => {
 					const update = incidentUpdates[i];
 
 					//	Add space above updates if it is not the first one for a cleaner look
-					if (i > 0) statusEmbed.addBlankField();
+					if (i > 0) statusEmbed.addField('\u200b', '\u200b');
 
 					statusEmbed.addField(update.status.toProperCase(), update.body);
 				}

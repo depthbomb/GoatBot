@@ -1,4 +1,4 @@
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 const mongoose = require('mongoose');
 const ReminderSchema = new mongoose.Schema({
 	_id: { type: String, default: uuid() },

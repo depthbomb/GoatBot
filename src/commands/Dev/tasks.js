@@ -23,7 +23,7 @@
 
 const ms = require('ms');
 const moment = require('moment');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 function formatInterval(interval) {
 	const hours   = Math.floor(interval / 3600);
@@ -43,7 +43,7 @@ function formatInterval(interval) {
 exports.run = (client, message, args, level) => {
 	const requestedTask = args.join(' ') || null;
 	const tasks = client.tasks.filter(t => t.enabled === true);
-	const embed = new RichEmbed().setColor(client.colors.brand);
+	const embed = new MessageEmbed().setColor(client.colors.brand);
 
 	if (requestedTask) {
 		const task = tasks.find(t => t.name == requestedTask);

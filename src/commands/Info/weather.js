@@ -23,7 +23,7 @@
 
 const request = require('request');
 const moment = require('moment');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const appId = client.config.openweathermap_api_key;
@@ -41,7 +41,7 @@ exports.run = async (client, message, args, level) => {
 		if (data.cod && data.cod === 200) {
 			const weather = data.weather[0];
 			const icon = `http://openweathermap.org/img/w/${weather.icon}.png`;
-			embed = new RichEmbed()
+			embed = new MessageEmbed()
 				.setThumbnail(icon)
 				.setTitle(`Weather for ${data.name} (${data.coord.lat},${data.coord.lon})`)
 				.setDescription(`**${weather.main}**: ${weather.description}`)
@@ -53,7 +53,7 @@ exports.run = async (client, message, args, level) => {
 				.addField('Sunset', moment.unix(data.sys.sunset).fromNow(), true)
 				.setFooter(`Updated ${moment.unix(data.dt).fromNow()}`);
 		} else {
-			embed = new RichEmbed()
+			embed = new MessageEmbed()
 				.setTitle(`Error ${data.cod}`)
 				.setColor(client.colors.red)
 				.setDescription(data.message);

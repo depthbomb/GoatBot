@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length < 2) return;
 	const giveawayLimit = args[0];
@@ -33,7 +33,7 @@ exports.run = async (client, message, args, level) => {
 	let displayEntered = [];
 	let filter = (r, u) => r.emoji.name === '🎉' && !entered.includes(u.id) && u.id !== client.user.id;
 
-	let embed = new RichEmbed()
+	let embed = new MessageEmbed()
 		.setColor(client.colors.default)
 		.setTitle(description)
 		.setDescription(`React with 🎉 to enter.`)
@@ -47,7 +47,7 @@ exports.run = async (client, message, args, level) => {
 			timeLeft--;
 		}, 1000);
 		let updateEmbed = setInterval(() => {
-			embed = new RichEmbed()
+			embed = new MessageEmbed()
 				.setTitle(description)
 				.setDescription(`React with 🎉 to enter.`)
 				.setFooter(`Time left: ${timeLeft} seconds`);
@@ -85,7 +85,7 @@ exports.run = async (client, message, args, level) => {
 				let winner = entered.shuffle()[0];
 				winnerText = `Congratulations, <@${winner}>! You've won **${giveawayItem}**`;
 				return message.channel.send(winnerText).then(() => {
-					embed = new RichEmbed()
+					embed = new MessageEmbed()
 						.setColor('#000000')
 						.setTitle(description)
 						.setDescription(`<@${winner}> has won this giveaway.`)

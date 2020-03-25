@@ -22,7 +22,7 @@
 */
 
 exports.run = async (client, message, args, level) => {
-	const { RichEmbed } = require('discord.js');
+	const { MessageEmbed } = require('discord.js');
 	const moment = require('moment');
 	let mention,
 		member;
@@ -32,7 +32,7 @@ exports.run = async (client, message, args, level) => {
 		if (mention.match(/<@!?\d{17,19}>/g)) {
 			member = message.mentions.members.first();
 		} else {
-			member = message.guild.members.find(m => m.id === mention);
+			member = message.guild.members.cache.find(m => m.id === mention);
 		}
 	} else {
 		member = message.member;
@@ -40,8 +40,8 @@ exports.run = async (client, message, args, level) => {
 
 	if (member) {
 		const user = member.user;
-		const embed = new RichEmbed()
-			  .setAuthor(user.tag + ` (${user.id})`, user.avatarURL)
+		const embed = new MessageEmbed()
+			  .setAuthor(user.tag + ` (${user.id})`, user.avatarURL({ dynamic: true }))
 			  .setColor(member.colorRole.hexColor)
 			  .addField('Account created', `${moment(user.createdAt).fromNow()}\n(${user.createdAt})`)
 			  .addField('Joined guild', `${moment(member.joinedAt).fromNow()}\n(${member.joinedAt})`)

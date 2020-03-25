@@ -22,7 +22,7 @@
 */
 
 const Patron = require('@models/Patron');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const itemId = args.join(' ');

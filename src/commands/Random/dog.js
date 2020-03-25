@@ -22,7 +22,7 @@
 */
 
 const request = require('request');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const uri = 'https://dog.ceo/api/breeds/image/random';
 	request({
@@ -36,7 +36,7 @@ exports.run = async (client, message, args, level) => {
 		const data = JSON.parse(body);
 		if (data.status) {
 			const image = data.message;
-			const embed = new RichEmbed()
+			const embed = new MessageEmbed()
 				.setColor('RANDOM')
 				.setImage(image)
 				.setTitle('Random Dog');

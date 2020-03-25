@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 module.exports = client => {
 	return task = {
 		name: 'clearLockdowns',
@@ -36,8 +36,8 @@ module.exports = client => {
 				for (let channel of channels) {
 					if (lockdowns[channel] <= now) {
 						delete lockdowns[channel];
-						const channelToMessage = client.channels.find(c => c.id == channel);
-						const embed = new RichEmbed()
+						const channelToMessage = client.channels.cache.find(c => c.id == channel);
+						const embed = new MessageEmbed()
 							  .setColor(client.colors.blue)
 							  .setDescription('The lockdown on this channel has expired.');
 						channelToMessage.send({ embed });

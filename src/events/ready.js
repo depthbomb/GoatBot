@@ -26,14 +26,7 @@ module.exports = async client => {
 	await client.wait(250);
 	client.online = true;
 	client.heartbeat = client.timestamp();
-	client.user.setPresence({
-		status: 'online',
-		afk: false,
-		game: {
-			name: client.localMode ? '<DEV MODE>' : client.config.initialGame,
-			type: 0
-		}
-	});
+	client.user.setActivity(client.localMode ? '<DEV MODE>' : client.config.initialGame, { type: 'WATCHING' });
 
-	console.log(chalk.bgCyan.whiteBright(`Ready to serve ${client.users.size} users in ${client.guilds.size} servers.`));
+	console.log(chalk.bgCyan.whiteBright(`Ready to serve ${client.users.cache.size} users in ${client.guilds.cache.size} servers.`));
 };
