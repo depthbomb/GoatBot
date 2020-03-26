@@ -22,7 +22,6 @@
 */
 
 exports.run = (client, message, args, level) => {
-	// return message.reply('You can find a list of my commands on my website: **http://18.236.65.76/commands**');
 	const settings = client.config;
 	if (!args[0]) {
 		const myCommands = message.guild ? client.commands.filter(cmd => cmd.conf.permLevel <= level) : client.commands.filter(cmd => cmd.conf.permLevel <= level);
@@ -49,7 +48,6 @@ exports.run = (client, message, args, level) => {
 		let paramLine = '';
 		let command;
 		let parameters = [];
-		let extraInfo = '';
 		if (client.commands.has(args[0])) {
 			command = args[0];
 		} else if (client.aliases.has(args[0])) {
@@ -91,7 +89,7 @@ exports.run = (client, message, args, level) => {
 				`Examples\n--------\n${examples.join("\n")}\n\n`
 				, {code: 'markdown', split: true}
 			)
-			.then((msg) => message.react('📨'))
+			.then(msg => message.react('📨'))
 			.catch(err => message.reply('I cannot send the commands to you. You must allow DMs from me for some commands to function.'));
 		}
 	}

@@ -302,8 +302,7 @@ const init = () => new Listr([
 ])
 .run()
 .then(() => {
-	client.login(client.config.token)
-	// .then(() => require('./src/web/website')(client).boot());
+	client.login(client.config.token).then(() => require('./src/web/website')(client).boot());
 })
 .catch(err => {
 	console.error(err);
