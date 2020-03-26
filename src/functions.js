@@ -103,7 +103,7 @@ module.exports = client => {
 	 * @param {string} authorName "Author" name
 	 * @param {string} authorImage "Author" image
 	 */
-	client.logAction = (title, logMessage, color = client.colors.default, authorName, authorImage = client.guilds.find(g => g.id === client.config.mainGuild).iconURL({ dynamic: true })) => {
+	client.logAction = (title, logMessage, color = client.colors.default, authorName, authorImage = client.guilds.cache.find(g => g.id === client.config.mainGuild).iconURL({ dynamic: true })) => {
 		if (client.disableLog) return;
 		const logChannel = client.channels.cache.find(c => c.id === client.config.logChannel);
 		const embed = new MessageEmbed()
