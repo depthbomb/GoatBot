@@ -30,7 +30,11 @@ const componentToHex = (c) => {
 }
 const rgbToHex = (r, g, b) => "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 exports.run = async (client, message, args, level) => {
-	const imageUrl = args.join(' ').trim() || message.attachments.first().url;
+	let imageUrl;
+	if (message.attachments.first()) imageUrl = message.attachments.first().url;
+	else imageUrl = args.join(' ').trim() || message.member.user.displayAvatarURL({ format: 'jpg', size: 512 });
+	if (!imageUrl) return message.reply('Please provide an image source.');
+
 	Vibrant.from(imageUrl).getPalette((err, palette) => {
 		if (typeof palette === 'undefined') return message.reply('The image source you provided is invalid.\nIf you are using a URL, make sure it is a __direct link__ to the image and not to a page displaying the image.\nIf you are attaching an image to the command message, make sure the attachment is an image and/or that the image is the first attachment.');
 		const colors = {};
@@ -77,7 +81,7 @@ exports.help = {
 	description: 'Extracts prominent colors from an image',
 	usage: 'vibrant [image]',
 	params: {
-		'image': 'Direct image URL or image attached to the message that invokes the command'
+		'image': 'Direct image URL or image attached to the message that invokes the command, otherwise it will use your avatar'
 	},
 	examples: [
 		'vibrant https://website.com/image.jpg'

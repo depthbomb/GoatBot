@@ -24,7 +24,11 @@
 const path = require('path');
 const jimp = require('jimp');
 exports.run = async (client, message, args, level) => {
-	const imageUrl = args.join(' ').trim() || message.attachments.first().url;
+	let imageUrl;
+	if (message.attachments.first()) imageUrl = message.attachments.first().url;
+	else imageUrl = args.join(' ').trim() || message.member.user.displayAvatarURL({ format: 'jpg', size: 512 });
+	if (!imageUrl) return message.reply('Please provide an image source.');
+
 	jimp.read(imageUrl).then(image => {
 		const tmpName = `deepfried_${client.uuid()}.${image.getExtension()}`;
 		const tmpLocation = path.join(client.tmpPath, tmpName);
@@ -32,7 +36,7 @@ exports.run = async (client, message, args, level) => {
 		image.posterize(4);
 		image.dither565();
 		image.write(tmpLocation, () => message.channel.send({ files: [{ attachment: tmpLocation, name: tmpName }] }));
-	}).catch(err => message.reply(`There was a problem deepfrying your image: \`\`\`${err}\`\`\``));
+	}).catch(err => message.reply(`There was a problem deepfrying your image. Ensure that the image source you provided is valid.`));
 };
 
 exports.conf = {
@@ -48,7 +52,7 @@ exports.help = {
 	description: '"Deep fries" an image',
 	usage: 'deepfry [image]',
 	params: {
-		'image': 'Direct image URL or image attached to the message that invokes the command'
+		'image': 'Direct image URL or image attached to the message that invokes the command, otherwise it will use your avatar'
 	},
 	examples: [
 		'deepfry https://website.com/image.jpg'
