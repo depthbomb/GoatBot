@@ -32,6 +32,7 @@ const rgbToHex = (r, g, b) => "#" + componentToHex(r) + componentToHex(g) + comp
 exports.run = async (client, message, args, level) => {
 	const imageUrl = args.join(' ').trim() || message.attachments.first().url;
 	Vibrant.from(imageUrl).getPalette((err, palette) => {
+		if (typeof palette === 'undefined') return message.reply('The image source you provided is invalid.\nIf you are using a URL, make sure it is a __direct link__ to the image and not to a page displaying the image.\nIf you are attaching an image to the command message, make sure the attachment is an image and/or that the image is the first attachment.');
 		const colors = {};
 		for (let p in palette) {
 			const swatch = palette[p];
