@@ -69,7 +69,7 @@ exports.run = async (client, message, args, level) => {
 
 	const chosen     = chance.weighted(rarities, weights),
 		  color      = chosen.color,
-		  image      = `https://caprine.s3.amazonaws.com/bot/goats/${chosen.file}.png`,
+		  image      = `https://f000.backblazeb2.com/file/caprine/bot/goats/${chosen.file}.png`,
 		  weight     = weights[rarities.indexOf(chosen)],
 		  prefix     = chosen.prefix || '',
 		  suffix     = chosen.suffix || '',

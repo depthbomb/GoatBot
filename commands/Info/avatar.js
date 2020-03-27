@@ -23,8 +23,7 @@
 
 const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	let mention,
-		member;
+	let mention, member;
 	if (args.length > 0) {
 		mention = args.join(' ');
 		if (mention.match(/<@!?\d{17,19}>/g)) {
@@ -40,12 +39,7 @@ exports.run = async (client, message, args, level) => {
 		const defaultAvatarUrl = member.user.defaultAvatarURL;
 		const displayAvatarUrl = member.user.displayAvatarURL({ dynamic: true, size: 1024 });
 		const avatar           = member.user.avatar;
-
-		const urls = [
-			`[Avatar](${displayAvatarUrl})`,
-			`[Default Avatar](${defaultAvatarUrl})`
-		].join('\n');
-
+		const urls = [`[Avatar](${displayAvatarUrl})`, `[Default Avatar](${defaultAvatarUrl})`].join('\n');
 		const embed = new MessageEmbed()
 			  .setTitle(`${member.displayName}'s avatars`)
 			  .setDescription(`Avatar ID: \`${avatar}\``)
