@@ -31,14 +31,7 @@ module.exports = client => {
 		interval: 60*30,
 		action: () => {
 			const quote = chance.weighted(client.config.status.statuses, client.config.status.weights);
-			client.user.setPresence({
-				status: 'online',
-				afk: false,
-				game: {
-					name: quote,
-					type: 0
-				}
-			});
+			client.user.setActivity(quote.quote, { type: quote.type, url: quote.url || null });
 		}
 	};
 };
