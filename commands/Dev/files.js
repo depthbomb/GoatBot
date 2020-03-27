@@ -41,7 +41,9 @@ exports.run = async (client, message, args, level) => {
 	const dirs = {
 		tmp: client.tmpPath,
 		logs: path.join(client.storagePath, 'logs'),
-		commands: path.join(client.rootPath, 'commands')
+		tasks: path.join(client.rootPath, 'tasks'),
+		events: path.join(client.rootPath, 'events'),
+		commands: path.join(client.rootPath, 'commands'),
 	};
 	const directory = dirs[args.join(' ').trim()] || false;
 

@@ -37,8 +37,8 @@ exports.run = async (client, message, args, level) => {
 			return client.msg(message, 'red', 'error', 'Your reminder message is too long.');
 
 		let matches = timeFormatRegex.exec(inputFormat);
-			matches.shift();					//	Remove first item from matches (full group match, useless in this case)
-			matches = matches.filter(Boolean);	//	Remove all undefined/blank/false values
+			matches.shift(); // Remove first item from matches (full group match, useless in this case)
+			matches = matches.filter(Boolean); // Remove all undefined/blank/false values
 
 		let arrival;
 		let duration = 0;
