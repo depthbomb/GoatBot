@@ -22,7 +22,6 @@
 */
 
 const cooldowns = {};
-const Patron = require('@models/Patron');
 const ms = require('ms');
 const { MessageEmbed } = require('discord.js');
 module.exports = (client, message) => {
@@ -37,7 +36,8 @@ module.exports = (client, message) => {
 	if (channelId === client.config.refugeeChannel || channelId === client.config.kennelChannel)
 		setTimeout(() => message.delete(), (600*1000));
 
-	if (message.author.bot || message.system || message.channel.type === 'dm') return;
+	if (message.author.bot || message.system) return;
+	if (message.channel.type === 'dm') return message.channel.send('I will not respond to commands and messages while in a DM. You can find me in the Caprine.net Discord server here: https://discord.gg/xw624a8');
 
 	const isOwner       = (userId === client.config.ownerId);
 	const level         = client.permLevel(message);
@@ -84,7 +84,7 @@ module.exports = (client, message) => {
 	*	Non-command messages
 	*/
 	if(messageContent.indexOf(client.config.prefix) !== 0) {
-		if (messageContent.includes('discord.gg') || messageContent.includes('invite')) {
+		if (messageContent.includes('discord') && messageContent.includes('invite')) {
 			if (
 				null !== messageContent.match(/^(https?:\/\/)?discord\.gg(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig) ||
 				null !== messageContent.match(/^(https?:\/\/)?discord\.gg\/invite\/(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig) ||
@@ -100,44 +100,17 @@ module.exports = (client, message) => {
 				}
 			}
 		}
-
-		if (message.guild) {
-			const cfg = client.config.store;
-			// if (!cfg.excludeChannels.includes(channelId)) {
-			// 	const now = client.timestamp();
-			// 	const goldCooldown = (client.timestamp() + cfg.cooldown);
-			// 	Patron.findOne({ userId }, 'gold earnAgain enabled', (err, patron) => {
-			// 		if (err) throw new Error(err);
-			// 		if (!patron) {
-			// 			Patron.create({ userId, earnAgain: goldCooldown }).catch(err => {
-			// 				throw new Error(err);
-			// 			});
-			// 		} else {
-			// 			if (patron.enabled && patron.earnAgain <= now) {
-			// 				const pendingGold = client.randomInt(cfg.gold[0], cfg.gold[1]);
-			// 				patron.gold = patron.gold + pendingGold;
-			// 				patron.earnAgain = goldCooldown;
-			// 				patron.save((err, newPatron) => {
-			// 					if (err) throw new Error(err);
-			// 					console.log(message.member.displayName, 'has earned', pendingGold, 'gold');
-			// 				});
-			// 			}
-			// 		}
-			// 	});
-			// }
-		}
-
 		return;
 	}
 
-	// If the command exists, **AND** the user has permission, run it.
+	// If the command exists AND the user has permission, run it.
 	if (cmd) {
 		if (
-			//	Prevent commands from being used in refugee camp
+			// Prevent commands from being used in refugee camp
 			channelId === '431266723736322048' ||
-			//	Prevent commands from being used outside of guilds
+			// Prevent commands from being used outside of guilds
 			!message.guild ||
-			//	Prevent commands from being used in the Kennel if the command is not !escape and the user is not elevated
+			// Prevent commands from being used in the Kennel if the command is not !escape and the user is not elevated
 			(cmd.help.name !== 'escape' && channelId === '481201307257012262' && level < 3)
 		) return;
 
