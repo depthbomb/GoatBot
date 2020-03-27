@@ -24,7 +24,7 @@
 exports.run = (client, message, args, level) => {
 	let num;
 	if (args.length !== 1) {
-		num = 10;				//	Default to 10 messages
+		num = 10; // to 10 messages
 	} else {
 		num = parseInt(args[0]);
 	}
@@ -33,7 +33,7 @@ exports.run = (client, message, args, level) => {
 
 	let n = 0;
 	message.delete().then(() => {
-		message.channel.message.fetch({ limit: num }).then(messages => {
+		message.channel.messages.fetch({ limit: num }).then(messages => {
 			client.disableLog = true;
 			for (let msg of messages) {
 				msg.delete().then(() => {
