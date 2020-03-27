@@ -27,8 +27,8 @@ module.exports = (client, oldMember, newMember) => {
 	const oldRolesArray = [];
 	const newRolesArray = [];
 
-	oldMember.roles.forEach(role => oldRolesArray.push(role.name));
-	newMember.roles.forEach(role => newRolesArray.push(role.name));
+	oldMember.roles.cache.forEach(role => oldRolesArray.push(role.name));
+	newMember.roles.cache.forEach(role => newRolesArray.push(role.name));
 
 	table.push(
 		{ 'Name': [oldMember.displayName, newMember.displayName] },
