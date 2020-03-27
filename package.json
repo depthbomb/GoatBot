@@ -23,7 +23,7 @@
 		"start": "node ."
 	},
 	"_moduleAliases": {
-		"@models": "src/database/models"
+		"@models": "database/models"
 	},
 	"dependencies": {
 		"ascii-table": "0.0.9",

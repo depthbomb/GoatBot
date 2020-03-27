@@ -72,8 +72,7 @@ class GoatBot extends Discord.Client {
 		this.heartbeat   = 0;
 
 		this.rootPath    = __dirname;
-		this.appPath     = path.join(this.rootPath, 'src');
-		this.webPath     = path.join(this.appPath, 'web');
+		this.appPath     = path.join(this.rootPath, 'bot');
 		this.storagePath = path.join(this.rootPath, 'storage');
 		this.tmpPath     = path.join(this.storagePath, 'tmp');
 		this.dbPath      = path.join(this.storagePath, 'database');
@@ -174,7 +173,7 @@ const client = new GoatBot({
 });
 client.started = client.timestamp();
 
-require(`${client.appPath}/functions.js`)(client);
+require(`${client.rootPath}/functions.js`)(client);
 
 const init = () => new Listr([
 	{
@@ -211,14 +210,14 @@ const init = () => new Listr([
 	{
 		title: 'Loading commands',
 		task: () => {
-			const commandsRoot = path.join(client.appPath, 'commands');
+			const commandsRoot = path.join(client.rootPath, 'commands');
 			const categories = fs.readdirSync(commandsRoot)
 				  .filter(file => fs.statSync(path.join(commandsRoot, file)).isDirectory());
 			for (let folder of categories) {
-				const commandFiles = fs.readdirSync(`${client.appPath}/commands/${folder}/`);
+				const commandFiles = fs.readdirSync(`${client.rootPath}/commands/${folder}/`);
 				for (let file of commandFiles) {
 					try {
-						const props = require(`${client.appPath}/commands/${folder}/${file}`);
+						const props = require(`${client.rootPath}/commands/${folder}/${file}`);
 						if (props.conf.enabled) {
 							if (file.split('.').slice(-1)[0] !== 'js') return;
 							client.commands.set(props.help.name, props);
@@ -234,13 +233,13 @@ const init = () => new Listr([
 	{
 		title: 'Loading events',
 		task: async () => {
-			const eventFiles = await readdir(`${client.appPath}/events/`);
+			const eventFiles = await readdir(`${client.rootPath}/events/`);
 			for (let file of eventFiles) {
 				try {
 					const eventName = file.split('.')[0];
-					const event = require(`${client.appPath}/events/${file}`);
+					const event = require(`${client.rootPath}/events/${file}`);
 					client.on(eventName, event.bind(null, client));
-					delete require.cache[require.resolve(`${client.appPath}/events/${file}`)];
+					delete require.cache[require.resolve(`${client.rootPath}/events/${file}`)];
 				} catch (e) {
 					throw new Error(e);
 				}
@@ -250,10 +249,10 @@ const init = () => new Listr([
 	{
 		title: 'Loading tasks',
 		task: async () => {
-			const taskFiles = await readdir(`${client.appPath}/tasks/`);
+			const taskFiles = await readdir(`${client.rootPath}/tasks/`);
 			for (let file of taskFiles) {
 				try {
-					const imported = require(`${client.appPath}/tasks/${file}`)(client);
+					const imported = require(`${client.rootPath}/tasks/${file}`)(client);
 					const task = Promise.resolve(imported);
 					task.then((t) => {
 						if (t.enabled) {
@@ -267,7 +266,7 @@ const init = () => new Listr([
 							storedTask.lastRan = 0;
 						}
 					});
-					delete require.cache[require.resolve(`${client.appPath}/tasks/${file}`)];
+					delete require.cache[require.resolve(`${client.rootPath}/tasks/${file}`)];
 				} catch (e) {
 					throw new Error(e);
 				}
