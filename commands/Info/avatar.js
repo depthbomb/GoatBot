@@ -38,8 +38,7 @@ exports.run = async (client, message, args, level) => {
 
 	if (member) {
 		const defaultAvatarUrl = member.user.defaultAvatarURL;
-		const displayAvatarUrl = member.user.displayAvatarURL({ dynamic: true });
-		const avatarURL        = member.user.avatarURL({ dynamic: true });
+		const displayAvatarUrl = member.user.displayAvatarURL({ dynamic: true, size: 1024 });
 		const avatar           = member.user.avatar;
 
 		const urls = [
