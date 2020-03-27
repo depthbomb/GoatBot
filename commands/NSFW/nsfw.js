@@ -25,11 +25,11 @@ exports.run = (client, message, args, level) => {
 	const nsfwRole = message.member.guild.roles.cache.find(r => r.name === 'NSFW');
 	const lenny = '( ͡° ͜ʖ ͡°)';
 	if (message.member.roles.cache.find(r => r.name === 'NSFW')) {
-		message.member.removeRole(nsfwRole, 'Via GoatBot!').then(() => {
+		message.member.roles.remove(nsfwRole, 'Via GoatBot!').then(() => {
 			return message.reply('Your access to the NSFW channels has been revoked.');
 		});
 	} else {
-		message.member.addRole(nsfwRole, 'Via GoatBot!').then(() => {
+		message.member.roles.add(nsfwRole, 'Via GoatBot!').then(() => {
 			return message.reply(`You have been given access to the NSFW channels. Have fun ${lenny}\n\n_Abuse of this command, such as using it frequently for no reason, will result in you being blacklisted from using it. If you do not wish to see the content in the channels, then don't bother joining._`);
 		});
 	}
