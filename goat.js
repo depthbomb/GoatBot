@@ -56,11 +56,12 @@ console.log(chalk.bgCyan.whiteBright(ascii.join('\n')));
 class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
+		this.config      = require('./config.js').config;
+
 		this.online      = false;
 		this.started     = 0;
 
-		this.localMode   = process.platform === 'win32';
-		this.config      = require('./config.js').config;
+		this.localMode   = this.config.dev;
 
 		this.commands    = new Discord.Collection();
 		this.aliases     = new Discord.Collection();
