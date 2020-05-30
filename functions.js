@@ -130,8 +130,8 @@ module.exports = client => {
 				.setDescription(`User \`${member.displayName}\` has been kenneled by **${issuer}**`)
 				.addField('Reason', reason);
 
-			member.removeRole(nsfwRole, 'Removed due to kenneling').catch(() => {});
-			member.addRole(kennelRole, reason).then(() => {
+			member.roles.remove(nsfwRole, 'Removed due to kenneling').catch(() => {});
+			member.roles.add(kennelRole, reason).then(() => {
 				member.setDeaf(true, 'Deafened due to kenneling').catch(() => {});
 				member.setMute(true, 'Muted due to kenneling').catch(() => {});
 				kennelChannel.send({ embed }).then(m => {

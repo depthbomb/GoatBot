@@ -46,8 +46,7 @@ module.exports = (client, message) => {
 	let logPrefix = [];
 	let username = message.member !== null ? message.member.displayName : message.author.tag;
 
-	if (message.member.guild.available)
-		logPrefix.push(`[${message.member.guild.name}]`);
+	if (message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
 
 	logPrefix.push(`#${message.channel.name}`);
 

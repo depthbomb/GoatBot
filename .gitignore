@@ -1,6 +1,7 @@
 node_modules
 commands.json
 tasks.json
+export.json
 config.js
 /storage/logs/*.log
 /storage/logs/crash/*.log

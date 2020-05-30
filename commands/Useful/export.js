@@ -21,49 +21,63 @@
 |--------------------------------------------------------------------------
 */
 
+const fs = require('fs');
 const path = require('path');
-const qr = require('qrcode');
+
+const HTML = ''
+
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
-	const text = args.slice(0).join(' ') || (() => { return });
-	const imageName = `${client.uuid()}.png`;
-	const imagePath = path.join(client.tmpPath, imageName);
-	const options = {
-		margin: 2,
-		scale: 32,
-		color: {
-			dark: client.colors.brand,
-			light: '#ffffffff'
+	let numMessages = parseInt(args.join(' ').trim()) || 100;
+	if (numMessages > 500) numMessages = 500;
+	if (numMessages < 1) numMessages = 1;
+
+	const channel  = message.channel;
+	const id       = channel.id;
+	channel.messages.fetch({ limit: numMessages }).then(msgs => {
+		const data = {
+			channel: {
+				id: channel.id,
+				name: channel.name,
+				topic: channel.topic
+			 },
+			messages: []
+		};
+		for (let msg of msgs.array()) {
+			data.messages.push({
+				author: {
+					username: msg.member.displayName,
+					avatar: msg.author.displayAvatarURL({ size: 64, dynamic: true }),
+					color: msg.member.roles.highest.hexColor
+				},
+				message: msg.content,
+				attachments: msg.attachments,
+				created: msg.createdTimestamp
+			});
 		}
-	};
-	let msg = await message.channel.send('Generating...');
-	qr.toFile(imagePath, text, options, err => {
-		if (err) return msg.edit(err.message);
-		msg.delete().then(msg => {
-			msg.channel.send({ files: [{ attachment: imagePath, name: imageName }] });
+
+		fs.writeFile('export.json', JSON.stringify(data), err => {
+			if (err) throw new Error(err);
 		});
 	});
 };
 
 exports.conf = {
 	enabled: true,
-	cooldown: 5,
+	cooldown: 60,
 	globalCd: false,
-	aliases: [
-		'qrcode'
-	],
+	aliases: [],
 	permLevel: 0
 };
 
 exports.help = {
-	name: 'qr',
+	name: 'export',
 	category: 'Useful',
-	description: 'Generates a QR code image from supplied text',
-	usage: 'qr [text]',
+	description: 'Exports N amount of messages in the channel to a file',
+	usage: 'export [number]',
 	params: {
-		'text': 'Text to encode into the QR code'
+		'number': 'Number of messages to export. Max 500, default of 100'
 	},
 	examples: [
-		'qr hewwo',
+		'export 150',
 	]
 };
