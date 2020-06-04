@@ -31,9 +31,15 @@ exports.run = async (client, message, args, level) => {
 	return message.channel.send({ embed }).then(msg => {
 		msg.react('🛑').then(() => {
 			const filter = (r, u) => r.emoji.name === '🛑' && u.id === client.config.ownerId;
-			const collector = msg.createReactionCollector(filter, { time: 10000 });
-				  collector.on('collect', async r => await exec('pm2', ['stop', 'goat']));
-				  collector.on('end', c => msg.delete());
+			const collector = msg.createReactionCollector(filter, { time: 10001 });
+			collector.on('collect', async r => {
+				if (process.platform === "win32") {
+					process.exit(0);
+				} else {
+					await exec('pm2', ['stop', 'goat']);
+				}
+			});
+			collector.on('end', c => msg.delete());
 		});
 	});
 };
@@ -47,7 +53,7 @@ exports.conf = {
 exports.help = {
 	name: 'shutdown',
 	category: 'Dev',
-	description: 'Stops the bot via PM2',
+	description: 'Stops the bot, via PM2 if non-Windows platform',
 	usage: 'shutdown',
 	params: {},
 	examples: [
