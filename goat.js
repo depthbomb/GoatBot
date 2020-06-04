@@ -142,7 +142,8 @@ const client = new GoatBot({
 });
 client.started = client.timestamp();
 
-require(`${client.rootPath}/functions.js`)(client);
+require(`${client.rootPath}/utils.js`)(client);
+require(`${client.rootPath}/prototypes.js`)(client);
 
 const init = () => new Listr([
 	{

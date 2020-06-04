@@ -63,7 +63,7 @@ exports.run = async (client, message, args, level) => {
 			}
 
 			msg.edit('🎉 Giveaway! 🎉', { embed });
-		}, 2000);
+		}, 5000);
 
 		collector.on('collect', r => {
 			const userId = r.users.last().id;	//	Get the latest user who reacted
