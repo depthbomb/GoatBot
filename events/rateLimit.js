@@ -22,5 +22,5 @@
 */
 
 module.exports = (client, rateLimitInfo) => {
-	client.log('event', `I'm being rate limited: [${rateLimitInfo.method}] ${rateLimitInfo.path} -> ${rateLimitInfo.limit}`)
+	client.log.info(`I'm being rate limited: [${rateLimitInfo.method}] ${rateLimitInfo.path} -> ${rateLimitInfo.limit}`)
 };

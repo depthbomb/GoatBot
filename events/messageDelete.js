@@ -39,6 +39,6 @@ module.exports = (client, message) => {
 	else if (attachmentWithMessage) logMessage = `${message.author.username}'s attachment [${message.attachments.first().url}] with message [${message.content}] was deleted in ${message.channel.name}`;
 	else logMessage = `${message.author.username}'s message [${message.content}] was deleted in ${message.channel.name}`;
 
-	client.log('event', logMessage);
+	client.log.info(logMessage);
 	client.logAction('Message deleted', logMessage, client.colors.default, message.author.tag, message.author.avatarURL({ dynamic: true }));
 };

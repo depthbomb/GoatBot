@@ -30,12 +30,12 @@ require('module-alias/register');
 const fs = require('fs');
 const path = require('path');
 const Listr = require('listr');
-const chalk = require('chalk');
-const Discord = require('discord.js');
-const { promisify } = require('util');
 const moment = require('moment');
+const winston = require('winston');
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
+const Discord = require('discord.js');
+const { promisify } = require('util');
 const readdir = promisify(require('fs').readdir);
 const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
 				"│                                                                         │",
@@ -51,7 +51,7 @@ const ascii = ["┌────────────────────�
 				"├─────────────────────────────────────────────────────────────────────────┤",
 				"│            « Made by depthbomb#0163, powered by goat butts »            │",
 				"└─────────────────────────────────────────────────────────────────────────┘"];
-console.log(chalk.bgCyan.whiteBright(ascii.join('\n')));
+console.log(ascii.join('\n'));
 
 class GoatBot extends Discord.Client {
 	constructor (options) {
@@ -73,12 +73,13 @@ class GoatBot extends Discord.Client {
 		this.heartbeat   = 0;
 
 		this.rootPath    = __dirname;
-		this.appPath     = path.join(this.rootPath, 'bot');
+		this.binPath     = path.join(this.rootPath, 'bin');
 		this.storagePath = path.join(this.rootPath, 'storage');
 		this.tmpPath     = path.join(this.storagePath, 'tmp');
 		this.dbPath      = path.join(this.storagePath, 'database');
 		this.cachePath   = path.join(this.storagePath, 'cache');
 		this.dlPath      = path.join(this.storagePath, 'downloads');
+		this.rsrcPath    = path.join(this.rootPath, 'resources');
 		this.colors      = {
 			brand:       this.config.color,
 			yellow:      '#ffb901',
@@ -110,48 +111,15 @@ class GoatBot extends Discord.Client {
 
 			return 0;
 		};
-		this.log         = (type, message, writeFile = !client.localMode) => {
-			let logName = type + '.log';
-			let logMsg = `[${moment().format('M/D/YY HH:mm:ss')}] [${type}] ${message}`;
-			let logEntry = "\n" + logMsg;
-			let logAsFile = ['msg', 'event', 'bot', 'system', 'warn', 'error', 'task'];
-	
-			switch (type) {
-				case 'msg':
-					console.log(chalk.yellowBright(logMsg));
-					break;
-				case 'event':
-					console.log(chalk.magentaBright(logMsg));
-					break;
-				case 'system':
-					console.log(chalk.bgBlueBright.whiteBright(logMsg));
-					break;
-				case 'warn':
-					console.log(chalk.bgYellowBright.black(logMsg));
-					break;
-				case 'error':
-					console.log(chalk.bgRedBright.whiteBright(logMsg));
-					break;
-				case 'task':
-					console.log(chalk.bgMagentaBright.whiteBright(logMsg));
-					break;
-				case 'debug':
-					console.log(chalk.bgBlackBright.whiteBright(logMsg));
-					break;
-				case 'bot':
-				default:
-					console.log(chalk.cyanBright(logMsg));
-					break;
-			}
-	
-			if (logAsFile.includes(type) && writeFile) {
-				const logFile = `${client.storagePath}/logs/${logName}`;
-				if (!fs.existsSync(logFile)) fs.writeFile(logFile, "", () => {});
-				fs.appendFile(logFile, logEntry, (err) => {
-					if (err) throw new Error(err);
-				});
-			}
-		};
+		this.log = winston.createLogger({
+			level: this.localMode ? 'debug' : 'info',
+			format: winston.format.json(),
+			transports: [
+				new winston.transports.File({ filename: './storage/logs/error.log', level: 'error' }),
+				new winston.transports.File({ filename: './storage/logs/combined.log' }),
+				new winston.transports.Console({ format: winston.format.simple() })
+			],
+		});
 	}
 }
 
@@ -303,7 +271,7 @@ const init = () => new Listr([
 .run()
 .then(() => client.login(client.config.token))
 .catch(err => {
-	console.error(err);
+	client.log.error(err);
 	client.destroy();
 	process.exit(1);
 });
@@ -314,16 +282,16 @@ init();
 * Listen for CTRL+C and shut the bot down gracefully
 */
 process.on('SIGINT', () => {
-	console.log(`\n${chalk.bgRedBright.whiteBright('Caught shutdown signal')}`);
+	client.log.info('Caught shutdown signal');
 	client.destroy();
-	console.log(`${chalk.bgYellowBright.whiteBright('Client destroyed, exiting...')}`)
+	client.log.info('Client destroyed, exiting...')
 	process.exit(1);
 });
 
 process.on('uncaughtException', err => {
 	const crashFile = path.join(client.storagePath, 'logs', 'crash', `EXCEPTION_${moment().format('M-D-YY')}.log`);
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
-	console.error('Uncaught Exception: ', errorMsg);
+	client.log.error('Uncaught Exception: ' + errorMsg);
 	fs.appendFile(crashFile, 'Uncaught Exception: ' + errorMsg + '\n', () => {
 		client.destroy();
 		process.exit(1);
@@ -333,7 +301,7 @@ process.on('uncaughtException', err => {
 process.on('unhandledRejection', err => {
 	const crashFile = path.join(client.storagePath, 'logs', 'crash', `REJECTION_${moment().format('M-D-YY')}.log`);
 	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
-	console.error('Uncaught Promise Error: ', errorMsg);
+	client.log.error('Uncaught Promise Error: ' + errorMsg);
 	fs.appendFile(crashFile, 'Uncaught Promise Error: ' + errorMsg + '\n', () => {
 		client.destroy();
 		process.exit(1);

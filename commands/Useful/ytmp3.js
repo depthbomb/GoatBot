@@ -21,47 +21,59 @@
 |--------------------------------------------------------------------------
 */
 
+const fs = require('fs'),
+	path = require('path'),
+	execa = require('execa'),
+	request = require('request');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
-	const mention = args[0];
-	
-	let member;
-	if (mention.match(/<@!?\d{17,19}>/g)) {
-		member = message.mentions.members.first();
-	} else {
-		member = message.guild.members.cache.find(m => m.id === mention);
-	}
+	if(args.length === 0) return;
+	const url = args[0];
+	const downloadPath = path.join(client.tmpPath, client.uuid() + '.mp3');
+	const ytdlArgs = [
+		'-x',
+		'-f',
+		'bestaudio',
+		'--audio-format',
+		'mp3',
+		'--geo-bypass',
+		'--no-check-certificate',
+		url,
+		'--output',
+		downloadPath,
+	];
 
-	if (member) {
-		if (member.roles.cache.find(r => r.name === 'Refugee')) {
-			const memberRole = message.member.guild.roles.cache.find(r => r.name === 'Member');
-			member.roles.set([memberRole.id]).then(mem => client.msg(message, 'green', 'success', `${member.displayName} has been approved!`));
-		} else {
-			client.msg(message, 'red', 'error', `${member.displayName} is not a refugee, cannot approve!`)
-		}
-	} else {
-		return message.reply(`Could not find member.`);
-	}
+	let msg = await message.channel.send('Grabbing video info...');
+
+	const { stdout, stderr } = await execa(path.join(client.binPath, 'youtube-dl.exe'), ytdlArgs);
+
+	msg.delete().then(m => {
+		return message.channel.send({
+			files: [{
+				attachment: downloadPath
+			}]
+		});
+	});
 };
 
 exports.conf = {
 	enabled: true,
-	cooldown: 1.5,
+	cooldown: 15,
+	globalCd: true,
 	aliases: [
-		'app',
+		'youtubemp3'
 	],
-	permLevel: 2,
+	permLevel: 0
 };
 
 exports.help = {
-	name: 'approve',
-	category: 'Moderation',
-	description: 'Approves a refugee',
-	usage: 'approve [@user]',
+	name: 'ytmp3',
+	category: 'Useful',
+	description: 'Downloads the ',
+	usage: 'ytmp3 [YouTube URL]',
 	params: {
-		'@user': 'Refugee user'
+		'YouTube URL': 'URL of the YouTube video that you want to extract the MP3 from'
 	},
 	examples: [
-		'approve @Username#0000'
+		'ytmp3 https://www.youtube.com/watch?v=ZJL4UGSbeFg',
 	]
 };

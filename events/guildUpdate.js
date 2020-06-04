@@ -34,6 +34,6 @@ module.exports = (client, oldGuild, newGuild) => {
 		{ 'Security Level': [oldGuild.verificationLevel, newGuild.verificationLevel] }
 	);
 
-	client.log('event', `Guild [${oldGuild.name}] was updated:`);
+	client.log.info(`Guild [${oldGuild.name}] was updated:`);
 	console.log(table.toString());
 };

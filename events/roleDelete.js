@@ -22,6 +22,5 @@
 */
 
 module.exports = (client, role) => {
-	const chalk = require('chalk');
-	client.log('event', `Role ${chalk.bgHex(role.hexColor).whiteBright(role.name)} was deleted from guild ${role.guild.name}.`);
+	client.log.info(`Role ${role.name} was deleted from guild ${role.guild.name}.`);
 };

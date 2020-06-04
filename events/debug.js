@@ -22,5 +22,5 @@
 */
 
 module.exports = (client, info) => {
-	if (client.config.debug) client.log('debug', info);
+	if (client.config.debug) client.log.info(info);
 };

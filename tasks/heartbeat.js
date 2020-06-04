@@ -31,7 +31,7 @@ module.exports = client => {
 			const heartbeat = client.heartbeat;
 			const time = Math.floor(new Date() / 1000);
 			if ((heartbeat + 35) < time) {
-				client.log('error', `Last heartbeat is behind by ${time - heartbeat} seconds. Restarting bot...`);
+				client.log.error(`Last heartbeat is behind by ${time - heartbeat} seconds. Restarting bot...`);
 				client.destroy();
 				process.exit(1);
 			} else {

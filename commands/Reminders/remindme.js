@@ -71,7 +71,7 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	cooldown: 60,
+	cooldown: 10,
 	aliases: [
 		'remind',
 		'reminder'

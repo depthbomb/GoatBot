@@ -21,7 +21,10 @@
 |--------------------------------------------------------------------------
 */
 
-const fs = require('fs'), path = require('path'), plural = require('pluralize'), pretty = require('pretty-bytes');
+const fs = require('fs'),
+	path = require('path'),
+	plural = require('pluralize'),
+	pretty = require('pretty-bytes');
 const walkSync = (dir, filelist = []) => {
 	fs.readdirSync(dir).forEach(file => {
 		filelist = fs.statSync(path.join(dir, file)).isDirectory()

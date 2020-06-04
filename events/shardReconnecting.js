@@ -23,5 +23,5 @@
 
 module.exports = (client, id) => {
 	client.online = false;
-	client.log('system', `Reconnecting to shard ${id}...`);
+	client.log.info(`Reconnecting to shard ${id}...`);
 };

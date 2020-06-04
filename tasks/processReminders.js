@@ -22,14 +22,13 @@
 */
 
 const Reminder = require('@models/Reminder');
-const moment = require('moment');
 const { MessageEmbed } = require('discord.js');
 module.exports = client => {
 	return task = {
 		name: 'processReminders',
 		description: 'Processes due reminders',
 		enabled: true,
-		interval: 5,
+		interval: 10,
 		action: () => {
 			const now = client.timestamp();
 			const query = { arrival: { $lte: now } };
@@ -38,11 +37,11 @@ module.exports = client => {
 				for (let rem of reminders) {
 					const uuid = rem._id;
 					const userId = rem.userId;
-					const user   = client.users.find(u => u.id == userId);
+					const user = client.users.cache.find(u => u.id == userId);
 					const embed = new MessageEmbed()
-						  .setTitle(`Your reminder`)
-						  .setColor(client.colors.brand)
-						  .setDescription(rem.reminderMessage);
+						.setTitle(`Your reminder`)
+						.setColor(client.colors.brand)
+						.setDescription(rem.reminderMessage);
 
 					Reminder.findOneAndRemove({ _id: uuid }, (err, doc) => {
 						if (err) throw new Error(err);

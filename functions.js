@@ -82,7 +82,7 @@ module.exports = client => {
 			'error': client.emojis.cache.find(e => e.name === 'caprineClose'),
 			'warning': client.emojis.cache.find(e => e.name === 'caprineWarning'),
 			'success': client.emojis.cache.find(e => e.name === 'caprineSuccess'),
-			'info': client.emojis.fcache.ind(e => e.name === 'caprineInfo'),
+			'info': client.emojis.cache.find(e => e.name === 'caprineInfo'),
 			'close': client.emojis.cache.find(e => e.name === 'caprineClose')
 		};
 		const color = colors[type];
