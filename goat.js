@@ -261,32 +261,7 @@ const init = () => new Listr([
 				}
 			}
 		}
-	},
-	{
-		title: 'Pre-ready tasks',
-		task: () => {
-			return new Listr([
-				{
-					title: 'Dumping command info',
-					task: () => {
-						const commands = JSON.stringify(client.commands.array());
-						fs.writeFile('commands.json', commands, err => {
-							if (err) throw new Error(err);
-						});
-					}
-				},
-				{
-					title: 'Dumping task info',
-					task: () => {
-						const tasks = JSON.stringify(client.tasks);
-						fs.writeFile('tasks.json', tasks, err => {
-							if (err) throw new Error(err);
-						});
-					}
-				}
-			], { exitOnError: false });
-		}
-	},
+	}
 ])
 .run()
 .then(() => client.login(client.config.token))
