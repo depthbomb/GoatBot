@@ -30,8 +30,8 @@ require('module-alias/register');
 const fs = require('fs');
 const path = require('path');
 const Listr = require('listr');
+const log4js = require('log4js');
 const moment = require('moment');
-const winston = require('winston');
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
 const Discord = require('discord.js');
@@ -68,6 +68,7 @@ class GoatBot extends Discord.Client {
 		this.tasks       = [];
 		this.store       = { lockdowns: { } };
 		this.db;
+		this.log;
 
 		this.disableLog  = false;
 		this.heartbeat   = 0;
@@ -111,15 +112,6 @@ class GoatBot extends Discord.Client {
 
 			return 0;
 		};
-		this.log = winston.createLogger({
-			level: this.localMode ? 'debug' : 'info',
-			format: winston.format.json(),
-			transports: [
-				new winston.transports.File({ filename: './storage/logs/error.log', level: 'error' }),
-				new winston.transports.File({ filename: './storage/logs/combined.log' }),
-				new winston.transports.Console({ format: winston.format.simple() })
-			],
-		});
 	}
 }
 
@@ -146,6 +138,33 @@ require(`${client.rootPath}/utils.js`)(client);
 require(`${client.rootPath}/prototypes.js`)(client);
 
 const init = () => new Listr([
+	{
+		title: 'Setting up logging',
+		task: () => {
+			log4js.configure({
+				appenders: {
+					file: {
+						type: 'file',
+						filename: path.join(client.storagePath, 'logs', 'GoatBot.log'),
+						maxLogSize: 1*1024*1024,
+						backups: 1,
+						compress: true,
+						encoding: 'utf-8',
+						mode: 0o0640,
+						flags: 'w+'
+					},
+					out: {
+						type: 'stdout'
+					}
+				},
+				categories: {
+					default: { appenders: ['file', 'out'], level: (client.localMode ? 'debug' : 'info') }
+				}
+			});
+
+			client.log = log4js.getLogger('default');
+		}
+	},
 	{
 		title: 'Cleaning up tmp files',
 		skip: () => {

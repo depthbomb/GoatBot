@@ -46,18 +46,26 @@ module.exports = client => {
 				type: 'tf2',
 				host: client.config.serverInfo.address
 			}).then(state => {
-				const padding = 15;
+				const padding    = 15;
 				const serverName = state.name;
 				const serverMap  = state.map;
 				const maxPlayers = state.maxplayers;
 				const players    = state.players;
+
+				const embed = new MessageEmbed()
+					.setTitle(serverName)
+					.setColor(client.colors.brand)
+					.setFooter('Updated')
+					.setTimestamp()
+					.addField('Players', `${players.length}/${maxPlayers}`, true)
+					.addField('Map', serverMap, true);
 
 				if (players.length > 0) {
 					// Sort the players by score (descending)
 					players.sort((a, b) => b.score - a.score);
 
 					let playersList  = [
-						`${'Name'.padEnd(20)}${'Score'.padEnd(padding)}Time`
+						`${'Name'.padEnd(padding)}${'Score'.padEnd(padding)}Time`
 					];
 
 					for (let player of players) {
@@ -69,14 +77,11 @@ module.exports = client => {
 						}
 						playersList.push(line);
 					}
-				}
 
-				const embed = new MessageEmbed()
-					.setTitle(serverName)
-					.setColor(client.colors.brand)
-					.addField('Players', `${players.length}/${maxPlayers}`, true)
-					.addField('Map', serverMap, true)
-					.addField('Players List', players.length > 0 ? playersList.join('\n') : 'Nobody here but us chickens.');
+					embed.addField('Players List', players.length > 0 ? playersList.join('\n') : `Nobody here but us chickens. Why not [hop on?](steam://connect/${client.config.serverInfo.address}:27015)`);
+				} else {
+					embed.addField('Players List', `Nobody here but us chickens. Why not hop on?`)
+				}
 
 				if (infoMessageId !== null) {
 					const messageToEdit = infoChannel.messages.cache.first();
@@ -85,7 +90,7 @@ module.exports = client => {
 					let msg = infoChannel.send({ embed });
 					infoMessageId = msg.id;
 				}
-			}).catch(_ => {});
+			}).catch(_ => console.error(_));
 		}
 	};
 };
