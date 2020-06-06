@@ -21,43 +21,55 @@
 |--------------------------------------------------------------------------
 */
 
-const exec = require('execa');
+const request = require('request');
 const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const embed = new MessageEmbed()
-		  .setColor(client.colors.red)
-		  .setTitle('Pending shutdown')
-		  .setDescription('**Warning!** This will stop the bot process via PM2 and it will not be restarted automatically.\n\nClick 🛑 within **10 seconds** to confirm.')
-	return message.channel.send({ embed }).then(msg => {
-		msg.react('🛑').then(() => {
-			const filter = (r, u) => r.emoji.name === '🛑' && u.id === client.config.ownerId;
-			const collector = msg.createReactionCollector(filter, { time: 10001 });
-			collector.on('collect', async r => {
-				if (process.platform === "win32") {
-					client.destroy();
-					process.exit(0);
-				} else {
-					await exec('pm2', ['stop', 'goat']);
-				}
-			});
-			collector.on('end', c => msg.delete());
-		});
+	if (args.length === 0) return;
+	const keywords = encodeURIComponent(args.join(' ').trim());
+	const uri = 'https://api.gfycat.com/v1/gfycats/search?search_text=' + keywords;
+	request({
+		headers: {
+			'User-Agent': client.config.userAgent
+		},
+		uri,
+		method: 'GET'
+	}, (err, res, body) => {
+		if (err) return client.error(message, err);
+		const data = JSON.parse(body);
+		const gfy = data.gfycats.shuffle()[0];
+		const embed = new MessageEmbed()
+			.setTitle(gfy.title || 'Untitled')
+			.setColor('RANDOM')
+			.setURL(gfy.url)
+			.addField('Tags', gfy.tags.join(', '))
+			.setImage(gfy.max5mbGif);
+		return message.reply({ embed });
 	});
 };
 
 exports.conf = {
 	enabled: true,
-	aliases: [],
-	permLevel: 5,
+	cooldown: 5,
+	globalCd: false,
+	aliases: [
+		'randomgfy',
+		'randomgyf',
+		'rgif',
+		'rgfy',
+		'rgyf',
+	],
+	permLevel: 0,
 };
 
 exports.help = {
-	name: 'shutdown',
-	category: 'Dev',
-	description: 'Stops the bot, via PM2 if non-Windows platform',
-	usage: 'shutdown',
-	params: {},
+	name: 'randomgif',
+	category: 'Random',
+	description: 'Gets a random GIF from Gfycat based on the keywords you provide',
+	usage: 'randomgif [keywords]',
+	params: {
+		'keywords': 'Keywords to search'
+	},
 	examples: [
-		'shutdown'
+		'randomgif goat'
 	]
 };

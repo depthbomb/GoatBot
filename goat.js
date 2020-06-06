@@ -36,6 +36,7 @@ const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
 const Discord = require('discord.js');
 const { promisify } = require('util');
+const NodeCache = require('node-cache');
 const readdir = promisify(require('fs').readdir);
 const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
 				"│                                                                         │",
@@ -82,16 +83,17 @@ class GoatBot extends Discord.Client {
 		this.dlPath      = path.join(this.storagePath, 'downloads');
 		this.rsrcPath    = path.join(this.rootPath, 'resources');
 		this.colors      = {
-			brand:       this.config.color,
-			yellow:      '#ffb901',
+			brand:       '#ea005e',
+			yellow:      '#ffb900',
 			default:     '#99aab5',
 			red:         '#e81123',
-			orange:      '#f7630d',
-			green:       '#10883e',
+			orange:      '#f7630c',
+			green:       '#10893e',
 			blue:        '#0078d7',
-			black:       '#222222'
+			black:       '#111111'
 		};
 
+		this.cache       = new NodeCache({ checkperiod: 60 });
 		this.uuid        = () => uuid();
 		this.timestamp   = () => Math.floor(new Date() / 1000);
 		this.printCmd    = (commandName) => this.config.prefix + commandName;
@@ -248,7 +250,7 @@ const init = () => new Listr([
 							client.tasks.push(t);
 							if (t.hasOwnProperty('start')) t.start();
 							const storedTask = client.tasks[client.tasks.indexOf(t)];
-							setInterval(() => {
+							client.setInterval(() => {
 								t.action();
 								storedTask.lastRan = Math.floor(new Date() / 1000);
 							}, (t.interval * 1000));

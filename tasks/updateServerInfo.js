@@ -29,7 +29,7 @@ module.exports = client => {
 	return task = {
 		name: 'updateServerInfo',
 		description: 'Displays info on the TF2 server in the designated text channel',
-		enabled: true,
+		enabled: false,
 		interval: 60,
 		action: async () => {
 			const infoChannel = client.channels.cache.find(c => c.id === client.config.serverInfo.channel);
