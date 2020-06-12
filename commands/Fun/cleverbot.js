@@ -25,32 +25,38 @@ let state = {};
 const request = require('request');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
-	const msg = encodeURI(args.join(' '));
+	const msg = args.join(' ');
 	const apiKey = client.config.apiKeys.cleverbot;
 	const authorId = message.author.id;
 
-	if (!state.hasOwnProperty(authorId))
-		state[authorId] = '';
+	if (msg === '%debug%') {
+		const debugMessage1 = state[authorId] || 'No conversation state is currently stored for you';
+		const debugMessage2 = `There are currently ${Object.keys(state).length} conversation state(s) stored for ${Object.keys(state).join(', ') || 'nobody'}.`;
+		return message.reply(`${debugMessage1}\n${debugMessage2}`);
+	} else {
+		if (!state.hasOwnProperty(authorId))
+			state[authorId] = '';
 
-	message.channel.startTyping();
+		message.channel.startTyping();
 
-	const uri = `http://www.cleverbot.com/getreply?key=${apiKey}&input=${msg}&cs=${state[authorId]}`;
-
-	request({
-		headers: {
-			'User-Agent': client.config.userAgent
-		},
-		uri: uri,
-		method: 'GET'
-	}, (err, res, body) => {
-		if (err) return client.error(message, err);
-
-		const data = JSON.parse(body);
-		state[authorId] = data.cs;
-
-		message.channel.stopTyping();
-		return message.reply(data.output);
-	});
+		const uri = `http://www.cleverbot.com/getreply?key=${apiKey}&input=${encodeURI(msg)}&cs=${state[authorId]}`;
+	
+		request({
+			headers: {
+				'User-Agent': client.config.userAgent
+			},
+			uri: uri,
+			method: 'GET'
+		}, (err, res, body) => {
+			if (err) return client.error(message, err);
+	
+			const data = JSON.parse(body);
+			state[authorId] = data.cs;
+	
+			message.channel.stopTyping();
+			return message.reply(data.output);
+		});
+	}
 };
 
 exports.conf = {
@@ -67,7 +73,7 @@ exports.conf = {
 
 exports.help = {
 	name: 'cleverbot',
-	category: 'Random',
+	category: 'Fun',
 	description: 'Talk to a bot',
 	usage: 'cleverbot [message]',
 	params: {
