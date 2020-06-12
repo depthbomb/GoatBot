@@ -26,7 +26,7 @@ const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const text = encodeURIComponent(args.join(''));
-	const uri = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${client.config.apiKeys.perspective}`;
+	const uri = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${client.config.apiKeys.googleapis}`;
 
 	let msg = await message.channel.send('Analyzing...');
 	request({
