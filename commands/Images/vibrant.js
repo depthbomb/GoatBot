@@ -32,6 +32,7 @@ const rgbToHex = (r, g, b) => "#" + componentToHex(r) + componentToHex(g) + comp
 exports.run = async (client, message, args, level) => {
 	let imageUrl;
 	if (message.attachments.first()) imageUrl = message.attachments.first().url;
+	else if (message.mentions.members.array().length > 0) imageUrl = message.mentions.members.first().user.displayAvatarURL({ format: 'jpg', size: 512 });
 	else imageUrl = args.join(' ').trim() || message.member.user.displayAvatarURL({ format: 'jpg', size: 512 });
 	if (!imageUrl) return message.reply('Please provide an image source.');
 

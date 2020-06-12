@@ -26,8 +26,11 @@ const jimp = require('jimp');
 exports.run = async (client, message, args, level) => {
 	let imageUrl;
 	if (message.attachments.first()) imageUrl = message.attachments.first().url;
+	else if (message.mentions.members.array().length > 0) imageUrl = message.mentions.members.first().user.displayAvatarURL({ format: 'jpg', size: 512 });
 	else imageUrl = args.join(' ').trim() || message.member.user.displayAvatarURL({ format: 'jpg', size: 512 });
 	if (!imageUrl) return message.reply('Please provide an image source.');
+
+	console.log(imageUrl);
 
 	jimp.read(imageUrl).then(image => {
 		const tmpName = `deepfried_${client.uuid()}.${image.getExtension()}`;
@@ -41,7 +44,7 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	cooldown: 10,
+	cooldown: 5,
 	aliases: [],
 	permLevel: 0,
 };
