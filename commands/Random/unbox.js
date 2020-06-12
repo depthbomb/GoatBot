@@ -47,8 +47,8 @@ const rarities = [
 ];
 let weights = [
 	250,	//	poor
-	1500,	//	common
-	1200,	//	uncommon
+	1400,	//	common
+	1150,	//	uncommon
 	1000,	//	rare
 	700,	//	epic
 	500,	//	legendary
