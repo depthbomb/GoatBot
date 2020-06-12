@@ -21,57 +21,56 @@
 |--------------------------------------------------------------------------
 */
 
-const path = require('path'),
-	execa = require('execa');
+const fs = require('fs'),
+	path = require('path'),
+	https = require('https'),
+	request = require('request');
 exports.run = async (client, message, args, level) => {
 	if(args.length === 0) return;
-	const url = args[0];
-	const downloadPath = path.join(client.tmpPath, client.uuid() + '.mp3');
-	const ytdlArgs = [
-		'-x',
-		'-f',
-		'bestaudio',
-		'--audio-format',
-		'mp3',
-		'--geo-bypass',
-		'--no-check-certificate',
-		url,
-		'--output',
-		downloadPath,
-	];
-
-	let msg = await message.channel.send('Grabbing video info...');
-
-	const { stdout, stderr } = await execa(path.join(client.binPath, 'youtube-dl.exe'), ytdlArgs);
-
-	msg.delete().then(m => {
-		return message.channel.send({
-			files: [{
-				attachment: downloadPath
-			}]
+	const uri = args[0] + '.json';
+	
+	request({
+		uri,
+		method: 'GET'
+	}, (err, res, body) => {
+		if (err) return client.error(message, err);
+		const data = JSON.parse(body)[0].data.children[0].data;
+		const videoName = encodeURIComponent(data.title);
+		const videoFile = data.secure_media.reddit_video.fallback_url;
+		const audioFile = videoFile
+							.replace('DASH_96', 'audio')
+							.replace('DASH_360', 'audio')
+							.replace('DASH_720', 'audio')
+							.replace('DASH_1080', 'audio');
+		
+		https.get(audioFile, res => {
+			if (res.statusCode !== 403) {
+				// video + audio
+			} else {
+				//	video only
+			}
 		});
 	});
 };
 
 exports.conf = {
 	enabled: true,
-	cooldown: 15,
-	globalCd: true,
-	aliases: [
-		'youtubemp3'
-	],
-	permLevel: 0
+	cooldown: 10,
+	globalCd: false,
+	aliases: [],
+	permLevel: 5
 };
 
 exports.help = {
-	name: 'ytmp3',
+	name: 'vreddit',
 	category: 'Useful',
-	description: 'Downloads the audio of a YouTube video',
-	usage: 'ytmp3 [YouTube URL]',
+	description: 'Downloads a Reddit video from its URL',
+	usage: 'vreddit [post URL]',
 	params: {
-		'YouTube URL': 'URL of the YouTube video that you want to extract the MP3 from'
+		'post URL': 'URL of the Reddit video post'
 	},
 	examples: [
-		'ytmp3 https://www.youtube.com/watch?v=ZJL4UGSbeFg',
+		'vreddit https://www.reddit.com/r/Thatsactuallyverycool/comments/h0zm09',
+		'vreddit https://www.reddit.com/h0zm09',
 	]
 };

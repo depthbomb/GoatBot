@@ -93,11 +93,11 @@ class GoatBot extends Discord.Client {
 			black:       '#111111'
 		};
 
-		this.cache       = new NodeCache({ checkperiod: 60 });
-		this.uuid        = () => uuid();
-		this.timestamp   = () => Math.floor(new Date() / 1000);
-		this.printCmd    = (commandName) => this.config.prefix + commandName;
-		this.permLevel   = (message) => {
+		this.cache     = new NodeCache({ checkperiod: 60 });
+		this.uuid      = () => uuid();
+		this.timestamp = () => Math.floor(new Date() / 1000);
+		this.printCmd  = (commandName) => this.config.prefix + commandName;
+		this.permLevel = (message) => {
 			if (message.author.id === client.config.ownerId)
 				return 5;
 
@@ -117,24 +117,8 @@ class GoatBot extends Discord.Client {
 	}
 }
 
-const client = new GoatBot({
-	messageCacheLifetime: 604800,
-	disableEveryone: true,
-	disabledEvents: [
-		'GUILD_MEMBER_SPEAKING',
-		'TYPING_START',
-		'TYPING_STOP',
-		'VOICE_SERVER_UPDATE',
-		'MESSAGE_REACTION_REMOVE',
-		'MESSAGE_REACTION_REMOVE_ALL',
-		'CHANNEL_PINS_UPDATE',
-		'USER_NOTE_UPDATE',
-		'RELATIONSHIP_ADD',
-		'RELATIONSHIP_REMOVE',
-		'WEBHOOKS_UPDATE'
-	],
-});
-client.started = client.timestamp();
+const client = new GoatBot();
+	  client.started = client.timestamp();
 
 require(`${client.rootPath}/utils.js`)(client);
 require(`${client.rootPath}/prototypes.js`)(client);
