@@ -37,7 +37,6 @@ module.exports = (client, message) => {
 		setTimeout(() => message.delete(), (600*1000));
 
 	if (message.author.bot || message.system) return;
-	if (message.channel.type === 'dm') return message.channel.send('I will not respond to commands and messages while in a DM. You can find me in the Caprine.net Discord server here: https://discord.gg/xw624a8');
 
 	const isOwner       = (userId === client.config.ownerId);
 	const level         = client.permLevel(message);
@@ -112,6 +111,10 @@ module.exports = (client, message) => {
 			// Prevent commands from being used in the Kennel if the command is not !escape and the user is not elevated
 			(cmd.help.name !== 'escape' && channelId === '481201307257012262' && level < 3)
 		) return;
+
+		// TODO: Refactor this by adding something like a "allow in DMs" option per command
+		if (message.channel.type === 'dm' && cmd.help.name !== 'help')
+			return message.channel.send('I will not respond to commands and messages while in a DM. You can find me in the Caprine.net Discord server here: https://discord.gg/xw624a8');
 
 		if (level >= cmd.conf.permLevel) {
 			const cooldown = (cmd.conf.cooldown * 1000) || 1500;
