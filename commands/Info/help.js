@@ -57,8 +57,8 @@ exports.run = (client, message, args, level) => {
 			command = client.commands.get(command);
 			if (level < command.conf.permLevel) return;
 
-			let cooldown = command.conf.hasOwnProperty('cooldown') || 1.5;
-			let examples = [];
+			const cooldown = command.conf.hasOwnProperty('cooldown') ? command.conf.cooldown : 1.5;
+			const examples = [];
 			command.help.examples.forEach((element) => {
 				examples.push(`* ${settings.prefix}${element}`)
 			});
