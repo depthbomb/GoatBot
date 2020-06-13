@@ -23,7 +23,7 @@
 
 exports.run = (client, message, args, level) => {
 	const guild = message.member.guild;
-	const members = guild.members.random(Math.ceil(guild.members.size / 2));
+	const members = guild.members.cache.random(Math.ceil(guild.members.cache.size / 2));
 
 	let unlucky = [];
 
