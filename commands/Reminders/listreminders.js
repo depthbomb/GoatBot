@@ -47,7 +47,6 @@ exports.run = async (client, message, args, level) => {
 			return client.msg(message, 'orange', 'warning', 'You do not have any reminders to list.');
 		}
 	});
-	
 };
 
 exports.conf = {

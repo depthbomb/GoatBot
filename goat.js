@@ -57,10 +57,15 @@ console.log(ascii.join('\n'));
 class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
+		this.db;
+		this.log;
+
 		this.config      = require('./config.js').config;
 
+		this.disableLog  = false;
 		this.online      = false;
 		this.started     = 0;
+		this.heartbeat   = 0;
 
 		this.localMode   = this.config.dev;
 
@@ -68,11 +73,8 @@ class GoatBot extends Discord.Client {
 		this.aliases     = new Discord.Collection();
 		this.tasks       = [];
 		this.store       = { lockdowns: { } };
-		this.db;
-		this.log;
 
-		this.disableLog  = false;
-		this.heartbeat   = 0;
+		this.raidMode    = false;
 
 		this.rootPath    = __dirname;
 		this.binPath     = path.join(this.rootPath, 'bin');

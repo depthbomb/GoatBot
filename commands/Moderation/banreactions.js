@@ -53,8 +53,7 @@ exports.run = async (client, message, args, level) => {
 					 .setDescription(`**Error**: ${err.message}`);
 			});
 		} else {
-			await ReactionBan.create({ userId, reason })
-			.then(ban => {
+			await ReactionBan.create({ userId, reason }).then(ban => {
 				embed.setColor(client.colors.red)
 					 .setDescription(`${member.displayName} has been banned from adding reactions.`)
 					 .addField('Reason', ban.reason);
