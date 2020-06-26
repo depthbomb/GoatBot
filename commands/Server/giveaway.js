@@ -43,10 +43,8 @@ exports.run = async (client, message, args, level) => {
 		msg.react('🎉');
 		const collector = msg.createReactionCollector(filter, { time: (giveawayLimit * 1000) });
 
-		let updateTimeLeft = setInterval(() => {
-			timeLeft--;
-		}, 1000);
-		let updateEmbed = setInterval(() => {
+		const updateTimeLeft = setInterval(() => { timeLeft--; }, 1000);
+		const updateEmbed = setInterval(() => {
 			embed = new MessageEmbed()
 				.setTitle(description)
 				.setDescription(`React with 🎉 to enter.`)
@@ -56,7 +54,7 @@ exports.run = async (client, message, args, level) => {
 				embed.addField('Entries', displayEntered.join('\n'));
 			}
 			
-			if (timeLeft < 11) {
+			if (timeLeft <= 15) {
 				embed.setColor('#ff0000').addField('\u200b', '\n***Time\'s almost up!***');
 			} else {
 				embed.setColor(client.colors.default);
@@ -65,8 +63,8 @@ exports.run = async (client, message, args, level) => {
 			msg.edit('🎉 Giveaway! 🎉', { embed });
 		}, 5000);
 
-		collector.on('collect', r => {
-			const userId = r.users.last().id;	//	Get the latest user who reacted
+		collector.on('collect', (r, u) => {
+			const userId = u.id;	//	Get the latest user who reacted
 			if (!entered.includes(userId)) {
 				entered.push(userId);
 				displayEntered.push(`<@${userId}>`);
@@ -111,13 +109,12 @@ exports.help = {
 	name: 'giveaway',
 	category: 'Server',
 	description: 'Starts a giveaway, users can enter by reacting with the appropriate emoji.',
-	usage: 'giveaway [time] [winners] [item]',
+	usage: 'giveaway [time] [item]',
 	params: {
 		'time': 'Time in seconds the giveaway should last for',
-		'winners': 'Number of winners',
 		'items': 'Item being given away'
 	},
 	examples: [
-		'giveaway 60 1 My Virginity'
+		'giveaway 60 My Virginity'
 	]
 };
