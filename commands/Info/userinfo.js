@@ -42,7 +42,7 @@ exports.run = async (client, message, args, level) => {
 		const user = member.user;
 		const embed = new MessageEmbed()
 			  .setAuthor(user.tag + ` (${user.id})`, user.avatarURL({ dynamic: true }))
-			  .setColor(member.colorRole.hexColor)
+			  .setColor(member.displayHexColor)
 			  .addField('Account created', `${moment(user.createdAt).fromNow()}\n(${user.createdAt})`)
 			  .addField('Joined guild', `${moment(member.joinedAt).fromNow()}\n(${member.joinedAt})`)
 			  .addField('Is a bot?', user.bot, true)
