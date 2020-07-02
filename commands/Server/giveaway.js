@@ -94,6 +94,8 @@ exports.run = async (client, message, args, level) => {
 			}
 		});
 	});
+
+	message.delete();
 };
 
 exports.conf = {

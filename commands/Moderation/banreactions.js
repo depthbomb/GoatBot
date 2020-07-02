@@ -30,9 +30,9 @@ exports.run = async (client, message, args, level) => {
 
 	let member;
 	if (mention.match(/<@!?\d{17,19}>/g)) {
-		member = message.mentions.members.first();
+		member = message.mentions.members.cache.first();
 	} else {
-		member = message.guild.members.find(m => m.id === mention);
+		member = message.guild.members.cache.find(m => m.id === mention);
 	}
 
 	if (member) {
