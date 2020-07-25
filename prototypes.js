@@ -12,7 +12,7 @@
 |
 |	This library is distributed in the hope that it will be useful,
 |	but WITHOUT ANY WARRANTY; without even the implied warranty of
-|	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+|	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 |	Lesser General Public License for more details.
 |
 |	You can receive a copy of the GNU Lesser General Public License from 
@@ -53,17 +53,17 @@ module.exports = client => {
 	};
 
 
-	String.prototype.toProperCase = function () {
+	String.prototype.toProperCase = function() {
 		return this.replace(/([^\W_]+[^\s-]*) */g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 	};
 
 
-	String.prototype.usToSp = function () {
+	String.prototype.usToSp = function() {
 		return this.replace(/_/g, ' ');
 	};
 
 
-	String.prototype.scramble = function () {
+	String.prototype.scramble = function() {
 		let a = this.split(''),
 		n = a.length;
 
@@ -77,12 +77,12 @@ module.exports = client => {
 	};
 
 
-	String.prototype.toProperCase = function () {
+	String.prototype.toProperCase = function() {
 		return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 	};
 
 
-	Array.prototype.allValuesSame = function () {
+	Array.prototype.allValuesSame = function() {
 		for(let i = 1; i < this.length; i++)
 		{
 			if(this[i] !== this[0])
@@ -92,7 +92,7 @@ module.exports = client => {
 	};
 
 
-	Array.prototype.shuffle = function () {
+	Array.prototype.shuffle = function() {
 		let currentIndex = this.length, temporaryValue, randomIndex;
 
 		// While there remain elements to shuffle...
@@ -111,14 +111,14 @@ module.exports = client => {
 		return this;
 	};
 
-	Number.prototype.reduce = function (percent, fix = false) {
+	Number.prototype.reduce = function(percent, fix = false) {
 		let num = (this - this * percent);
 		if (fix) num = num.toFixed(2);
 		return num;
 	};
 
 
-	Number.prototype.increase = function (percent, fix = false) {
+	Number.prototype.increase = function(percent, fix = false) {
 		let num = (this + this * percent);
 		if (fix) num = num.toFixed(2);
 		return num;
