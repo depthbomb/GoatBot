@@ -53,9 +53,9 @@ exports.run = async (client, message, args, level) => {
 	const embed = new MessageEmbed()
 		.setColor(color)
 		.setTitle(`Unbox a Goat`)
-		.setDescription(`<@${userId}> has unboxed: **${name}!**`)
-		.addField('Tier', `\`${tier}/${tiers}\``)
-		.addField('Drop chance', `\`${dropChance}%\``)
+		.setDescription(`<@${userId}> has unboxed: **${name}!**\nType \`${client.printCmd('unboxstats')}\` to view your stats.`)
+		.addField('Tier', `\`${tier}/${tiers}\``, true)
+		.addField('Drop chance', `\`${dropChance}%\``, true)
 		.setImage(image)
 		.setTimestamp();
 
