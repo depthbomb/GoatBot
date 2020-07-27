@@ -23,7 +23,9 @@
 
 const cooldowns = {};
 const ms = require('ms');
+const Chance = require('chance');
 const { MessageEmbed } = require('discord.js');
+const levelProfileAuxillaryCache = {};
 module.exports = (client, message) => {
 	const author         = message.author;
 	const userId         = author.id;
@@ -100,6 +102,46 @@ module.exports = (client, message) => {
 				}
 			}
 		}
+
+		/**
+		 * Handle distributing user XP
+		 */
+		(async () => {
+			if (!levelProfileAuxillaryCache.hasOwnProperty(userId)) {
+				const chance = new Chance();
+				const LevelProfile = require('@models/LevelProfile');
+				const disallowedChannels = client.config.levels.disallowedChannels;
+				const disallowedRoles = client.config.levels.disallowedRoles;
+				const userRoles = authorRoles.array().map(r => r.id);
+				const xpGranted = chance.bool({ likelihood: 5 }) ? 2 : 1;
+				const delay = chance.integer({ min: 60, max: 120 });
+				const touchAgain = client.timestamp() + delay;
+				if (!disallowedChannels.includes(channelId) && !(disallowedRoles.some(r => userRoles.includes(r)))) {
+					LevelProfile.findOne({ userId }, 'userId value multiplier touchAgain disabled', (err, profile) => {
+						if (err) throw new Error(err);
+						if (profile && profile.touchAgain < client.timestamp()) {
+							const existingXp = profile.value;
+							const multiplier = profile.multiplier;
+							const finalXp = (existingXp + xpGranted) * multiplier;
+							LevelProfile.updateOne({ userId }, { value: finalXp, touchAgain }, (err, res) => {
+								if (err) return client.error(message, err);
+								if (xpGranted > 1) {
+									message.react('⭐');
+								}
+							});
+						} else {
+							LevelProfile.create({ userId, value: xpGranted, touchAgain }, (err, newProfile) => {
+								if (err) return client.error(message, err);
+							});
+						}
+					});
+
+					levelProfileAuxillaryCache[userId] = touchAgain;
+					setTimeout(() => delete levelProfileAuxillaryCache[userId], delay * 1000);
+				}
+			}
+		})();
+
 		return;
 	}
 

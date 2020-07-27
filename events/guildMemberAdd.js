@@ -34,6 +34,7 @@ module.exports = (client, member) => {
 	.catch(err => {
 		throw new Error(err);
 	});
+
 	const refugeeRole = member.guild.roles.cache.find(r => r.name === 'Refugee');
 	const greetingChannel = member.guild.channels.cache.find(c => c.id === client.config.greetingChannel);
 	const refugeeChannel = member.guild.channels.cache.find(c => c.id === '431266723736322048');

@@ -21,4 +21,14 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (client, rateLimitInfo) => client.log.info(`I'm being rate limited: [${rateLimitInfo.method}] ${rateLimitInfo.path} -> ${rateLimitInfo.limit}`);
+module.exports = client => {
+	return task = {
+		name: 'distributeLevelRewards',
+		description: 'Applies rewards to users based on their level',
+		enabled: true,
+		interval: 30,
+		action: () => {
+			//
+		}
+	};
+};

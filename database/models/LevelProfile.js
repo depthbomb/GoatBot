@@ -21,4 +21,14 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (client, rateLimitInfo) => client.log.info(`I'm being rate limited: [${rateLimitInfo.method}] ${rateLimitInfo.path} -> ${rateLimitInfo.limit}`);
+const mongoose = require('mongoose');
+const LevelProfileSchema = new mongoose.Schema({
+	userId: Number,
+	multiplier: { type: Number, default: 1 },
+	value: Number,
+	touchAgain: Number,	//	TODO: potentially change this name before shipping, represents the time in which the user can earn XP again
+	disabled: Boolean,
+});
+const LevelProfile = mongoose.model('LevelProfile', LevelProfileSchema);
+
+module.exports = LevelProfile;
