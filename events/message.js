@@ -25,10 +25,12 @@ const cooldowns = {};
 const ms = require('ms');
 const { MessageEmbed } = require('discord.js');
 module.exports = (client, message) => {
-	const userId         = message.author.id;
+	const author         = message.author;
+	const userId         = author.id;
 	const channelId      = message.channel.id;
 	const messageContent = message.content;
 	const cleanContent   = message.cleanContent;
+	const authorRoles    = message.member?.roles?.cache;
 
 	/**
 	* Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
@@ -42,31 +44,31 @@ module.exports = (client, message) => {
 	const level         = client.permLevel(message);
 	const isServerStaff = (message.member.roles.cache.find(r => r.name === client.config.roles.admin) || message.member.roles.cache.find(r => r.name === client.config.roles.mod) || level > 1 || isOwner);
 
-	let logPrefix = [];
-	let username = message.member !== null ? message.member.displayName : message.author.tag;
+	const logPrefixes = [];
+	const username = message.member !== null ? message.member.displayName : message.author.tag;
 
-	if (message.member.guild.available) logPrefix.push(`[${message.member.guild.name}]`);
+	if (message.member.guild.available) {
+		logPrefixes.push(`[${message.member.guild.name}]`);
+	}
 
-	logPrefix.push(`#${message.channel.name}`);
+	logPrefixes.push(`#${message.channel.name}`);
 
-	if (message.tts) logPrefix.push('[TTS]');
+	if (message.tts) {
+		logPrefixes.push('[TTS]');
+	}
 
-	let isAttachment = false;
-	let attachmentWithMessage = false;
+	const logPrefix = logPrefixes.join(' ');
+	const isAttachment = (typeof message.attachments.first() != 'undefined');
+	const attachmentWithMessage = (isAttachment && messageContent !== '');
 
 	let logMessage;
-
-	if (typeof message.attachments.first() != 'undefined')
-		isAttachment = true;
-	if (isAttachment && messageContent !== '')
-		attachmentWithMessage = true;
-
-	if (isAttachment && !attachmentWithMessage)
-		logMessage = `${logPrefix.join(' ')} ${username} uploaded attachment ${message.attachments.first().url}`;
-	else if (isAttachment && attachmentWithMessage)
-		logMessage = `${logPrefix.join(' ')} ${username} uploaded attachment ${message.attachments.first().url} with message [${cleanContent}]`;
-	else
-		logMessage = `${logPrefix.join(' ')} ${username}: ${cleanContent}`;
+	if (isAttachment && !attachmentWithMessage) {
+		logMessage = `${logPrefix} ${username} uploaded attachment ${message.attachments.first().url}`;
+	} else if (isAttachment && attachmentWithMessage) {
+		logMessage = `${logPrefix} ${username} uploaded attachment ${message.attachments.first().url} with message [${cleanContent}]`;
+	} else {
+		logMessage = `${logPrefix} ${username}: ${cleanContent}`;
+	}
 
 	client.log.info(logMessage);
 
@@ -74,9 +76,9 @@ module.exports = (client, message) => {
 	const command = args.shift().toLowerCase();
 	const cmd     = client.commands.get(command) || client.commands.get(client.aliases.get(command));
 
-	if (client.store.lockdowns.hasOwnProperty(channelId))
-		if (level < 3)
-			return message.delete();
+	if (client.store.lockdowns.hasOwnProperty(channelId) && level < 3) {
+		return message.delete();
+	}
 
 	/**
 	*	Non-command messages
@@ -112,16 +114,15 @@ module.exports = (client, message) => {
 			(cmd.help.name !== 'escape' && channelId === '481201307257012262' && level < 3)
 		) return;
 
-		// TODO: Refactor this by adding something like a "allow in DMs" option per command
+		// TODO: Refactor this by adding something like an "allow in DMs" option per command
 		if (message.channel.type === 'dm' && cmd.help.name !== 'help')
 			return message.channel.send('I will not respond to commands and messages while in a DM. You can find me in the Caprine.net Discord server here: https://discord.gg/xw624a8');
 
 		if (level >= cmd.conf.permLevel) {
 			const cooldown = (cmd.conf.cooldown * 1000) || 1500;
-			const cooldownName = cmd.conf.globalCd ? `${cmd.help.name}_GLOBAL` : `${cmd.help.name}_${userId}`;
+			const cooldownName = cmd.conf.globalCd ? cmd.help.name : cmd.help.name + userId;
 			const messageTime = message.createdTimestamp;
 			const bypassCooldown = userId === client.config.ownerId;
-
 			if (cooldowns.hasOwnProperty(cooldownName)) {
 				const expiration = cooldowns[cooldownName].ex;
 				const timeLeft   = (expiration - messageTime);
