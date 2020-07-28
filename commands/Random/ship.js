@@ -47,7 +47,7 @@ exports.run = async (client, message, args, level) => {
 
 	const seed = parseInt((parseInt('0x' + crypto.createHash('md5').update(thing).digest("hex")) * parseInt('0x' + crypto.createHash('md5').update(thing2).digest("hex"))).toString().replace('.', ''));
 	const chance = new Chance(seed);
-	const output = Math.floor(chance.random() * (100 - 1 + 1)) + 1;
+	const output = Math.floor(chance.random() * 100) + 1;
 	const blocks = Math.floor(output / 10);
 	const bar = '█'.repeat(blocks);
 	const barFill = ' ​'.repeat((10 - blocks));

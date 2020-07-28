@@ -37,19 +37,21 @@ module.exports = client => {
 
 	client.error = (msg, err) => {
 		const algorithm = 'aes-256-cbc';
-		const key = client.config.crypto.errorSalt;
-		const cipher = crypto.createCipher(algorithm, key);
+		const key = client.config.crypto.key;
+		const iv  = crypto.randomBytes(16);
+		const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
 		const errorStack = `**UserID:** ${msg.author.id}\n**ChannelID:** ${msg.channel.id}\n**DM?:** ${msg.channel.type === 'dm'}\n${msg.guild.available ? '**Guild:** ' + msg.guild.name + '\n' : ''}\n\`\`\`js\n${err}\n\`\`\``;
 	
-		let encrypted = cipher.update(errorStack, 'utf8', 'base64');
-			encrypted += cipher.final('base64');
-	
+		let encrypted = cipher.update(errorStack);
+			encrypted = Buffer.concat([encrypted, cipher.final()]);
+
+		const crashCode = Buffer.from('GoatBotSuperSecretStackTraceCrashCode::'+iv.toString('hex')+'::'+encrypted.toString('hex')).toString('base64');
 		const embed = new MessageEmbed()
 			.setAuthor('OOPSIE WOOPSIE!!', client.user.avatarURL({ dynamic: true }))
 			.setColor(client.colors.red)
 			.setDescription('OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this code belowo if you see him!')
-			.addField('\u200B', `\`\`\`\n${encrypted}\n\`\`\``, true)
-			.setThumbnail(client.emojis.cache.find('name', 'caprineError').url);
+			.addField('\u200B', `\`\`\`\n${crashCode}\n\`\`\``, true)
+			.setThumbnail(client.emojis.cache.find(e => e.name === 'caprineAlert').url);
 	
 		return msg.reply({ embed });
 	};
