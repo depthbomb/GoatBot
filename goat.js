@@ -100,21 +100,24 @@ class GoatBot extends Discord.Client {
 		this.timestamp = () => Math.floor(new Date() / 1000);
 		this.printCmd  = (commandName) => this.config.prefix + commandName;
 		this.permLevel = (message) => {
-			if (message.author.id === client.config.ownerId)
+			if (message.author.id === client.config.ownerId) {
 				return 5;
+			}
 
-			const adminRole = message.member.roles.cache.find(r => r.id === client.config.roles.admin);
+			const adminRole     = message.member.roles.cache.find(r => r.id === client.config.roles.admin);
 			const moderatorRole = message.member.roles.cache.find(r => r.id === client.config.roles.mod);
-			const donorRole = message.member.roles.cache.find(r => r.id === client.config.roles.donor);
+			const donorRole     = message.member.roles.cache.find(r => r.id === client.config.roles.donor);
+			const tf2StaffRole  = message.member.roles.cache.find(r => r.id === '432295395356311553');
 			
-			if (donorRole && message.member.roles.cache.has(donorRole.id))
-				return 1;
-			if (moderatorRole && message.member.roles.cache.has(moderatorRole.id))
-				return 2;
-			if (adminRole && message.member.roles.cache.has(adminRole.id))
+			if (adminRole && message.member.roles.cache.has(adminRole.id)) {
 				return 3;
-
-			return 0;
+			} else if (moderatorRole && message.member.roles.cache.has(moderatorRole.id)) {
+				return 2;
+			} else if (donorRole && message.member.roles.cache.has(donorRole.id) || tf2StaffRole && message.member.roles.cache.has(tf2StaffRole.id)) {
+				return 1;
+			} else {
+				return 0;
+			}
 		};
 	}
 }
