@@ -34,7 +34,7 @@ module.exports = client => {
 			return false;
 		}
 	};
-	
+
 	client.error = (msg, err) => {
 		const algorithm = 'aes-256-cbc';
 		const key = client.config.crypto.errorSalt;
@@ -53,29 +53,24 @@ module.exports = client => {
 	
 		return msg.reply({ embed });
 	};
-	
+
 	client.msg = (messageObj, type, icon, message, reply = true) => {
 		const colors = {
-			'black': '#212121',
-			'yellow': '#faa61a',
-			'default': '#99aab5',
-			'red': '#f04747',
-			'orange': '#f57731',
-			'green': '#43b581',
-			'blue': '#3498db'
+			'black': client.colors.black,
+			'yellow': client.colors.yellow,
+			'default': client.colors.brand,
+			'red': client.colors.red,
+			'orange': client.colors.orange,
+			'green': client.colors.green,
+			'blue': client.colors.blue
 		};
 		const emojis = {
 			'gold': client.emojis.cache.find(e => e.name === 'caprineGold'),
-			'ungag': client.emojis.cache.find(e => e.name === 'caprineCommentNormal'),
-			'gag': client.emojis.cache.find(e => e.name === 'caprineGag'),
-			'mute': client.emojis.cache.find(e => e.name === 'caprineMute'),
-			'search': client.emojis.cache.find(e => e.name === 'caprineSearch'),
-			'refresh': client.emojis.cache.find(e => e.name === 'caprineRefresh'),
-			'error': client.emojis.cache.find(e => e.name === 'caprineClose'),
+			'error': client.emojis.cache.find(e => e.name === 'caprineAlert'),
 			'warning': client.emojis.cache.find(e => e.name === 'caprineWarning'),
 			'success': client.emojis.cache.find(e => e.name === 'caprineSuccess'),
 			'info': client.emojis.cache.find(e => e.name === 'caprineInfo'),
-			'close': client.emojis.cache.find(e => e.name === 'caprineClose')
+			'close': client.emojis.cache.find(e => e.name === 'caprineAlert')
 		};
 		const color = colors[type];
 		const emoji = emojis[icon];
@@ -85,7 +80,7 @@ module.exports = client => {
 	
 		return messageObj.channel.send({ embed });
 	};
-	
+
 	client.logAction = (title, logMessage, color = client.colors.default, authorName, authorImage = client.guilds.cache.find(g => g.id === client.config.mainGuild).iconURL({ dynamic: true })) => {
 		if (client.disableLog) return;
 		const logChannel = client.channels.cache.find(c => c.id === client.config.logChannel);
@@ -99,7 +94,7 @@ module.exports = client => {
 		if (authorName && authorImage) embed.setAuthor(authorName, authorImage);
 		return logChannel.send({ embed });
 	};
-	
+
 	client.kennelUser = (member, reason, issuer = 'GoatBot!') => {
 		const kennelRole = member.guild.roles.cache.find(r => r.name === 'Kenneled');
 		const nsfwRole = member.roles.cache.find(r => r.name === 'NSFW');
@@ -126,7 +121,7 @@ module.exports = client => {
 			});
 		}
 	};
-	
+
 	client.clean = async (client, text) => {
 		if (text && text.constructor.name == 'Promise')
 		text = await text;
@@ -140,7 +135,7 @@ module.exports = client => {
 	
 		return text;
 	};
-	
+
 	client.randomInt = (min, max, amount = 1, forceArray = false) => {
 		let results;
 		if (amount > 1 || forceArray) {
