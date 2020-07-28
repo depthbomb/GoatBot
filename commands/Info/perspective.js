@@ -82,7 +82,7 @@ exports.run = async (client, message, args, level) => {
 			  .addField('Obscenity*', `${OBSCENE}%`, true)
 			  .addField('Spam*', `${SPAM}%`, true)
 
-		return msg.edit({ embed });
+		return msg.edit(null, { embed });
 	});
 };
 
