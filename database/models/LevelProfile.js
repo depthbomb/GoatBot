@@ -23,11 +23,11 @@
 
 const mongoose = require('mongoose');
 const LevelProfileSchema = new mongoose.Schema({
-	userId: Number,
+	userId: String,
 	multiplier: { type: Number, default: 1 },
 	value: Number,
 	touchAgain: Number,	//	TODO: potentially change this name before shipping, represents the time in which the user can earn XP again
-	disabled: Boolean,
+	disabled: { type: Boolean, default: false },
 });
 const LevelProfile = mongoose.model('LevelProfile', LevelProfileSchema);
 
