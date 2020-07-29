@@ -111,8 +111,7 @@ module.exports = client => {
 	
 			member.roles.remove(nsfwRole, 'Removed due to kenneling').catch(() => {});
 			member.roles.add(kennelRole, reason).then(() => {
-				member.setDeaf(true, 'Deafened due to kenneling').catch(() => {});
-				member.setMute(true, 'Muted due to kenneling').catch(() => {});
+				member.edit({ mute: true, deaf: true }, 'User kenneled');
 				kennelChannel.send({ embed }).then(m => {
 					embed = new MessageEmbed()
 						.setColor(client.colors.red)

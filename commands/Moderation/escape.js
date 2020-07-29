@@ -29,12 +29,11 @@ exports.run = async (client, message, args, level) => {
 	const kenneled = message.member.guild.roles.cache.find(r => r.name === 'Kenneled');
 
 	if (kenneled) {
-		const hasEscaped = chance.weighted([1, 0], [1, 7]);
+		const hasEscaped = chance.weighted([1, 0], [1, 10]);
 		if (hasEscaped) {
 			message.reply('You have successfully escaped the kennel and are on your way back to the public. Try to behave next time and you might not be back! (You will be freed shortly)');
 			setTimeout(() => {
-				message.member.setDeaf(false, 'Undeafened due to escaping kennel').catch(() => {});
-				message.member.setMute(false, 'Unmuted due to escaping kennel').catch(() => {});
+				message.member.edit({ mute: false, deaf: false }, 'User escaped kennel');
 				return message.member.removeRole(kenneled, 'User escaped!');
 			}, (10*1000));
 		} else {
