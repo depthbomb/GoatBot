@@ -52,12 +52,15 @@ exports.run = async (client, message, args, level) => {
 	} else {
 		return message.reply('Invalid classification.');
 	}
-	const userAvatar = message.member.user.displayAvatarURL({ format: 'png', size: 512 })
+	const userAvatar = message.member.user.displayAvatarURL({ format: 'png', size: 512 });
 	const avatar = await jimp.read(userAvatar);
+	const avatarWidth = avatar.bitmap.width;
+	const avatarHeight = avatar.bitmap.height;
 	const overlay = await jimp.read(path.join(client.rsrcPath, 'prideflags', 'square', classification + '.png'));
 	const tmpName = `pride_${client.uuid()}.${avatar.getExtension()}`;
 	const tmpLocation = path.join(client.tmpPath, tmpName);
 
+	overlay.resize(avatarWidth, avatarHeight);
 	overlay.opacity(opacity);
 	avatar.composite(overlay, 0, 0);
 	avatar.write(tmpLocation, () => {
