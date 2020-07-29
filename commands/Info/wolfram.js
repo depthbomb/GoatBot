@@ -26,9 +26,9 @@ const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (args.length === 0) return;
 	const query = encodeURIComponent(args.join(' '));
-	const uri = `http://api.wolframalpha.com/v2/query?appid=${client.config.wolfram_alpha_api_key}&input=${query}&format=plaintext&output=json&units=nonmetric`;
+	const uri = `http://api.wolframalpha.com/v2/query?appid=${client.config.apiKeys.wolframalpha}&input=${query}&format=plaintext&output=json&units=nonmetric`;
 
-	let msg = await message.reply("Sending request...");
+	let msg = await message.reply('Sending request...');
 	request({
 		uri: uri,
 		method: 'GET'
@@ -83,7 +83,7 @@ exports.run = async (client, message, args, level) => {
 			}
 		}
 
-		return msg.edit({ embed });
+		return msg.edit(null, { embed });
 	});
 };
 
