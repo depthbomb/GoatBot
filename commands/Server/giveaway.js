@@ -44,8 +44,8 @@ exports.run = async (client, message, args, level) => {
 		msg.react('🎉');
 		const collector = msg.createReactionCollector(filter, { time: (giveawayLimit * 1000) });
 
-		const updateTimeLeft = setInterval(() => { timeLeft--; }, 1000);
-		const updateEmbed = setInterval(() => {
+		const updateTimeLeft = client.setInterval(() => { timeLeft--; }, 1000);
+		const updateEmbed = client.setInterval(() => {
 			embed = new MessageEmbed()
 				.setTitle(description)
 				.setDescription(`React with 🎉 to enter.`)
@@ -73,8 +73,8 @@ exports.run = async (client, message, args, level) => {
 		});
 
 		collector.on('end', () => {
-			clearInterval(updateEmbed);
-			clearInterval(updateTimeLeft);
+			client.clearInterval(updateEmbed);
+			client.clearInterval(updateTimeLeft);
 
 			if (entered.length < 1) {
 				return message.channel.send(`No one entered the giveaway for **${giveawayItem}**\n\nA winner cannot be chosen.`).then(() => {
