@@ -21,103 +21,36 @@
 |--------------------------------------------------------------------------
 */
 
+const polls = {};
+
 const { MessageEmbed } = require('discord.js');
 const { InvalidArgumentError, InvalidArgumentCountError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	InvalidArgumentCountError.assert(args.length >= 3, '');
-	const giveawayLimit = args[0];
-	const giveawayItem = args.slice(1).join(' ');
+	InvalidArgumentCountError.assert(args.length >= 1, 'You must supply a poll question.');
 
-	let timeLeft = giveawayLimit;
-	let description = `"${giveawayItem}"`;
-	let entered = [];
-	let displayEntered = [];
-	let filter = (r, u) => r.emoji.name === '🎉' && !entered.includes(u.id) && u.id !== client.user.id;
+	const question = args.join(' ').trim() || null;
 
-	let embed = new MessageEmbed()
-		.setColor(client.colors.default)
-		.setTitle(description)
-		.setDescription(`React with 🎉 to enter.`)
-		.setFooter(`Time left: ${timeLeft} seconds`);
+	InvalidArgumentError.assert(question !== null && question !== '', 'Poll question may not be empty or null.');
 
-	message.channel.send('🎉 Giveaway! 🎉', { embed }).then(msg => {
-		msg.react('🎉');
-		const collector = msg.createReactionCollector(filter, { time: (giveawayLimit * 1000) });
-
-		const updateTimeLeft = setInterval(() => { timeLeft--; }, 1000);
-		const updateEmbed = setInterval(() => {
-			embed = new MessageEmbed()
-				.setTitle(description)
-				.setDescription(`React with 🎉 to enter.`)
-				.setFooter(`Time left: ${timeLeft} seconds`);
-
-			if (entered.length > 0) {
-				embed.addField('Entries', displayEntered.join('\n'));
-			}
-			
-			if (timeLeft <= 15) {
-				embed.setColor('#ff0000').addField('\u200b', '\n***Time\'s almost up!***');
-			} else {
-				embed.setColor(client.colors.default);
-			}
-
-			msg.edit('🎉 Giveaway! 🎉', { embed });
-		}, 5000);
-
-		collector.on('collect', (r, u) => {
-			const userId = u.id;	//	Get the latest user who reacted
-			if (!entered.includes(userId)) {
-				entered.push(userId);
-				displayEntered.push(`<@${userId}>`);
-			}
-		});
-
-		collector.on('end', () => {
-			clearInterval(updateEmbed);
-			clearInterval(updateTimeLeft);
-
-			if (entered.length < 1) {
-				return message.channel.send(`No one entered the giveaway for **${giveawayItem}**\n\nA winner cannot be chosen.`).then(() => {
-					msg.delete();
-				});
-			} else {
-				let winner = entered.shuffle()[0];
-				winnerText = `Congratulations, <@${winner}>! You've won **${giveawayItem}**`;
-				return message.channel.send(winnerText).then(() => {
-					embed = new MessageEmbed()
-						.setColor('#000000')
-						.setTitle(description)
-						.setDescription(`<@${winner}> has won this giveaway.`)
-						.setFooter('Ended')
-						.setTimestamp();
-					msg.edit('🎉 **GIVEAWAY ENDED!** 🎉', { embed });
-				});
-			}
-		});
-	});
-
-	message.delete();
+	
 };
 
 exports.conf = {
 	enabled: true,
-	aliases: [
-		'ga',
-		'raffle'
-	],
-	permLevel: 3,
+	cooldown: 5,
+	aliases: [],
+	permLevel: 1,
 };
 
 exports.help = {
-	name: 'giveaway',
+	name: 'poll',
 	category: 'Server',
-	description: 'Starts a giveaway, users can enter by reacting with the appropriate emoji.',
-	usage: 'giveaway [time] [item]',
+	description: 'Starts a poll with the supplied question',
+	usage: 'poll [question]',
 	params: {
-		'time': 'Time in seconds the giveaway should last for',
-		'items': 'Item being given away'
+		'question': 'Question to be asked in the poll. You will be asked to supply the poll choices after.'
 	},
 	examples: [
-		'giveaway 60 My Virginity'
+		'poll should everyone be banned?'
 	]
 };

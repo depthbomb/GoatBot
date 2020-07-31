@@ -26,9 +26,9 @@
  * as Hastebin requires you to send data without a field name.
  */
 const https = require('https');
-const { MissingArgumentsError, InvalidArgumentError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	MissingArgumentsError.assert(args.length > 0, 'Please provide code to upload.');
+	MissingArgumentError.assert(args.length > 0, 'Please provide code to upload.');
 	const code = args.slice(0).join(' ') || null;
 
 	const msg = await message.channel.send('Processing...');

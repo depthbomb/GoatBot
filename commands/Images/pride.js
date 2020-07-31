@@ -23,7 +23,7 @@
 
 const path = require('path');
 const jimp = require('jimp');
-const { MissingArgumentsError, InvalidArgumentError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentError } = require('@errors');
 
 const dictionary = {
 	asexual: 'asexual',
@@ -41,7 +41,7 @@ const dictionary = {
 	transgender: 'trans',
 };
 exports.run = async (client, message, args, level) => {
-	MissingArgumentsError.assert(args.length !== 0, 'Please supply a classification');
+	MissingArgumentError.assert(args.length !== 0, 'Please supply a classification');
 	InvalidArgumentError.assert(dictionary.hasOwnProperty(args[0]), 'The classification you provided is invalid');
 
 	const classification = dictionary[args[0]];

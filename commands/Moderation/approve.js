@@ -21,9 +21,9 @@
 |--------------------------------------------------------------------------
 */
 
-const { MissingArgumentsError } = require('@errors');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	MissingArgumentsError.assert(args.length > 0, 'Please provide a target.');
+	MissingArgumentError.assert(args.length > 0, 'Please provide a target.');
 	const mention = args[0];
 	
 	let member;

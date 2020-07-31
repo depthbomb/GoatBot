@@ -23,9 +23,9 @@
 
 const path = require('path'),
 	  execa = require('execa');
-const { MissingArgumentsError } = require('@errors');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	MissingArgumentsError.assert(args.length > 0, 'Please provide a URL.');
+	MissingArgumentError.assert(args.length > 0, 'Please provide a URL.');
 	const url = args[0];
 	const downloadPath = path.join(client.tmpPath, client.uuid() + '.mp3');
 	const ytdlArgs = [

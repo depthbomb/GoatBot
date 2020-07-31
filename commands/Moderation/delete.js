@@ -21,9 +21,9 @@
 |--------------------------------------------------------------------------
 */
 
-const { MissingArgumentsError } = require('@errors');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	MissingArgumentsError.assert(args.length > 0, 'Please provide a message ID.');
+	MissingArgumentError.assert(args.length > 0, 'Please provide a message ID.');
 	const messageID = args.join(' ');
 	message.channel.message.fetch(messageID).then(msg => msg.delete().then(() => message.delete())).catch(console.error);
 };

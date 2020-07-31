@@ -23,9 +23,9 @@
 
 const path = require('path');
 const qr = require('qrcode');
-const { MissingArgumentsError } = require('@errors');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	MissingArgumentsError.assert(args.length > 0, 'Please provide text.');
+	MissingArgumentError.assert(args.length > 0, 'Please provide text.');
 	const text = args.slice(0).join(' ');
 	const imageName = `${client.uuid()}.png`;
 	const imagePath = path.join(client.tmpPath, imageName);

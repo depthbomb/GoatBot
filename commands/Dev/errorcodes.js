@@ -21,36 +21,44 @@
 |--------------------------------------------------------------------------
 */
 
-const { MissingArgumentError, InvalidArgumentCountError, InvalidArgumentError } = require('@errors');
+const dictionary = [];
+const { codes } = require('@errors');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	MissingArgumentError.assert(args.length > 0);
-	InvalidArgumentCountError.assert((args.length >= 2 && args.length <= 50), 'Amount of choices must be between 2 and 50');
-	InvalidArgumentError.assert(!args.allValuesSame(), 'Choices may not be identical');
-	const choice = args.shuffle()[0].usToSp();
-	return message.reply(`I choose... ***${choice}***!`);
+	if (dictionary.length === 0) {
+		for (let key of Object.keys(codes)) {
+			const code = codes[key];
+			const entry = { name: key, code: code.code, message: code.message };
+			dictionary.push(entry);
+		}
+	}
+
+	const embed = new MessageEmbed()
+		  .setColor(client.colors.red)
+		  .setTitle('Error Codes');
+
+	for (let entry of dictionary) {
+		embed.addField(entry.code, `**${entry.name}** - ${entry.message}`);
+	}
+
+	return message.channel.send({ embed });
 };
 
 exports.conf = {
 	enabled: true,
 	aliases: [
-		'choose'
+		'ecodes'
 	],
-	cooldown: 1.5,
-	permLevel: 0
+	permLevel: 0,
 };
 
 exports.help = {
-	name: 'choice',
-	category: 'Random',
-	description: 'Let the bot choose between a list of items',
-	usage: 'choice [item] [item2] [...?]',
-	params: {
-		'item': 'First choice, use underscores for spacces',
-		'item2': 'Second choice',
-		'...?': 'Additional choices, need at least two'
-	},
+	name: 'errorcodes',
+	category: 'Dev',
+	description: 'Displays error codes utilized by the bot',
+	usage: 'errorcodes',
+	params: {},
 	examples: [
-		'choice paper plastic',
-		'choose beef pork chicken tofu'
+		'errorcodes'
 	]
 };

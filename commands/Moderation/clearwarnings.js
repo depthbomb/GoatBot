@@ -23,9 +23,9 @@
 
 const pluralize = require('pluralize');
 const Warning = require('@models/Warning');
-const { MissingArgumentsError } = require('@errors');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	MissingArgumentsError.assert(args.length >= 1, 'Please provide a target.');
+	MissingArgumentError.assert(args.length >= 1, 'Please provide a target.');
 	const mention = args.join(' ');
 
 	let member;
