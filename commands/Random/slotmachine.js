@@ -22,7 +22,7 @@
 */
 
 const { MessageEmbed } = require('discord.js');
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	const emoji = {
 		furdesire: client.emojis.cache.find(e => e.name === 'furdesire'),
 		pandasurprise: client.emojis.cache.find(e => e.name === 'pandasurprise'),

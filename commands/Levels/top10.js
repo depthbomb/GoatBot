@@ -21,31 +21,43 @@
 |--------------------------------------------------------------------------
 */
 
-const { MissingArgumentsError } = require('@errors');
+const { MessageEmbed } = require('discord.js');
+const LevelProfile = require('@models/LevelProfile');
 exports.run = async (client, message, args, level) => {
-	MissingArgumentsError.assert(args.length > 0, 'Please provide a message ID.');
-	const messageID = args.join(' ');
-	message.channel.message.fetch(messageID).then(msg => msg.delete().then(() => message.delete())).catch(console.error);
+	LevelProfile.find({ disabled: false }).sort({ 'value': 'desc' }).limit(10).exec((err, profiles) => {
+		const embed = new MessageEmbed()
+			.setTitle('Top 10 Users')
+			.setThumbnail(message.guild.iconURL({ dynamic: true, size: 256 }))
+			.setColor(client.colors.yellow);
+
+		for (let i = 0; i < profiles.length; i++) {
+			const profile = profiles[i];
+			const username = client.users.cache.find(u => u.id == profile.userId);
+			embed.addField(`Rank #${i+1} @ ${profile.value}xp`, username);
+		}
+
+		return message.channel.send({ embed });
+	});
 };
 
 exports.conf = {
 	enabled: true,
+	cooldown: 5,
+	globalCd: true,
 	aliases: [
-		'del',
-		'delet'
+		'topten',
+		'leaderboard2'
 	],
-	permLevel: 2,
+	permLevel: 0,
 };
 
 exports.help = {
-	name: 'delete',
-	category: 'Moderation',
-	description: 'Deletes a message by ID',
-	usage: 'delete [message ID]',
-	params: {
-		'message ID': 'ID of the message you want to delete'
-	},
+	name: 'top10',
+	category: 'Levels',
+	description: 'Shows the top 10 ranked users',
+	usage: 'top10',
+	params: {},
 	examples: [
-		'delete 357686677051985921'
+		'top10'
 	]
 };

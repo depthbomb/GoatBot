@@ -21,10 +21,11 @@
 |--------------------------------------------------------------------------
 */
 
-const ReactionBan = require('@models/ReactionBan');
 const { MessageEmbed } = require('discord.js');
+const ReactionBan = require('@models/ReactionBan');
+const { MissingArgumentsError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
+	MissingArgumentsError.assert(args.length >= 1, 'Please provide a target.');
 	const mention = args[0];
 	const reason = args.slice(1).join(' ') || 'No reason given';
 
@@ -32,7 +33,7 @@ exports.run = async (client, message, args, level) => {
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		member = message.mentions.members.cache.first();
 	} else {
-		member = message.guild.members.cache.find(m => m.id === mention);
+		member = message.guild.members.cache.find(m => m.id == mention);
 	}
 
 	if (member) {

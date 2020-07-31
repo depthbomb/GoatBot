@@ -21,50 +21,50 @@
 |--------------------------------------------------------------------------
 */
 
-const TempBan = require('@models/TempBan');
 const moment = require('moment');
+const TempBan = require('@models/TempBan');
 const { MessageEmbed } = require('discord.js');
-exports.run = (client, message, args, level) => {
-	if (args.length === 0) return;
+const { MissingArgumentsError, InvalidArgumentsError } = require('@errors');
+exports.run = async (client, message, args, level) => {
+	MissingArgumentsError.assert(args.length >= 1, 'Please provide a target.');
 	const mention  = args[0];
 	const duration = args[1].parseTimeFormat();
-	const reason   = args.slice(2).join(' ') || 'No reason given';
 
-	if (duration) {
-		let member;
-		if (mention.match(/<@!?\d{17,19}>/g)) {
-			member = message.mentions.members.first();
-		} else {
-			member = message.guild.members.cache.find(m => m.id === mention);
-		}
+	InvalidArgumentsError.assert(duration, 'Time format is invalid.');
 
-		if (member) {
-			const userId = member.id;
-			const expires = duration;	//	semantics
-			member.kick(reason).then(() => {
-				TempBan.create({ userId, reason, expires }, (err, ban) => {
-					const expiresFormat = moment.unix(expires).format('dddd, MMMM Do YYYY, HH:mm:ss');
-					const embed = new MessageEmbed()
-						  .setColor(client.colors.red)
-						  .setDescription(`${member.displayName} has been temporarily banned.`)
-						  .addField('Reason', reason)
-						  .addField('Expires', expiresFormat);
-					
-					const memberMessage = [
-						`You have been temporarily banned by ${message.member.displayName} until ${expiresFormat}.`,
-						`Reason:`,
-						`\`\`\`md\n* ${reason}\`\`\``,
-						'You will not be allowed back into the server until the ban expires or is lifted by staff.'
-					];
-					member.user.send(memberMessage.join('\n')).catch(() => {});
-				});
-			})
-			.catch(() => client.msg(message, 'red', 'error', `Failed to kick ${member.displayName}, likely a permission error.`));
-		} else {
-			return message.reply('Could not find member.');
-		}
+	const reason = args.slice(2).join(' ') || 'No reason given';
+
+	let member;
+	if (mention.match(/<@!?\d{17,19}>/g)) {
+		member = message.mentions.members.first();
 	} else {
-		return message.reply('Time format is invalid.');
+		member = message.guild.members.cache.find(m => m.id == mention);
+	}
+
+	if (member) {
+		const userId = member.id;
+		const expires = duration;	//	semantics
+		member.kick(reason).then(() => {
+			TempBan.create({ userId, reason, expires }, (err, ban) => {
+				const expiresFormat = moment.unix(expires).format('dddd, MMMM Do YYYY, HH:mm:ss');
+				const embed = new MessageEmbed()
+					  .setColor(client.colors.red)
+					  .setDescription(`${member.displayName} has been temporarily banned.`)
+					  .addField('Reason', reason)
+					  .addField('Expires', expiresFormat);
+				
+				const memberMessage = [
+					`You have been temporarily banned by ${message.member.displayName} until ${expiresFormat}.`,
+					`Reason:`,
+					`\`\`\`md\n* ${reason}\`\`\``,
+					'You will not be allowed back into the server until the ban expires or is lifted by staff.'
+				];
+				member.user.send(memberMessage.join('\n')).catch(() => {});
+			});
+		})
+		.catch(() => client.msg(message, 'red', 'error', `Failed to kick ${member.displayName}, likely a permission error.`));
+	} else {
+		return message.reply('Could not find member.');
 	}
 };
 

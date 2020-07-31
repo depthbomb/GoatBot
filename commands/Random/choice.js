@@ -21,9 +21,11 @@
 |--------------------------------------------------------------------------
 */
 
+const { MissingArgumentsError, InvalidArgumentCountError, InvalidArgumentsError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length < 2 || args.length > 50) return;
-	if (args.allValuesSame()) return message.reply('Choices cannot be identical.');
+	MissingArgumentsError.assert(args.length > 0);
+	InvalidArgumentCountError.assert((args.length >= 2 && args.length <= 50), 'Amount of choices must be between 2 and 50');
+	InvalidArgumentsError.assert(!args.allValuesSame(), 'Choices may not be identical');
 	const choice = args.shuffle()[0].usToSp();
 	return message.reply(`I choose... ***${choice}***!`);
 };

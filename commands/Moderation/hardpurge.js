@@ -21,7 +21,9 @@
 |--------------------------------------------------------------------------
 */
 
-exports.run = (client, message, args, level) => {
+const { MissingArgumentsError } = require('@errors');
+exports.run = async (client, message, args, level) => {
+	MissingArgumentsError.assert(args.length > 0, 'Please provide a number.');
 	let num;
 	if (args.length !== 1) {
 		num = 10; // to 10 messages

@@ -21,14 +21,11 @@
 |--------------------------------------------------------------------------
 */
 
-const pluralize = require('pluralize');
-const Warning = require('@models/Warning');
-const { MissingArgumentsError } = require('@errors');
+const LevelProfile = require('@models/LevelProfile');
 exports.run = async (client, message, args, level) => {
-	MissingArgumentsError.assert(args.length >= 1, 'Please provide a target.');
-	const mention = args.join(' ');
-
-	let member;
+	if (args.length < 2) return;
+	
+	let mention = args[0], member;
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		member = message.mentions.members.first();
 	} else {
@@ -36,10 +33,26 @@ exports.run = async (client, message, args, level) => {
 	}
 
 	if (member) {
-		const userId =  member.id;
-		Warning.deleteMany({ userId })
-		.then(warnings => message.reply(`Cleared ${pluralize('warning', warnings.n, true)} for <@${userId}>.`))
-		.catch(err => message.reply(err));
+		const value = parseInt(args[1]);
+		if (value === NaN) {
+			return client.msg(message, 'red', 'error', 'XP value must be a number.');
+		}
+
+		LevelProfile.findOne({ userId: member.id }, (err, profile) => {
+			if (profile) {
+				const xp    = profile.value;
+				const newXp = xp + value;
+				LevelProfile.updateOne({ userId: member.id }, { value: newXp }, (err, res) => {
+					if (err) return client.error(message, err);
+					return client.msg(message, 'green', 'success', `${member.displayName}'s XP has been modified: \`${xp} -> ${newXp}\``);
+				});
+			} else {
+				LevelProfile.create({ userId: member.id, value, touchAgain: client.timestamp() }, (err, newProfile) => {
+					if (err) return client.error(message, err);
+					return client.msg(message, 'green', 'success', `${member.displayName}'s level profile has been created and they have been given \`${value}xp\``);
+				});
+			}
+		});
 	} else {
 		return message.reply('Could not find member.');
 	}
@@ -49,22 +62,22 @@ exports.conf = {
 	enabled: true,
 	cooldown: 5,
 	aliases: [
-		'clearwarn',
-		'warningsclear',
-		'wipewarnings'
+		'modxp'
 	],
-	permLevel: 2
+	permLevel: 5,
 };
 
 exports.help = {
-	name: 'clearwarnings',
-	category: 'Moderation',
-	description: 'Clears a user\'s outstand warnings',
-	usage: 'warn [@mention|user ID]',
+	name: 'modifyxp',
+	category: 'Levels',
+	description: 'Modifies a user\'s XP value',
+	usage: 'modifyxp [@mention] [value]',
 	params: {
-		'@mention|user ID': 'Mention or ID of user to warn'
+		'@mention': 'Mention of user to target',
+		'value': 'Amount of XP to apply to the user, can be negative to subtract XP',
 	},
 	examples: [
-		'warn @Username#0000'
+		'modifyxp @Username#0000 50',
+		'modifyxp @Username#0000 -600',
 	]
 };

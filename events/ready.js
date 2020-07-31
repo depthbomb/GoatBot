@@ -26,6 +26,6 @@ module.exports = async client => {
 	client.online = true;
 	client.heartbeat = client.timestamp();
 	client.user.setActivity(client.localMode ? '<DEV MODE>' : client.config.initialGame, { type: 'PLAYING' });
-
+	console.log();	//	Just to add a little space
 	client.log.info(`Ready to serve ${client.users.cache.size} users in ${client.guilds.cache.size} servers.`);
 };

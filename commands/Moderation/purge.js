@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	let num;
 	if (args.length !== 1) {
 		num = 10;				//	Default to 10 messages

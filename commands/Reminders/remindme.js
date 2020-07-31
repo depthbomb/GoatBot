@@ -21,52 +21,49 @@
 |--------------------------------------------------------------------------
 */
 
-const Reminder = require('@models/Reminder');
 const moment = require('moment');
+const Reminder = require('@models/Reminder');
 const { MessageEmbed } = require('discord.js');
+const { MissingArgumentsError, InvalidArgumentsError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length < 2) return;
+	MissingArgumentsError.assert(args.length === 2, 'This command requires 2 arguments.');
 	const userId          = message.author.id;
 	const inputFormat     = args[0];
 	const reminderMessage = args.slice(1).join(' ');
 	const timeFormatRegex = /(\d+w)?(\d+d)?(\d+h)?(\d+m)?/i;
 	const converter       = { m: 60, h: 60*60, d: 60*60*24, w: 60*60*24*7 };
 
-	if (timeFormatRegex.test(inputFormat)) {
-		if (reminderMessage.length > 750)
-			return client.msg(message, 'red', 'error', 'Your reminder message is too long.');
+	InvalidArgumentsError.assert(reminderMessage < 750, 'Your reminder message is too long.');
+	InvalidArgumentsError.assert(timeFormatRegex.test(inputFormat), 'The time format you supplied is invalid. See command examples for correct usage.');
 
-		let matches = timeFormatRegex.exec(inputFormat);
-			matches.shift(); // Remove first item from matches (full group match, useless in this case)
-			matches = matches.filter(Boolean); // Remove all undefined/blank/false values
+	let matches = timeFormatRegex.exec(inputFormat);
+		matches.shift(); // Remove first item from matches (full group match, useless in this case)
+		matches = matches.filter(Boolean); // Remove all undefined/blank/false values
 
-		let arrival;
-		let duration = 0;
-		const now = client.timestamp();
-		for (let match of matches) {
-			const dur = match.replace(/[0-9]/g, '');
-			const num = parseInt(match.replace(/\D/g, ''));
-			const out = num * converter[dur];
-			duration = (duration + out);
-		}
-		arrival = (now + duration);
-
-		if (duration < 60) return client.msg(message, 'red', 'error', 'Your reminder delay is too short. Minimum 1 minute (1m).');
-
-		Reminder.create({ userId, arrival, reminderMessage }, (err, reminder) => {
-			if (err) return message.reply(err.message);
-			const embed = new MessageEmbed()
-				  .setTitle('Reminder Set')
-				  .setColor(client.colors.green)
-				  .setDescription(`Your reminder has been successfully set!\n\nTo cancel this reminder, type \`${client.config.prefix}rcancel ${reminder._id}\`\n\nType \`${client.config.prefix}rlist\` to see all of your active reminders.`)
-				  .addField('Arrival', moment.unix(arrival).format('dddd, MMMM Do YYYY, HH:mm:ss'))
-				  .addField('Message', `\`\`\`${reminderMessage}\`\`\``);
-
-			return message.channel.send({ embed });
-		});
-	} else {
-		return client.msg(message, 'red', 'error', 'The time format you supplied is invalid. See command examples for correct usage.');
+	let arrival;
+	let duration = 0;
+	const now = client.timestamp();
+	for (let match of matches) {
+		const dur = match.replace(/[0-9]/g, '');
+		const num = parseInt(match.replace(/\D/g, ''));
+		const out = num * converter[dur];
+		duration = (duration + out);
 	}
+	arrival = (now + duration);
+
+	InvalidArgumentsError.assert(duration >= 60, 'Your reminder delay is too short. Minimum 1 minute (1m).');
+
+	Reminder.create({ userId, arrival, reminderMessage }, (err, reminder) => {
+		if (err) return message.reply(err.message);
+		const embed = new MessageEmbed()
+				.setTitle('Reminder Set')
+				.setColor(client.colors.green)
+				.setDescription(`Your reminder has been successfully set!\n\nTo cancel this reminder, type \`${client.config.prefix}rcancel ${reminder._id}\`\n\nType \`${client.config.prefix}rlist\` to see all of your active reminders.`)
+				.addField('Arrival', moment.unix(arrival).format('dddd, MMMM Do YYYY, HH:mm:ss'))
+				.addField('Message', `\`\`\`${reminderMessage}\`\`\``);
+
+		return message.channel.send({ embed });
+	});
 };
 
 exports.conf = {

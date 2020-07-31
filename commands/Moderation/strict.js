@@ -35,7 +35,7 @@ exports.run = async (client, message, args, level) => {
 	} else {
 		client.strictMode.enabled = true;
 		client.msg(message, 'green', 'success', `Strict mode has been enabled. Commands may only be used within the <#420816699626094592> channel. This expires in ${duration} minutes.`, false);
-		setTimeout(() => {
+		client.setTimeout(() => {
 			client.strictMode.enabled = false;
 			return client.msg(message, 'green', 'success', 'Strict mode has expired.', false);
 		}, (duration*60*1000));

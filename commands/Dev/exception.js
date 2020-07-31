@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	throw new Error('Exception thrown!');
 };
 

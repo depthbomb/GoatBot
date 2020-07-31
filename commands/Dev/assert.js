@@ -21,30 +21,23 @@
 |--------------------------------------------------------------------------
 */
 
+const { MissingArgumentsError, InvalidArgumentsError, InsufficientPermissionsError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (client.raidMode) {
-		
-	} else {
-
-	}
-
-	client.raidMode = !client.raidMode;
+	throw new InsufficientPermissionsError(args.join(' ') || client.uuid());
 };
 
 exports.conf = {
 	enabled: true,
-	cooldown: 1,
+	cooldown: 5,
 	aliases: [],
-	permLevel: 3,
+	permLevel: 1,
 };
 
 exports.help = {
-	name: 'raidmode',
-	category: 'Moderation',
-	description: 'Enables/disables raid mode.',
-	usage: 'raidmode',
+	name: 'assert',
+	category: 'Dev',
+	description: 'Test',
+	usage: 'assert',
 	params: {},
-	examples: [
-		'raidmode'
-	]
+	examples: []
 };

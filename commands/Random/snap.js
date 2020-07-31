@@ -21,11 +21,11 @@
 |--------------------------------------------------------------------------
 */
 
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	const guild = message.member.guild;
 	const members = guild.members.cache.random(Math.ceil(guild.members.cache.size / 2));
 
-	let unlucky = [];
+	const unlucky = [];
 
 	for (let i = 0; i < members.length; i++) {
 		const user = members[i];

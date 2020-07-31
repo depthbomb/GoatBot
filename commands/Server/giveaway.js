@@ -22,8 +22,9 @@
 */
 
 const { MessageEmbed } = require('discord.js');
+const { InvalidArgumentCountError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length < 2) return;
+	InvalidArgumentCountError.assert(args.length >= 2, 'Both arguments are required.');
 	const giveawayLimit = args[0];
 	const giveawayItem = args.slice(1).join(' ');
 

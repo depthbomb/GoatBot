@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	const nsfwRole = message.member.guild.roles.cache.find(r => r.name === 'NSFW');
 	const lenny = '( ͡° ͜ʖ ͡°)';
 	if (message.member.roles.cache.find(r => r.name === 'NSFW')) {

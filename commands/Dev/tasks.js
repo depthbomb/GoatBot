@@ -40,7 +40,7 @@ function formatInterval(interval) {
 	return durations.join(', ');
 };
 
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	const requestedTask = args.join(' ') || null;
 	const tasks = client.tasks.filter(t => t.enabled === true);
 	const embed = new MessageEmbed().setColor(client.colors.brand);

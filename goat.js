@@ -21,17 +21,12 @@
 |--------------------------------------------------------------------------
 */
 
-if (
-	process.version.slice(1).split('.')[0] < 10 ||
-	process.version.slice(1).split('.')[0] >= 10 && process.version.slice(1).split('.')[1] < 2
-) throw new Error('GoatBot requires Node 10.2.0 or higher.');
-
 require('module-alias/register');
 const fs = require('fs');
 const path = require('path');
 const Listr = require('listr');
-const log4js = require('log4js');
-const moment = require('moment');
+const winston = require('winston');
+	  require('winston-daily-rotate-file');
 const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
 const Discord = require('discord.js');
@@ -94,16 +89,14 @@ class GoatBot extends Discord.Client {
 			blue:        '#0078d7',
 			black:       '#111111'
 		};
+		this.errors = require('./errors');
 
 		this.cache     = new NodeCache({ checkperiod: 60 });
 		this.uuid      = () => uuid();
 		this.timestamp = () => Math.floor(new Date() / 1000);
 		this.printCmd  = (commandName) => this.config.prefix + commandName;
 		this.permLevel = (message) => {
-			if (message.author.id === client.config.ownerId) {
-				return 5;
-			}
-
+			if (message.author.id === client.config.ownerId) return 5;
 			const adminRole     = message.member.roles.cache.find(r => r.id === client.config.roles.admin);
 			const moderatorRole = message.member.roles.cache.find(r => r.id === client.config.roles.mod);
 			const donorRole     = message.member.roles.cache.find(r => r.id === client.config.roles.donor);
@@ -132,28 +125,32 @@ const init = () => new Listr([
 	{
 		title: 'Setting up logging',
 		task: () => {
-			log4js.configure({
-				appenders: {
-					file: {
-						type: 'file',
-						filename: path.join(client.storagePath, 'logs', 'GoatBot.log'),
-						maxLogSize: 1*1024*1024,
-						backups: 1,
-						compress: true,
-						encoding: 'utf-8',
-						mode: 0o0640,
-						flags: 'w+'
-					},
-					out: {
-						type: 'stdout'
-					}
-				},
-				categories: {
-					default: { appenders: ['file', 'out'], level: (client.localMode ? 'debug' : 'info') }
-				}
+			const logPath = path.join(client.storagePath, 'logs');
+			const consoleLogFormat = winston.format.combine(
+				winston.format.colorize(),
+				winston.format.timestamp(),
+				winston.format.printf(info => `${info.timestamp} [${info.level}] ${info.message}`),
+			);
+			const combinedLogOptions = {
+				filename: path.join(logPath, 'goatbot-%DATE%.log'),
+				datePattern: 'YYYY-MM-DD',
+				zippedArchive: true,
+				maxSize: '50m',
+				maxFiles: '14d',
+			};
+			const logger = winston.createLogger({
+				level: 'info',
+				format: winston.format.json(),
+				transports: [
+					new winston.transports.File({ filename: path.join(logPath, 'alert.log'), level: 'alert' }),
+					new winston.transports.File({ filename: path.join(logPath, 'error.log'), level: 'error' }),
+					new winston.transports.File({ filename: path.join(logPath, 'debug.log'), level: 'debug' }),
+					new winston.transports.DailyRotateFile(combinedLogOptions),
+					new winston.transports.Console({ format: consoleLogFormat }),
+				]
 			});
 
-			client.log = log4js.getLogger('default');
+			client.log = logger;
 		}
 	},
 	{
@@ -270,26 +267,18 @@ init();
 process.on('SIGINT', () => {
 	client.log.info('Caught shutdown signal');
 	client.destroy();
-	client.log.info('Client destroyed, exiting...')
+	client.log.info('Client destroyed, exiting...');
 	process.exit(1);
 });
 
 process.on('uncaughtException', err => {
-	const crashFile = path.join(client.storagePath, 'logs', 'crash', `EXCEPTION_${moment().format('M-D-YY')}.log`);
-	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
-	client.log.error('Uncaught Exception: ' + errorMsg);
-	fs.appendFile(crashFile, 'Uncaught Exception: ' + errorMsg + '\n', () => {
-		client.destroy();
-		process.exit(1);
-	});
+	client.log.alert(err.stack);
+	client.destroy();
+	process.exit(1);
 });
 
 process.on('unhandledRejection', err => {
-	const crashFile = path.join(client.storagePath, 'logs', 'crash', `REJECTION_${moment().format('M-D-YY')}.log`);
-	const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
-	client.log.error('Uncaught Promise Error: ' + errorMsg);
-	fs.appendFile(crashFile, 'Uncaught Promise Error: ' + errorMsg + '\n', () => {
-		client.destroy();
-		process.exit(1);
-	});
+	client.log.alert(err.stack);
+	client.destroy();
+	process.exit(1);
 });

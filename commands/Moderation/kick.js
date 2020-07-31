@@ -22,8 +22,9 @@
 */
 
 const { MessageEmbed } = require('discord.js');
-exports.run = (client, message, args, level) => {
-	if (args.length === 0) return;
+const { MissingArgumentsError } = require('@errors');
+exports.run = async (client, message, args, level) => {
+	MissingArgumentsError.assert(args.length >= 1, 'Please provide a target.');
 	const mention = args[0];
 	const reason = args.slice(1).join(' ') || 'No reason given';
 
@@ -31,7 +32,7 @@ exports.run = (client, message, args, level) => {
 	if (mention.match(/<@!?\d{17,19}>/g)) {
 		member = message.mentions.members.first();
 	} else {
-		member = message.guild.members.cache.find(m => m.id === mention);
+		member = message.guild.members.cache.find(m => m.id == mention);
 	}
 
 	if (member) {

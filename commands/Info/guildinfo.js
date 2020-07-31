@@ -23,7 +23,7 @@
 
 const moment = require('moment');
 const { MessageEmbed } = require('discord.js');
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	const guild = message.member.guild;
 	const embed = new MessageEmbed()
 		.setColor(client.colors.default)

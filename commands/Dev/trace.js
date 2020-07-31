@@ -23,7 +23,7 @@
 
 const crypto = require('crypto');
 const { MessageEmbed } = require('discord.js');
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	if (args.length != 1) return;
 	const crashCode = args.join('').trim();
 	const decoded   = Buffer.from(crashCode, 'base64').toString();

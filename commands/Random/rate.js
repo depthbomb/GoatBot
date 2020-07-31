@@ -23,8 +23,9 @@
 
 const Chance = require('chance');
 const { MessageEmbed } = require('discord.js');
-exports.run = (client, message, args, level) => {
-	if (args.length < 1) return;
+const { InvalidArgumentCountError } = require('@errors');
+exports.run = async (client, message, args, level) => {
+	InvalidArgumentCountError.assert(args.length >= 1, 'Please provide a subject to rate');
 	let subject = args.join(' ');
 	const seed = subject.toLowerCase().usToSp().trim();
 

@@ -4,7 +4,7 @@ tasks.json
 export.json
 config.js
 /storage/logs/*.log
-/storage/logs/crash/*.log
+/storage/logs/*.json
 /storage/cache/rss/*
 /storage/cache/sb/*
 /storage/tmp/*

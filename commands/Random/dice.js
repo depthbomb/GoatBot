@@ -22,20 +22,21 @@
 */
 
 const pluralize = require('pluralize');
+const { InvalidArgumentsError, InvalidArgumentCountError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length < 1) return message.reply('Both arguments are required.');
+	InvalidArgumentCountError.assert(args.length > 1, 'Both arguments are required.');
+
 	const numSides = args[0];
-	let numDice = args[1];
+
+	InvalidArgumentsError.assert(!isNaN(numSides), 'Number of sides must be a number, duh dummy!');
+	InvalidArgumentsError.assert(numSides >= 2 && numSides <= 999999999, 'Number of sides must be between 2 and 999999999.');
+
+	const numDice = args[1];
 	
-	if (isNaN(numDice) || args.length < 2) numDice = 1;
+	InvalidArgumentsError.assert(!isNaN(numDice), 'Number of dice must be a number, duh dummy!');
+	InvalidArgumentsError.assert(numDice >= 1 && numDice <= 100, 'Number of dice must be between 0 and 100');
 
-	if (isNaN(numSides)) return message.reply('Number of sides must be a number, duh dummy!');
-	if (numSides < 2 || numSides > 999999999) return message.reply('Number of sides must be between 2 and 999999999.');
-
-	if (isNaN(numDice)) return message.reply('Number of dice must be a number, duh dummy!');
-	if (numDice < 1 || numDice > 100) return message.reply('Number of dice must be between 0 and 100');
-
-	let results = client.randomInt(1, numSides, numDice, 1);
+	const results = client.randomInt(1, numSides, numDice, 1);
 
 	return message.reply(`:game_die: Rolled ${numDice} ${numSides}-sided ${pluralize('die', numDice)} and got ***${results.join(', ')}*** :game_die:`);
 };
@@ -52,13 +53,12 @@ exports.help = {
 	name: 'dice',
 	category: 'Random',
 	description: 'Roll a dice.',
-	usage: 'dice [side count] [die count?]',
+	usage: 'dice [side count] [die count]',
 	params: {
-		'side count': 'Number of sides per die',
-		'die count': '(Optional) Number of die to roll, defaults to 1 if not specified or non-numeric'
+		'side count': 'Number of sides per dice',
+		'dice count': 'Number of dice to roll'
 	},
 	examples: [
 		'dice 5 10',
-		'dice 6'
 	]
 };

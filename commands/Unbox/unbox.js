@@ -36,8 +36,7 @@ exports.run = async (client, message, args, level) => {
 	unboxWeights = client.config.unbox.weights;
 
 	let weightSum = 0;
-	for (let w of unboxWeights)
-		weightSum += w;
+	for (let w of unboxWeights) weightSum += w;
 
 	const chosen     = chance.weighted(unboxTiers, unboxWeights),
 		  color      = chosen.color,

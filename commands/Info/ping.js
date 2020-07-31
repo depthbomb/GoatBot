@@ -23,14 +23,9 @@
 
 const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const embed = new MessageEmbed()
-		  .setDescription('Testing...');
-
+	const embed = new MessageEmbed().setDescription('Testing...');
 	const msg = await message.channel.send({ embed });
-
-	embed
-		.setColor('RANDOM')
-		.setDescription(`Pong! Latency is ${msg.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
+	embed.setColor('RANDOM').setDescription(`Pong! Latency is ${msg.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
 
 	return msg.edit({ embed });
 };

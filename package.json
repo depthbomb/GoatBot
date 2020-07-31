@@ -1,6 +1,6 @@
 {
 	"name": "goatbot",
-	"version": "3.0.0",
+	"version": "4.0.0",
 	"description": "Caprine.net Discord bot",
 	"keywords": [
 		"discord",
@@ -23,7 +23,9 @@
 		"start": "node ."
 	},
 	"_moduleAliases": {
-		"@models": "database/models"
+		"@models": "database/models",
+		"@errors": "errors",
+		"@helpers": "helpers"
 	},
 	"dependencies": {
 		"ascii-table": "0.0.9",
@@ -33,7 +35,9 @@
 		"cli-table3": "^0.6.0",
 		"discord.js": "^12.2.0",
 		"erlpack": "github:discordapp/erlpack",
+		"eslint": "^7.5.0",
 		"execa": "^4.0.3",
+		"fejl": "^2.5.1",
 		"gamedig": "^2.0.21",
 		"imgur": "^0.3.1",
 		"jimp": "^0.14.0",
@@ -43,7 +47,7 @@
 		"module-alias": "^2.2.2",
 		"moment": "^2.27.0",
 		"moment-duration-format": "^2.3.2",
-		"mongoose": "^5.9.25",
+		"mongoose": "^5.9.26",
 		"ms": "^2.1.2",
 		"node-cache": "^5.1.2",
 		"node-vibrant": "^3.1.5",
@@ -54,7 +58,10 @@
 		"steamid": "^1.1.3",
 		"truncate": "^2.1.0",
 		"utf-8-validate": "^5.0.2",
-		"uuid": "^8.2.0",
+		"uuid": "^8.3.0",
+		"validator": "^13.1.1",
+		"winston": "^3.3.3",
+		"winston-daily-rotate-file": "^4.5.0",
 		"zlib-sync": "^0.1.7"
 	}
 }

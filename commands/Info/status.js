@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	const status = args[0];
 	let statusMessage;
 	if (typeof status !== 'undefined') {

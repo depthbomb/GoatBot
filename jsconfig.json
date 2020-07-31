@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@errors": [ "./errors" ],
+			"@helpers": [ "./helpers" ],
+		}
+	}
+}

@@ -23,8 +23,9 @@
 
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
+const { InvalidArgumentCountError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
+	InvalidArgumentCountError.assert(args.length >= 1, 'Please provide a keyword');
 	const keywords = encodeURIComponent(args.join(' ').trim());
 	const uri = 'https://api.gfycat.com/v1/gfycats/search?search_text=' + keywords;
 	request({

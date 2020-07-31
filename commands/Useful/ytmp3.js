@@ -22,9 +22,10 @@
 */
 
 const path = require('path'),
-	execa = require('execa');
+	  execa = require('execa');
+const { MissingArgumentsError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if(args.length === 0) return;
+	MissingArgumentsError.assert(args.length > 0, 'Please provide a URL.');
 	const url = args[0];
 	const downloadPath = path.join(client.tmpPath, client.uuid() + '.mp3');
 	const ytdlArgs = [
@@ -40,8 +41,9 @@ exports.run = async (client, message, args, level) => {
 		downloadPath,
 	];
 
-	let msg = await message.channel.send('Grabbing video info...');
+	const msg = await message.channel.send('Grabbing video info...');
 
+	//	TODO: parse output/errors
 	const { stdout, stderr } = await execa(path.join(client.binPath, 'youtube-dl.exe'), ytdlArgs);
 
 	msg.delete().then(m => {

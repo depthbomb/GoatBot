@@ -26,40 +26,41 @@
  * as Hastebin requires you to send data without a field name.
  */
 const https = require('https');
+const { MissingArgumentsError, InvalidArgumentsError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
+	MissingArgumentsError.assert(args.length > 0, 'Please provide code to upload.');
 	const code = args.slice(0).join(' ') || null;
-	let msg = await message.channel.send('Processing...');
-	if (code) {
-		msg.edit('Uploading...');
-		const options = {
-			hostname: 'pastie.io',
-			port: 443,
-			path: '/documents',
-			method: 'POST',
-			headers: {
-				'Content-Length': code.length
-			}
-		};
-		const req = https.request(options, res => {
-			res.on('data', d => {
-				let data;
-				try {
-					data = JSON.parse(d);
-				} catch (e) {
-					return msg.edit('There was an error uploading to Pastie. This is likely a problem on their end.');
-				}
-				
-				return msg.edit(`<@${message.author.id}>, https://pastie.io/${data.key}`);
-			});
-			res.on('error', err => message.reply(`**Error**: ${err}`));
-		});
 
-		req.write(code);
-		req.end();
-	} else {
-		return message.reply('You didn\'t supply any text to upload, silly.');
-	}
+	const msg = await message.channel.send('Processing...');
+
+	InvalidArgumentsError.assert(code !== null, 'Code provided is empty or null.');
+	
+	msg.edit('Uploading...');
+	const options = {
+		hostname: 'pastie.io',
+		port: 443,
+		path: '/documents',
+		method: 'POST',
+		headers: {
+			'Content-Length': code.length
+		}
+	};
+	const req = https.request(options, res => {
+		res.on('data', d => {
+			let data;
+			try {
+				data = JSON.parse(d);
+			} catch (e) {
+				return msg.edit('There was an error uploading to Pastie. This is likely a problem on their end.');
+			}
+			
+			return msg.edit(`<@${message.author.id}>, https://pastie.io/${data.key}`);
+		});
+		res.on('error', err => message.reply(`**Error**: ${err}`));
+	});
+
+	req.write(code);
+	req.end();
 };
 
 exports.conf = {

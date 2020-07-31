@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	const bullet = 3;
 	const chamber = client.randomInt(1, 6);
 	if(bullet === chamber) {

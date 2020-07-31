@@ -22,8 +22,9 @@
 */
 
 const Reminder = require('@models/Reminder');
+const { MissingArgumentsError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
+	MissingArgumentsError.assert(args.length === 1, 'Please provide a reminder ID.');
 	const uuid = args.join(' ');
 	const userId = message.author.id;
 

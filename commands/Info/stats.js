@@ -22,7 +22,7 @@
 */
 
 const ms = require('ms');
-exports.run = (client, message, args, level) => {
+exports.run = async (client, message, args, level) => {
 	const duration = ms(client.uptime, { long: true });
 	return message.channel.send(`My Statistics
 -------------

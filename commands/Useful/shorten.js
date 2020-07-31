@@ -23,8 +23,9 @@
 
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
+const { MissingArgumentsError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
+	MissingArgumentsError.assert(args.length > 0, 'Please provide a URL.');
 	const longUrl = args.join(' ').trim().replace('<', '').replace('>', '');
 	const uri = 'https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=' + client.config.apiKeys.firebase;
 	request({

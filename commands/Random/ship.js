@@ -24,12 +24,13 @@
 const Chance = require('chance');
 const crypto = require('crypto');
 const { MessageEmbed } = require('discord.js');
+const { InvalidArgumentsError, InvalidArgumentCountError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length < 2) return;
+	InvalidArgumentCountError.assert(args.length === 2, 'Both arguments are required.');
 	let thing = args[0].usToSp().trim();
 	let thing2 = args.slice(1).join(' ').trim();
 
-	if (thing.toLowerCase() === thing2.toLowerCase()) return message.reply('You cannot ship two identical items.');
+	InvalidArgumentsError.assert(thing.toLowerCase() !== thing2.toLowerCase(), 'You cannot ship two identical items.');
 
 	try {
 		if (thing.match(/<@!?\d{17,19}>/g)) {
@@ -65,11 +66,10 @@ exports.run = async (client, message, args, level) => {
 	else if(output >= 100) response = 'A perfect match! \:heart_eyes:';
 	else response = 'You should not see this';
 
-	let embed = new MessageEmbed()
+	const embed = new MessageEmbed()
 		.setColor('#be1931')
 		.setTitle('\:heart: Ship Calculator')
-		.setDescription(`\:small_red_triangle_down: \`${thing}\`\n\:small_red_triangle: \`${thing2}\`\n\n${output}% [\`${bar}${barFill}\`](https://paypal.me/depthbomb) ${response}`)
-	;
+		.setDescription(`\:small_red_triangle_down: \`${thing}\`\n\:small_red_triangle: \`${thing2}\`\n\n${output}% \`${bar}${barFill}\` ${response}`);
 
 	return message.reply({ embed });
 };

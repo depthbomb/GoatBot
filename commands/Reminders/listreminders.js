@@ -21,8 +21,8 @@
 |--------------------------------------------------------------------------
 */
 
-const Reminder = require('@models/Reminder');
 const moment = require('moment');
+const Reminder = require('@models/Reminder');
 const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const userId = message.author.id;

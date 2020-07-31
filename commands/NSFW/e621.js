@@ -102,9 +102,7 @@ exports.run = async (client, message, args, level) => {
 					if (blT.indexOf(1) >= 0) {
 						attempts++;
 						msg.edit(`Blacklisted post found... trying again... (${attempts} out of ${maxAttempts})`);
-						setTimeout(() => {
-							sendPost(data);
-						}, 1000);
+						client.setTimeout(() => sendPost(data), 1000);
 						return;
 					} else {
 						let postEmbed = new MessageEmbed()

@@ -22,45 +22,44 @@
 */
 
 const { MessageEmbed } = require('discord.js');
+const { MissingArgumentsError, InvalidArgumentsError } = require('@errors');
 exports.run = async (client, message, args, level) => {
+	MissingArgumentsError.assert(args.length > 0, 'Please provide a question.');
 	const question = args.join(' ');
-	if(question.endsWith("?")) {
-		const responses = [
-			// Affirmative
-			"It is certain",
-			"It is decidedly so",
-			"Without a doubt",
-			"Yes, definitely",
-			"You may rely on it",
-			"As I see it, yes",
-			"Most likely",
-			"Outlook good",
-			"Yes",
-			"Signs point to yes",
+	InvalidArgumentsError.assert(question.endsWith('?'), 'Question must end with a question mark.');
+	const responses = [
+		// Affirmative
+		"It is certain",
+		"It is decidedly so",
+		"Without a doubt",
+		"Yes, definitely",
+		"You may rely on it",
+		"As I see it, yes",
+		"Most likely",
+		"Outlook good",
+		"Yes",
+		"Signs point to yes",
 
-			// Non-committal
-			"Reply hazy, try again",
-			"Ask again later",
-			"Better not tell you now",
-			"Cannot predict now",
-			"Concentrate and ask again",
+		// Non-committal
+		"Reply hazy, try again",
+		"Ask again later",
+		"Better not tell you now",
+		"Cannot predict now",
+		"Concentrate and ask again",
 
-			// Negative
-			"No",
-			"Nope",
-			"Don't count on it",
-			"My reply is no",
-			"My sources say no",
-			"Outlook not so good",
-			"Very doubtful"
-		];
-		const embed = new MessageEmbed()
-			  .setColor('#232323')
-			  .setDescription(`\:8ball: <@${message.author.id}>, ${responses.shuffle()[0]}`);
-		return message.channel.send({ embed });
-	} else {
-		return client.msg(message, 'orange', 'warning', 'Question must end with a question mark.');
-	}
+		// Negative
+		"No",
+		"Nope",
+		"Don't count on it",
+		"My reply is no",
+		"My sources say no",
+		"Outlook not so good",
+		"Very doubtful"
+	];
+	const embed = new MessageEmbed()
+		  .setColor('#232323')
+		  .setDescription(`\:8ball: <@${message.author.id}>, ${responses.shuffle()[0]}`);
+	return message.channel.send({ embed });
 };
 
 exports.conf = {

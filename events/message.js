@@ -22,23 +22,24 @@
 */
 
 const cooldowns = {};
+
 const ms = require('ms');
-const Chance = require('chance');
 const { MessageEmbed } = require('discord.js');
-const levelProfileAuxillaryCache = {};
-module.exports = (client, message) => {
+const { xp } = require('@helpers');
+const { MissingArgumentsError, InvalidArgumentsError, InvalidArgumentCountError, InsufficientPermissionsError, RefugeeCampCommandInvocationError } = require('@errors');
+module.exports = async (client, message) => {
 	const author         = message.author;
 	const userId         = author.id;
 	const channelId      = message.channel.id;
 	const messageContent = message.content;
 	const cleanContent   = message.cleanContent;
-	const authorRoles    = message.member?.roles?.cache;
 
 	/**
 	* Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
 	*/
-	if (channelId === client.config.refugeeChannel || channelId === client.config.kennelChannel)
-		setTimeout(() => message.delete(), (600*1000));
+	if (channelId === client.config.refugeeChannel || channelId === client.config.kennelChannel) {
+		client.setTimeout(() => message.delete(), (600*1000));
+	}
 
 	if (message.author.bot || message.system) return;
 
@@ -106,87 +107,70 @@ module.exports = (client, message) => {
 		/**
 		 * Handle distributing user XP
 		 */
-		(async () => {
-			if (!levelProfileAuxillaryCache.hasOwnProperty(userId)) {
-				const chance = new Chance();
-				const LevelProfile = require('@models/LevelProfile');
-				const disallowedChannels = client.config.levels.disallowedChannels;
-				const disallowedRoles = client.config.levels.disallowedRoles;
-				const userRoles = authorRoles.array().map(r => r.id);
-				const xpGranted = chance.bool({ likelihood: 5 }) ? 2 : 1;
-				const delay = chance.integer({ min: 60, max: 120 });
-				const touchAgain = client.timestamp() + delay;
-				if (!disallowedChannels.includes(channelId) && !(disallowedRoles.some(r => userRoles.includes(r)))) {
-					LevelProfile.findOne({ userId }, 'userId value multiplier touchAgain disabled', (err, profile) => {
-						if (err) throw new Error(err);
-						if (profile && profile.touchAgain < client.timestamp()) {
-							const existingXp = profile.value;
-							const multiplier = profile.multiplier;
-							const finalXp = (existingXp + xpGranted) * multiplier;
-							LevelProfile.updateOne({ userId }, { value: finalXp, touchAgain }, (err, res) => {
-								if (err) return client.error(message, err);
-								if (xpGranted > 1) {
-									message.react('⭐');
-								}
-							});
-						} else {
-							LevelProfile.create({ userId, value: xpGranted, touchAgain }, (err, newProfile) => {
-								if (err) return client.error(message, err);
-							});
-						}
-					});
-
-					levelProfileAuxillaryCache[userId] = touchAgain;
-					setTimeout(() => delete levelProfileAuxillaryCache[userId], delay * 1000);
-				}
-			}
-		})();
+		(async () => xp.distribute(message, client))();
 
 		return;
 	}
 
-	// If the command exists AND the user has permission, run it.
 	if (cmd) {
 		if (
 			// Prevent commands from being used in refugee camp
 			channelId === '431266723736322048' ||
 			// Prevent commands from being used outside of guilds
-			!message.guild ||
-			// Prevent commands from being used in the Kennel if the command is not !escape and the user is not elevated
-			(cmd.help.name !== 'escape' && channelId === '481201307257012262' && level < 3)
+			!message.guild
 		) return;
 
 		// TODO: Refactor this by adding something like an "allow in DMs" option per command
-		if (message.channel.type === 'dm' && cmd.help.name !== 'help')
+		if (message.channel.type === 'dm' && cmd.help.name !== 'help') {
 			return message.channel.send('I will not respond to commands and messages while in a DM. You can find me in the Caprine.net Discord server here: https://discord.gg/xw624a8');
+		}
 
-		if (level >= cmd.conf.permLevel) {
-			const cooldown = (cmd.conf.cooldown * 1000) || 1500;
-			const cooldownName = cmd.conf.globalCd ? cmd.help.name : cmd.help.name + userId;
-			const messageTime = message.createdTimestamp;
-			const bypassCooldown = userId === client.config.ownerId;
-			if (cooldowns.hasOwnProperty(cooldownName)) {
-				const expiration = cooldowns[cooldownName].ex;
-				const timeLeft   = (expiration - messageTime);
-				const response   = timeLeft <= 1000 ? 'Please try again.' : `Please try again in about ${ms(timeLeft, { long: true })}.`;
-				const embed = new MessageEmbed()
-					  .setColor('#aab8c2')
-					  .setDescription(`\:timer: <@${userId}>, ${response}`);
+		const cooldown = (cmd.conf.cooldown * 1000) || 1500;
+		const cooldownName = cmd.conf.globalCd ? cmd.help.name : cmd.help.name + userId;
+		const messageTime = message.createdTimestamp;
+		const bypassCooldown = userId === client.config.ownerId;
+		if (cooldowns.hasOwnProperty(cooldownName)) {
+			const expiration = cooldowns[cooldownName].ex;
+			const timeLeft   = (expiration - messageTime);
+			const response   = timeLeft <= 1000 ? 'Please try again.' : `Please try again in about ${ms(timeLeft, { long: true })}.`;
+			const embed = new MessageEmbed().setColor('#aab8c2').setDescription(`\:timer: <@${userId}>, ${response}`);
 
-				client.log.info(`${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);
-				return message.channel.send({ embed });
-			} else {
+			client.log.info(`${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);
+			return message.channel.send({ embed });
+		} else {
+			try {
+				if (channelId === '481201307257012262') {
+					RefugeeCampCommandInvocationError.assert(cmd.help.name === 'escape');
+				}
+
+				InsufficientPermissionsError.assert(level >= cmd.conf.permLevel, `You do not have permission to use this command. It requires a permission level of ${cmd.conf.permLevel} and you have a permission level of ${level}.`);
+
+				await cmd.run(client, message, args, level);
+
 				if (!bypassCooldown) {
 					cooldowns[cooldownName] = { ex: (messageTime + cooldown) };
-					setTimeout(() => delete cooldowns[cooldownName], cooldown);
+					client.setTimeout(() => delete cooldowns[cooldownName], cooldown);
 				}
 
 				client.log.info(`${message.author.username} executed command [${cmd.help.name}]`);
-				return cmd.run(client, message, args, level);
+			} catch (err) {
+				switch (err.constructor) {
+					default:
+						client.log.error(err.stack);
+						return client.error(message, err.message);
+					case RefugeeCampCommandInvocationError:
+						break;
+					case MissingArgumentsError:
+					case InvalidArgumentsError:
+					case InvalidArgumentCountError:
+					case InsufficientPermissionsError:
+						const emoji = client.emojis.cache.find(e => e.name === 'caprineAlert');
+						const embed = new MessageEmbed()
+							.setColor(client.colors.red)
+							.setDescription(`${emoji} \`${err.code}\` **${err.message}**`);
+						return message.channel.send({ embed });
+				}
 			}
-		} else {
-			client.log.info(`${message.author.username} attempted to execute command [${cmd.help.name}] but does not have permission`);
-			return client.msg(message, 'red', 'error', `You do not have permission to use this command. It requires a permission level of ${cmd.conf.permLevel} and you have a permission level of ${level}.`, true);
 		}
 	}
 };
