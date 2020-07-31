@@ -23,14 +23,14 @@
 
 const path = require('path');
 const jimp = require('jimp');
-const { InvalidArgumentsError } = require('@errors');
+const { InvalidArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
 	let imageUrl;
 	if (message.attachments.first()) imageUrl = message.attachments.first().url;
 	else if (message.mentions.members.array().length > 0) imageUrl = message.mentions.members.first().user.displayAvatarURL({ format: 'jpg', size: 512 });
 	else imageUrl = args.join(' ').trim() || message.member.user.displayAvatarURL({ format: 'jpg', size: 512 });
 
-	InvalidArgumentsError.assert(imageUrl, 'Please provide an image source.');
+	InvalidArgumentError.assert(imageUrl, 'Please provide an image source.');
 
 	jimp.read(imageUrl).then(image => {
 		const tmpName = `deepfried_${client.uuid()}.${image.getExtension()}`;

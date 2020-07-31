@@ -24,7 +24,7 @@
 const path = require('path');
 const Jimp = require('jimp');
 const Vibrant = require('node-vibrant');
-const { InvalidArgumentsError } = require('@errors');
+const { InvalidArgumentError } = require('@errors');
 const componentToHex = (c) => {
 	const hex = Math.floor(c).toString(16);
 	return hex.length == 1 ? "0" + hex : hex;
@@ -36,7 +36,7 @@ exports.run = async (client, message, args, level) => {
 	else if (message.mentions.members.array().length > 0) imageUrl = message.mentions.members.first().user.displayAvatarURL({ format: 'jpg', size: 512 });
 	else imageUrl = args.join(' ').trim() || message.member.user.displayAvatarURL({ format: 'jpg', size: 512 });
 
-	InvalidArgumentsError.assert(imageUrl, 'Please provide an image source.');
+	InvalidArgumentError.assert(imageUrl, 'Please provide an image source.');
 
 	Vibrant.from(imageUrl).getPalette((err, palette) => {
 		if (typeof palette === 'undefined') return message.reply('The image source you provided is invalid.\nIf you are using a URL, make sure it is a __direct link__ to the image and not to a page displaying the image.\nIf you are attaching an image to the command message, make sure the attachment is an image and/or that the image is the first attachment.');

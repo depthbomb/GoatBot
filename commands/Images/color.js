@@ -24,13 +24,13 @@
 const jimp = require('jimp');
 const imgur = require('imgur');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentsError, InvalidArgumentsError } = require('@errors');
+const { MissingArgumentsError, InvalidArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentsError.assert(args.length > 0, 'Please supply an image URL.');
 	const color = args[0];
 	const imageName = `${client.tmpPath}/${client.uuid()}.png`;
 
-	InvalidArgumentsError.assert(color.match(/#?[a-fA-F0-9]{6}/i), 'The color code you provided is invalid.');
+	InvalidArgumentError.assert(color.match(/#?[a-fA-F0-9]{6}/i), 'The color code you provided is invalid.');
 
 	const msg = await message.channel.send('Generating image, please wait...');
 	const colorCode = color.replace(/^#/, '').toUpperCase();

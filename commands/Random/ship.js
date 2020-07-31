@@ -24,13 +24,13 @@
 const Chance = require('chance');
 const crypto = require('crypto');
 const { MessageEmbed } = require('discord.js');
-const { InvalidArgumentsError, InvalidArgumentCountError } = require('@errors');
+const { InvalidArgumentError, InvalidArgumentCountError } = require('@errors');
 exports.run = async (client, message, args, level) => {
 	InvalidArgumentCountError.assert(args.length === 2, 'Both arguments are required.');
 	let thing = args[0].usToSp().trim();
 	let thing2 = args.slice(1).join(' ').trim();
 
-	InvalidArgumentsError.assert(thing.toLowerCase() !== thing2.toLowerCase(), 'You cannot ship two identical items.');
+	InvalidArgumentError.assert(thing.toLowerCase() !== thing2.toLowerCase(), 'You cannot ship two identical items.');
 
 	try {
 		if (thing.match(/<@!?\d{17,19}>/g)) {

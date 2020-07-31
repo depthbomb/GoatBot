@@ -22,11 +22,11 @@
 */
 
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentsError, InvalidArgumentsError } = require('@errors');
+const { MissingArgumentsError, InvalidArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentsError.assert(args.length > 0, 'Please provide a question.');
 	const question = args.join(' ');
-	InvalidArgumentsError.assert(question.endsWith('?'), 'Question must end with a question mark.');
+	InvalidArgumentError.assert(question.endsWith('?'), 'Question must end with a question mark.');
 	const responses = [
 		// Affirmative
 		"It is certain",

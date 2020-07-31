@@ -23,12 +23,12 @@
 
 const moment = require('moment');
 const { MessageEmbed } = require('discord.js');
-const { InvalidArgumentsError } = require('@errors');
+const { InvalidArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
 	const lockdowns = client.store.lockdowns;
 	const expires  = args[0].parseTimeFormat() || null;
 
-	InvalidArgumentsError.assert(expires, 'Time format is invalid.');
+	InvalidArgumentError.assert(expires, 'Time format is invalid.');
 
 	const reason = args.slice(1).join(' ') || null;
 	const channelId = message.channel.id;

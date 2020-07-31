@@ -22,19 +22,19 @@
 */
 
 const pluralize = require('pluralize');
-const { InvalidArgumentsError, InvalidArgumentCountError } = require('@errors');
+const { InvalidArgumentError, InvalidArgumentCountError } = require('@errors');
 exports.run = async (client, message, args, level) => {
 	InvalidArgumentCountError.assert(args.length > 1, 'Both arguments are required.');
 
 	const numSides = args[0];
 
-	InvalidArgumentsError.assert(!isNaN(numSides), 'Number of sides must be a number, duh dummy!');
-	InvalidArgumentsError.assert(numSides >= 2 && numSides <= 999999999, 'Number of sides must be between 2 and 999999999.');
+	InvalidArgumentError.assert(!isNaN(numSides), 'Number of sides must be a number, duh dummy!');
+	InvalidArgumentError.assert(numSides >= 2 && numSides <= 999999999, 'Number of sides must be between 2 and 999999999.');
 
 	const numDice = args[1];
 	
-	InvalidArgumentsError.assert(!isNaN(numDice), 'Number of dice must be a number, duh dummy!');
-	InvalidArgumentsError.assert(numDice >= 1 && numDice <= 100, 'Number of dice must be between 0 and 100');
+	InvalidArgumentError.assert(!isNaN(numDice), 'Number of dice must be a number, duh dummy!');
+	InvalidArgumentError.assert(numDice >= 1 && numDice <= 100, 'Number of dice must be between 0 and 100');
 
 	const results = client.randomInt(1, numSides, numDice, 1);
 

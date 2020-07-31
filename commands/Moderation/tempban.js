@@ -24,13 +24,13 @@
 const moment = require('moment');
 const TempBan = require('@models/TempBan');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentsError, InvalidArgumentsError } = require('@errors');
+const { MissingArgumentsError, InvalidArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentsError.assert(args.length >= 1, 'Please provide a target.');
 	const mention  = args[0];
 	const duration = args[1].parseTimeFormat();
 
-	InvalidArgumentsError.assert(duration, 'Time format is invalid.');
+	InvalidArgumentError.assert(duration, 'Time format is invalid.');
 
 	const reason = args.slice(2).join(' ') || 'No reason given';
 

@@ -24,7 +24,7 @@
 const moment = require('moment');
 const Reminder = require('@models/Reminder');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentsError, InvalidArgumentsError } = require('@errors');
+const { MissingArgumentsError, InvalidArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentsError.assert(args.length === 2, 'This command requires 2 arguments.');
 	const userId          = message.author.id;
@@ -33,8 +33,8 @@ exports.run = async (client, message, args, level) => {
 	const timeFormatRegex = /(\d+w)?(\d+d)?(\d+h)?(\d+m)?/i;
 	const converter       = { m: 60, h: 60*60, d: 60*60*24, w: 60*60*24*7 };
 
-	InvalidArgumentsError.assert(reminderMessage < 750, 'Your reminder message is too long.');
-	InvalidArgumentsError.assert(timeFormatRegex.test(inputFormat), 'The time format you supplied is invalid. See command examples for correct usage.');
+	InvalidArgumentError.assert(reminderMessage < 750, 'Your reminder message is too long.');
+	InvalidArgumentError.assert(timeFormatRegex.test(inputFormat), 'The time format you supplied is invalid. See command examples for correct usage.');
 
 	let matches = timeFormatRegex.exec(inputFormat);
 		matches.shift(); // Remove first item from matches (full group match, useless in this case)
@@ -51,7 +51,7 @@ exports.run = async (client, message, args, level) => {
 	}
 	arrival = (now + duration);
 
-	InvalidArgumentsError.assert(duration >= 60, 'Your reminder delay is too short. Minimum 1 minute (1m).');
+	InvalidArgumentError.assert(duration >= 60, 'Your reminder delay is too short. Minimum 1 minute (1m).');
 
 	Reminder.create({ userId, arrival, reminderMessage }, (err, reminder) => {
 		if (err) return message.reply(err.message);

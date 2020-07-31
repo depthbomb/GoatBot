@@ -23,7 +23,7 @@
 
 const path = require('path');
 const jimp = require('jimp');
-const { MissingArgumentsError, InvalidArgumentsError } = require('@errors');
+const { MissingArgumentsError, InvalidArgumentError } = require('@errors');
 
 const dictionary = {
 	asexual: 'asexual',
@@ -42,12 +42,12 @@ const dictionary = {
 };
 exports.run = async (client, message, args, level) => {
 	MissingArgumentsError.assert(args.length !== 0, 'Please supply a classification');
-	InvalidArgumentsError.assert(dictionary.hasOwnProperty(args[0]), 'The classification you provided is invalid');
+	InvalidArgumentError.assert(dictionary.hasOwnProperty(args[0]), 'The classification you provided is invalid');
 
 	const classification = dictionary[args[0]];
 	const opacity = args.length === 2 ? parseFloat(args[1]) : 0.5;
 
-	InvalidArgumentsError.assert((opacity >= 0 && opacity <= 1), 'Opacity must be a number between 0 and 1');
+	InvalidArgumentError.assert((opacity >= 0 && opacity <= 1), 'Opacity must be a number between 0 and 1');
 
 	const userAvatar = message.member.user.displayAvatarURL({ format: 'png', size: 512 });
 	const avatar = await jimp.read(userAvatar);

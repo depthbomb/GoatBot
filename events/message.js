@@ -26,7 +26,7 @@ const cooldowns = {};
 const ms = require('ms');
 const { MessageEmbed } = require('discord.js');
 const { xp } = require('@helpers');
-const { MissingArgumentsError, InvalidArgumentsError, InvalidArgumentCountError, InsufficientPermissionsError, RefugeeCampCommandInvocationError } = require('@errors');
+const { MissingArgumentsError, InvalidArgumentError, InvalidArgumentCountError, InsufficientPermissionsError, RefugeeCampCommandInvocationError } = require('@errors');
 module.exports = async (client, message) => {
 	const author         = message.author;
 	const userId         = author.id;
@@ -161,7 +161,7 @@ module.exports = async (client, message) => {
 					case RefugeeCampCommandInvocationError:
 						break;
 					case MissingArgumentsError:
-					case InvalidArgumentsError:
+					case InvalidArgumentError:
 					case InvalidArgumentCountError:
 					case InsufficientPermissionsError:
 						const emoji = client.emojis.cache.find(e => e.name === 'caprineAlert');
