@@ -135,7 +135,7 @@ module.exports = async (client, message) => {
 			const response   = timeLeft <= 1000 ? 'Please try again.' : `Please try again in about ${ms(timeLeft, { long: true })}.`;
 			const embed = new MessageEmbed().setColor('#aab8c2').setDescription(`\:timer: <@${userId}>, ${response}`);
 
-			client.log.info(`${message.author.username} executed command [${cmd.help.name}] but is under a cooldown.`);
+			client.log.info(`${message.author.username} executed command [${cmd.help.name}] but is under a cooldown`);
 			return message.channel.send({ embed });
 		} else {
 			try {

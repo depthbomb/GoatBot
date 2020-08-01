@@ -31,7 +31,6 @@ const mongoose = require('mongoose');
 const { v4: uuid } = require('uuid');
 const Discord = require('discord.js');
 const { promisify } = require('util');
-const NodeCache = require('node-cache');
 const readdir = promisify(require('fs').readdir);
 const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
 				"│                                                                         │",
@@ -91,7 +90,6 @@ class GoatBot extends Discord.Client {
 		};
 		this.errors = require('./errors');
 
-		this.cache     = new NodeCache({ checkperiod: 60 });
 		this.uuid      = () => uuid();
 		this.timestamp = () => Math.floor(new Date() / 1000);
 		this.printCmd  = (commandName) => this.config.prefix + commandName;
@@ -139,22 +137,60 @@ const init = () => new Listr([
 					}
 				})();
 			};
-			const combinedLogOptions = {
-				filename: path.join(logPath, 'goatbot-%DATE%.log'),
-				datePattern: 'YYYY-MM-DD',
-				zippedArchive: true,
-				maxSize: '50m',
-				maxFiles: '14d',
+			const logOptions = {
+				alert: {
+					level: 'alert',
+					filename: path.join(logPath, 'ALERT.%DATE%.log'),
+					datePattern: 'YYYY-MM-DD',
+					zippedArchive: true,
+					maxSize: '50m',
+					maxFiles: '14d',
+					format: restrictLevel('alert')
+				},
+				error: {
+					level: 'error',
+					filename: path.join(logPath, 'ERROR.%DATE%.log'),
+					datePattern: 'YYYY-MM-DD',
+					zippedArchive: true,
+					maxSize: '50m',
+					maxFiles: '14d',
+					format: restrictLevel('error')
+				},
+				warning: {
+					level: 'warning',
+					filename: path.join(logPath, 'WARNING.%DATE%.log'),
+					datePattern: 'YYYY-MM-DD',
+					zippedArchive: true,
+					maxSize: '50m',
+					maxFiles: '14d',
+					format: restrictLevel('warning')
+				},
+				debug: {
+					level: 'debug',
+					filename: path.join(logPath, 'DEBUG.%DATE%.log'),
+					datePattern: 'YYYY-MM-DD',
+					zippedArchive: true,
+					maxSize: '50m',
+					maxFiles: '14d',
+					format: restrictLevel('debug')
+				},
+				combined: {
+					filename: path.join(logPath, 'INFO.%DATE%.log'),
+					datePattern: 'YYYY-MM-DD',
+					zippedArchive: true,
+					maxSize: '50m',
+					maxFiles: '14d',
+				}
 			};
 			const logger = winston.createLogger({
 				level: 'info',
 				format: winston.format.json(),
 				transports: [
-					new winston.transports.File({ filename: path.join(logPath, 'alert.log'), level: 'alert', format: restrictLevel('alert') }),
-					new winston.transports.File({ filename: path.join(logPath, 'error.log'), level: 'error', format: restrictLevel('error') }),
-					new winston.transports.File({ filename: path.join(logPath, 'warning.log'), level: 'warning', format: restrictLevel('warning') }),
-					new winston.transports.File({ filename: path.join(logPath, 'debug.log'), level: 'debug', format: restrictLevel('debug') }),
-					new winston.transports.DailyRotateFile(combinedLogOptions),
+					new winston.transports.DailyRotateFile(logOptions.alert),
+					new winston.transports.DailyRotateFile(logOptions.error),
+					new winston.transports.DailyRotateFile(logOptions.warning),
+					new winston.transports.DailyRotateFile(logOptions.debug),
+					new winston.transports.DailyRotateFile(logOptions.combined),
 					new winston.transports.Console({ format: consoleLogFormat }),
 				]
 			});
