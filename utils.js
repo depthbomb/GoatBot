@@ -47,11 +47,10 @@ module.exports = client => {
 
 		const crashCode = Buffer.from('GoatBotSuperSecretStackTraceCrashCode::'+iv.toString('hex')+'::'+encrypted.toString('hex')).toString('base64');
 		const embed = new MessageEmbed()
-			.setAuthor('OOPSIE WOOPSIE!!', client.user.avatarURL({ dynamic: true }))
-			.setColor(client.colors.red)
-			.setDescription('OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this code belowo if you see him!')
-			.addField('\u200B', `\`\`\`\n${crashCode}\n\`\`\``, true)
-			.setThumbnail(client.emojis.cache.find(e => e.name === 'caprineAlert').url);
+			  .setColor(client.colors.red)
+			  .setDescription('OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this   code belowo if you see him!')
+			  .addField('\u200B', `\`\`\`\n${crashCode}\n\`\`\``, true)
+			  .setThumbnail(client.emojis.cache.find(e => e.name === 'caprineAlert').url);
 	
 		return msg.reply({ embed });
 	};
