@@ -23,5 +23,5 @@
 
 module.exports = (client, id) => {
 	client.online = true;
-	client.log.info(`Resumed shard ${id}`);
+	client.log.debug(`Resumed shard ${id}`);
 };

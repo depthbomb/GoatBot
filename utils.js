@@ -45,7 +45,7 @@ module.exports = client => {
 		let encrypted = cipher.update(errorStack);
 			encrypted = Buffer.concat([encrypted, cipher.final()]);
 
-		const crashCode = Buffer.from('GoatBotSuperSecretStackTraceCrashCode::'+iv.toString('hex')+'::'+encrypted.toString('hex')).toString('base64');
+		const crashCode = Buffer.from(client.config.version+'::'+iv.toString('hex')+'::'+encrypted.toString('hex')).toString('base64');
 		const embed = new MessageEmbed()
 			  .setColor(client.colors.red)
 			  .setDescription('OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this   code belowo if you see him!')
