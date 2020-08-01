@@ -33,7 +33,7 @@ exports.run = async (client, message, args, level) => {
 	const iv   = Buffer.from(exploded[1], 'hex');
 	const data = Buffer.from(exploded[2], 'hex');
 	
-	let decipher  = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
+	let decipher  = crypto.createDecipheriv('aes-256-gcm', Buffer.from(key), iv);
 	let decrypted = decipher.update(data);
 		decrypted = Buffer.concat([decrypted, decipher.final()]);
 	
