@@ -21,4 +21,4 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (client, rateLimitInfo) => client.log.info(`I'm being rate limited: [${rateLimitInfo.method}] ${rateLimitInfo.path} -> ${rateLimitInfo.limit}`);
+module.exports = (client, rateLimitInfo) => client.log.warning(`I'm being rate limited: [${rateLimitInfo.method}] ${rateLimitInfo.path} -> ${rateLimitInfo.limit}`);

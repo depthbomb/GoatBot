@@ -131,6 +131,14 @@ const init = () => new Listr([
 				winston.format.timestamp(),
 				winston.format.printf(info => `${info.timestamp} [${info.level}] ${info.message}`),
 			);
+			const restrictLevel = (level) => {
+				const LEVEL = Symbol.for('level');
+				return winston.format(info => {
+					if (info[LEVEL] === level) {
+						return info;
+					}
+				})();
+			};
 			const combinedLogOptions = {
 				filename: path.join(logPath, 'goatbot-%DATE%.log'),
 				datePattern: 'YYYY-MM-DD',
@@ -142,9 +150,10 @@ const init = () => new Listr([
 				level: 'info',
 				format: winston.format.json(),
 				transports: [
-					new winston.transports.File({ filename: path.join(logPath, 'alert.log'), level: 'alert' }),
-					new winston.transports.File({ filename: path.join(logPath, 'error.log'), level: 'error' }),
-					new winston.transports.File({ filename: path.join(logPath, 'debug.log'), level: 'debug' }),
+					new winston.transports.File({ filename: path.join(logPath, 'alert.log'), level: 'alert', format: restrictLevel('alert') }),
+					new winston.transports.File({ filename: path.join(logPath, 'error.log'), level: 'error', format: restrictLevel('error') }),
+					new winston.transports.File({ filename: path.join(logPath, 'warning.log'), level: 'warning', format: restrictLevel('warning') }),
+					new winston.transports.File({ filename: path.join(logPath, 'debug.log'), level: 'debug', format: restrictLevel('debug') }),
 					new winston.transports.DailyRotateFile(combinedLogOptions),
 					new winston.transports.Console({ format: consoleLogFormat }),
 				]

@@ -21,6 +21,4 @@
 |--------------------------------------------------------------------------
 */
 
-module.exports = (client, error) => {
-	client.log.error('Encountered WS error: ' + error);
-};
+module.exports = (client, error) => client.log.error(error);
