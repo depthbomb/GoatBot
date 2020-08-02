@@ -186,9 +186,7 @@ const init = () => new Listr([
 				level: 'info',
 				format: winston.format.json(),
 				transports: [
-					new winston.transports.DailyRotateFile(logOptions.alert),
 					new winston.transports.DailyRotateFile(logOptions.error),
-					new winston.transports.DailyRotateFile(logOptions.warning),
 					new winston.transports.DailyRotateFile(logOptions.debug),
 					new winston.transports.DailyRotateFile(logOptions.combined),
 					new winston.transports.Console({ format: consoleLogFormat }),
@@ -317,13 +315,13 @@ process.on('SIGINT', () => {
 });
 
 process.on('uncaughtException', err => {
-	client.log.alert(err.stack);
+	client.log.error(err.stack);
 	client.destroy();
 	process.exit(1);
 });
 
 process.on('unhandledRejection', err => {
-	client.log.alert(err.stack);
+	client.log.error(err.stack);
 	client.destroy();
 	process.exit(1);
 });

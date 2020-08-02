@@ -5,6 +5,7 @@ export.json
 config.js
 /storage/logs/*.log
 /storage/logs/*.json
+/storage/logs/*.gz
 /storage/cache/rss/*
 /storage/cache/sb/*
 /storage/tmp/*

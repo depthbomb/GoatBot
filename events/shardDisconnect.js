@@ -23,5 +23,5 @@
 
 module.exports = (client, id) => {
 	client.online = false;
-	client.log.warning(`Bot disconnected from shard ${id}`);
+	client.log.error(`Bot disconnected from shard ${id}`);
 };
