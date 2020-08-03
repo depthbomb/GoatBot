@@ -52,8 +52,6 @@ exports.run = async (client, message, args, level) => {
 			  .setThumbnail(client.emojis.cache.find(e => e.name === 'caprineCommand').url)
 			  .setDescription(`Here are all of my commands! You can read detailed info about a single command by typing \`${client.printCmd('help')} [command]\`.`)
 			  .setFooter(`You can read detailed info about a single command by typing ${client.printCmd('help')} [command]`);
-		
-		console.log(commands);
 
 		for (let cat of Object.keys(commands)) {
 			const cmds = commands[cat].keys();
