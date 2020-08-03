@@ -72,8 +72,7 @@ exports.run = async (client, message, args, level) => {
 		.setDescription(`<@${userId}> has unboxed: **${name}!**\nType \`${client.printCmd('unboxstats')}\` to view your stats.`)
 		.addField('Tier', `\`${tier}/${tiers}\``, true)
 		.addField('Drop chance', `\`${dropChance}%\``, true)
-		.setImage(image)
-		.setTimestamp();
+		.setImage(image);
 
 	Unbox.findOne({ userId }, (err, doc) => {
 		if (err) return console.error(err);
