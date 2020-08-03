@@ -26,7 +26,15 @@ const cooldowns = {};
 const ms = require('ms');
 const { MessageEmbed } = require('discord.js');
 const { xp } = require('@helpers');
-const { MissingArgumentError, InvalidArgumentError, InvalidArgumentCountError, InsufficientPermissionsError, RefugeeCampCommandInvocationError } = require('@errors');
+const {
+	MissingArgumentError,
+	InvalidArgumentError,
+	InvalidArgumentCountError,
+	InsufficientPermissionsError,
+	RefugeeCommandUsageError,
+	InvalidCommandLocationError,
+	GuildOnlyCommandError,
+} = require('@errors');
 module.exports = async (client, message) => {
 	const author         = message.author;
 	const userId         = author.id;
@@ -45,16 +53,16 @@ module.exports = async (client, message) => {
 
 	const isOwner       = (userId === client.config.ownerId);
 	const level         = client.permLevel(message);
-	const isServerStaff = (message.member.roles.cache.find(r => r.name === client.config.roles.admin) || message.member.roles.cache.find(r => r.name === client.config.roles.mod) || level > 1 || isOwner);
+	const isServerStaff = (message?.member?.roles.cache.find(r => r.name === client.config.roles.admin) || message?.member?.roles.cache.find(r => r.name === client.config.roles.mod) || level > 1 || isOwner);
 
 	const logPrefixes = [];
 	const username = message.member !== null ? message.member.displayName : message.author.tag;
 
-	if (message.member.guild.available) {
-		logPrefixes.push(`[${message.member.guild.name}]`);
+	if (message?.member?.guild) {
+		logPrefixes.push(`[${message.member.guild.name}]`, `#${message.channel.name}`);
+	} else {
+		logPrefixes.push('[DM]');
 	}
-
-	logPrefixes.push(`#${message.channel.name}`);
 
 	if (message.tts) {
 		logPrefixes.push('[TTS]');
@@ -113,18 +121,6 @@ module.exports = async (client, message) => {
 	}
 
 	if (cmd) {
-		if (
-			// Prevent commands from being used in refugee camp
-			channelId === '431266723736322048' ||
-			// Prevent commands from being used outside of guilds
-			!message.guild
-		) return;
-
-		// TODO: Refactor this by adding something like an "allow in DMs" option per command
-		if (message.channel.type === 'dm' && cmd.help.name !== 'help') {
-			return message.channel.send('I will not respond to commands and messages while in a DM. You can find me in the Caprine.net Discord server here: https://discord.gg/xw624a8');
-		}
-
 		const cooldown = (cmd.conf.cooldown * 1000) || 1500;
 		const cooldownName = cmd.conf.globalCd ? cmd.help.name : cmd.help.name + userId;
 		const messageTime = message.createdTimestamp;
@@ -133,14 +129,19 @@ module.exports = async (client, message) => {
 			const expiration = cooldowns[cooldownName].ex;
 			const timeLeft   = (expiration - messageTime);
 			const response   = timeLeft <= 1000 ? 'Please try again.' : `Please try again in about ${ms(timeLeft, { long: true })}.`;
-			const embed = new MessageEmbed().setColor('#aab8c2').setDescription(`\:timer: <@${userId}>, ${response}`);
+			const embed = new MessageEmbed()
+				  .setColor('#aab8c2')
+				  .setDescription(`\:timer: <@${userId}>, ${response}`);
 
 			client.log.info(`${message.author.username} executed command [${cmd.help.name}] but is under a cooldown`);
 			return message.channel.send({ embed });
 		} else {
 			try {
+				GuildOnlyCommandError.assert(message.channel.type !== 'dm');
+				InvalidCommandLocationError.assert(channelId !== '431266723736322048');
+
 				if (channelId === '481201307257012262') {
-					RefugeeCampCommandInvocationError.assert(cmd.help.name === 'escape');
+					RefugeeCommandUsageError.assert(cmd.help.name === 'escape');
 				}
 
 				InsufficientPermissionsError.assert(level >= cmd.conf.permLevel, `You do not have permission to use this command. It requires a permission level of ${cmd.conf.permLevel} and you have a permission level of ${level}.`);
@@ -158,7 +159,10 @@ module.exports = async (client, message) => {
 					default:
 						client.log.error(err.stack);
 						return client.error(message, err.stack);
-					case RefugeeCampCommandInvocationError:
+					case GuildOnlyCommandError:
+						return message.author.send(err.message);
+					case RefugeeCommandUsageError:
+					case InvalidCommandLocationError:
 						break;
 					case MissingArgumentError:
 					case InvalidArgumentError:
