@@ -21,76 +21,107 @@
 |--------------------------------------------------------------------------
 */
 
+const embedCache = {};
+const commandCache = {};
+
+const ms = require('ms');
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	const settings = client.config;
-	if (!args[0]) {
-		const myCommands = message.guild ? client.commands.filter(cmd => cmd.conf.permLevel <= level) : client.commands.filter(cmd => cmd.conf.permLevel <= level);
-		const commandNames = myCommands.keyArray();
-		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
+	const userId = message.author.id;
+	const command = args[0]?.trim();
+	if (!command) {	//	Display all commands for user's permission level
+		let commands;
+		if (!commandCache.hasOwnProperty(userId)) {
+			const cmds = client.commands.filter(c => c.conf.permLevel <= level);
 
-		let currentCategory = '';
-		let output = `= Command List =\n\n[Use ${client.printCmd('help')} <command> for details. For bot details, type !about]\n`;
-
-		const sorted = myCommands.sort((p, c) => p.help.category > c.help.category ? 1 : -1);
-		sorted.forEach( c => {
-			const cat = c.help.category.toProperCase();
-			if (currentCategory !== cat) {
-				output += `\n== ${cat} ==\n`;
-				currentCategory = cat;
+			const categories = [];
+			for (let cmd of cmds.array()) {
+				categories.push(cmd.help.category);
 			}
-			output += `${c.help.name}${' '.repeat(longest - c.help.name.length)} :: ${c.help.description}\n`;
-		});
-		return message.author.send(output, { code: 'asciidoc', split: true })
-			  .then((msg) => message.react('📨'))
-			  .catch(err => message.reply('I cannot send the commands to you. You must allow DMs from me for some commands to function.'));
-	} else {
-		let hasParams = false;
-		let paramLine = '';
-		let command;
-		let parameters = [];
-		if (client.commands.has(args[0])) {
-			command = args[0];
-		} else if (client.aliases.has(args[0])) {
-			command = client.aliases.get(args[0]);
+	
+			const categorized = {};
+			for (let cat of categories) {
+				const complyingCommand = cmds.filter(c => c.help.category === cat);
+				categorized[cat] = [];
+				categorized[cat].push(complyingCommand);
+			}
+	
+			commands = categorized;
+			commandCache[userId] = categorized;
+		} else {
+			commands = commandCache[userId];
 		}
-		if (client.commands.has(command)) {
-			command = client.commands.get(command);
-			if (level < command.conf.permLevel) return;
 
-			const cooldown = command.conf.hasOwnProperty('cooldown') ? command.conf.cooldown : 1.5;
-			const examples = [];
-			command.help.examples.forEach((element) => {
-				examples.push(`* ${settings.prefix}${element}`)
-			});
-
-			if(Object.keys(command.help.params).length !== 0) {
-				hasParams = true;
-				Object.keys(command.help.params).forEach((key, i) => {
-					parameters.push(`${i + 1}. [${key}] - ${command.help.params[key]}`);
-				});
+		const embed = new MessageEmbed()
+			  .setTitle('Commands')
+			  .setColor(client.colors.brand)
+			  .setThumbnail(client.emojis.cache.find(e => e.name === 'caprineCommand').url)
+			  .setDescription(`Here are all of my commands! You can read detailed info about a single command by typing \`${client.printCmd('help')} [command]\`.`)
+			  .setFooter(`You can read detailed info about a single command by typing ${client.printCmd('help')} [command]`);
+		
+		for (let cat of Object.keys(commands)) {
+			const cmds = commands[cat][0].keys();
+			const printedCmds = [];
+			for (let c of cmds) {
+				printedCmds.push(client.printCmd(c));
 			}
 
-			if (command.conf.hasOwnProperty('requiredRole')) {
-				requiresRole = 'Required Role\n-------------\n' + command.conf.requiredRole + '\n\n'
-			} else {
-				requiresRole = '';
+			embed.addField(cat, `\`\`\`${printedCmds.join('\n')}\`\`\``);
+		}
+
+		return message.channel.send({ embed });
+	} else {		//	Display info about the specified command
+		const cmd = client.commands.get(command) || client.aliases.get(command);
+		if (cmd) {
+			let embed;
+			if (embedCache.hasOwnProperty(command)) {
+				embed = embedCache[command];
+			} else { 
+				const name = cmd.help.name;
+				const category = cmd.help.category;
+				const description = cmd.help.description;
+				const usage = cmd.help.usage;
+				const params = cmd.help.params || {};
+				const examples = cmd.help.examples;
+				const cooldown = cmd.conf.cooldown || 1.5;
+				const globalCd = cmd.conf.globalCd || false;
+				const aliases = cmd.conf.aliases || [];
+	
+				embed = new MessageEmbed()
+					.setTitle(client.printCmd(name))
+					.setColor(client.colors.brand)
+					.setThumbnail(client.emojis.cache.find(e => e.name === 'caprineCommand').url)
+					.setDescription(description + '‌	‌'.repeat(66 - description.length))
+					.addField(aliases.length === 1 ? 'Alias' : 'Aliases', aliases.length > 0 ? aliases.join(', ') : 'None')
+					.addField('Cooldown', ms(cooldown*1000, { long: true }), true)
+					.addField('Global Cooldown', globalCd ? 'Yes' : 'No', true)
+					.addField('Usage', client.printCmd(usage))
+					.setFooter('This command is from the ' + category + ' category.');
+				
+				if (Object.keys(params).length !== 0) {
+					let parameters = [];
+	
+					for (let p of Object.keys(params)) {
+						const paramDescription = params[p];
+						parameters.push(`\`${p}\`` + '	' + paramDescription);
+					}
+	
+					embed.addField('Parameters', parameters.join('\n'));
+				}
+	
+				let exampleLines = [];
+				for (let example of examples) {
+					exampleLines.push(client.printCmd(example));
+				}
+
+				embed.addField(examples.length > 1 ? 'Examples' : 'Example', `\`\`\`\n${exampleLines.join('\n')}\`\`\``);
+
+				embedCache[command] = embed;
 			}
 
-			if (hasParams) paramLine = `Parameters\n----------\n${parameters.join("\n")}\n\n`;
-
-			return message.author.send(
-				`# ${command.help.name.toProperCase()}\n` +
-				`${command.help.description}\n\n` +
-				`Cooldown\n--------\n${cooldown} seconds\n\n` +
-				requiresRole +
-				`Aliases\n-------\n${command.conf.aliases.length > 0 ? command.conf.aliases.join(", ") : 'None'}\n\n` +
-				`Usage\n-----\n${settings.prefix}${command.help.usage}\n\n` +
-				paramLine +
-				`Examples\n--------\n${examples.join("\n")}\n\n`
-				, {code: 'markdown', split: true}
-			)
-			.then(msg => message.react('📨'))
-			.catch(err => message.reply('I cannot send the commands to you. You must allow DMs from me for some commands to function.'));
+			return message.channel.send({ embed });
+		} else {
+			return message.reply('That command does not exist.');
 		}
 	}
 };
@@ -98,7 +129,6 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	aliases: [
-		'h',
 		'halp',
 		'cmds',
 		'commands'
@@ -109,10 +139,10 @@ exports.conf = {
 exports.help = {
 	name: 'help',
 	category: 'Info',
-	description: 'Displays all the available commands for your permission level.',
+	description: 'Displays all the available commands for your permission level',
 	usage: 'help [command?]',
 	params: {
-		'command': '(Optional) command to view details on'
+		'command?': '(Optional) Command to view details on'
 	},
 	examples: [
 		'help',

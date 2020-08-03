@@ -84,7 +84,7 @@ exports.conf = {
 exports.help = {
 	name: 'tasks',
 	category: 'Dev',
-	description: 'Shows the bot\'s enable, automated tasks',
+	description: 'Shows the bot\'s enabled, automated tasks',
 	usage: 'tasks [task?]',
 	params: {
 		'task': 'Task to view info on'

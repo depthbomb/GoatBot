@@ -237,12 +237,14 @@ const init = () => new Listr([
 				const commandFiles = fs.readdirSync(`${client.rootPath}/commands/${folder}/`);
 				for (let file of commandFiles) {
 					try {
-						const props = require(`${client.rootPath}/commands/${folder}/${file}`);
+						const commandPath = `${client.rootPath}/commands/${folder}/${file}`;
+						const props = require(commandPath);
 						if (props.conf.enabled) {
 							if (file.split('.').slice(-1)[0] !== 'js') return;
 							client.commands.set(props.help.name, props);
 							props.conf.aliases.forEach(alias => client.aliases.set(alias, props.help.name));
 						}
+						delete require.cache[require.resolve(commandPath)];
 					} catch (e) {
 						throw new Error(e);
 					}

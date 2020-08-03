@@ -11,3 +11,4 @@ config.js
 /storage/tmp/*
 /storage/database/*
 /storage/downloads/*
+*.bak
