@@ -16,7 +16,7 @@ const distribute = (message, client) => {
 		const disallowedRoles = client.config.levels.disallowedRoles;
 		const userRoles = authorRoles.array().map(r => r.id);
 		const xpGranted = chance.bool({ likelihood: 3 }) ? 3 : 1;
-		const delay = chance.integer({ min: 60, max: 120 });
+		const delay = chance.integer({ min: 45, max: 90 });
 		const touchAgain = client.timestamp() + delay;
 		const guildRoles = message.guild.roles.cache;
 		if (!disallowedChannels.includes(channelId) && !(disallowedRoles.some(r => userRoles.includes(r)))) {

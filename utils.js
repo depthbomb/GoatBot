@@ -21,7 +21,10 @@
 |--------------------------------------------------------------------------
 */
 
+const fs = require('fs');
+const path = require('path');
 const crypto = require('crypto');
+const moment = require('moment');
 const { MessageEmbed } = require('discord.js');
 module.exports = client => {
 	client.awaitReply = async (msg, question, limit = 60000) => {
@@ -36,22 +39,26 @@ module.exports = client => {
 	};
 
 	client.error = (msg, err) => {
-		const algorithm = 'aes-256-gcm';
+		const algorithm = 'aes-256-cbc';
 		const key = client.config.crypto.key;
 		const iv  = crypto.randomBytes(16);
 		const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
-		const errorStack = `**UserID:** ${msg.author.id}\n**ChannelID:** ${msg.channel.id}\n**DM?:** ${msg.channel.type === 'dm'}\n${msg.guild.available ? '**Guild:** ' + msg.guild.name + '\n' : ''}\n\`\`\`js\n${err}\n\`\`\``;
-	
-		let encrypted = cipher.update(errorStack);
+		const errorStack = err;
+		const timestamp  = moment().format('YYYY-MM-DD-HHmmss');
+		const logLocation = path.join(__dirname, 'storage', 'logs', 'crash', 'CRASH.' + timestamp + '.log');
+
+		fs.writeFileSync(logLocation, errorStack);
+
+		let encrypted = cipher.update(logLocation);
 			encrypted = Buffer.concat([encrypted, cipher.final()]);
 
-		const crashCode = Buffer.from(client.config.version+'::'+iv.toString('hex')+'::'+encrypted.toString('hex')).toString('base64');
+		const crashCode = Buffer.from(iv.toString('hex')+'!'+encrypted.toString('hex')).toString('hex');
 		const embed = new MessageEmbed()
 			  .setColor(client.colors.red)
-			  .setDescription('OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this   code belowo if you see him!')
+			  .setDescription('OOPSIE WOOPSIE!! UwU I made a fucky wucky!! A wittle fucko boingo! My cweator is working VEWY HAWD to fix this! Send them this code belowo if you see him!')
 			  .addField('\u200B', `\`\`\`\n${crashCode}\n\`\`\``, true)
 			  .setThumbnail(client.emojis.cache.find(e => e.name === 'caprineAlert').url);
-	
+		
 		return msg.reply({ embed });
 	};
 

@@ -21,27 +21,34 @@
 |--------------------------------------------------------------------------
 */
 
+const fs = require('fs');
 const crypto = require('crypto');
-const { MessageEmbed } = require('discord.js');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length != 1) return;
+	MissingArgumentError.assert(args.length > 0, 'Please provide a crash code.');
 	const crashCode = args.join('').trim();
-	const decoded   = Buffer.from(crashCode, 'base64').toString();
-	const exploded  = decoded.split('::');
-
+	const decoded   = Buffer.from(crashCode, 'hex').toString();
+	const exploded  = decoded.split('!');
 	const key  = client.config.crypto.key;
-	const iv   = Buffer.from(exploded[1], 'hex');
-	const data = Buffer.from(exploded[2], 'hex');
+	const iv   = Buffer.from(exploded[0], 'hex');
+	const data = Buffer.from(exploded[1], 'hex');
 	
-	let decipher  = crypto.createDecipheriv('aes-256-gcm', Buffer.from(key), iv);
+	let decipher  = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
 	let decrypted = decipher.update(data);
 		decrypted = Buffer.concat([decrypted, decipher.final()]);
-	
-	const embed = new MessageEmbed()
-		  .setColor(client.colors.green)
-		  .setDescription(decrypted);
+		decrypted = decrypted.toString();
 
-	return message.channel.send({ embed });
+	fs.readFile(decrypted, (err, stack) => {
+		if (err) {
+			return message.author.send('The requested log file `'+ decrypted +'` could not be opened.');
+		} else {
+			if (stack.length > 2040) {
+				return message.author.send({ files: [{ attachment: decrypted }] });
+			} else {
+				return message.author.send('```' + stack + '```');
+			}
+		}
+	});
 };
 
 exports.conf = {

@@ -6,6 +6,7 @@ config.js
 /storage/logs/*.log
 /storage/logs/*.json
 /storage/logs/*.gz
+/storage/logs/crash/*
 /storage/cache/rss/*
 /storage/cache/sb/*
 /storage/tmp/*

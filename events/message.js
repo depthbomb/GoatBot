@@ -157,7 +157,7 @@ module.exports = async (client, message) => {
 				switch (err.constructor) {
 					default:
 						client.log.error(err.stack);
-						return client.error(message, err.message);
+						return client.error(message, err.stack);
 					case RefugeeCampCommandInvocationError:
 						break;
 					case MissingArgumentError:
