@@ -23,8 +23,9 @@
 
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
+	MissingArgumentError.assert(args.length > 0, 'Please provide a sample of text to analyze');
 	const text = encodeURIComponent(args.join(''));
 	const uri = `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${client.config.apiKeys.googleapis}`;
 
@@ -90,10 +91,8 @@ exports.conf = {
 	enabled: true,
 	cooldown: 5,
 	aliases: [
-		'analyze',
 		'toxicity',
 		'toxic',
-		'pers'
 	],
 	permLevel: 0,
 };

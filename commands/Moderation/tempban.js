@@ -70,10 +70,7 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	aliases: [
-		'tban',
-		'bantemp'
-	],
+	aliases: [],
 	permLevel: 3
 };
 

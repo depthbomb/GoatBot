@@ -87,7 +87,7 @@ exports.help = {
 	description: 'Shows the bot\'s enabled, automated tasks',
 	usage: 'tasks [task?]',
 	params: {
-		'task': 'Task to view info on'
+		'task?': '(Optional) Task to view info on'
 	},
 	examples: [
 		'tasks heartbeat'

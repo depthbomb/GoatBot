@@ -38,9 +38,10 @@ const getFileSize = (file) => {
 	const bytes = stats['size'];
 	return bytes;
 };
-
+const { MissingArgumentError, InvalidArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if(args.length === 0) return;
+	MissingArgumentError.assert(args.length > 0, 'Please provide a directory name');
+
 	const dirs = {
 		tmp: client.tmpPath,
 		logs: path.join(client.storagePath, 'logs'),
@@ -48,19 +49,18 @@ exports.run = async (client, message, args, level) => {
 		events: path.join(client.rootPath, 'events'),
 		commands: path.join(client.rootPath, 'commands'),
 	};
-	const directory = dirs[args.join(' ').trim()] || false;
 
-	if (directory) {
-		const files = walkSync(directory);
-		if (files.length > 0) {
-			let totalSize = 0;
-			for (let file of files) totalSize = totalSize + getFileSize(file);
-			return message.reply(`This directory contains **${plural('file', files.length, true)}** with a total size of **${pretty(totalSize)}**.`);
-		} else {
-			return message.reply('This directory does not have any files in it.');
-		}
+	const directory = dirs[args.join(' ').trim()];
+
+	InvalidArgumentError.assert(directory, 'The directory you provided is not valid');
+
+	const files = walkSync(directory);
+	if (files.length > 0) {
+		let totalSize = 0;
+		for (let file of files) totalSize = totalSize + getFileSize(file);
+		return message.reply(`This directory contains **${plural('file', files.length, true)}** with a total size of **${pretty(totalSize)}**.`);
 	} else {
-		return message.reply('Invalid directory');
+		return message.reply('This directory does not have any files in it.');
 	}
 };
 

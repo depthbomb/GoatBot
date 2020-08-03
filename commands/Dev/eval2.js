@@ -21,9 +21,9 @@
 |--------------------------------------------------------------------------
 */
 
-const trunc = require('truncate');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if(args.length === 0) return;
+	MissingArgumentError.assert(args.length > 0, 'Please provide code to evaluate');
 	const code = args.join(' ');
 
 	try {

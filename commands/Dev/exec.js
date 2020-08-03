@@ -22,8 +22,9 @@
 */
 
 const exec = require('execa');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
+	MissingArgumentError.assert(args.length > 0, 'Please provide a command to execute');
 	const command   = args[0];
 	const arguments = args.slice(1);
 	try {

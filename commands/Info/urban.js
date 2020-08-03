@@ -24,8 +24,9 @@
 const trunc = require('truncate');
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
+	MissingArgumentError.assert(args.length > 0, 'Please provide a term');
 	const term = encodeURIComponent(args.join(" "));
 	const apiUrl = `http://api.urbandictionary.com/v0/define?term=${term}`;
 

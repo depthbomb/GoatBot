@@ -49,7 +49,6 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	cooldown: 5,
-	globalCd: false,
 	aliases: [
 		'qrcode'
 	],

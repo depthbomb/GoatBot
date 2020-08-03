@@ -6,7 +6,9 @@ const codes = {
 	InvalidArgumentCountError: { code: 'CPRNET10002', message: 'The number of arguments is invalid' },
 	OnCooldownError: { code: 'CPRNET10003', message: 'An active cooldown is preventing this action from executing' },
 	InsufficientPermissionsError: { code: 'CPRNET10004', message: 'User has insufficient permissions to perform this action' },
-	RefugeeCampCommandInvocationError: { code: 'CPRNET10005', message: 'The command may not be executed in the refugee camp channel' },
+	RefugeeCommandUsageError: { code: 'CPRNET10005', message: 'The command may not be executed in the refugee camp channel' },
+	InvalidCommandLocationError: { code: 'CPRNET10006', message: 'The command may not be executed in this context' },
+	GuildOnlyCommandError: { code: 'CPRNET10007', message: 'Commands may only be executed in my server https://discord.gg/xw624a8' },
 
 	//	2xxxx series - database errors
 	DocumentExistsError: { code: 'CPRNET20000', message: 'The document already exists in the database' },
@@ -18,9 +20,11 @@ class MissingArgumentError extends MakeErrorClass(codes['MissingArgumentError'].
 class InvalidArgumentError extends MakeErrorClass(codes['InvalidArgumentError'].message, { code: codes['InvalidArgumentError'].code }) {}
 class InvalidArgumentCountError extends MakeErrorClass(codes['InvalidArgumentCountError'].message, { code: codes['InvalidArgumentCountError'].code }) {}
 class InsufficientPermissionsError extends MakeErrorClass(codes['InsufficientPermissionsError'].message, { code: codes['InsufficientPermissionsError'].code }) {}
-class RefugeeCampCommandInvocationError extends MakeErrorClass(codes['RefugeeCampCommandInvocationError'].message, { code: codes['RefugeeCampCommandInvocationError'].code }) {}
+class InvalidCommandLocationError extends MakeErrorClass(codes['InvalidCommandLocationError'].message, { code: codes['InvalidCommandLocationError'].code }) {}
+class GuildOnlyCommandError extends MakeErrorClass(codes['GuildOnlyCommandError'].message, { code: codes['GuildOnlyCommandError'].code }) {}
 
 class DocumentExistsError extends MakeErrorClass(codes['DocumentExistsError'].message, { code: codes['DocumentExistsError'].code }) {}
+class DocumentNotFoundError extends MakeErrorClass(codes['DocumentNotFoundError'].message, { code: codes['DocumentNotFoundError'].code }) {}
 
 module.exports = {
 	OnCooldownError,
@@ -28,9 +32,11 @@ module.exports = {
 	InvalidArgumentError,
 	InvalidArgumentCountError,
 	InsufficientPermissionsError,
-	RefugeeCampCommandInvocationError,
+	InvalidCommandLocationError,
+	GuildOnlyCommandError,
 
 	DocumentExistsError,
+	DocumentNotFoundError,
 
 	codes,
 };

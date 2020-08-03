@@ -24,8 +24,9 @@
 const request = require('request');
 const moment = require('moment');
 const { MessageEmbed } = require('discord.js');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
+	MissingArgumentError.assert(args.length > 0, 'Please provide a query');
 	const appId = client.config.openweathermap_api_key;
 	const query = args.join(' ');
 	const uri = `http://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${appId}&units=imperial`;

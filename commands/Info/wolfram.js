@@ -23,8 +23,9 @@
 
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length === 0) return;
+	MissingArgumentError.assert('Please provide a query');
 	const query = encodeURIComponent(args.join(' '));
 	const uri = `http://api.wolframalpha.com/v2/query?appid=${client.config.apiKeys.wolframalpha}&input=${query}&format=plaintext&output=json&units=nonmetric`;
 

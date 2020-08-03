@@ -66,7 +66,6 @@ exports.run = async (client, message, args, level) => {
 exports.conf = {
 	enabled: true,
 	cooldown: 10,
-	globalCd: true,
 	aliases: [
 		'paste',
 		'hastebin',

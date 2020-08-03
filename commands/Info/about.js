@@ -50,7 +50,7 @@ exports.run = async (client, message, args, level) => {
 };
 
 exports.conf = {
-	enabled: true,
+	enabled: false,
 	aliases: [
 		'abt',
 		'info'

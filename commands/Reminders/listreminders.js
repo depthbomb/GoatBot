@@ -51,7 +51,6 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	cooldown: 1,
 	aliases: [
 		'listreminder',
 		'rlist',

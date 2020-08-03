@@ -22,8 +22,9 @@
 */
 
 const LevelProfile = require('@models/LevelProfile');
+const { InvalidArgumentError, InvalidArgumentCountError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length < 2) return;
+	InvalidArgumentCountError.assert(args.length === 2, 'You must provide two arguments');
 
 	let mention = args[0], member;
 	if (mention.match(/<@!?\d{17,19}>/g)) {
@@ -34,9 +35,8 @@ exports.run = async (client, message, args, level) => {
 
 	if (member) {
 		const value = parseInt(args[1]);
-		if (value === NaN) {
-			return client.msg(message, 'red', 'error', 'XP value must be a number.');
-		}
+
+		InvalidArgumentError.assert(value !== NaN, 'XP value must be a number');
 
 		LevelProfile.findOne({ userId: member.id }, (err, profile) => {
 			if (profile) {

@@ -21,8 +21,9 @@
 |--------------------------------------------------------------------------
 */
 
+const { MissingArgumentError } = require('@errors');
 exports.run = async (client, message, args, level) => {
-	if (args.length < 0) return;
+	MissingArgumentError.assert(args.length > 0, 'Please provide a target');
 
 	let subject;
 	let type;

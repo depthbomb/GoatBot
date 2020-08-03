@@ -47,12 +47,10 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
-	cooldown: 1,
 	aliases: [
 		'remindercancel',
 		'remindcancel',
 		'remindmecancel',
-		'rcancel'
 	],
 	permLevel: 0
 };
