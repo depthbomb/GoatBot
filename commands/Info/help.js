@@ -28,26 +28,20 @@ const ms = require('ms');
 const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	const userId = message.author.id;
-	const command = args[0]?.trim();
+	const command = args[0]?.trim().replace('!', '');
 	if (!command) {	//	Display all commands for user's permission level
 		let commands;
 		if (!commandCache.hasOwnProperty(userId)) {
 			const cmds = client.commands.filter(c => c.conf.permLevel <= level);
 
-			const categories = [];
-			for (let cmd of cmds.array()) {
-				categories.push(cmd.help.category);
+			const keys = Array.from(new Set(cmds.map(c => c.help.category)));
+			const categories = {};
+			for (const key of keys) {
+				categories[key] = cmds.filter(c => c.help.category === key);
 			}
-	
-			const categorized = {};
-			for (let cat of categories) {
-				const complyingCommand = cmds.filter(c => c.help.category === cat);
-				categorized[cat] = [];
-				categorized[cat].push(complyingCommand);
-			}
-	
-			commands = categorized;
-			commandCache[userId] = categorized;
+
+			commands = categories;
+			commandCache[userId] = categories;
 		} else {
 			commands = commandCache[userId];
 		}
@@ -59,8 +53,10 @@ exports.run = async (client, message, args, level) => {
 			  .setDescription(`Here are all of my commands! You can read detailed info about a single command by typing \`${client.printCmd('help')} [command]\`.`)
 			  .setFooter(`You can read detailed info about a single command by typing ${client.printCmd('help')} [command]`);
 		
+		console.log(commands);
+
 		for (let cat of Object.keys(commands)) {
-			const cmds = commands[cat][0].keys();
+			const cmds = commands[cat].keys();
 			const printedCmds = [];
 			for (let c of cmds) {
 				printedCmds.push(client.printCmd(c));
@@ -128,6 +124,7 @@ exports.run = async (client, message, args, level) => {
 
 exports.conf = {
 	enabled: true,
+	cooldown: 5,
 	aliases: [
 		'halp',
 		'cmds',
