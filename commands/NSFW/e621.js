@@ -56,8 +56,7 @@ exports.run = async (client, message, args, level) => {
 	let maxAttempts = 5;
 	let attempts = 0;
 	const msg = await message.channel.send('Sending request...');
-
-	const searchQuery = `tags=${tags}+rating:${rating}&limit=320&page=${pageNum}`;
+	const searchQuery = `tags=${tags.join(' ')}+rating:${rating}&limit=320&page=${pageNum}`;
 	const apiUrl = `https://e621.net/posts.json?${searchQuery}`;
 
 	request({
