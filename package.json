@@ -42,7 +42,7 @@
 		"gamedig": "^2.0.22",
 		"imgur": "^0.3.1",
 		"jimp": "^0.14.0",
-		"libsodium-wrappers": "^0.7.6",
+		"libsodium-wrappers": "^0.7.8",
 		"listr": "^0.14.3",
 		"module-alias": "^2.2.2",
 		"moment": "^2.27.0",
