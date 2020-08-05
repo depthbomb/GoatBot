@@ -58,6 +58,7 @@ exports.conf = {
 	aliases: [
 		'shortenurl',
 		'shorturl',
+		'shortlink',
 	],
 	permLevel: 0
 };
@@ -65,7 +66,7 @@ exports.conf = {
 exports.help = {
 	name: 'shorten',
 	category: 'Useful',
-	description: 'Generates a goo.gl link from the provided URL',
+	description: 'Generates a short link from the provided URL',
 	usage: 'shorten [URL]',
 	params: {
 		'URL': 'The URL to shorten'

@@ -171,7 +171,7 @@ module.exports = async (client, message) => {
 						const emoji = client.emojis.cache.find(e => e.name === 'caprineAlert');
 						const embed = new MessageEmbed()
 							.setColor(client.colors.red)
-							.setDescription(`${emoji} \`${err.code}\` **${err.message}**`);
+							.setDescription(`${emoji} \`${err.code}\` ${err.message}`);
 						return message.channel.send({ embed });
 				}
 			}
