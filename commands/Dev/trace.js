@@ -45,7 +45,7 @@ exports.run = async (client, message, args, level) => {
 			if (stack.length > 2040) {
 				return message.author.send({ files: [{ attachment: decrypted }] });
 			} else {
-				return message.author.send('```' + stack + '```');
+				return message.channel.send('```js\n' + stack + '```');
 			}
 		}
 	});

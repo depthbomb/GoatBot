@@ -21,6 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
+console.clear();
 require('module-alias/register');
 const fs = require('fs');
 const path = require('path');
@@ -54,7 +55,8 @@ class GoatBot extends Discord.Client {
 		this.db;
 		this.log;
 
-		this.config      = require('./config.js').config;
+		this.config      = require('./config').config;
+		this.images      = require('./images');
 
 		this.disableLog  = false;
 		this.online      = false;
