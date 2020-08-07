@@ -1,8 +1,8 @@
 module.exports = {
 	version: 1,
 	coin: {
-		heads: '',
-		tails: '',
+		heads: 'https://cdn.discordapp.com/app-assets/405805435438891008/741088330833461288.png?size=256',
+		tails: 'https://cdn.discordapp.com/app-assets/405805435438891008/741088330581671947.png?size=256',
 	},
 	unbox: {
 		poor: 'https://cdn.discordapp.com/app-assets/405805435438891008/739648861731291146.png',
