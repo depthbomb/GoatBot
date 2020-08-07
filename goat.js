@@ -90,7 +90,6 @@ class GoatBot extends Discord.Client {
 			blue:        '#0078d7',
 			black:       '#111111'
 		};
-		this.errors = require('./errors');
 
 		this.uuid      = () => uuid();
 		this.timestamp = () => Math.floor(new Date() / 1000);
