@@ -21,24 +21,18 @@
 |--------------------------------------------------------------------------
 */
 
-const pluralize = require('pluralize');
-const { InvalidArgumentError, InvalidArgumentCountError } = require('@errors');
+const Chance = require('chance')
+	  chance = new Chance();
+const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
-	InvalidArgumentCountError.assert(args.length > 1, 'Both arguments are required.');
+	const roll = chance.integer({ min: 1, max: 6 });
+	const image = client.images.dice[roll];
+	const embed = new MessageEmbed()
+		  .setColor(client.colors.brand)
+		  .setDescription(`${message.member.displayName} rolls the dice!`)
+		  .setImage(image);
 
-	const numSides = args[0];
-
-	InvalidArgumentError.assert(!isNaN(numSides), 'Number of sides must be a number, duh dummy!');
-	InvalidArgumentError.assert(numSides >= 2 && numSides <= 999999999, 'Number of sides must be between 2 and 999999999.');
-
-	const numDice = args[1];
-	
-	InvalidArgumentError.assert(!isNaN(numDice), 'Number of dice must be a number, duh dummy!');
-	InvalidArgumentError.assert(numDice >= 1 && numDice <= 100, 'Number of dice must be between 0 and 100');
-
-	const results = client.randomInt(1, numSides, numDice, 1);
-
-	return message.reply(`:game_die: Rolled ${numDice} ${numSides}-sided ${pluralize('die', numDice)} and got ***${results.join(', ')}*** :game_die:`);
+	return message.channel.send({ embed });
 };
 
 exports.conf = {
@@ -52,13 +46,10 @@ exports.conf = {
 exports.help = {
 	name: 'dice',
 	category: 'Random',
-	description: 'Roll a dice.',
-	usage: 'dice [side count] [die count]',
-	params: {
-		'side count': 'Number of sides per dice',
-		'dice count': 'Number of dice to roll'
-	},
+	description: 'Rolls a 6-sided dice',
+	usage: 'dice',
+	params: {},
 	examples: [
-		'dice 5 10',
+		'dice',
 	]
 };

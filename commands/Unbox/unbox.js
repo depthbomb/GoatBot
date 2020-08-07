@@ -39,7 +39,7 @@ exports.run = async (client, message, args, level) => {
 
 	const chosen     = chance.weighted(unboxTiers, unboxWeights),
 		  color      = chosen.color,
-		  image      = client.images.unbox[chosen.file] + '?size=1024',
+		  image      = client.images.unbox[chosen.file],
 		  weight     = unboxWeights[unboxTiers.indexOf(chosen)],
 		  prefix     = chosen.prefix || '',
 		  suffix     = chosen.suffix || '',

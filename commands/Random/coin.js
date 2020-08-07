@@ -26,9 +26,6 @@ exports.run = async (client, message, args, level) => {
 	const sides = ['Heads', 'Tails'];
 	const decision = sides.shuffle()[0];
 	const image = client.images.coin[decision.toLowerCase()];
-
-	console.log(image);
-
 	const embed = new MessageEmbed()
 		  .setColor('#828282')
 		  .setDescription(`The coin lands on __${decision}!__`)
