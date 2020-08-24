@@ -121,6 +121,7 @@ module.exports = async (client, message) => {
 	}
 
 	if (cmd) {
+		if (client.strictMode.enabled && message.channel.id !== '420816699626094592') return;
 		const cooldown = (cmd.conf.cooldown * 1000) || 1500;
 		const cooldownName = cmd.conf.globalCd ? cmd.help.name : cmd.help.name + userId;
 		const messageTime = message.createdTimestamp;

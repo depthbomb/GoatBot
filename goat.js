@@ -21,7 +21,6 @@
 |--------------------------------------------------------------------------
 */
 
-console.clear();
 require('module-alias/register');
 const fs = require('fs');
 const path = require('path');
@@ -71,6 +70,7 @@ class GoatBot extends Discord.Client {
 		this.store       = { lockdowns: { } };
 
 		this.raidMode    = false;
+		this.strictMode  = { enabled: false };
 
 		this.rootPath    = __dirname;
 		this.binPath     = path.join(this.rootPath, 'bin');
@@ -95,6 +95,7 @@ class GoatBot extends Discord.Client {
 		this.timestamp = () => Math.floor(new Date() / 1000);
 		this.printCmd  = (commandName) => this.config.prefix + commandName;
 		this.permLevel = (message) => {
+			if (message.author.bot || message.system || message.channel.type !== 'text') return 0;
 			if (message.author.id === client.config.ownerId) return 5;
 			const adminRole     = message.member.roles.cache.find(r => r.id === client.config.roles.admin);
 			const moderatorRole = message.member.roles.cache.find(r => r.id === client.config.roles.mod);
