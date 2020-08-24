@@ -76,26 +76,22 @@ exports.run = async (client, message, args, level) => {
 
 	const msg = await message.channel.send({ embed });
 
-	if (settings.mode < 2) {
-		message.channel.awaitMessages(m => m.cleanContent.trim() === `${chosenNumber}`, { max: 1, time: (time*1000), errors: ['time'] }).then(col => {
-			inProgress = false;
-			const winner = col.first().member;
-			embed = new MessageEmbed()
-				.setTitle('RNG')
-				.setColor(client.colors.green)
-				.setDescription(`<@${winner.user.id}> has guessed the number first (0 - ${settings.max})!\n**The number was __${chosenNumber}__!**`);
-			msg.delete().then(m => m.channel.send({ embed }));
-		}).catch(() => {
-			inProgress = false;
-			embed = new MessageEmbed()
-				.setTitle('RNG')
-				.setColor(client.colors.red)
-				.setDescription(`No one guessed the number (0 - ${settings.max})!\n**The number was __${chosenNumber}__!**`);
-			msg.delete().then(m => m.channel.send({ embed }));
-		});
-	} else {
-
-	}
+	message.channel.awaitMessages(m => m.cleanContent.trim() === `${chosenNumber}`, { max: 1, time: (time*1000), errors: ['time'] }).then(col => {
+		inProgress = false;
+		const winner = col.first().member;
+		embed = new MessageEmbed()
+			.setTitle('RNG')
+			.setColor(client.colors.green)
+			.setDescription(`<@${winner.user.id}> has guessed the number first (0 - ${settings.max})!\n**The number was __${chosenNumber}__!**`);
+		msg.delete().then(m => m.channel.send({ embed }));
+	}).catch(() => {
+		inProgress = false;
+		embed = new MessageEmbed()
+			.setTitle('RNG')
+			.setColor(client.colors.red)
+			.setDescription(`No one guessed the number (0 - ${settings.max})!\n**The number was __${chosenNumber}__!**`);
+		msg.delete().then(m => m.channel.send({ embed }));
+	});
 };
 
 exports.conf = {
