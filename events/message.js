@@ -101,15 +101,18 @@ module.exports = async (client, message) => {
 				null !== messageContent.match(/^(https?:\/\/)?discord\.gg\/invite\/(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig) ||
 				null !== messageContent.match(/^(https?:\/\/)?discordapp\.com\/invite\/(?:(?!.*[Ii10OolL]).[a-zA-Z0-9]{5,6}|[a-zA-Z0-9\-]{2,32})$/ig)
 			) {
-				if (isServerStaff) return;
-				if (
+				if (!isServerStaff && (
 					!messageContent.includes('discord.gg/xw624a8') ||
 					!messageContent.includes('discord.gg/invite/xw624a8') ||
 					!messageContent.includes('discordapp.com/invite/xw624a8')
-				) {
+				)) {
 					return message.delete().then(m => m.reply('Discord invite links are not allowed. Please keep those links to DMs.'));
 				}
 			}
+		}
+
+		if (messageContent.match(/\n{9,}/igm)) {
+			return message.delete();
 		}
 
 		/**
