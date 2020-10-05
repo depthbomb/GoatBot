@@ -46,7 +46,11 @@ module.exports = async (client, message) => {
 	* Automatically delete messages in refugee camp and kennel after 10 minutes. Placed up at the top so we cover bot messages too.
 	*/
 	if (channelId === client.config.refugeeChannel || channelId === client.config.kennelChannel) {
-		client.setTimeout(() => message.delete(), (600*1000));
+		client.setTimeout(() => {
+			if (message) {
+				message.delete();
+			}
+		}, (600*1000));
 	}
 
 	if (message.author.bot || message.system) return;
