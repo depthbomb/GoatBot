@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-const { MissingArgumentError } = require('@errors');
+const { MissingArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0, 'Please provide code to evaluate');
 	const code = args.join(' ');

@@ -23,7 +23,7 @@
 
 const path = require('path');
 const jimp = require('jimp');
-const { MissingArgumentError, InvalidArgumentError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentError } = require('@core/errors');
 
 const dictionary = {
 	asexual: 'asexual',

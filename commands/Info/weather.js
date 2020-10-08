@@ -24,7 +24,7 @@
 const request = require('request');
 const moment = require('moment');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentError } = require('@errors');
+const { MissingArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0, 'Please provide a query');
 	const appId = client.config.openweathermap_api_key;

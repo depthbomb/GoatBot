@@ -24,7 +24,7 @@
 const moment = require('moment');
 const TempBan = require('@models/TempBan');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentError, InvalidArgumentError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length >= 1, 'Please provide a target.');
 	const mention  = args[0];

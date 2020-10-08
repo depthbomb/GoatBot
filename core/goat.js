@@ -57,27 +57,27 @@ class GoatBot extends Discord.Client {
 		this.db;
 		this.log;
 
-		this.queue       = new JobQueue(this);
+		this.queue        = new JobQueue(this);
 
-		this.config      = require('./config').config;
-		this.images      = require('./images');
+		this.config       = require('../config').config;
+		this.images       = require('./images');
 
-		this.disableLog  = false;
-		this.online      = false;
-		this.started     = 0;
-		this.heartbeat   = 0;
+		this.disableLog   = false;
+		this.online       = false;
+		this.started      = 0;
+		this.heartbeat    = 0;
 
-		this.localMode   = this.config.dev;
+		this.localMode    = this.config.dev;
 
-		this.commands    = new Discord.Collection();
-		this.aliases     = new Discord.Collection();
-		this.tasks       = [];
-		this.store       = { lockdowns: { } };
+		this.commands     = new Discord.Collection();
+		this.aliases      = new Discord.Collection();
+		this.tasks        = [];
+		this.store        = { lockdowns: { } };
 
-		this.raidMode    = false;
-		this.strictMode  = { enabled: false };
+		this.raidMode     = false;
+		this.strictMode   = { enabled: false };
 
-		this.rootPath    = __dirname;
+		this.rootPath    = path.join(__dirname, '../');
 		this.binPath     = path.join(this.rootPath, 'bin');
 		this.storagePath = path.join(this.rootPath, 'storage');
 		this.tmpPath     = path.join(this.storagePath, 'tmp');
@@ -85,6 +85,7 @@ class GoatBot extends Discord.Client {
 		this.cachePath   = path.join(this.storagePath, 'cache');
 		this.dlPath      = path.join(this.storagePath, 'downloads');
 		this.rsrcPath    = path.join(this.rootPath, 'resources');
+		this.cmdsPath    = path.join(this.rootPath, 'commands');
 		this.colors      = {
 			brand:       '#ea005e',
 			yellow:      '#ffb900',
@@ -96,6 +97,7 @@ class GoatBot extends Discord.Client {
 			black:       '#111111'
 		};
 
+		this.console   = console;
 		this.snowflake = () => Snowflake.getUniqueID();
 		this.uuid      = () => uuid();
 		this.timestamp = () => Math.floor(new Date() / 1000);
@@ -124,8 +126,8 @@ class GoatBot extends Discord.Client {
 const client = new GoatBot();
 	  client.started = client.timestamp();
 
-require(`${client.rootPath}/utils.js`)(client);
-require(`${client.rootPath}/prototypes.js`)(client);
+require('./utils')(client);
+require('./prototypes')(client);
 
 const init = () => new Listr([
 	{
@@ -238,14 +240,14 @@ const init = () => new Listr([
 	{
 		title: 'Loading commands',
 		task: () => {
-			const commandsRoot = path.join(client.rootPath, 'commands');
-			const categories = fs.readdirSync(commandsRoot)
-				  .filter(file => fs.statSync(path.join(commandsRoot, file)).isDirectory());
-			for (let folder of categories) {
-				const commandFiles = fs.readdirSync(`${client.rootPath}/commands/${folder}/`);
-				for (let file of commandFiles) {
+			const categories = fs.readdirSync(client.cmdsPath)
+				  .filter(file => fs.statSync(path.join(client.cmdsPath, file)).isDirectory());
+			for (const folder of categories) {
+				const categoryFolder = path.join(client.cmdsPath, folder);
+				const commandFiles = fs.readdirSync(categoryFolder);
+				for (const file of commandFiles) {
 					try {
-						const commandPath = `${client.rootPath}/commands/${folder}/${file}`;
+						const commandPath = path.join(categoryFolder, file);
 						const props = require(commandPath);
 						if (props.conf.enabled) {
 							if (file.split('.').slice(-1)[0] !== 'js') return;
@@ -307,7 +309,7 @@ const init = () => new Listr([
 .run()
 .then(() => client.login(client.config.token))
 .catch(err => {
-	client.log.error(err);
+	client.log.error(err.stack);
 	client.destroy();
 	process.exit(1);
 });

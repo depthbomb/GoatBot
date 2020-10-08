@@ -21,7 +21,7 @@
 |--------------------------------------------------------------------------
 */
 
-const { MissingArgumentError, InvalidArgumentCountError, InvalidArgumentError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentCountError, InvalidArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0);
 	InvalidArgumentCountError.assert((args.length >= 2 && args.length <= 50), 'Amount of choices must be between 2 and 50');

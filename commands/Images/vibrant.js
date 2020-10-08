@@ -24,7 +24,7 @@
 const path = require('path');
 const Jimp = require('jimp');
 const Vibrant = require('node-vibrant');
-const { InvalidArgumentError } = require('@errors');
+const { InvalidArgumentError } = require('@core/errors');
 const componentToHex = (c) => {
 	const hex = Math.floor(c).toString(16);
 	return hex.length == 1 ? "0" + hex : hex;

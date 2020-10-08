@@ -34,7 +34,7 @@ const {
 	RefugeeCommandUsageError,
 	InvalidCommandLocationError,
 	GuildOnlyCommandError,
-} = require('@errors');
+} = require('@core/errors');
 module.exports = async (client, message) => {
 	const author         = message.author;
 	const userId         = author.id;

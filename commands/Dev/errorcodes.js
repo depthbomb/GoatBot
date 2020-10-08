@@ -22,7 +22,7 @@
 */
 
 const dictionary = [];
-const { codes } = require('@errors');
+const { codes } = require('@core/errors');
 const { MessageEmbed } = require('discord.js');
 exports.run = async (client, message, args, level) => {
 	if (dictionary.length === 0) {

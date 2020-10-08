@@ -23,7 +23,7 @@
 
 const { MessageEmbed } = require('discord.js');
 const ReactionBan = require('@models/ReactionBan');
-const { MissingArgumentError } = require('@errors');
+const { MissingArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length >= 1, 'Please provide a target.');
 	const mention = args[0];

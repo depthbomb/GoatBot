@@ -23,7 +23,7 @@
 
 const moment = require('moment');
 const { MessageEmbed } = require('discord.js');
-const { InvalidArgumentError } = require('@errors');
+const { InvalidArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	const lockdowns = client.store.lockdowns;
 	const expires  = args[0].parseTimeFormat() || null;

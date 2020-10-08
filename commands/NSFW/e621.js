@@ -28,7 +28,7 @@ const tagBlacklist = ['male_lactation', 'vore', 'inflation', 'gore', 'macro', 's
 const trunc = require('truncate');
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentError, InvalidArgumentError, InvalidCommandLocationError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentError, InvalidCommandLocationError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length >= 3, 'You must provide three arguments');
 	InvalidCommandLocationError.assert(message.channel.nsfw, 'This command can only be used in NSFW channels')

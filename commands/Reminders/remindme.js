@@ -24,7 +24,7 @@
 const moment = require('moment');
 const Reminder = require('@models/Reminder');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentError, InvalidArgumentError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length === 2, 'This command requires 2 arguments.');
 	const userId          = message.author.id;

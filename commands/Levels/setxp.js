@@ -22,7 +22,7 @@
 */
 
 const LevelProfile = require('@models/LevelProfile');
-const { InvalidArgumentError, InvalidArgumentCountError } = require('@errors');
+const { InvalidArgumentError, InvalidArgumentCountError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	InvalidArgumentCountError.assert(args.length === 2, 'You must provide two arguments');
 

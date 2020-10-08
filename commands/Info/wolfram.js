@@ -23,7 +23,7 @@
 
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentError } = require('@errors');
+const { MissingArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert('Please provide a query');
 	const query = encodeURIComponent(args.join(' '));

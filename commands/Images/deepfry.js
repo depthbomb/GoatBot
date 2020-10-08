@@ -23,7 +23,7 @@
 
 const path = require('path');
 const jimp = require('jimp');
-const { InvalidArgumentError } = require('@errors');
+const { InvalidArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	let imageUrl;
 	if (message.attachments.first()) imageUrl = message.attachments.first().url;

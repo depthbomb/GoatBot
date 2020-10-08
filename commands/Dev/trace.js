@@ -23,7 +23,7 @@
 
 const fs = require('fs');
 const crypto = require('crypto');
-const { MissingArgumentError } = require('@errors');
+const { MissingArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0, 'Please provide a crash code.');
 	const crashCode = args.join('').trim();

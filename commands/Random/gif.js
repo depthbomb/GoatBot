@@ -23,7 +23,7 @@
 
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
-const { InvalidArgumentCountError } = require('@errors');
+const { InvalidArgumentCountError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	InvalidArgumentCountError.assert(args.length >= 1, 'Please provide a keyword');
 	const keywords = encodeURIComponent(args.join(' ').trim());

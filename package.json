@@ -18,11 +18,12 @@
 	"bugs": {
 		"url": "https://github.com/depthbomb/GoatBot/issues"
 	},
-	"main": "goat.js",
+	"main": "./core/goat.js",
 	"scripts": {
 		"start": "node ."
 	},
 	"_moduleAliases": {
+		"@core": "core",
 		"@models": "database/models",
 		"@errors": "errors",
 		"@helpers": "helpers"

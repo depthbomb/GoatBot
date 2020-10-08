@@ -24,7 +24,7 @@
 const Filter = require('bad-words');
 const filter = new Filter({ list: [ 'nigger', 'faggot', 'fag', 'kike', 'jew', 'chink' ] });
 const Tag = require('@models/Tag');
-const { MissingArgumentError, InvalidArgumentError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	const userId = message.author.id;
 	MissingArgumentError.assert(args.length >= 1, 'This command requires at least one argument.');

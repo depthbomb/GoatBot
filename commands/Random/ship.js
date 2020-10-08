@@ -24,7 +24,7 @@
 const Chance = require('chance');
 const crypto = require('crypto');
 const { MessageEmbed } = require('discord.js');
-const { InvalidArgumentError, InvalidArgumentCountError } = require('@errors');
+const { InvalidArgumentError, InvalidArgumentCountError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	InvalidArgumentCountError.assert(args.length === 2, 'Both arguments are required.');
 	let thing = args[0].usToSp().trim();

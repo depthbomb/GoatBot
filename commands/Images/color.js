@@ -24,7 +24,7 @@
 const jimp = require('jimp');
 const imgur = require('imgur');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentError, InvalidArgumentError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0, 'Please supply an image URL.');
 	const color = args[0];

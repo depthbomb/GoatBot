@@ -25,7 +25,7 @@ const translate = require('@k3rn31p4nic/google-translate-api');
 const languages = translate.languages;
 const languageCodes = Object.keys(languages);
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentError, InvalidArgumentError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length >= 3, 'You must provide at least three arguments');
 

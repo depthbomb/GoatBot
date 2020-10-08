@@ -22,7 +22,7 @@
 */
 
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentError, InvalidArgumentError } = require('@errors');
+const { MissingArgumentError, InvalidArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0, 'Please provide a question.');
 	const question = args.join(' ');

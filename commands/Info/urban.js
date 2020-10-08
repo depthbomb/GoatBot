@@ -24,7 +24,7 @@
 const trunc = require('truncate');
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentError } = require('@errors');
+const { MissingArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0, 'Please provide a term');
 	const term = encodeURIComponent(args.join(" "));

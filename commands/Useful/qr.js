@@ -23,7 +23,7 @@
 
 const path = require('path');
 const qr = require('qrcode');
-const { MissingArgumentError } = require('@errors');
+const { MissingArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0, 'Please provide text.');
 	const text = args.slice(0).join(' ');

@@ -23,7 +23,7 @@
 
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
-const { MissingArgumentError } = require('@errors');
+const { MissingArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0, 'Please provide a URL.');
 	const longUrl = args.join(' ').trim().replace('<', '').replace('>', '');
