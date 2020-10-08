@@ -32,6 +32,8 @@ const { v4: uuid } = require('uuid');
 const Discord = require('discord.js');
 const { promisify } = require('util');
 const readdir = promisify(require('fs').readdir);
+const { UniqueID } = require('nodejs-snowflake');
+const Snowflake = new UniqueID({ customEpoch: 823824000, machineID: 1 });
 const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
 				"│                                                                         │",
 				"│                                                                         │",
@@ -48,11 +50,14 @@ const ascii = ["┌────────────────────�
 				"└─────────────────────────────────────────────────────────────────────────┘"];
 console.log(ascii.join('\n'));
 
+const JobQueue = require('./jobQueue');
 class GoatBot extends Discord.Client {
 	constructor (options) {
 		super (options);
 		this.db;
 		this.log;
+
+		this.queue       = new JobQueue(this);
 
 		this.config      = require('./config').config;
 		this.images      = require('./images');
@@ -91,6 +96,7 @@ class GoatBot extends Discord.Client {
 			black:       '#111111'
 		};
 
+		this.snowflake = () => Snowflake.getUniqueID();
 		this.uuid      = () => uuid();
 		this.timestamp = () => Math.floor(new Date() / 1000);
 		this.printCmd  = (commandName) => this.config.prefix + commandName;

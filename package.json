@@ -50,6 +50,7 @@
 		"mongoose": "^5.10.7",
 		"ms": "^2.1.2",
 		"node-vibrant": "^3.1.5",
+		"nodejs-snowflake": "^1.5.1",
 		"pluralize": "^8.0.0",
 		"pretty-bytes": "^5.4.1",
 		"qrcode": "^1.4.4",
