@@ -2,8 +2,10 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
+			"@core": [ "./core" ],
 			"@errors": [ "./errors" ],
 			"@helpers": [ "./helpers" ],
+			"@models": [ "./database/models" ],
 		}
 	}
 }

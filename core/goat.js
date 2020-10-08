@@ -56,8 +56,8 @@ class GoatBot extends Discord.Client {
 		super (options);
 		this.db;
 		this.log;
-
-		this.queue        = new JobQueue(this);
+		
+		this.fetch        = require('node-fetch');
 
 		this.config       = require('../config').config;
 		this.images       = require('./images');
@@ -66,16 +66,14 @@ class GoatBot extends Discord.Client {
 		this.online       = false;
 		this.started      = 0;
 		this.heartbeat    = 0;
-
 		this.localMode    = this.config.dev;
-
 		this.commands     = new Discord.Collection();
 		this.aliases      = new Discord.Collection();
 		this.tasks        = [];
 		this.store        = { lockdowns: { } };
-
 		this.raidMode     = false;
 		this.strictMode   = { enabled: false };
+		this.queue        = new JobQueue(this);
 
 		this.rootPath    = path.join(__dirname, '../');
 		this.binPath     = path.join(this.rootPath, 'bin');
@@ -86,6 +84,7 @@ class GoatBot extends Discord.Client {
 		this.dlPath      = path.join(this.storagePath, 'downloads');
 		this.rsrcPath    = path.join(this.rootPath, 'resources');
 		this.cmdsPath    = path.join(this.rootPath, 'commands');
+	
 		this.colors      = {
 			brand:       '#ea005e',
 			yellow:      '#ffb900',
@@ -97,7 +96,6 @@ class GoatBot extends Discord.Client {
 			black:       '#111111'
 		};
 
-		this.console   = console;
 		this.snowflake = () => Snowflake.getUniqueID();
 		this.uuid      = () => uuid();
 		this.timestamp = () => Math.floor(new Date() / 1000);
