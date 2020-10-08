@@ -22,6 +22,7 @@ class InvalidArgumentCountError extends MakeErrorClass(codes['InvalidArgumentCou
 class InsufficientPermissionsError extends MakeErrorClass(codes['InsufficientPermissionsError'].message, { code: codes['InsufficientPermissionsError'].code }) {}
 class InvalidCommandLocationError extends MakeErrorClass(codes['InvalidCommandLocationError'].message, { code: codes['InvalidCommandLocationError'].code }) {}
 class GuildOnlyCommandError extends MakeErrorClass(codes['GuildOnlyCommandError'].message, { code: codes['GuildOnlyCommandError'].code }) {}
+class RefugeeCommandUsageError extends MakeErrorClass(codes['RefugeeCommandUsageError'].message, { code: codes['RefugeeCommandUsageError'].code }) {}
 
 class DocumentExistsError extends MakeErrorClass(codes['DocumentExistsError'].message, { code: codes['DocumentExistsError'].code }) {}
 class DocumentNotFoundError extends MakeErrorClass(codes['DocumentNotFoundError'].message, { code: codes['DocumentNotFoundError'].code }) {}
@@ -34,9 +35,8 @@ module.exports = {
 	InsufficientPermissionsError,
 	InvalidCommandLocationError,
 	GuildOnlyCommandError,
-
 	DocumentExistsError,
 	DocumentNotFoundError,
-
+	RefugeeCommandUsageError,
 	codes,
 };

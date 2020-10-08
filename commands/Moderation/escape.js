@@ -33,7 +33,7 @@ exports.run = async (client, message, args, level) => {
 			message.reply('You have successfully escaped the kennel and are on your way back to the public. Try to behave next time and you might not be back! (You will be freed shortly)');
 			client.setTimeout(() => {
 				message.member.edit({ mute: false, deaf: false }, 'User escaped kennel');
-				return message.member.removeRole(kenneled, 'User escaped!');
+				message.member.roles.remove(kenneled, 'User escaped kennel').then(() => {});
 			}, (10*1000));
 		} else {
 			message.reply('Drats! You\'ve failed to escape the kennel. Please try again shortly.');
