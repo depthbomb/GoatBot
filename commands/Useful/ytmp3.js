@@ -27,7 +27,7 @@ const { MissingArgumentError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0, 'Please provide a URL.');
 	const url = args[0];
-	const downloadPath = path.join(client.tmpPath, client.uuid() + '.mp3');
+	const downloadPath = path.join(client.tmpPath, client.snowflake() + '.mp3');
 	const ytdlArgs = [
 		'-x',
 		'-f',
@@ -43,15 +43,26 @@ exports.run = async (client, message, args, level) => {
 
 	const msg = await message.channel.send('Grabbing video info...');
 
-	//	TODO: parse output/errors
+	// TODO: parse output/errors
 	const { stdout, stderr } = await execa(path.join(client.binPath, 'youtube-dl.exe'), ytdlArgs);
 
+	client.log.debug(stdout);
+
 	msg.delete().then(m => {
-		return message.channel.send({
-			files: [{
-				attachment: downloadPath
-			}]
-		});
+		if (stderr) {
+			client.log.error(stderr);
+			return m.reply('There was a problem converting the video to an MP3. This error has been logged so my creator can find out what happened.');
+		} else {
+			return message.channel.send({
+				files: [{
+					attachment: downloadPath
+				}]
+			}).then(m => {
+				client.queue.add(function() {
+					require('fs').unlinkSync(downloadPath);
+				}, 10);
+			});
+		}
 	});
 };
 

@@ -47,7 +47,6 @@ module.exports = client => {
 				const json       = await response.json();
 				const version    = json[0].tag_name;
 				const needUpdate = getVersion(version) > getVersion(currentVersion);
-
 				if (needUpdate) {
 					client.log.info(`Updating youtube-dl to version ${version}`);
 					const downloadUrl = `https://yt-dl.org/downloads/${version}/youtube-dl.exe`;
