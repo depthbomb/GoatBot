@@ -17,3 +17,5 @@ const calculateCooldown = (commandCooldown, member) => {
 
 	return (cooldown * 1000);
 };
+
+module.exports = calculateCooldown;
