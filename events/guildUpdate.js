@@ -21,19 +21,18 @@
 |--------------------------------------------------------------------------
 */
 
-const Table = require('cli-table3');
+const _ = require('console.table');
 module.exports = (client, oldGuild, newGuild) => {
-	const table = new Table({ head: ['', 'Old', 'New'], style: { head: [] } });
+	const header = ['prop', 'old', 'new'];
+	const body   = [
+		['name', oldGuild.name, newGuild.name],
+		['nameAcronym', oldGuild.nameAcronym, newGuild.nameAcronym],
+		['iconURL', oldGuild.iconURL({ dynamic: true }), newGuild.iconURL({ dynamic: true })],
+		['region', oldGuild.region, newGuild.region],
+		['afkTimeout', oldGuild.afkTimeout, newGuild.afkTimeout],
+		['verificationLevel', oldGuild.verificationLevel, newGuild.verificationLevel],
+	];
 
-	table.push(
-		{ 'Name': [oldGuild.name, newGuild.name] },
-		{ 'Acronym': [oldGuild.nameAcronym, newGuild.nameAcronym] },
-		{ 'Icon': [oldGuild.iconURL({ dynamic: true }), newGuild.iconURL({ dynamic: true })] },
-		{ 'Region': [oldGuild.region, newGuild.region] },
-		{ 'AFK Timeout': [oldGuild.afkTimeout, newGuild.afkTimeout] },
-		{ 'Security Level': [oldGuild.verificationLevel, newGuild.verificationLevel] }
-	);
-
-	client.log.info(`Guild [${oldGuild.name}] was updated:`);
-	console.log(table.toString());
+	client.log.info(`Guild [${oldGuild.name}] was updated`);
+	console.table(header, body);
 };

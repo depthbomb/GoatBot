@@ -21,16 +21,16 @@
 |--------------------------------------------------------------------------
 */
 
-const Table = require('cli-table3');
+const _ = require('console.table');
 module.exports = (client, oldRole, newRole) => {
-	const table = new Table({ head: ['', 'Old', 'New'], style: { head: [] } });
-
-	table.push(
-		{ 'Name': [oldRole.name, newRole.name] },
-		{ 'Color': [oldRole.color, newRole.color] },
-		{ 'Permissions': [oldRole.permissions, newRole.permissions] }
-	);
-
-	client.log.info(`${oldRole.name} was updated in ${oldRole.guild.name}:`);
-	console.log(table.toString());
+	const header = ['prop', 'old', 'new'];
+	const body   = [
+		['name', oldRole.name, newRole.name],
+		['hexColor', oldRole.hexColor, newRole.hexColor],
+		['mentionable', oldRole.mentionable, newRole.mentionable],
+		['permissions', oldRole.permissions, newRole.permissions],
+	];
+	
+	client.log.info(`${oldRole.name} was updated in ${oldRole.guild.name}`);
+	console.table(header, body);
 };
