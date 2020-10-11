@@ -24,7 +24,7 @@
 exports.run = async (client, message, args, level) => {
 	let duration;
 	if (args.length !== 1 || isNaN(args[0])) {
-		duration = client.config.strictMode.default_expiration;
+		duration = client.config.strictMode.defaultExpiration;
 	} else {
 		duration = parseInt(args[0]);
 	}
