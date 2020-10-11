@@ -22,10 +22,9 @@
 */
 
 const cooldowns = {};
-
 const ms = require('ms');
 const { MessageEmbed } = require('discord.js');
-const { xp } = require('@helpers');
+const { xp, calculateCooldown } = require('@helpers');
 const {
 	MissingArgumentError,
 	InvalidArgumentError,
@@ -37,6 +36,7 @@ const {
 } = require('@core/errors');
 module.exports = async (client, message) => {
 	const author         = message.author;
+	const member         = message.member || null;
 	const userId         = author.id;
 	const channelId      = message.channel.id;
 	const messageContent = message.content;
@@ -58,6 +58,7 @@ module.exports = async (client, message) => {
 	const isOwner       = (userId === client.config.ownerId);
 	const level         = client.permLevel(message);
 	const isServerStaff = (message?.member?.roles.cache.find(r => r.name === client.config.roles.admin) || message?.member?.roles.cache.find(r => r.name === client.config.roles.mod) || level > 1 || isOwner);
+	const isBooster = member && member.premiumSince;
 
 	const logPrefixes = [];
 	const username = message.member !== null ? message.member.displayName : message.author.tag;
@@ -129,7 +130,7 @@ module.exports = async (client, message) => {
 
 	if (cmd) {
 		if (client.strictMode.enabled && message.channel.id !== '420816699626094592') return;
-		const cooldown = (cmd.conf.cooldown * 1000) || 1500;
+		const cooldown = isServerStaff ? 500 : calculateCooldown(cmd.conf.cooldown, message);
 		const cooldownName = cmd.conf.globalCd ? cmd.help.name : cmd.help.name + userId;
 		const messageTime = message.createdTimestamp;
 		const bypassCooldown = userId === client.config.ownerId;
