@@ -42,8 +42,6 @@ exports.run = async (client, message, args, level) => {
 	];
 
 	const msg = await message.channel.send('Grabbing video info...');
-
-	// TODO: parse output/errors
 	const { stdout, stderr } = await execa(path.join(client.binPath, 'youtube-dl.exe'), ytdlArgs);
 
 	client.log.debug(stdout);

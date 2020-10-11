@@ -22,5 +22,5 @@
 */
 
 module.exports = (client, info) => {
-	client.log('warn', info);
+	client.log.warning(info);
 };
