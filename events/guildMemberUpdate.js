@@ -29,4 +29,8 @@ module.exports = (client, oldMember, newMember) => {
 	if (!oldMember.premiumSince && newMember.premiumSince) {
 		client.log.info(`${oldMember.displayName} has boosted the server!`);
 	}
+
+	if (!newMember.premiumSince) {
+		client.log.info(`${newMember.displayName}'s boost has been removed`);
+	}
 };
