@@ -25,40 +25,51 @@ const url = require('url');
 const path = require('path');
 const capture = require('capture-website');
 const { MissingArgumentError } = require('@core/errors');
+const blacklistedHosts = [ 'pornhub.com', 'xhamster.com', 'redtube.com', '4chan.org', '4channel.org', '4cdn.org', 'gelbooru.com' ];
 exports.run = async (client, message, args, level) => {
 	MissingArgumentError.assert(args.length > 0, 'Please supply a website URL.');
 	let website = args[0];
 	const file = `screenshot_${client.snowflake()}.jpg`;
 	const fullPath = path.join(client.tmpPath, file);
 	const msg = await message.reply('Checking URL...');
-	const providedURL = new url.parse(website);
+	let providedURL = new url.parse(website);
 
 	if (!providedURL.protocol) {
-		website = 'https://' + website;
+		providedURL = new url.parse('https://' + website);
 	}
 
-	(async() => {
-		msg.edit('Capturing website...');
-		await capture.file(website, fullPath, {
-			width: 1600,
-			height: 900,
-			type: 'jpeg',
-			scaleFactor: 2,
-			quality: 0.67,
-			fullPage: true,
-			delay: 1,
-		});
-
-		msg.edit('Uploading image...');
-
-		message.channel.send({ files: [{ attachment: fullPath, name: file }] });
-
-		msg.delete();
-
-		client.queue.add(function() {
-			require('fs').unlinkSync(fullPath);
-		}, 30);
-	})();
+	if (blacklistedHosts.some(s => providedURL.host.includes(s))) {
+		msg.edit('The website you provided is blacklisted.');
+	} else {
+		(async() => {
+			msg.edit('Attempting to capture website...');
+			
+			try {
+				await capture.file(website, fullPath, {
+					width: 1600,
+					height: 900,
+					type: 'jpeg',
+					scaleFactor: 2,
+					quality: 0.67,
+					fullPage: true,
+					delay: 1,
+				});
+			} catch {
+				msg.edit('Failed to capture website, connection timed out');
+				return;
+			}
+	
+			msg.edit('Uploading image...');
+	
+			message.channel.send({ files: [{ attachment: fullPath, name: file }] });
+	
+			msg.delete();
+	
+			client.queue.add(function() {
+				require('fs').unlinkSync(fullPath);
+			}, 30);
+		})();
+	}
 };
 
 exports.conf = {
