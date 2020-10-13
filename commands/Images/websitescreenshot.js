@@ -30,9 +30,7 @@ exports.run = async (client, message, args, level) => {
 	let website = args[0];
 	const file = `screenshot_${client.snowflake()}.jpg`;
 	const fullPath = path.join(client.tmpPath, file);
-
 	const msg = await message.reply('Checking URL...');
-
 	const providedURL = new url.parse(website);
 
 	if (!providedURL.protocol) {
@@ -42,24 +40,24 @@ exports.run = async (client, message, args, level) => {
 	(async() => {
 		msg.edit('Capturing website...');
 		await capture.file(website, fullPath, {
-			width: 1920,
-			height: 1080,
+			width: 1600,
+			height: 900,
 			type: 'jpeg',
 			scaleFactor: 2,
-			quality: 0.90,
+			quality: 0.67,
 			fullPage: true,
-			delay: 3,
+			delay: 1,
 		});
 
 		msg.edit('Uploading image...');
 
 		message.channel.send({ files: [{ attachment: fullPath, name: file }] });
 
+		msg.delete();
+
 		client.queue.add(function() {
 			require('fs').unlinkSync(fullPath);
 		}, 30);
-
-		return;
 	})();
 };
 
