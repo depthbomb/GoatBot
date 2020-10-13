@@ -45,7 +45,7 @@ module.exports = client => {
 		const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
 		const errorStack = err;
 		const timestamp  = moment().format('YYYY-MM-DD-HHmmss');
-		const logLocation = path.join(__dirname, 'storage', 'logs', 'crash', 'CRASH.' + timestamp + '.log');
+		const logLocation = path.join('../', 'storage', 'logs', 'crash', 'CRASH.' + timestamp + '.log');
 
 		fs.writeFileSync(logLocation, errorStack);
 
