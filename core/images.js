@@ -27,6 +27,7 @@ module.exports = {
 		water: 'https://cdn.discordapp.com/app-assets/405805435438891008/739648870606176286.png?size=1024',
 		fire: 'https://cdn.discordapp.com/app-assets/405805435438891008/739648868463149147.png?size=1024',
 		void: 'https://cdn.discordapp.com/app-assets/405805435438891008/739648869389959168.png?size=1024',
+		halloween: 'https://cdn.discordapp.com/app-assets/405805435438891008/766033318499188776.png?size=1024',
 		solar: 'https://cdn.discordapp.com/app-assets/405805435438891008/739648869822103703.png?size=1024',
 		nebular: 'https://cdn.discordapp.com/app-assets/405805435438891008/739648870576816128.png?size=1024',
 		omniscient: 'https://cdn.discordapp.com/app-assets/405805435438891008/739648872422309948.png?size=1024',

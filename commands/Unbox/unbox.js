@@ -43,7 +43,8 @@ exports.run = async (client, message, args, level) => {
 		  weight     = unboxWeights[unboxTiers.indexOf(chosen)],
 		  prefix     = chosen.prefix || '',
 		  suffix     = chosen.suffix || '',
-		  name       = `${prefix} ${chosen.name} Goat ${suffix}`.trim(),
+		  name       = chosen.name || '',
+		  fullName   = `${prefix} ${name} Goat ${suffix}`.trim(),
 		  tier       = unboxTiers.indexOf(chosen),
 		  tiers      = (unboxTiers.length - 1),
 		  dropChance = ((weight / weightSum) * 100).toFixed(2);
@@ -51,7 +52,7 @@ exports.run = async (client, message, args, level) => {
 	const embed = new MessageEmbed()
 		.setColor(color)
 		.setTitle(`Unbox a Goat`)
-		.setDescription(`<@${userId}> has unboxed: **${name}!**\nType \`${client.printCmd('unboxstats')}\` to view your stats.`)
+		.setDescription(`<@${userId}> has unboxed: **${fullName}!**\nType \`${client.printCmd('unboxstats')}\` to view your stats.`)
 		.addField('Tier', `\`${tier}/${tiers}\``, true)
 		.addField('Drop chance', `\`${dropChance}%\``, true)
 		.setImage(image);
