@@ -23,8 +23,9 @@
 
 const path = require('path'),
 	  execa = require('execa');
-const { MissingArgumentError } = require('@core/errors');
+const { MissingArgumentError, CommandLockedError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
+	CommandLockedError.assert(!client.store.lockytdl, 'My youtube-dl binary is being updated. Please try again shortly.');
 	MissingArgumentError.assert(args.length > 0, 'Please provide a URL.');
 	const url = args[0];
 	const downloadPath = path.join(client.tmpPath, client.snowflake() + '.mp3');

@@ -9,6 +9,7 @@ const codes = {
 	RefugeeCommandUsageError: { code: 'CPRNET10005', message: 'The command may not be executed in the refugee camp channel' },
 	InvalidCommandLocationError: { code: 'CPRNET10006', message: 'The command may not be executed in this context' },
 	GuildOnlyCommandError: { code: 'CPRNET10007', message: 'Commands may only be executed in my server https://discord.gg/xw624a8' },
+	CommandLockedError: { code: 'CPRNET10008', message: 'This command is currently locked, likely due to a backend task. Please try again later.' },
 
 	//	2xxxx series - database errors
 	DocumentExistsError: { code: 'CPRNET20000', message: 'The document already exists in the database' },
@@ -23,6 +24,7 @@ class InsufficientPermissionsError extends MakeErrorClass(codes['InsufficientPer
 class InvalidCommandLocationError extends MakeErrorClass(codes['InvalidCommandLocationError'].message, { code: codes['InvalidCommandLocationError'].code }) {}
 class GuildOnlyCommandError extends MakeErrorClass(codes['GuildOnlyCommandError'].message, { code: codes['GuildOnlyCommandError'].code }) {}
 class RefugeeCommandUsageError extends MakeErrorClass(codes['RefugeeCommandUsageError'].message, { code: codes['RefugeeCommandUsageError'].code }) {}
+class CommandLockedError extends MakeErrorClass(codes['CommandLockedError'].message, { code: codes['CommandLockedError'].code }) {}
 
 class DocumentExistsError extends MakeErrorClass(codes['DocumentExistsError'].message, { code: codes['DocumentExistsError'].code }) {}
 class DocumentNotFoundError extends MakeErrorClass(codes['DocumentNotFoundError'].message, { code: codes['DocumentNotFoundError'].code }) {}
@@ -35,8 +37,11 @@ module.exports = {
 	InsufficientPermissionsError,
 	InvalidCommandLocationError,
 	GuildOnlyCommandError,
+	RefugeeCommandUsageError,
+	CommandLockedError,
+
 	DocumentExistsError,
 	DocumentNotFoundError,
-	RefugeeCommandUsageError,
+
 	codes,
 };
