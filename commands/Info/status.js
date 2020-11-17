@@ -39,11 +39,7 @@ exports.run = async (client, message, args, level) => {
 			name: statusMessage,
 			type: 0
 		}
-	}).then(() => {
-		return message.delete().then(m => {
-			client.msg(m, 'green', 'success', `My status has been set to \`${statusMessage}\`.`);
-		});
-	});
+	}).then(() => message.delete().then(m => client.msg(m, 'green', 'success', `My status has been set to \`${statusMessage}\`.`)));
 };
 
 exports.conf = {

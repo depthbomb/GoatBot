@@ -22,7 +22,7 @@
 */
 
 const exec = require('execa');
-const command = './bin/youtube-dl.exe -U';
+const command = './bin/youtube-dl.exe';
 const arguments = '-U';
 module.exports = client => {
 	return task = {
