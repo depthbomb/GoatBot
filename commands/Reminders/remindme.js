@@ -33,7 +33,7 @@ exports.run = async (client, message, args, level) => {
 	const timeFormatRegex = /(\d+w)?(\d+d)?(\d+h)?(\d+m)?/i;
 	const converter       = { m: 60, h: 60*60, d: 60*60*24, w: 60*60*24*7 };
 
-	InvalidArgumentError.assert(reminderMessage < 750, 'Your reminder message is too long.');
+	InvalidArgumentError.assert(reminderMessage.length < 750, 'Your reminder message is too long.');
 	InvalidArgumentError.assert(timeFormatRegex.test(inputFormat), 'The time format you supplied is invalid. See command examples for correct usage.');
 
 	let matches = timeFormatRegex.exec(inputFormat);
