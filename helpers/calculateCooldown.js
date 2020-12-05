@@ -1,4 +1,3 @@
-const fallback = 1.5;
 /**
  * Calculates the cooldown to apply to a user based on various factors
  * @param {float} commandCooldown Command cooldown

@@ -9,7 +9,7 @@ const distribute = (message, client) => {
 	const userId = author.id;
 	const channelId = message.channel.id;
 	if (!levelProfileAuxillaryCache.hasOwnProperty(userId)) {
-		const authorRoles    = message.member?.roles?.cache;
+		const authorRoles = message.member?.roles?.cache;
 		const xpRequired = client.config.levels.xpRequired;
 		const roleRewards = client.config.levels.roles;
 		const disallowedChannels = client.config.levels.disallowedChannels;
@@ -43,8 +43,8 @@ const distribute = (message, client) => {
 
 								await message.member.roles.add(roleToReward, 'Rank Up');
 								const embed = new MessageEmbed()
-										.setColor(client.colors.yellow)
-										.setDescription(`🌟 ${announcement}`);
+									  .setColor(client.colors.yellow)
+									  .setDescription(`🌟 ${announcement}`);
 								return announcementChannel.send({ embed });
 							}
 						}
@@ -59,6 +59,4 @@ const distribute = (message, client) => {
 	}
 };
 
-module.exports = {
-	distribute
-};
+module.exports = { distribute };
