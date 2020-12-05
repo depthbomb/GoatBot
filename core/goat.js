@@ -33,6 +33,7 @@ const Discord = require('discord.js');
 const { promisify } = require('util');
 const readdir = promisify(require('fs').readdir);
 const { UniqueID } = require('nodejs-snowflake');
+const paths = require('./paths');
 const Snowflake = new UniqueID({ customEpoch: 823824000, machineID: 1 });
 const ascii = ["┌─────────────────────────────────────────────────────────────────────────┐",
 				"│                                                                         │",
@@ -75,15 +76,15 @@ class GoatBot extends Discord.Client {
 		this.strictMode   = { enabled: false };
 		this.queue        = new JobQueue(this);
 
-		this.rootPath    = path.join(__dirname, '../');
-		this.binPath     = path.join(this.rootPath, 'bin');
-		this.storagePath = path.join(this.rootPath, 'storage');
-		this.tmpPath     = path.join(this.storagePath, 'tmp');
-		this.dbPath      = path.join(this.storagePath, 'database');
-		this.cachePath   = path.join(this.storagePath, 'cache');
-		this.dlPath      = path.join(this.storagePath, 'downloads');
-		this.rsrcPath    = path.join(this.rootPath, 'resources');
-		this.cmdsPath    = path.join(this.rootPath, 'commands');
+		this.rootPath    = paths.root;
+		this.binPath     = paths.bin;
+		this.storagePath = paths.storage;
+		this.tmpPath     = paths.tmp;
+		this.dbPath      = paths.db;
+		this.cachePath   = paths.cache;
+		this.dlPath      = paths.dl;
+		this.rsrcPath    = paths.rsrc;
+		this.cmdsPath    = paths.cmds;
 	
 		this.colors      = {
 			brand:       '#ea005e',
