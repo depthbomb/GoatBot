@@ -23,6 +23,7 @@
 
 const path = require('path'),
 	  execa = require('execa');
+const binPath = path.join(client.binPath, 'youtube-dl.exe');
 const { MissingArgumentError, CommandLockedError } = require('@core/errors');
 exports.run = async (client, message, args, level) => {
 	CommandLockedError.assert(!client.store.lockytdl, 'My youtube-dl binary is being updated. Please try again shortly.');
@@ -43,7 +44,7 @@ exports.run = async (client, message, args, level) => {
 	];
 
 	const msg = await message.channel.send('Grabbing video info...');
-	const { stdout, stderr } = await execa(path.join(client.binPath, 'youtube-dl.exe'), ytdlArgs);
+	const { stdout, stderr } = await execa(binPath, ytdlArgs);
 
 	client.log.debug(stdout);
 
