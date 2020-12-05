@@ -22,8 +22,6 @@
 */
 
 const exec = require('execa');
-const command = './bin/youtube-dl.exe';
-const arguments = '-U';
 module.exports = client => {
 	return task = {
 		name: 'updateYoutubeDL',
@@ -32,7 +30,7 @@ module.exports = client => {
 		interval: 60*60*3,
 		action: async () => {
 			client.store.lockytdl = true;
-			let { stdout } = await exec(command, arguments);
+			let { stdout } = await exec('./bin/youtube-dl.exe', ['-U']);
 			stdout = stdout.trim();
 			client.store.lockytdl = false;
 		}
