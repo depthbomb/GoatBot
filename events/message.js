@@ -120,10 +120,12 @@ module.exports = async (client, message) => {
 			return message.delete();
 		}
 
-		/**
-		 * Handle distributing user XP
-		 */
-		(async () => xp.distribute(message, client))();
+		if (message.channel.type === 'text') {
+			/**
+			 * Handle distributing user XP
+			 */
+			(async () => xp.distribute(message, client))();
+		}
 
 		return;
 	}
